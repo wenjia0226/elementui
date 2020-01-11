@@ -4,16 +4,16 @@
             <div class="avatar_box">
                 <img src="../assets/logo.png" alt="">
             </div>
-            <el-form ref="form" :modal="loginForm" class="login_form">
-                <el-form-item>
-                    <el-input  v-modal="username" prefix-icon="el-icon-user-solid"></el-input>
+            <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
+                <el-form-item prop="username">
+                    <el-input  v-model="loginForm.username" prefix-icon="el-icon-user-solid"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-input v-modal="password" prefix-icon="el-icon-lock"></el-input>
+                <el-form-item prop="password">
+                    <el-input v-model="loginForm.password" prefix-icon="el-icon-lock"></el-input>
                 </el-form-item>
                 <el-form-item class="btns">
-                    <el-button type="primary" >登录</el-button>
-                    <el-button type="info">登录</el-button>
+                    <el-button type="primary" @click="submitForm">登录</el-button>
+                    <el-button type="info" @click="resetForm">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -22,10 +22,43 @@
 <script>
 export default {
     name: 'login',
-    loginForm: {
-        username:  '',
-        password: ''
+    data() {
+        return {
+            //登录表单的数据绑定对象
+            loginForm: {
+                username: 'admin',
+                password: '123456'
+            },
+            loginFormRules: {
+                username: [
+                    {required: true,  message: '请输入姓名', trigger: 'blur'}
+                ],
+                password: [
+                     {required: true,  message: '请输入密码', trigger: 'blur'}
+                ]
+            }
+        }
+    },
+    methods: {
+        resetForm(formName) {
+            this.$refs.loginFormRef.resetFields()
+        },
+        submitForm() {
+            this.$refs.loginFormRef.validate( async(valid) => {
+                //预验证
+                if(!valid) return;
+                //如果验证成功，发起登录请求
+                const {data: res} =  await this.$http.post('login', this.loginForm);
+                if(res.meta.status !== 200) 
+                return this.$message.error('登录失败');
+                this.$message.success('登录成功');
+                //将token 存到sessionStorage
+                window.sessionStorage.setItem('token', res.data.token)
+                this.$router.push('/home')
+            })
+        }
     }
+    
     
 }
 </script>
