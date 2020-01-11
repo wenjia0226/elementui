@@ -6,7 +6,7 @@
             </div>
             <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
                 <el-form-item prop="username">
-                    <el-input  v-model="loginForm.username" prefix-icon="el-icon-user-solid"></el-input>
+                    <el-input  v-model="loginForm.loginname" prefix-icon="el-icon-user-solid"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input v-model="loginForm.password" prefix-icon="el-icon-lock"></el-input>
@@ -20,17 +20,20 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
+// var instance = axios.create({ headers: {'content-type': 'application/x-www-form-urlencoded'} });
+//axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; 
 export default {
     name: 'login',
     data() {
         return {
             //登录表单的数据绑定对象
             loginForm: {
-                username: 'admin',
+                loginname: 'admin',
                 password: '123456'
             },
             loginFormRules: {
-                username: [
+                loginname: [
                     {required: true,  message: '请输入姓名', trigger: 'blur'}
                 ],
                 password: [
@@ -48,13 +51,23 @@ export default {
                 //预验证
                 if(!valid) return;
                 //如果验证成功，发起登录请求
-                const {data: res} =  await this.$http.post('login', this.loginForm);
-                if(res.meta.status !== 200) 
-                return this.$message.error('登录失败');
-                this.$message.success('登录成功');
-                //将token 存到sessionStorage
-                window.sessionStorage.setItem('token', res.data.token)
-                this.$router.push('/home')
+                // const {data: res} =  await this.$http.post('login', this.loginForm);
+               let param = new URLSearchParams();
+               param.append('loginname', 'admin');
+               param.append('password', '123456')
+                axios({
+                    method: 'post',
+                    url: '/api/login',
+                    data: param
+                 }).then((res) => {
+                     console.log(res)
+                      if(res.status !== 200) 
+                        return this.$message.error('登录失败');
+                        this.$message.success('登录成功');
+                        //将token 存到sessionStorage
+                        window.sessionStorage.setItem('token', res.data.token)
+                        this.$router.push('/home')
+                 })
             })
         }
     }
