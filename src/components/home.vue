@@ -3,7 +3,7 @@
         <!-- 头部 -->
         <el-header>
             <div>
-                <img src="../assets/image/heima.png" alt="">
+                <img src="../assets/image/logo2.png" alt="" style="width:200px;height: auto;overflow:hidden">
                 <span>光量空间后台管理系统</span>
             </div>
             <el-button type="info" @click="logout">退出</el-button>
@@ -14,51 +14,104 @@
             <el-aside width="200px">
                  <!-- 菜单区域 -->
                 <el-menu
-                background-color="#545c64"
+                background-color="#333744"
                 text-color="#fff"
-                active-text-color="#ffd04b">
+                active-text-color="#409eff" 
+                router
+                :unique-opened= true>
                 <!-- 一级菜单 -->
-                <el-submenu index="1">
+                <el-submenu :index="item.id"  v-for="item in menuList" :key="item.id">
                     <!-- 一级菜单模板 -->
                     <template slot="title">
                     <i class="el-icon-location"></i>
-                    <span>导航一</span>
+                    <span>{{item.authName}}</span>
                     </template>
                     <!-- 二级菜单 -->
-                    <el-menu-item index="1-4-1">
+                    <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id">
                         <template slot="title">
                             <i class="el-icon-location"></i>
-                            <span>导航一</span>
+                            <span>{{subItem.authName}}</span>
+                        
                         </template>
-                    </el-menu-item> 
+                    </el-menu-item>
+                    <!-- <el-menu-item index="grade">
+                        <template slot="title">
+                            <i class="el-icon-location"></i>
+                            <span>班级设置</span>
+                        </template>
+                    </el-menu-item>  
+                    <el-menu-item index="1-3">
+                        <template slot="title">
+                            <i class="el-icon-location"></i>
+                            <span>学生名单</span>
+                        </template>
+                    </el-menu-item>
+                    <el-menu-item index="1-4">
+                        <template slot="title">
+                            <i class="el-icon-location"></i>
+                            <span>检测记录</span>
+                        </template>
+                    </el-menu-item>     -->
                 </el-submenu>
                 
                 </el-menu>
             </el-aside>
             <!-- 右侧主体区 -->
-            <el-main>Main</el-main>
+            <el-main>
+                <router-view></router-view>
+            </el-main>
         </el-container>
     </el-container>
 </template>
 <script>
+import axios from 'axios'
     export default {
         data() {
             return {
-                menuList: [] //左侧菜单的获取
+                menuList: [] ,//左侧菜单的获取,
+                activePath: '', //被激活的链接地址
+                token: ''
             }
         },
         created() {
-            this.getMenuList()
+            this.getMenuList();
+            this.activePath = window.sessionStorage.getItem('activePath')
+            
         },
         methods: {
             logout () {
                 window.sessionStorage.clear();
                 this.$router.push('/login')
             },
-            async getMenuList() {
-                // const {data: res} = await this.$http.get('menus');
-                // if(res.meta.status !== 200) return this.$message.error(res.meta.msg)
-                // this.menuList = res.data
+            getMenuList() {
+                //获取所都菜单
+                 this.token = window.sessionStorage.getItem('token');
+                if(this.token) {
+                    let listparam = new URLSearchParams();
+                    listparam.append('token', this.token);
+                    axios({
+                        method: 'post',
+                        url: '/api/menuList',
+                        data: listparam
+                    }).then(this.handleGetMenuListSucc.bind(this)).catch(this.handleGetMenuListErr.bind(this))
+                }else {
+                    this.$message.error('请登录');
+                    this.$router.push('/login')
+                }
+            },
+            handleGetMenuListSucc (res){
+                 res? res= res.data: '';
+                if (res.status !== 200) return;
+                this.menuList = res.data;
+            },
+            handleGetMenuListErr(err) {
+                console.log(err)
+            },
+            //保存链接的激活状态
+            saveNavState(activePath) {
+                console.log(activePath)
+                window.sessionStorage.setItem('activePath', activePath)
+                this.activePath = activePath;
             }
         }
     }
@@ -86,6 +139,9 @@
 }
 .el-aside {
     background-color: #333744;
+    .el-menu {
+        border-right: none;
+    }
 }
 .el-main {
     background-color: #eaedf1;

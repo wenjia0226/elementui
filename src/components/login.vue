@@ -21,16 +21,17 @@
 </template>
 <script>
 import axios from 'axios'
-// var instance = axios.create({ headers: {'content-type': 'application/x-www-form-urlencoded'} });
-//axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; 
 export default {
     name: 'login',
+    created() {
+        this.getMenuList()
+    },
     data() {
         return {
             //登录表单的数据绑定对象
             loginForm: {
-                loginname: 'admin',
-                password: '123456'
+                loginname: '',
+                password: ''
             },
             loginFormRules: {
                 loginname: [
@@ -51,24 +52,26 @@ export default {
                 //预验证
                 if(!valid) return;
                 //如果验证成功，发起登录请求
-                // const {data: res} =  await this.$http.post('login', this.loginForm);
                let param = new URLSearchParams();
-               param.append('loginname', 'admin');
-               param.append('password', '123456')
+               param.append('loginname', this.loginForm.loginname);
+               param.append('password', this.loginForm.password);
                 axios({
                     method: 'post',
                     url: '/api/login',
                     data: param
                  }).then((res) => {
-                     console.log(res)
                       if(res.status !== 200) 
                         return this.$message.error('登录失败');
                         this.$message.success('登录成功');
                         //将token 存到sessionStorage
-                        window.sessionStorage.setItem('token', res.data.token)
+                        window.sessionStorage.setItem('token', res.data.data.token)
                         this.$router.push('/home')
                  })
             })
+        },
+        //获取所有的菜单
+        getMenuList() {
+
         }
     }
     
