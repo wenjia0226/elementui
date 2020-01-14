@@ -20,7 +20,7 @@
                 router
                 :unique-opened= true>
                 <!-- 一级菜单 -->
-                <el-submenu :index="item.id"  v-for="item in menuList" :key="item.id">
+                <el-submenu :index="'/' +item.id"  v-for="item in menuList" :key="item.id">
                     <!-- 一级菜单模板 -->
                     <template slot="title">
                     <i class="el-icon-location"></i>
@@ -34,24 +34,6 @@
                         
                         </template>
                     </el-menu-item>
-                    <!-- <el-menu-item index="grade">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span>班级设置</span>
-                        </template>
-                    </el-menu-item>  
-                    <el-menu-item index="1-3">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span>学生名单</span>
-                        </template>
-                    </el-menu-item>
-                    <el-menu-item index="1-4">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span>检测记录</span>
-                        </template>
-                    </el-menu-item>     -->
                 </el-submenu>
                 
                 </el-menu>

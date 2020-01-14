@@ -10,8 +10,8 @@
         <el-card>
              <el-row :gutter="20">
                  <el-col :span="6">
-                     <el-input placeholder="输入学校名称" v-model="query" clearable>
-                        <el-button slot="append" icon="el-icon-search" @click="getSchoolList"></el-button>
+                     <el-input placeholder="输入学校名称" v-model="query" clearable @clear="getSchoolList">
+                        <el-button slot="append" icon="el-icon-search" @click="querySchool"></el-button>
                      </el-input>
                  </el-col>
                  <el-col :span="6">
@@ -57,7 +57,7 @@
            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addDialogVisible = false">取 消</el-button>
-                <el-button type="primary" >确 定</el-button>
+                <el-button type="primary" @click="submitSchool" >确 定</el-button>
             </span>
         </el-dialog>
         <!-- 修改用户对话框 -->
@@ -108,9 +108,7 @@ export default {
            editSchoolRules: {
                 name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
                 address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
-           }
-            
-           
+           }           
        } 
     },
     created() {
@@ -134,6 +132,25 @@ export default {
         handleGetSchoolErr(err) {
             console.log(err)
         },
+        //搜索
+        querySchool() {
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('name', this.query);
+            axios({
+                method: "post",
+                url: '/api/querySchool',
+                data: param 
+            }).then(this.handleQuerySucc.bind(this))
+            .catch(this.handleQueryErr.bind(this))
+        },
+        handleQuerySucc(res) {
+            if(res.status !== 200) return this.$message.error('未搜索到内容');
+            this.schoolList = res.data.data;
+        },
+        handleQueryErr(err) {
+            console.log(err)
+        },
         //提交表单
         submitSchool() {
            this.$refs.schoolFormRef.validate((valid) => {
@@ -151,8 +168,10 @@ export default {
            })  
         },
         handleAddSchoolSucc(res) {
-            if(res.status !== 200)  return;
+            if(res.status !== 200)  return this.$message.error('添加学校失败');
             this.addDialogVisible = false;
+            this.$message.success('添加学校成功');
+            this.getSchoolList();
         },
         handleAddSchoolErr(err) {
             console.log(err)
