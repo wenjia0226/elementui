@@ -1,7 +1,7 @@
 <template>
     <div>
        <!-- 面包屑导航区域 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>基础数据</el-breadcrumb-item>
             <el-breadcrumb-item>学校设置</el-breadcrumb-item>
@@ -112,28 +112,29 @@ export default {
        } 
     },
     created() {
+        this.getSchoolList()
         this.token = window.sessionStorage.getItem('token');
-        this.getSchoolList();
+        console.log(this.token, 'school')
     },
     methods:{
         getSchoolList() {
-            let param = new URLSearchParams();
-             param.append('token', this.token);
+            let param2 = new URLSearchParams();
+             param2.append('token', this.token);
              axios({
                  method: 'post',
                  url: '/api/schoolList',
-                 data: param
+                 data: param2,
              }).then(this.handleGetSchoolSucc.bind(this))
                .catch(this.handleGetSchoolErr.bind(this))
         },
         handleGetSchoolSucc(res) {
             this.schoolList = res.data.data;
         },
-        handleGetSchoolErr(error) {
-           console.log(error)
+        handleGetSchoolErr(err) {
+            console.log(err)
         },
         //搜索
-        querySchool() {   
+        querySchool() {
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('name', this.query);
