@@ -21,16 +21,15 @@
               <!-- 用户列表 -->
             <el-table :data="schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
                 <el-table-column type="index"></el-table-column>
-                <el-table-column label="序号" prop="num"></el-table-column>
                 <el-table-column label="学校名称" prop="name"></el-table-column>
                 <el-table-column label="学校地址" prop="address"></el-table-column>
                 <el-table-column label="操作">
                     <template>
-                        <el-button type="primary" size="mini" icon="el-icon-edit" ></el-button>
-                        <el-button type="danger"  size="mini" icon="el-icon-delete"></el-button>
-                        <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+                        <el-button type="primary" size="middle" icon="el-icon-edit" ></el-button>
+                        <el-button type="danger"  size="middle" icon="el-icon-delete"></el-button>
+                        <!-- <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
                             <el-button type="success" size="mini" icon="el-icon-setting"></el-button>
-                        </el-tooltip>
+                        </el-tooltip> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -70,36 +69,11 @@ export default {
     name: 'school',
     data () {
        return{
+           token: '',
            query: '',
            currentPage: 2,
            pageSize: 5,
-           schoolList: [{
-               name: 'zhuofan',
-               address: '12'
-           },
-           {
-               name: 'xiaoming',
-               address: '12'
-           },
-           {
-               name: 'zhuofan',
-               address: '12'
-           },
-           {
-               name: 'zhuofan',
-               address: '12'
-           },
-           {
-               name: 'zhuofan',
-               address: '12'
-           },
-           {
-               name: 'zhuofan',
-               address: '12'
-           },{
-               name: 'zhuofan',
-               address: '12'
-           }],
+           schoolList: [],
            total: 0,
            addDialogVisible: false, //控制对话框的显示隐藏
            addSchoolForm: {
@@ -115,15 +89,22 @@ export default {
     },
     created() {
         this.getSchoolList()
+        this.token = window.sessionStorage.getItem('token');
     },
     methods:{
         getSchoolList() {
-            axios.get('/api/schoolList').
-            then(this.handleGetSchoolSucc.bind(this)).
-            catch(this.handleGetSchoolErr.bind(this))
+            let param2 = new URLSearchParams();
+             param2.append('token', this.token);
+             axios({
+                 method: 'post',
+                 url: '/api/schoolList',
+                 data: param2,
+             }).then(this.handleGetSchoolSucc.bind(this))
+               .catch(this.handleGetSchoolErr.bind(this))
         },
         handleGetSchoolSucc(res) {
             console.log(res)
+            this.schoolList = res.data.data;
         },
         handleGetSchoolErr(err) {
             console.log(err)
@@ -135,6 +116,7 @@ export default {
                let param = new URLSearchParams();
                param.append('name', this.addSchoolForm.name);
                param.append('address', this.addSchoolForm.address);
+               param.append('token', this.token)
                axios({
                    method: 'post',
                    url: '/api/addSchool',
