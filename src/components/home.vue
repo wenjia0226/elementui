@@ -16,7 +16,8 @@
                 <el-menu
                 background-color="#333744"
                 text-color="#fff"
-                active-text-color="#409eff" 
+                active-text-color="#409eff"
+                default-active = '2'
                 router
                 :unique-opened= true>
                 <!-- 一级菜单 -->
@@ -31,7 +32,6 @@
                         <template slot="title">
                             <i class="el-icon-location"></i>
                             <span>{{subItem.authName}}</span>
-                        
                         </template>
                     </el-menu-item>
                 </el-submenu>

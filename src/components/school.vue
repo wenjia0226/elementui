@@ -18,7 +18,7 @@
                         <el-button type="primary" @click="addDialogVisible = true">添加学校</el-button>
                  </el-col>
              </el-row>
-              <!-- 用户列表 -->
+              <!-- 学校列表 -->
             <el-table :data="schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="学校名称" prop="name"></el-table-column>
@@ -49,10 +49,10 @@
            <!-- 添加学校 -->
            <el-form :model="addSchoolForm" :rules="addSchoolRules" ref="schoolFormRef" label-width="100px">
                 <el-form-item label="学校名称" prop="name">
-                    <el-input v-model="addSchoolForm.name"></el-input>
+                    <el-input v-model="addSchoolForm.name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="学校地址" prop="address">
-                    <el-input v-model="addSchoolForm.address"></el-input>
+                    <el-input v-model="addSchoolForm.address" clearable></el-input>
                 </el-form-item>
            </el-form>
             <span slot="footer" class="dialog-footer">
@@ -79,6 +79,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { mapState } from 'vuex'
 export default {
     name: 'school',
     data () {
@@ -127,7 +128,9 @@ export default {
                .catch(this.handleGetSchoolErr.bind(this))
         },
         handleGetSchoolSucc(res) {
+            if(res.status !== 200) return this.$message.error('获取学校列表失败');
             this.schoolList = res.data.data;
+            
         },
         handleGetSchoolErr(error) {
            console.log(error)
@@ -171,6 +174,7 @@ export default {
             if(res.status !== 200)  return this.$message.error('添加学校失败');
             this.addDialogVisible = false;
             this.$message.success('添加学校成功');
+            this.$refs.schoolFormRef.resetFields();
             this.getSchoolList();
         },
         handleAddSchoolErr(err) {

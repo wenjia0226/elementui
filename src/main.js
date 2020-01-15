@@ -6,7 +6,7 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/global.css'
-import axios from 'axios'
+import store from './store/index.js'
 Vue.use(ElementUI);
 // //挂载原型属性
 // Vue.prototype.$http = axios
@@ -26,6 +26,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
