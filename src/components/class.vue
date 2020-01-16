@@ -33,10 +33,11 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassEditDialog(scope.row.id)" ></el-button>
-                        <el-button type="danger"  size="middle" icon="el-icon-delete"></el-button>
-                        <!-- <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-                            <el-button type="success" size="mini" icon="el-icon-setting"></el-button>
-                        </el-tooltip> -->
+                    </template>
+                </el-table-column>
+                 <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeClassById(scope.row.id)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -52,14 +53,14 @@
             </el-pagination>
         </el-card>
         <!-- 添加班级 -->
-       <el-dialog title="添加班级" :visible.sync="addClassVisible" width="50%">
+       <el-dialog title="添加班级" ref="addClassRef" :visible.sync="addClassVisible" width="50%">
         <el-form :model="addClassForm" :rules="addClassRules" ref="addClassRef" label-width="120px" class="demo-ruleForm">
              <el-form-item label="所属学校" prop="schoolName">
                 <el-cascader v-model="addClassForm.schoolName"  :options="school" :props ="cateProps" @change="handleChange">
                 </el-cascader>
             </el-form-item>
-            <el-form-item label="班级" prop="className">
-                <el-input v-model="addClassForm.className" clearable></el-input>
+            <el-form-item label="班级" prop="name">
+                <el-input v-model="addClassForm.name" clearable></el-input>
             </el-form-item>
             <el-form-item label="教室长度(米)" prop="roomLength">
                 <el-input v-model="addClassForm.roomLength" clearable></el-input>
@@ -75,8 +76,8 @@
             </el-form-item>
            
              <el-form-item label="是否实验班" prop="experiment">
-                <el-radio-group v-model="addClassForm.experiment" size="medium">
-                <el-radio border label="1">是</el-radio>
+                <el-radio-group  size="medium"  v-model="addClassForm.experiment">
+                <el-radio border  label="1">是</el-radio>
                 <el-radio border label="0">不是</el-radio>
                 </el-radio-group>
             </el-form-item>
@@ -89,7 +90,7 @@
             <el-button type="primary" @click=" sumitClass">确 定</el-button>
         </span>
         </el-dialog>
-        <!-- 修改用户对话框 -->
+        <!-- 修改班级对话框 -->
         <el-dialog title="修改班级" :visible.sync="editVisible" width="50%" @close="editDialogClosed">
             <el-form :model="editClassForm" :rules="editClassRules" ref="editClassRef" label-width="100px">
                 <el-form-item label="所属学校" prop="schoolName" >
@@ -97,7 +98,7 @@
                 </el-cascader> -->
                     <el-input v-model="editClassForm.schoolName" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="班级" prop="className">
+                <el-form-item label="班级" prop="name">
                     <el-input v-model="editClassForm.name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="教室长度(米)" prop="roomLength">
@@ -113,10 +114,10 @@
                     <el-input v-model="editClassForm.volume" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="是否实验班" prop="experiment">
-                    <el-radio-group v-model="editClassForm.experiment" size="medium">
-                    <el-radio border label="1">是</el-radio>
-                    <el-radio border label="0">不是</el-radio>
-                    </el-radio-group>
+                    <!-- <el-radio-group size="medium" > -->
+                    <el-radio border  v-model="editClassForm.experiment" :label="1" >是</el-radio>
+                    <el-radio border  v-model="editClassForm.experiment"  :label="0">不是</el-radio>
+                    <!-- </el-radio-group> -->
                 </el-form-item>
                 <el-form-item label="备注" prop="description">
                     <el-input v-model="editClassForm.description"></el-input>
@@ -145,8 +146,10 @@ export default {
             editVisible: false,
             school: [],
             schoolId: '',
+            labelNum1: 1,
+            labelNum2: 0,
             addClassForm: {
-                className:'',
+                name:'',
                 roomLength: '',
                 roomWidth: '',
                 bbLength: '',
@@ -157,11 +160,11 @@ export default {
             },
             addClassRules: {
                 schoolName:  { required: true, message: '请选择学校', trigger: 'blur' },
-                className:  { required: true, message: '请输入班级', trigger: 'blur' },
-                roomLength:  { required: true, message: '请输入教室长度', trigger: 'blur'},
-                roomWidth:  { required: true, message: '请输入教室宽度', trigger: 'blur' },
-                bbLength:  { required: true, message: '请输入黑板长度', trigger: 'blur' },
-                volume:  { required: true, message: '请输入班级容量', trigger: 'blur' },
+                name:  { required: true, message: '请输入班级', trigger: 'blur' },
+                roomLength:  { required: true, type:'number', message: '请输入教室长度', trigger: 'blur'},
+                roomWidth:  { required: true,  type:'number', message: '请输入教室宽度', trigger: 'blur' },
+                bbLength:  { required: true,  type:'number',message: '请输入黑板长度', trigger: 'blur' },
+                volume:  { required: true, type:'number', message: '请输入班级容量', trigger: 'blur' },
                 experiment: {required: true, message: '请选择是否是实验班', trigger: 'blur'}
                
             },
@@ -175,7 +178,7 @@ export default {
             pageSize: 5,
             total: 0,
             editClassForm: {
-                className:'',
+                name:'',
                 roomLength: '',
                 roomWidth: '',
                 bbLength: '',
@@ -186,11 +189,11 @@ export default {
             },
             editClassRules: {
                 schoolName:  { required: true, message: '请选择学校', trigger: 'blur' },
-                className:  { required: true, message: '请输入班级', trigger: 'blur' },
-                roomLength:  { required: true, message: '请输入教室长度', trigger: 'blur'},
-                roomWidth:  { required: true, message: '请输入教室宽度', trigger: 'blur' },
-                bbLength:  { required: true, message: '请输入黑板长度', trigger: 'blur' },
-                volume:  { required: true, message: '请输入班级容量', trigger: 'blur' },
+                name:  { required: true, message: '请输入班级', trigger: 'blur' },
+                roomLength:  { required: true, type:'number', message: '请输入教室长度', trigger: 'blur'},
+                roomWidth:  { required: true,  type:'number', message: '请输入教室宽度', trigger: 'blur' },
+                bbLength:  { required: true,  type:'number',message: '请输入黑板长度', trigger: 'blur' },
+                volume:  { required: true, type:'number', message: '请输入班级容量', trigger: 'blur' },
                 experiment: {required: true, message: '请选择是否是实验班', trigger: 'blur'}
             }
             
@@ -199,6 +202,14 @@ export default {
     methods: {
         addClass() {
             this.addClassVisible = true  
+        },
+        changeY() {
+            this.labelNum1 = 1;
+            this.labelNum2 = 2;
+        },
+        changeNo() {
+            this.labelNum1 = 2;
+            this.labelNum2 = 1;
         },
         //获取班级列表
         getClassList () {
@@ -237,7 +248,7 @@ export default {
                 var param = new URLSearchParams();
                 param.append('token', this.token);
                 param.append('schoolId',this.schoolId);
-                param.append('className',this.addClassForm.className);
+                param.append('name',this.addClassForm.name);
                 param.append('roomLength',this.addClassForm.roomLength);
                 param.append('roomWidth',this.addClassForm.roomWidth);
                 param.append('volume',this.addClassForm.volume);
@@ -256,7 +267,9 @@ export default {
            this.schoolId = this.addClassForm.schoolName
         },
         handleAddClassSucc(res) {
-            console.log(res)
+            if(res.status !== 200) return this.$message.error('添加班级失败');
+            this.$refs.addClassRef.resetFields();
+            this.getClassList();
         },
         handleAddClassErr(err) {
             console.log(err)
@@ -278,7 +291,7 @@ export default {
             if(res.status !== 200) return;
             res ? res = res.data: '';
             this.editClassForm = res.data;
-            console.log(this.editClassForm.experiment)
+            console.log(this.editClassForm.experiment, typeof this.editClassForm.experiment)
         },
         handleEditclassErr(err) {
             console.log(err)
@@ -290,13 +303,14 @@ export default {
                 let param = new URLSearchParams();
                 param.append('token', this.token);
                 param.append('schoolId',this.schoolId);
-                param.append('className',this.addClassForm.className);
-                param.append('roomLength',this.addClassForm.roomLength);
-                param.append('roomWidth',this.addClassForm.roomWidth);
-                param.append('volume',this.addClassForm.volume);
-                param.append('bbLength', this.addClassForm.bbLength);
-                param.append('description',this.addClassForm.description);
-                param.append('experiment',this.addClassForm.experiment);
+                param.append('name',this.editClassForm.name);
+                param.append('roomLength',this.editClassForm.roomLength);
+                param.append('roomWidth',this.editClassForm.roomWidth);
+                param.append('volume',this.editClassForm.volume);
+                param.append('bbLength', this.editClassForm.bbLength);
+                param.append('description',this.editClassForm.description);
+                param.append('experiment',this.editClassForm.experiment);
+                 param.append('id', this.editClassForm.id)
                 axios({
                     method: 'post',
                     url: '/api/saveClasses',
@@ -313,6 +327,7 @@ export default {
             this.editVisible = false;
             //提示修改成功
             this.$message.success('更新班级信息成功');
+            this.getClassList();
         },
         handleEditSaveClassErr(err) {
             console.log(err)
@@ -320,6 +335,10 @@ export default {
          //监听修改用户对话框的关闭事件
         editDialogClosed() {
             this.$refs.editClassRef.resetFields()
+        },
+        //删除班级
+        removeClassById(id) {
+            console.log(id)
         },
         // 获取学校列表
          getSchoolList() {
@@ -336,9 +355,37 @@ export default {
             if(res.status !== 200) return this.$message.error('获取学校列表失败');
             this.school = res.data.data;
         },
-        handleGetSchoolErr(error) {
-           console.log(error)
+        handleGetSchoolErr(err) {
+            console.log(err)
         },
+        //删除班级
+        async removeClassById(id) {
+        const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+        }).catch(err => err)
+        if(confirmResult !== 'confirm') {
+            return this.$message.info('已经取消删除')
+        }
+        let param = new URLSearchParams();
+        param.append('token', this.token);
+        param.append('id', id)
+        axios({
+            method: 'post',
+            url: '/api/deleteClasses',
+            data: param
+        }).then(this.handleDeleteClassSucc.bind(this))
+        .catch(this.handleDeleteClassErr.bind(this))
+        },
+        handleDeleteClassSucc(res) {
+            if(res.status !== 200) return this.$message.error('删除班级失败');
+            this.$message.success('删除班级成功');
+            this.getClassList();  
+        },
+        handleDeleteClassErr(err) {
+            console.log(err)
+        }
     }
     
 }

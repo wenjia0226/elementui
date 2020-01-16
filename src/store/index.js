@@ -1,16 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import mine from './modules/mine'
 Vue.use(Vuex);
 //创建vuex实例
 const store = new Vuex.Store({
-    state: {
-       schoolList: [1,2,3]
-    },
-    mutations:{
-        changeSchoolList(state, schoolList) {
-            state.schoolList = schoolList
-            console.log(state.schoolList, 'state')
-        }
+    modules: {
+        mine
     }
 })
 export default store

@@ -5,6 +5,7 @@ import Home from '@/components/home'
 import Welcome from '@/components/welcome'
 import School from '@/components/school'
 import Class from '@/components/class'
+import Student from '@/components/student'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -22,6 +23,7 @@ const router = new Router({
         {path: '/welcome', component: Welcome},
         {path: '/schoolsetting', component: School},
         {path: '/classsetting', component: Class},
+        {path: '/studentList', component: Student}
       ]
     }
   ]

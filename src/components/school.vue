@@ -27,9 +27,6 @@
                     <template slot-scope="scope">
                         <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
                         <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSchoolById(scope.row.id)"></el-button>
-                        <!-- <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-                            <el-button type="success" size="mini" icon="el-icon-setting"></el-button>
-                        </el-tooltip> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -44,7 +41,7 @@
                 :total="schoolList.length">
             </el-pagination>
         </el-card>
-        <!-- 添加用户的对话框 -->
+        <!-- 添加学校对话框 -->
         <el-dialog title="添加学校" :visible.sync="addDialogVisible" width="50%">
            <!-- 添加学校 -->
            <el-form :model="addSchoolForm" :rules="addSchoolRules" ref="schoolFormRef" label-width="100px">
@@ -79,7 +76,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
     name: 'school',
     data () {
@@ -115,8 +112,17 @@ export default {
     created() {
         this.token = window.sessionStorage.getItem('token');
         this.getSchoolList();
+        
+        //this.$store.dispatch('getMineBaseApi');
+       
     },
+    // computed: {
+    //     ...mapGetters([
+    //     'schoolList'
+    //     ]),
+    // },
     methods:{
+        
         getSchoolList() {
             let param = new URLSearchParams();
              param.append('token', this.token);
@@ -192,7 +198,7 @@ export default {
         //点击展示编辑页面
         showEditDialog (id) {
             this.editDialogVisible = true;
-            let param = new URLSearchParams();
+           let param = new URLSearchParams();
             param.append('id', id);
             param.append('token',this.token)
             axios({
