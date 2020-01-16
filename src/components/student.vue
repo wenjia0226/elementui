@@ -221,7 +221,16 @@ export default {
             console.log(err)
         },
         //删除学校
-        removeStudentsById(id) {
+       
+       async removeStudentsById(id) {
+        const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).catch(err => err)
+        if(confirmResult !== 'confirm') {
+            return this.$message.info('已经取消删除')
+        }
             let param = new URLSearchParams();
             param.append('id', id);
             param.append('token', this.token);
