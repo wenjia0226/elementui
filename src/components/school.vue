@@ -122,7 +122,6 @@ export default {
     //     ]),
     // },
     methods:{
-        
         getSchoolList() {
             let param = new URLSearchParams();
              param.append('token', this.token);

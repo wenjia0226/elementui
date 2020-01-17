@@ -10,8 +10,8 @@
         <el-card>
             <el-row :gutter="20">
                  <el-col :span="6">
-                     <el-input placeholder="输入学生姓名"  clearable >
-                        <el-button slot="append" icon="el-icon-search"></el-button>
+                     <el-input placeholder="输入学生姓名"  clearable v-model="query"  @clear="getStudentList">
+                        <el-button slot="append" icon="el-icon-search" @click="queryStudent"></el-button>
                      </el-input>
                  </el-col>
                  <el-col :span="6">
@@ -35,7 +35,7 @@
                 <el-table-column label="备注" prop="description"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassEditDialog(scope.row.id)" ></el-button>
+                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showStudentEditDialog(scope.row.id)" ></el-button>
                     </template>
                 </el-table-column>
                  <el-table-column label="操作">
@@ -46,12 +46,12 @@
             </el-table>
               <!-- 添加学生 -->
             <el-dialog title="添加学生" :visible.sync="addStudentVisible" width="50%">
-                <el-form :model="addStudentForm" :rules="addStudentRules" ref="studentFormRef" label-width="100px">
+                <el-form :model="addStudentForm" :rules="addStudentRules" ref="studentFormRef" label-width="120px">
                     <el-form-item label="所属学校班级" prop="name">
                         <el-cascader :options="options" v-model="addStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="学生姓名" prop="name">
-                        <el-input v-model.number="addStudentForm.name" clearable></el-input>
+                        <el-input v-model="addStudentForm.name" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="性别" prop="gender">
                         <el-radio v-model="addStudentForm.gender" size="medium" border :label="0">男</el-radio>
@@ -89,11 +89,55 @@
                     </span>
             </el-dialog>
             <!-- 编辑学生 -->
+             <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%">
+                <el-form :model="editStudentForm" :rules="editStudentRules" ref="studentEditFormRef" label-width="120px">
+                    <el-form-item label="所属学校班级" prop="name">
+                        <el-cascader ref="myCascader" :options="options" v-model="editStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                    </el-form-item>
+                    <el-form-item label="学生姓名" prop="name">
+                        <el-input v-model.number="editStudentForm.name" clearable></el-input>
+                   </el-form-item>
+                   <el-form-item label="性别" prop="gender">
+                        <el-radio v-model="editStudentForm.gender" size="medium" border :label="0">男</el-radio>
+                        <el-radio v-model="editStudentForm.gender" size="medium" border :label="1">女</el-radio>
+                   </el-form-item>
+                   <el-form-item label="年龄" prop="age">
+                        <el-input v-model.number="editStudentForm.age" clearable></el-input>
+                   </el-form-item>
+                   <el-form-item label="身高" prop="height">
+                        <el-input v-model.number="editStudentForm.height" clearable></el-input>
+                   </el-form-item>
+                   <el-form-item label="体重" prop="weight">
+                        <el-input v-model.number="editStudentForm.weight" clearable></el-input>
+                   </el-form-item>
+                   <el-form-item label="性格" prop="nature">
+                        <el-input v-model="editStudentForm.nature" clearable></el-input>
+                   </el-form-item>
+                   <el-form-item label="椅子高度" prop="chairHeight">
+                        <el-input v-model.number="editStudentForm.chairHeight" clearable></el-input>
+                   </el-form-item>
+                   <el-form-item label="坐姿高度" prop="sittingHeight">
+                        <el-input v-model.number="editStudentForm.sittingHeight" clearable></el-input>
+                   </el-form-item>
+                   <el-form-item label="是否矫正" prop="correct">
+                            <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
+                            <el-radio v-model="editStudentForm.correct" size="medium" border :label="0">未校正</el-radio>
+                   </el-form-item>
+                   <el-form-item label="备注" prop="description">
+                        <el-input v-model="editStudentForm.description" clearable></el-input>
+                   </el-form-item>
+                </el-form>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="editStudentVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
+                    </span>
+            </el-dialog>
         </el-card> 
      </div>
 </template>
 <script>
 import axios from 'axios'
+const thsAreaCode = ''; // 拼接 三级联动地址代码
 export default {
     created() {
         this.token = window.sessionStorage.getItem('token');
@@ -102,6 +146,8 @@ export default {
     },
     data() {
         return {
+            id: '', //学生id
+            query:"",
             token: '',
             options: [],
             addStudentVisible: false,
@@ -137,15 +183,60 @@ export default {
                label: 'name', //看到的是哪个属性
                value: 'id', // 选中的是谁的值
                children: 'children' //哪个属性实现父子节点嵌套
+            },
+            editStudentVisible: false,
+            editStudentForm:{
+                "age":'' ,
+                "chairHeight": '',
+                "sittingHeight":'',
+                "correct": '',
+                "description":"",
+                "gender":'',
+                "height":'',
+                "weight": '',
+                "name":"",
+                "nature":"",
+                "stu_cat":[]
+            },
+            editStudentRules: {
+                name:  { required: true, message: '请输入姓名', trigger: 'blur' },
+                age:  { required: true,  type: 'number', message: '请输入年龄', trigger: 'blur' },
+                chairHeight:  { required: true, type: 'number', message: '请输入椅子高度', trigger: 'blur' },
+                sittingHeight:  { required: true,type: 'number', message: '请输入坐姿高度', trigger: 'blur' },
+                correct:  { required: true, type: 'number',message: '请输入是否矫正', trigger: 'blur' },
+                gender:  { required: true,type: 'number', message: '请输入性别', trigger: 'blur' },
+                height:  { required: true,type: 'number', message: '请输入身高', trigger: 'blur' },
+                weight:  { required: true,type: 'number', message: '请输入体重', trigger: 'blur' },
+                nature:  { required: true, message: '请输入性格', trigger: 'blur' },
             }
 
         }
     },
      methods: {
-         //添加学生
+        //搜索学生
+        queryStudent() {
+        let param = new URLSearchParams();
+        param.append('token', this.token);
+        param.append('name', this.query);
+        axios({
+            method: "post",
+            url: '/api/queryStudent',
+            data: param 
+        }).then(this.handleQuerySucc.bind(this))
+        .catch(this.handleQueryErr.bind(this))
+        },
+        handleQuerySucc(res) {
+            if(res.status !== 200) return this.$message.error('未搜索到内容');
+            this.studentList = res.data.data;
+        },
+        handleQueryErr(err) {
+            console.log(err)
+        },
+         //点击出现添加学生框
         addStudent() { 
             this.addStudentVisible = true   
         },
+        //添加学生
         sumitAddStudent() {
             this.$refs.studentFormRef.validate((valid) => {
                 if(!valid) return this.$message.error('验证失败');
@@ -153,7 +244,6 @@ export default {
                 param.append('token', this.token);
                 param.append('schoolId', this.schoolId);
                 param.append('classId', this.classId);
-                param.append('age', this.addStudentForm.age)
                 param.append('chairHeight', this.addStudentForm.chairHeight)
                 param.append('sittingHeight',this.addStudentForm.sittingHeight)
                 param.append('correct', this.addStudentForm.correct)
@@ -164,7 +254,7 @@ export default {
                 param.append('name', this.addStudentForm.name)
                 param.append('nature', this.addStudentForm.nature)
                 param.append('age', this.addStudentForm.age)
-                param.append('stu_cat', this.addStudentForm.stu_cat)
+                // param.append('stu_cat', this.addStudentForm.stu_cat)
                 axios({
                     method: 'post',
                     url: '/api/addStudent',
@@ -175,8 +265,10 @@ export default {
         handleAddStuSucc(res) {
            if(res.status != 200) return this.$message.error('添加学生信息失败');
            this.addStudentVisible = false;
+           this.$message.success('添加学生信息成功');
+           this.$refs.studentFormRef.resetFields();
            this.getStudentList();
-            this.$message.success('添加学生信息成功');
+          
         },
         handleAddStuErr(err) {
            console.log(err)
@@ -220,8 +312,7 @@ export default {
         handleGetStudentErr(err) {
             console.log(err)
         },
-        //删除学校
-       
+        //删除学生    
        async removeStudentsById(id) {
         const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
             confirmButtonText: '确定',
@@ -241,11 +332,79 @@ export default {
             }).then(this.handleDeleteStuSucc.bind(this)).catch(this.handleDeleteStuErr.bind(this))
         },
         handleDeleteStuSucc(res) {
-            console.log(res)
             if(res.status !== 200) return this.$message.error('删除学生失败');
             this.getStudentList();
         },
         handleDeleteStuErr(err) {
+            console.log(err)
+        },
+        // 修改学生
+        showStudentEditDialog(id) {
+              this.id = id;
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('id', id);
+            axios({
+                method: 'post', 
+                url: '/api/editStudent',
+                data: param
+            }).then(this.handleEditStuSucc.bind(this)).catch(this.handleEditStuErr.bind(this))
+        },
+        handleEditStuSucc(res) {
+            if(res.status !== 200) return;
+            if(res.data) {
+                this.editStudentForm = res.data.data;
+                this.editStudentVisible = true;
+                this.getStudentList();
+
+            }
+            
+        },
+        handleAddressFun(e, form, thsAreaCode) {
+            thsAreaCode = this.$refs['cascaderAddr'].currentLabels;
+            alert(thsAreaCode)
+            
+        },
+        handleEditStuErr(err) {
+            console.log(err)
+        },
+        //保存修改的数据
+        saveEditInfo() {
+            this.$refs.studentEditFormRef.validate((valid) => {
+            if(!valid) return this.$message.error('验证失败');
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('schoolId', this.schoolId);
+            param.append('classId', this.classId);
+            param.append('age', this.editStudentForm.age)
+            param.append('chairHeight', this.editStudentForm.chairHeight)
+            param.append('sittingHeight',this.editStudentForm.sittingHeight)
+            param.append('correct', this.editStudentForm.correct)
+            param.append('description', this.editStudentForm.description)
+            param.append('gender', this.editStudentForm.gender)
+            param.append('height', this.editStudentForm.height)
+            param.append('weight', this.editStudentForm.weight)
+            param.append('name', this.editStudentForm.name)
+            param.append('nature', this.editStudentForm.nature)
+            param.append('id', this.id)
+            axios({
+                method: 'post',
+                url: '/api/saveStudent',
+                data: param
+            }).then(this.handldEditStuSucc.bind(this)).catch(this.handleEditStuErr.bind(this))
+            })
+        },
+        handldEditStuSucc(res) {
+            if(res.status !== 200) return;
+             this.studentList = res.data.data;
+             //console.log(this.studentList)
+            //隐藏编辑框
+            this.editStudentVisible = false;
+            //提示修改成功
+            this.$message.success('更新学生信息成功');
+            this.getStudentList();
+        },
+        handleEditStuErr(err) {
             console.log(err)
         }
     }
