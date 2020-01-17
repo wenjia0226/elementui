@@ -3,7 +3,7 @@
         <!-- 面包屑导航 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+            <el-breadcrumb-item>基础数据</el-breadcrumb-item>
             <el-breadcrumb-item>班级设置</el-breadcrumb-item>
         </el-breadcrumb>
         <!-- 卡片视图 -->
@@ -57,19 +57,19 @@
             <el-form :model="addClassForm" :rules="addClassRules" ref="addClassRef" label-width="120px" class="demo-ruleForm">
                 <el-form-item label="所属学校" prop="schoolName">
                     <el-cascader v-model="addClassForm.schoolName"  :options="school" :props ="cateProps" @change="handleChange">
-                    </el-cascader>
+                    </el-cascader> 
                 </el-form-item>
                 <el-form-item label="班级" prop="className">
                     <el-input v-model="addClassForm.className" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="教室长度(米)" prop="roomLength">
-                    <el-input v-model.number="addClassForm.roomLength" clearable></el-input>
+                    <el-input v-model="addClassForm.roomLength" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="教室宽度(米)" prop="roomWidth">
-                    <el-input v-model.number="addClassForm.roomWidth" clearable></el-input>
+                    <el-input v-model="addClassForm.roomWidth" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="黑板长度(米)" prop="bbLength">
-                    <el-input v-model.number="addClassForm.bbLength" clearable></el-input>
+                    <el-input v-model="addClassForm.bbLength" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="人数" prop="volume">
                     <el-input v-model.number="addClassForm.volume" clearable></el-input>
@@ -94,21 +94,21 @@
         <el-dialog title="修改班级" :visible.sync="editVisible" width="50%" @close="editDialogClosed">
             <el-form :model="editClassForm" :rules="editClassRules" ref="editClassRef" label-width="100px">
                 <el-form-item label="所属学校" prop="schoolName" >
-                <!-- <el-cascader v-model="editClassForm.schoolName"  :options="school" :props ="cateProps" @change="handleChange">
-                </el-cascader> -->
-                    <el-input v-model="editClassForm.schoolName" disabled></el-input>
+                <el-cascader v-model="districtNames"  :options="school" :props ="cateProps" @change="handleChange">
+                </el-cascader>
+                    <!-- <el-input v-model="editClassForm.schoolName" disabled></el-input> -->
                 </el-form-item>
                 <el-form-item label="班级" prop="className">
                     <el-input v-model="editClassForm.className" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="教室长度(米)" prop="roomLength">
-                    <el-input v-model.number="editClassForm.roomLength" clearable></el-input>
+                    <el-input v-model="editClassForm.roomLength" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="教室宽度(米)" prop="roomWidth">
-                    <el-input v-model.number="editClassForm.roomWidth" clearable></el-input>
+                    <el-input v-model="editClassForm.roomWidth" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="黑板长度(米)" prop="bbLength">
-                    <el-input v-model.number="editClassForm.bbLength" clearable></el-input>
+                    <el-input v-model="editClassForm.bbLength" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="人数" prop="volume">
                     <el-input v-model.number="editClassForm.volume" clearable></el-input>
@@ -140,6 +140,16 @@ export default {
         this.getSchoolList();
     },
     data() {
+        var valiNumberPass1 = (rule, value, callback) => {//包含小数的数字
+            let reg = /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/g;
+            if (value === '') {
+                callback(new Error('请输入内容'));
+            } else if (!reg.test(value)) {
+                callback(new Error('请输入数字'));
+            } else {
+                callback();
+            }
+        };
         return {
             token: '',
             addClassVisible: false,
@@ -148,6 +158,7 @@ export default {
             schoolId: '',
             labelNum1: 1,
             labelNum2: 0,
+            districtNames: [],
             addClassForm: {
                 className:'',
                 roomLength: '',
@@ -159,11 +170,11 @@ export default {
                 schoolName: ''
             },
             addClassRules: {
-                schoolName:  { required: true, message: '请选择学校', trigger: 'blur' },
-                className:  { required: true, message: '请输入班级', trigger: 'blur' },
-                roomLength:  { required: true, type:'number', message: '请输入教室长度', trigger: 'blur'},
-                roomWidth:  { required: true,  type:'number', message: '请输入教室宽度', trigger: 'blur' },
-                bbLength:  { required: true,  type:'number',message: '请输入黑板长度', trigger: 'blur' },
+                schoolName:  { required: true,  message: '请选择学校', trigger: 'blur' },
+                className:  { required: true,  message: '请输入班级', trigger: 'blur' },
+                roomLength:  { required: true, validator: valiNumberPass1, message: '请输入教室长度', trigger: 'blur'},
+                roomWidth:  { required: true,  validator: valiNumberPass1, message: '请输入教室宽度', trigger: 'blur' },
+                bbLength:  { required: true,  validator: valiNumberPass1,message: '请输入黑板长度', trigger: 'blur' },
                 volume:  { required: true, type:'number', message: '请输入班级容量', trigger: 'blur' },
                 experiment: {required: true, message: '请选择是否是实验班', trigger: 'blur'}
                
@@ -189,10 +200,10 @@ export default {
             },
             editClassRules: {
                 schoolName:  { required: true, message: '请选择学校', trigger: 'blur' },
-                nclassNameame:  { required: true, message: '请输入班级', trigger: 'blur' },
-                roomLength:  { required: true, type:'number', message: '请输入教室长度', trigger: 'blur'},
-                roomWidth:  { required: true,  type:'number', message: '请输入教室宽度', trigger: 'blur' },
-                bbLength:  { required: true,  type:'number',message: '请输入黑板长度', trigger: 'blur' },
+                classNameame:  { required: true, message: '请输入班级', trigger: 'blur' },
+                roomLength:  { required: true, validator: valiNumberPass1, message: '请输入教室长度', trigger: 'blur'},
+                roomWidth:  { required: true,  validator: valiNumberPass1, message: '请输入教室宽度', trigger: 'blur' },
+                bbLength:  { required: true,  validator: valiNumberPass1, message: '请输入黑板长度', trigger: 'blur' },
                 volume:  { required: true, type:'number', message: '请输入班级容量', trigger: 'blur' },
                 experiment: {required: true, message: '请选择是否是实验班', trigger: 'blur'}
             }
@@ -202,14 +213,6 @@ export default {
     methods: {
         addClass() {
             this.addClassVisible = true  
-        },
-        changeY() {
-            this.labelNum1 = 1;
-            this.labelNum2 = 2;
-        },
-        changeNo() {
-            this.labelNum1 = 2;
-            this.labelNum2 = 1;
         },
         //获取班级列表
         getClassList () {
@@ -262,8 +265,9 @@ export default {
                 .catch(this.handleAddClassErr.bind(this))
             })
         },
-         handleChange() {
-           this.schoolId = this.addClassForm.schoolName
+         handleChange(item) {
+           this.schoolId = this.addClassForm.schoolName;
+           console.log(item)
         },
         handleAddClassSucc(res) {
             if(res.status !== 200) return this.$message.error('添加班级失败');
@@ -349,6 +353,7 @@ export default {
         handleGetSchoolSucc(res) {
             if(res.status !== 200) return this.$message.error('获取学校列表失败');
             this.school = res.data.data;
+            console.log(this.school)
         },
         handleGetSchoolErr(err) {
             console.log(err)

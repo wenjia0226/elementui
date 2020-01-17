@@ -19,7 +19,7 @@
                  </el-col>
              </el-row>
               <!-- 学生列表 -->
-            <el-table :data="studentList" border stripe style="width: 100%">
+            <el-table :data="studentList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="所属学校" prop="schoolName"></el-table-column>
                 <el-table-column label="所属班级" prop="classesName"></el-table-column>
@@ -44,10 +44,20 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 分页功能 -->
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[5, 10, 20]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="studentList.length">
+            </el-pagination>
               <!-- 添加学生 -->
             <el-dialog title="添加学生" :visible.sync="addStudentVisible" width="50%">
                 <el-form :model="addStudentForm" :rules="addStudentRules" ref="studentFormRef" label-width="120px">
-                    <el-form-item label="所属学校班级" prop="name">
+                    <el-form-item label="所属学校班级">
                         <el-cascader :options="options" v-model="addStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="学生姓名" prop="name">
@@ -60,20 +70,20 @@
                    <el-form-item label="年龄" prop="age">
                         <el-input v-model.number="addStudentForm.age" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="身高" prop="height">
-                        <el-input v-model.number="addStudentForm.height" clearable></el-input>
+                   <el-form-item label="身高(米)" prop="height">
+                        <el-input v-model="addStudentForm.height" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="体重" prop="weight">
-                        <el-input v-model.number="addStudentForm.weight" clearable></el-input>
+                   <el-form-item label="体重(KG)" prop="weight">
+                        <el-input v-model="addStudentForm.weight" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="性格" prop="nature">
                         <el-input v-model="addStudentForm.nature" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="椅子高度" prop="chairHeight">
-                        <el-input v-model.number="addStudentForm.chairHeight" clearable></el-input>
+                   <el-form-item label="椅子高度(米)" prop="chairHeight">
+                        <el-input v-model="addStudentForm.chairHeight" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="坐姿高度" prop="sittingHeight">
-                        <el-input v-model.number="addStudentForm.sittingHeight" clearable></el-input>
+                   <el-form-item label="坐姿高度(米)" prop="sittingHeight">
+                        <el-input v-model="addStudentForm.sittingHeight" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="是否矫正" prop="correct">
                             <el-radio v-model="addStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
@@ -95,7 +105,7 @@
                         <el-cascader ref="myCascader" :options="options" v-model="editStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="学生姓名" prop="name">
-                        <el-input v-model.number="editStudentForm.name" clearable></el-input>
+                        <el-input v-model="editStudentForm.name" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="性别" prop="gender">
                         <el-radio v-model="editStudentForm.gender" size="medium" border :label="0">男</el-radio>
@@ -104,20 +114,20 @@
                    <el-form-item label="年龄" prop="age">
                         <el-input v-model.number="editStudentForm.age" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="身高" prop="height">
-                        <el-input v-model.number="editStudentForm.height" clearable></el-input>
+                   <el-form-item label="身高(米)" prop="height">
+                        <el-input v-model="editStudentForm.height" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="体重" prop="weight">
-                        <el-input v-model.number="editStudentForm.weight" clearable></el-input>
+                   <el-form-item label="体重(KG)" prop="weight">
+                        <el-input v-model="editStudentForm.weight" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="性格" prop="nature">
                         <el-input v-model="editStudentForm.nature" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="椅子高度" prop="chairHeight">
-                        <el-input v-model.number="editStudentForm.chairHeight" clearable></el-input>
+                   <el-form-item label="椅子高度(米)" prop="chairHeight">
+                        <el-input v-model="editStudentForm.chairHeight" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="坐姿高度" prop="sittingHeight">
-                        <el-input v-model.number="editStudentForm.sittingHeight" clearable></el-input>
+                   <el-form-item label="坐姿高度(米)" prop="sittingHeight">
+                        <el-input v-model="editStudentForm.sittingHeight" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="是否矫正" prop="correct">
                             <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
@@ -145,6 +155,16 @@ export default {
         this.getStudentList();
     },
     data() {
+        var valiNumberPass1 = (rule, value, callback) => {//包含小数的数字
+        let reg = /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/g;
+        if (value === '') {
+            callback(new Error('请输入内容'));
+        } else if (!reg.test(value)) {
+            callback(new Error('请输入数字'));
+        } else {
+            callback();
+        }
+        };
         return {
             id: '', //学生id
             query:"",
@@ -154,6 +174,9 @@ export default {
             schoolId: '',
             classId: '',
             studentList: [],
+            currentPage: 1,
+            pageSize: 5,
+            total:0,
             addStudentForm: {
                 "age":'' ,
                 "chairHeight": '',
@@ -171,12 +194,12 @@ export default {
             addStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
                 age:  { required: true,  type: 'number', message: '请输入年龄', trigger: 'blur' },
-                chairHeight:  { required: true, type: 'number', message: '请输入椅子高度', trigger: 'blur' },
-                sittingHeight:  { required: true,type: 'number', message: '请输入坐姿高度', trigger: 'blur' },
+                chairHeight:  { required: true, validator: valiNumberPass1, message: '请输入椅子高度', trigger: 'blur' },
+                sittingHeight:  { required: true,validator: valiNumberPass1, message: '请输入坐姿高度', trigger: 'blur' },
                 correct:  { required: true, type: 'number',message: '请输入是否矫正', trigger: 'blur' },
                 gender:  { required: true,type: 'number', message: '请输入性别', trigger: 'blur' },
-                height:  { required: true,type: 'number', message: '请输入身高', trigger: 'blur' },
-                weight:  { required: true,type: 'number', message: '请输入体重', trigger: 'blur' },
+                height:  { required: true, validator: valiNumberPass1, message: '请输入身高', trigger: 'blur' },
+                weight:  { required: true,validator: valiNumberPass1, message: '请输入体重', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
             },
             cateProps: {
@@ -201,12 +224,12 @@ export default {
             editStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
                 age:  { required: true,  type: 'number', message: '请输入年龄', trigger: 'blur' },
-                chairHeight:  { required: true, type: 'number', message: '请输入椅子高度', trigger: 'blur' },
-                sittingHeight:  { required: true,type: 'number', message: '请输入坐姿高度', trigger: 'blur' },
+                chairHeight:  { required: true, validator: valiNumberPass1, message: '请输入椅子高度', trigger: 'blur' },
+                sittingHeight:  { required: true,validator: valiNumberPass1, message: '请输入坐姿高度', trigger: 'blur' },
                 correct:  { required: true, type: 'number',message: '请输入是否矫正', trigger: 'blur' },
                 gender:  { required: true,type: 'number', message: '请输入性别', trigger: 'blur' },
-                height:  { required: true,type: 'number', message: '请输入身高', trigger: 'blur' },
-                weight:  { required: true,type: 'number', message: '请输入体重', trigger: 'blur' },
+                height:  { required: true,validator: valiNumberPass1, message: '请输入身高', trigger: 'blur' },
+                weight:  { required: true,validator: valiNumberPass1, message: '请输入体重', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
             }
 
@@ -215,15 +238,15 @@ export default {
      methods: {
         //搜索学生
         queryStudent() {
-        let param = new URLSearchParams();
-        param.append('token', this.token);
-        param.append('name', this.query);
-        axios({
-            method: "post",
-            url: '/api/queryStudent',
-            data: param 
-        }).then(this.handleQuerySucc.bind(this))
-        .catch(this.handleQueryErr.bind(this))
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('name', this.query);
+            axios({
+                method: "post",
+                url: '/api/queryStudent',
+                data: param 
+            }).then(this.handleQuerySucc.bind(this))
+            .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
             if(res.status !== 200) return this.$message.error('未搜索到内容');
@@ -305,6 +328,16 @@ export default {
                 data: param
             }).then(this.handleGetStudentList.bind(this)).catch(this.handleGetStudentErr.bind(this))
         },
+        //分页
+        //监听pageSize改变事件
+        handleSizeChange(newSize) {
+            this.pageSize = newSize;
+            this.getStudentList();
+        },
+        //监听页码值改变事件
+        handleCurrentChange(val) {
+           this.currentPage = val;
+        },
         handleGetStudentList(res) {
             if(res.status !==200) return this.$message.error('获取学生列表失败');
             this.studentList = res.data.data;
@@ -312,35 +345,9 @@ export default {
         handleGetStudentErr(err) {
             console.log(err)
         },
-        //删除学生    
-       async removeStudentsById(id) {
-        const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-        }).catch(err => err)
-        if(confirmResult !== 'confirm') {
-            return this.$message.info('已经取消删除')
-        }
-            let param = new URLSearchParams();
-            param.append('id', id);
-            param.append('token', this.token);
-            axios({
-                method: 'post',
-                url: '/api/deleteStudent',
-                data: param
-            }).then(this.handleDeleteStuSucc.bind(this)).catch(this.handleDeleteStuErr.bind(this))
-        },
-        handleDeleteStuSucc(res) {
-            if(res.status !== 200) return this.$message.error('删除学生失败');
-            this.getStudentList();
-        },
-        handleDeleteStuErr(err) {
-            console.log(err)
-        },
         // 修改学生
         showStudentEditDialog(id) {
-              this.id = id;
+            this.id = id;
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('id', id);
@@ -356,9 +363,7 @@ export default {
                 this.editStudentForm = res.data.data;
                 this.editStudentVisible = true;
                 this.getStudentList();
-
-            }
-            
+            }            
         },
         handleAddressFun(e, form, thsAreaCode) {
             thsAreaCode = this.$refs['cascaderAddr'].currentLabels;
@@ -406,7 +411,33 @@ export default {
         },
         handleEditStuErr(err) {
             console.log(err)
+        },
+        //删除学生    
+       async removeStudentsById(id) {
+        const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).catch(err => err)
+        if(confirmResult !== 'confirm') {
+            return this.$message.info('已经取消删除')
         }
+            let param = new URLSearchParams();
+            param.append('id', id);
+            param.append('token', this.token);
+            axios({
+                method: 'post',
+                url: '/api/deleteStudent',
+                data: param
+            }).then(this.handleDeleteStuSucc.bind(this)).catch(this.handleDeleteStuErr.bind(this))
+        },
+        handleDeleteStuSucc(res) {
+            if(res.status !== 200) return this.$message.error('删除学生失败');
+            this.getStudentList();
+        },
+        handleDeleteStuErr(err) {
+            console.log(err)
+        },
     }
 }
 </script>
