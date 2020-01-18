@@ -7,10 +7,11 @@ import School from '@/components/school'
 import Class from '@/components/class'
 import Student from '@/components/student'
 import Record from '@/components/record'
+// import Rights from '@/components/power/rights'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
-  return routerPush.call(this, location).catch(error=> error)
+return routerPush.call(this, location).catch(error=> error)
 }
 const router = new Router({
   routes: [
@@ -25,7 +26,8 @@ const router = new Router({
         {path: '/schoolsetting', component: School},
         {path: '/classsetting', component: Class},
         {path: '/studentList', component: Student},
-        {path: '/testrecord', component: Record}
+        {path: '/testrecord', component: Record},
+        // {path: '/Jurisdiction', component: Rights}
       ]
     }
   ]

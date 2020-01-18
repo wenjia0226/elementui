@@ -101,8 +101,8 @@
             <!-- 编辑学生 -->
              <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%">
                 <el-form :model="editStudentForm" :rules="editStudentRules" ref="studentEditFormRef" label-width="120px">
-                    <el-form-item label="所属学校班级" prop="name">
-                        <el-cascader ref="myCascader" :options="options" v-model="editStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                    <el-form-item label="所属学校/班级" prop="name" width="100%">
+                        <el-cascader ref="myCascader" :options="options" v-model="selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="学生姓名" prop="name">
                         <el-input v-model="editStudentForm.name" clearable></el-input>
@@ -177,6 +177,7 @@ export default {
             currentPage: 1,
             pageSize: 5,
             total:0,
+            selectedOptions: [],
             addStudentForm: {
                 "age":'' ,
                 "chairHeight": '',
@@ -187,19 +188,18 @@ export default {
                 "height":'',
                 "weight": '',
                 "name":"",
-                "nature":"",
-                "stu_cat":[]
+                "nature":""
                 
             },
             addStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
                 age:  { required: true,  type: 'number', message: '请输入年龄', trigger: 'blur' },
-                chairHeight:  { required: true, validator: valiNumberPass1, message: '请输入椅子高度', trigger: 'blur' },
-                sittingHeight:  { required: true,validator: valiNumberPass1, message: '请输入坐姿高度', trigger: 'blur' },
+                chairHeight:  { required: true, validator: valiNumberPass1, message: '请输入椅子高度(cm)', trigger: 'blur' },
+                sittingHeight:  { required: true,validator: valiNumberPass1, message: '请输入坐姿高度(cm)', trigger: 'blur' },
                 correct:  { required: true, type: 'number',message: '请输入是否矫正', trigger: 'blur' },
                 gender:  { required: true,type: 'number', message: '请输入性别', trigger: 'blur' },
-                height:  { required: true, validator: valiNumberPass1, message: '请输入身高', trigger: 'blur' },
-                weight:  { required: true,validator: valiNumberPass1, message: '请输入体重', trigger: 'blur' },
+                height:  { required: true, validator: valiNumberPass1, message: '请输入身高(m)', trigger: 'blur' },
+                weight:  { required: true,validator: valiNumberPass1, message: '请输入体重(kg)', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
             },
             cateProps: {
@@ -302,13 +302,13 @@ export default {
             param.append('token', this.token);
             axios({
                 method: 'post',
-                url: '/api/cascade',
+                url: '/api/cascade1',
                 data: param
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
             if(res.status !==200) return this.$message.error('获取级联数据失败');
-            this.options = res.data.data;
+            this.options =  res.data.data;
         },
         handleGetOptionErr(err) {
             console.log(err)
@@ -343,7 +343,6 @@ export default {
             this.studentList = res.data.data;
             // console.log(this.studentList)
             this.studentList.forEach((value, index) => {
-                console.log(value)
                 if(value.gender == 1) {
                     value.gender = '女'
                 }else{
@@ -376,8 +375,9 @@ export default {
             if(res.status !== 200) return;
             if(res.data) {
                 this.editStudentForm = res.data.data;
-                console.log(this.editStudentForm)
                 this.editStudentVisible = true;
+                this.selectedOptions.push(res.data.data.schoolId)
+                this.selectedOptions.push(res.data.data.classesId)
                 this.getStudentList();
             }            
         },

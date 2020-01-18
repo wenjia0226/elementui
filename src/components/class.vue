@@ -56,7 +56,7 @@
         <el-dialog title="添加班级" ref="addClassRef" :visible.sync="addClassVisible" width="50%">
             <el-form :model="addClassForm" :rules="addClassRules" ref="addClassRef" label-width="120px" class="demo-ruleForm">
                 <el-form-item label="所属学校" prop="schoolName">
-                    <el-cascader v-model="addClassForm.schoolName"  :options="school" :props ="cateProps" @change="handleChange">
+                    <el-cascader v-model="selectedOptions"  :options="school" :props ="cateProps" @change="handleChange">
                     </el-cascader> 
                 </el-form-item>
                 <el-form-item label="班级" prop="className">
@@ -94,9 +94,8 @@
         <el-dialog title="修改班级" :visible.sync="editVisible" width="50%" @close="editDialogClosed">
             <el-form :model="editClassForm" :rules="editClassRules" ref="editClassRef" label-width="100px">
                 <el-form-item label="所属学校" prop="schoolName" >
-                <el-cascader v-model="districtNames"  :options="school" :props ="cateProps" @change="handleChange">
-                </el-cascader>
-                    <!-- <el-input v-model="editClassForm.schoolName" disabled></el-input> -->
+                    <el-cascader v-model="selectedOptions"  :options="school" :props ="cateProps" @change="handleChange">
+                    </el-cascader>
                 </el-form-item>
                 <el-form-item label="班级" prop="className">
                     <el-input v-model="editClassForm.className" clearable></el-input>
@@ -158,7 +157,7 @@ export default {
             schoolId: '',
             labelNum1: 1,
             labelNum2: 0,
-            districtNames: [],
+            selectedOptions: [],
             addClassForm: {
                 className:'',
                 roomLength: '',
@@ -293,6 +292,7 @@ export default {
             if(res.status !== 200) return;
             res ? res = res.data: '';
             this.editClassForm = res.data;
+            this.selectedOptions = res.data.schoolId;
             this.editVisible = true;
         },
         handleEditclassErr(err) {
