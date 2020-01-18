@@ -26,7 +26,7 @@
                 <el-table-column label="姓名" prop="name"></el-table-column>
                 <el-table-column label="性别" prop="gender"></el-table-column>
                 <el-table-column label="年龄" prop="age"></el-table-column>
-                 <el-table-column label="身高" prop="height"></el-table-column>
+                <el-table-column label="身高" prop="height"></el-table-column>
                 <el-table-column label="体重" prop="weight"></el-table-column>
                 <el-table-column label="性格" prop="nature"></el-table-column>
                 <el-table-column label="椅子高度" prop="chairHeight"></el-table-column>
@@ -131,7 +131,7 @@
                    </el-form-item>
                    <el-form-item label="是否矫正" prop="correct">
                             <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
-                            <el-radio v-model="editStudentForm.correct" size="medium" border :label="0">未校正</el-radio>
+                            <el-radio v-model="editStudentForm.correct" size="medium" border :label="0">未矫正</el-radio>
                    </el-form-item>
                    <el-form-item label="备注" prop="description">
                         <el-input v-model="editStudentForm.description" clearable></el-input>
@@ -341,6 +341,21 @@ export default {
         handleGetStudentList(res) {
             if(res.status !==200) return this.$message.error('获取学生列表失败');
             this.studentList = res.data.data;
+            // console.log(this.studentList)
+            this.studentList.forEach((value, index) => {
+                console.log(value)
+                if(value.gender == 1) {
+                    value.gender = '女'
+                }else{
+                    value.gender = '男'
+                }
+                if(value.correct ==1 ) {
+                    value.correct = '已矫正'
+                }else {
+                    value.correct = '未矫正'
+                }
+            })
+            
         },
         handleGetStudentErr(err) {
             console.log(err)
@@ -361,6 +376,7 @@ export default {
             if(res.status !== 200) return;
             if(res.data) {
                 this.editStudentForm = res.data.data;
+                console.log(this.editStudentForm)
                 this.editStudentVisible = true;
                 this.getStudentList();
             }            

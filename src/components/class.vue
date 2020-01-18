@@ -267,7 +267,6 @@ export default {
         },
          handleChange(item) {
            this.schoolId = this.addClassForm.schoolName;
-           console.log(item)
         },
         handleAddClassSucc(res) {
             if(res.status !== 200) return this.$message.error('添加班级失败');
@@ -353,7 +352,6 @@ export default {
         handleGetSchoolSucc(res) {
             if(res.status !== 200) return this.$message.error('获取学校列表失败');
             this.school = res.data.data;
-            console.log(this.school)
         },
         handleGetSchoolErr(err) {
             console.log(err)
