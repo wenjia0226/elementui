@@ -18,7 +18,7 @@
                         <el-button type="primary" @click="addDialogVisible = true">添加学校</el-button>
                  </el-col>
              </el-row>
-              <!-- 学校列表 -->
+            <!-- 学校列表 -->
             <el-table :data="schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="学校名称" prop="name"></el-table-column>
@@ -111,10 +111,7 @@ export default {
     },
     created() {
         this.token = window.sessionStorage.getItem('token');
-        this.getSchoolList();
-        
-        //this.$store.dispatch('getMineBaseApi');
-       
+        this.getSchoolList();       
     },
     // computed: {
     //     ...mapGetters([
