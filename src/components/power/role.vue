@@ -323,8 +323,7 @@ export default {
                 return arr.push(node.id)
             }
             node.children.forEach(item =>
-            this.getLeafKeys(item, arr) )
-            
+            this.getLeafKeys(item, arr))
         },
         //监听分配权限对话框的关闭事件
         setRightDialogClose() {
