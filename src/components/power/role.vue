@@ -49,7 +49,7 @@
                 <el-table-column label="描述" prop="description"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary" size="mini" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" >编辑</el-button>
+                        <el-button type="primary" size="mini" icon="el-icon-edit"  @click="showEditDialog(scope.row.roleId)" >编辑</el-button>
                     </template>
                 </el-table-column>
                  <el-table-column label="操作">
@@ -59,7 +59,7 @@
                 </el-table-column>
                   <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="warning"  size="mini" icon="el-icon-setting" @click="showSetRightDialog(scope.row)">权限分配</el-button>
+                        <el-button type="warning"  size="mini" icon="el-icon-setting" @click="showSetRightDialog(scope.row.roleId)">权限分配</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -137,8 +137,8 @@ export default {
            },
            editRoleForm: {
                 roleName: '',
-               description: '',
-               id: ''
+                description: '',
+                id: ''
            },
            editRoleRules: {
                 roleName: [{required: true, message: '请输入角色名称', trigger: 'blur' }]
@@ -214,11 +214,11 @@ export default {
            this.currentPage = val;
         },
         //点击展示编辑页面
-        showEditDialog (id) {
+        showEditDialog (roleId) {
             this.editRoleDialogVisible = true;
-            this.editRoleForm.id = id;
+            this.editRoleForm.id = roleId;
            let param = new URLSearchParams();
-            param.append('id', id);
+            param.append('roleId', roleId);
             param.append('token',this.token)
             axios({
                 method: 'post',
@@ -337,7 +337,6 @@ export default {
             param.append('token' , this.token);
             param.append('roleId', this.roleId);
             param.append('rightId', idStr);
-            console.log(this.roleId);
             axios({
                 method: 'post',
                 data: param,
