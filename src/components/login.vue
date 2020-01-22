@@ -65,6 +65,7 @@ export default {
                         this.$message.success('登录成功');
                         //将token 存到sessionStorage
                         window.sessionStorage.setItem('token', res.data.data.token)
+                        window.sessionStorage.setItem('loginName', this.loginForm.loginname)
                         this.$router.push('/home')
                  })
             })

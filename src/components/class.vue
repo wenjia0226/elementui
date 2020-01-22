@@ -86,7 +86,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addClassVisible = false">取 消</el-button>
+                <el-button @click="resetAddClass">重置</el-button>
                 <el-button type="primary" @click=" sumitClass">确 定</el-button>
             </span>
         </el-dialog>
@@ -275,6 +275,9 @@ export default {
         },
         handleAddClassErr(err) {
             console.log(err)
+        },
+        resetAddClass() {
+            this.$refs.addClassRef.resetFields();
         },
         //点击展示编辑页面
         showClassEditDialog (id) {

@@ -59,7 +59,7 @@
                 </el-table-column>
                   <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="warning"  size="mini" icon="el-icon-setting" @click="showSetRightDialog(scope.row.roleId)">权限分配</el-button>
+                        <el-button type="warning"  size="mini" icon="el-icon-setting" @click="showSetRightDialog(scope.row)">权限分配</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -154,8 +154,8 @@ export default {
            },
            // 默认选中的id值数据
            defkeys: [],
-           role: '',
-           roleId: ''
+           role: '', //角色
+           roleId: '' //角色Id
 
        }
    },
@@ -295,8 +295,9 @@ export default {
         },
         //展示分配权限对话框
         showSetRightDialog(role) {
-            this.role = role;
-            this.roleId= role.roleId;
+            console.log(role)
+            this.roleId = role.roleId;
+            this.role= role;
             let param = new URLSearchParams();
             param.append('token', this.token)
             //获取权限列表
@@ -305,8 +306,7 @@ export default {
                 url: '/api/menuList',
                 data: param
             }).then(this.handleGetMenuListSucc.bind(this))
-            .catch(this.getMenuListErr.bind(this))
-           
+            .catch(this.getMenuListErr.bind(this))          
         },
         handleGetMenuListSucc(res) {
             if(res.status !== 200) return this.$message.error('获取列表失败');

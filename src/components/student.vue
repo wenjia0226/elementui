@@ -57,7 +57,7 @@
               <!-- 添加学生 -->
             <el-dialog title="添加学生" :visible.sync="addStudentVisible" width="50%">
                 <el-form :model="addStudentForm" :rules="addStudentRules" ref="studentFormRef" label-width="120px">
-                    <el-form-item label="所属学校班级">
+                    <el-form-item label="所属学校班级" prop='stu_cat'>
                         <el-cascader :options="options" v-model="addStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="学生姓名" prop="name">
@@ -201,6 +201,7 @@ export default {
                 height:  { required: true, validator: valiNumberPass1, message: '请输入身高(m)', trigger: 'blur' },
                 weight:  { required: true,validator: valiNumberPass1, message: '请输入体重(kg)', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
+                stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'}
             },
             cateProps: {
                label: 'name', //看到的是哪个属性
@@ -231,6 +232,7 @@ export default {
                 height:  { required: true,validator: valiNumberPass1, message: '请输入身高', trigger: 'blur' },
                 weight:  { required: true,validator: valiNumberPass1, message: '请输入体重', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
+                stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'}
             }
 
         }
