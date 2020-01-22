@@ -56,15 +56,24 @@
                 <el-form-item label="微信昵称" prop="wechatName">
                     <el-input v-model="addAccountForm.wechatName" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="所属学校/班级" prop="selectedOptions" width="100%">
-                    <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
-                </el-form-item>
                 <el-form-item label="分配角色" prop="role">
                     <el-select v-model="addAccountForm.role" placeholder="请选择" @change="handleRoleChange">
                         <el-option v-for="item in roleList" :key="item.roleId"  :label="item.roleName" :value="item" clearable>
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="" prop="selectedOptions" width="100%" v-if="addAccountForm.role == '超级管理员' " v-show="false">
+                    <!-- <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader> -->
+                </el-form-item>
+                <el-form-item label="所属学校" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '校级管理员' ">
+                    <el-cascader ref="myCascader" :options="schoolOptions" v-model="addAccountForm.schoolOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                </el-form-item>
+                <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '班级管理员' ">
+                    <el-cascader ref="myCascader" :options="classOptions" v-model="addAccountForm.classOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                </el-form-item>
+               <!-- <el-form-item label="所属学校/班级" prop="selectedOptions" width="100%" v-else>
+                    <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange"  v-show = "false" clearable></el-cascader>
+                </el-form-item> -->
                
            </el-form>
             <span slot="footer" class="dialog-footer">
@@ -93,32 +102,46 @@ import axios from 'axios'
                password: '',
                wechatName: '',
                role: '', //角色下拉框默认选中
-              selectedOptions: [],
+               selectedOptions: [],
+               schoolOptions: [],
+              id: ''
            },
            addAccountRules: {
                 name: [{required: true, message: '请输入所属人', trigger: 'blur' }],
                 loginName: [{required: true, message: '请输入账号', trigger: 'blur' }],
                 password: [{required: true, message: '请输入密码', trigger: 'blur' }],
-                selectedOptions:  [{required: true, message: '请选择所属学校班级', trigger: 'change' }],
+                selectedOptions: [{required: true, message: '请选择所属学校班级', trigger: 'change' }],
+                schoolOptions:  [{required: true, message: '请选择所属学校', trigger: 'change' }],
                 role:  [{required: true, message: '请选择角色', trigger: 'change' }]
            },
-             cateProps: {
+            cateProps: {
                label: 'name', //看到的是哪个属性
                value: 'id', // 选中的是谁的值
                children: 'children' //哪个属性实现父子节点嵌套
             },
             roleId: '', // 选中角色的id,
-           
-            options: [], //级联绑定的数据
-           
             schoolId: '',
             classId: '',
             userList: [], // 用户列表
             currentPage: 1,
             pageSize: 5,
+            show: true,
+            options: [], //级联绑定的数据
+           
          }
      },
      methods: {
+         showCascade() {
+            if(this.addAccountForm.role == '超级管理员') {
+                 this.show = false;
+             }else if(this.addAccountForm.role == '校级管理员') {
+
+             }else if (this.addAccountForm.role == '班级管理员') {
+
+             }else {
+
+             }
+         },
          getUserList() {
              let param = new URLSearchParams();
              param.append('token', this.token);
@@ -204,13 +227,21 @@ import axios from 'axios'
         handleGetOptionSucc (res) {
             if(res.status !==200) return this.$message.error('获取级联数据失败');
             this.options =  res.data.data;
+            
+            this.addAccountForm.schoolOptions  = res.data.data.map((item, index) => {
+                return item.name
+            })
+            console.log(this.addAccountForm.schoolOptions)
+            
         },
         handleGetOptionErr(err) {
             console.log(err)
         },
         handleRoleChange(item) {
-            this.roleId = item.roleId;
-            this.role = item.roleName;
+            this.addAccountForm.role = item.roleName;
+            this.addAccountForm.id = item.roleId;
+            // this.roleId = item.roleId;
+            // this.role = item.roleName;
         },
         //监听pageSize改变事件
         handleSizeChange(newSize) {

@@ -23,9 +23,9 @@
 import axios from 'axios'
 export default {
     name: 'login',
-    created() {
-        this.getMenuList()
-    },
+    // created() {
+    //     this.getMenuList()
+    // },
     data() {
         return {
             //登录表单的数据绑定对象
@@ -59,20 +59,30 @@ export default {
                     method: 'post',
                     url: '/api/login',
                     data: param
-                 }).then((res) => {
-                      if(res.status !== 200) 
-                        return this.$message.error('登录失败');
-                        this.$message.success('登录成功');
-                        //将token 存到sessionStorage
-                        window.sessionStorage.setItem('token', res.data.data.token)
-                        window.sessionStorage.setItem('loginName', this.loginForm.loginname)
-                        this.$router.push('/home')
-                 })
+                }).then(this.handleLoginSucc.bind(this))
+                .catch(this.handleLoginErr.bind(this))
+                //  }).then((res) => {
+                //       if(res.status !== 200) 
+                //         return this.$message.error('登录失败');
+                //         //将token 存到sessionStorage
+                //         window.sessionStorage.setItem('token', res.data.data.token)
+                //         this.$message.success('登录成功');
+                //         window.sessionStorage.setItem('loginName', this.loginForm.loginname)
+                //         this.$router.push('/home')
+                //  })
             })
         },
-        //获取所有的菜单
-        getMenuList() {
-
+        handleLoginSucc(res) {
+            console.log(res)
+         if(res.status !== 200) return this.$message.error('登录失败');
+            //将token 存到sessionStorage
+            window.sessionStorage.setItem('token', res.data.data.token)
+            this.$message.success('登录成功');
+            window.sessionStorage.setItem('loginName', this.loginForm.loginname)
+            this.$router.push('/home') 
+        },
+        handleLoginErr(err) {
+            console.log(err)
         }
     }
     
