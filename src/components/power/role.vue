@@ -338,7 +338,6 @@ export default {
             param.append('roleId', this.roleId);
             param.append('rightId', idStr);
             console.log(this.roleId);
-
             axios({
                 method: 'post',
                 data: param,
@@ -349,7 +348,6 @@ export default {
              
         },
         handleSaveRightSucc(res) {
-           // console.log(res);
             this.settingDialogVisible = false;
             this.getRoleList();
         },
