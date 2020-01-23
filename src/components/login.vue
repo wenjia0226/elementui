@@ -61,19 +61,9 @@ export default {
                     data: param
                 }).then(this.handleLoginSucc.bind(this))
                 .catch(this.handleLoginErr.bind(this))
-                //  }).then((res) => {
-                //       if(res.status !== 200) 
-                //         return this.$message.error('登录失败');
-                //         //将token 存到sessionStorage
-                //         window.sessionStorage.setItem('token', res.data.data.token)
-                //         this.$message.success('登录成功');
-                //         window.sessionStorage.setItem('loginName', this.loginForm.loginname)
-                //         this.$router.push('/home')
-                //  })
             })
         },
         handleLoginSucc(res) {
-            console.log(res)
          if(res.status !== 200) return this.$message.error('登录失败');
             //将token 存到sessionStorage
             window.sessionStorage.setItem('token', res.data.data.token)

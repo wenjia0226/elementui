@@ -65,11 +65,11 @@
                 <el-form-item label="" prop="selectedOptions" width="100%" v-if="addAccountForm.role == '超级管理员' " v-show="false">
                     <!-- <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader> -->
                 </el-form-item>
-                <el-form-item label="所属学校" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '校级管理员' ">
+                <el-form-item label="所属学校" prop="schoolOptions" width="100%" v-else-if="addAccountForm.role == '校级管理员' ">
                     <el-cascader ref="myCascader" :options="schoolOptions" v-model="addAccountForm.schoolOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
                 </el-form-item>
                 <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '班级管理员' ">
-                    <el-cascader ref="myCascader" :options="classOptions" v-model="addAccountForm.classOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                    <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
                 </el-form-item>
                <!-- <el-form-item label="所属学校/班级" prop="selectedOptions" width="100%" v-else>
                     <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange"  v-show = "false" clearable></el-cascader>
@@ -127,6 +127,7 @@ import axios from 'axios'
             pageSize: 5,
             show: true,
             options: [], //级联绑定的数据
+            schoolOptions: []
            
          }
      },
@@ -227,12 +228,13 @@ import axios from 'axios'
         handleGetOptionSucc (res) {
             if(res.status !==200) return this.$message.error('获取级联数据失败');
             this.options =  res.data.data;
-            
-            this.addAccountForm.schoolOptions  = res.data.data.map((item, index) => {
-                return item.name
-            })
-            console.log(this.addAccountForm.schoolOptions)
-            
+            let arr1 = this.options;
+            for(var i in arr1) {
+                    this.schoolOptions.push({
+                        name: arr1[i].name,
+                        id: arr1[i].id    
+            }) 
+            }
         },
         handleGetOptionErr(err) {
             console.log(err)
@@ -240,8 +242,7 @@ import axios from 'axios'
         handleRoleChange(item) {
             this.addAccountForm.role = item.roleName;
             this.addAccountForm.id = item.roleId;
-            // this.roleId = item.roleId;
-            // this.role = item.roleName;
+            this.roleId = item.roleId;
         },
         //监听pageSize改变事件
         handleSizeChange(newSize) {
