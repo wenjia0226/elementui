@@ -10,6 +10,7 @@ import Record from '@/components/record'
 import Right from '@/components/power/right'
 import Role from '@/components/power/role'
 import Account from '@/components/power/account'
+import Seat from '@/components/seat/seatinquiry'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -31,17 +32,18 @@ const router = new Router({
         {path: '/testrecord', component: Record},
         {path: '/permission', component: Right},
         {path: '/role', component: Role},
-        {path: '/account', component: Account}
+        {path: '/account', component: Account},
+        {path: '/seatinquiry', component: Seat}
       ]
     }
   ]
 })
 //挂载路由守卫
-// router.beforeEach((to, from, next) => {
-//   // to 将要访问的路径 from 代表从哪个路径而来 next表示放行
-//   if(to.path ==='/login')  return next();
-//   const tokenStr = sessionStorage.getItem('token');
-//   if(!tokenStr) return next('/login');
-//   next();  // 存在token 直接放行
-// })
+router.beforeEach((to, from, next) => {
+  // to 将要访问的路径 from 代表从哪个路径而来 next表示放行
+  if(to.path ==='/login')  return next();
+  const tokenStr = sessionStorage.getItem('token');
+  if(!tokenStr) return next('/login');
+  next();  // 存在token 直接放行
+})
 export default router;
