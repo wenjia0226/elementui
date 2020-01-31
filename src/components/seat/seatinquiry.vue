@@ -17,7 +17,7 @@
                 </el-col> 
             </el-row>
             <!-- 第一种排序方法 -->
-            <table>
+            <table class="seat">
                 <thead>
                     <tr align="center">
                         <th></th>
@@ -36,8 +36,10 @@
                 <tbody>
                      <th>第一排</th>
                     <td>
-                       <a href="">
+                       <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                              小名
                         </a> 
                     </td>
                      <td>
@@ -103,6 +105,8 @@
                     <td>
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           小名
                         </a> 
                     </td>
                      <td>
@@ -310,6 +314,7 @@ export default {
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('classId', this.classId);
+            param.append('type', 1);
             axios({
                 method: 'post',
                 data: param,
@@ -332,5 +337,16 @@ export default {
 <style lang="less" scope>
 .el-cascade {
     width: 100%;
+}
+.seat a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
+    line-height: 20px;
+}
+.seat img {
+    margin: 5px 0;
 }
 </style>
