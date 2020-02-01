@@ -466,7 +466,6 @@ export default {
             .catch(this.handleEditRecordErr.bind(this))
             },
             handleEditRecordSucc(res) {
-                console.log(res)
                 if(res.status !== 200) return;
                 res ? res = res.data: '';
                 this.editRecordForm = res.data;
