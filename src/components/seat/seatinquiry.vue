@@ -17,7 +17,7 @@
                 </el-col> 
             </el-row>
             <!-- 第一种排序方法 -->
-            <table class="seat">
+            <!-- <table class="seat">
                 <thead>
                     <tr align="center">
                         <th></th>
@@ -33,57 +33,71 @@
                         <th>第8列</th>
                     </tr>
                 </thead>
-                <tbody>
-                     <th>第一排</th>
-                    <td>
+                <tbody v-for="(item, index) in studentList" :key="index">
+                     <th>第{{index+1}}排</th>
+                    <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId">
                        <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
-                              小名
+                              {{item2.studentName}}
                         </a> 
                     </td>
-                     <td>
-                       <a href="">
+                     <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
+                       <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                              {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
-                       <a href="">
+                   <td  v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
+                       <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                              {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td>
-                    <td>
-                       <a href="">
+                    <td  v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
+                       <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                              {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
-                       <a href="">
+                    <td  v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
+                       <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                              {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td> 
-                    <td>
-                       <a href="">
+                    <td  v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
+                       <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                              {{item2.studentName}}
                         </a> 
                     </td>
-                     <td>
-                       <a href="">
+                     <td  v-for="(item2) in item.slice(6,7)" :key="item2.studentId">
+                       <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                              {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
-                       <a href="">
+                   <td  v-for="(item2) in item.slice(7,8)" :key="item2.studentId">
+                       <a href=""> 
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                              {{item2.studentName}}
                         </a> 
                     </td>
                     
                 </tbody>
-            </table>
+            </table> -->
               <!-- 第二种排序方法 -->
-            <table>
+            <!-- <table class="seat">
                 <thead>
                     <tr align="center">
                         <th></th>
@@ -100,62 +114,78 @@
                         <th>第9列</th>
                     </tr>
                 </thead>
-                <tbody>
-                     <th>第一排</th>
-                    <td>
+                <tbody v-for="(item, index) in studentList" :key="index">
+                     <th>第{{index + 1}}排</th>
+                    <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
-                           小名
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                     <td>
+                     <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
+                   <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td>
-                    <td>
+                    <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
+                     <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
+                   <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td> 
-                    <td>
+                    <td v-for="(item2) in item.slice(6,7)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                     <td>
+                     <td v-for="(item2) in item.slice(7,8)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
+                   <td v-for="(item2) in item.slice(8,9)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
                     
                 </tbody>
-            </table>
-            <!-- 第三种排序方法 -->
-            <table>
+            </table> -->
+           <!--第三种排序方法 -->
+            <!-- <table class="seat">
                 <thead>
                     <tr align="center">
                         <th></th>
@@ -171,45 +201,58 @@
                         <th style="width: 64px">&nbsp;</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <th>第一排</th>
-                    <td>
+                <tbody v-for="(item, index) in studentList" :key="index">
+                    <th>第{{index + 1}}排</th>
+                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                            <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td>
-                     <td>
+                    <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
+                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>&nbsp;</td> <td>
+                    <td>&nbsp;</td> 
+                    <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                     <td>
+                     <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td>
-                     <td>
+                     <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                           <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
-            </table>
-            <!-- 第四种排序方法 -->
-            <table>
+            </table> -->
+            <!-- 第四种排序方法-->
+            <table class="seat">
                 <thead>
                     <tr align="center">
                         <th></th>
@@ -225,38 +268,51 @@
                         <th style="width: 64px">&nbsp;</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <th>第一排</th>
-                    <td>
+                <tbody v-for="(item, index) in studentList" :key="index">
+                    <th>第{{index + 1}}排</th>
+                   <td v-for="item2 in item.slice(0,1)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                            <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                    <td>
+                    <td v-for="item2 in item.slice(1,2)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
-                        </a> 
-                    </td>
-                    <td>&nbsp;</td>
-                     <td>
-                       <a href="">
-                           <img src="../../assets/image/e12.png"  width="64px" alt="">
-                        </a> 
-                    </td>
-                    <td>&nbsp;</td> <td>
-                       <a href="">
-                           <img src="../../assets/image/e12.png"  width="64px" alt="">
+                            <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td>
-                     <td>
+                    <td v-for="item2 in item.slice(2,3)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                            <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
-                     <td>
+                     <td>&nbsp;</td>
+                    <td v-for="item2 in item.slice(3,4)" :key="item2.studentId">
                        <a href="">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
+                            <br>
+                           {{item2.studentName}}
+                        </a> 
+                    </td>
+                    <td>&nbsp;</td>
+                    <td v-for="item2 in item.slice(4,5)" :key="item2.studentId">
+                       <a href="">
+                           <img src="../../assets/image/e12.png"  width="64px" alt="">
+                            <br>
+                           {{item2.studentName}}
+                        </a> 
+                    </td>
+                      <td v-for="item2 in item.slice(5,6)" :key="item2.studentId">
+                       <a href="">
+                           <img src="../../assets/image/e12.png"  width="64px" alt="">
+                            <br>
+                           {{item2.studentName}}
                         </a> 
                     </td>
                     <td>&nbsp;</td>
@@ -284,6 +340,7 @@ export default {
               stu_cat: [],
               schoolId: '',
               classId: '',
+              studentList: []
         }
     },
     methods: {
@@ -325,7 +382,8 @@ export default {
             console.log(res)
             if(res.status !== 200) return this.$message.error('查询座位失败');
             
-            console.log(res.data.data)
+            this.studentList =res.data.data;
+            console.log(this.studentList)
         },
         handleGetSeatQueryErr(err) {
             console.log(err)
