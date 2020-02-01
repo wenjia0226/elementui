@@ -11,6 +11,7 @@ import Right from '@/components/power/right'
 import Role from '@/components/power/role'
 import Account from '@/components/power/account'
 import Seat from '@/components/seat/seatinquiry'
+import Online from '@/components/seat/online'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -33,7 +34,8 @@ const router = new Router({
         {path: '/permission', component: Right},
         {path: '/role', component: Role},
         {path: '/account', component: Account},
-        {path: '/seatinquiry', component: Seat}
+        {path: '/seatinquiry', component: Seat},
+        {path: '/online', component: Online}
       ]
     }
   ]
