@@ -28,13 +28,13 @@
                      <div class="schoolSet">排座周期：</div>
                 </el-col>
                 <el-col :span="3">
-                    <el-select v-model="value" @change="handleTypeChange" clearable>
+                    <el-select v-model="time" @change="changeTime"  clearable>
                     <el-option v-for="item in timeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
                     </el-option>
                 </el-select> 
                 </el-col>
                 <el-col :span="3">
-                        <el-button type="primary" @click="seatQuery">座位查询</el-button>
+                        <el-button type="primary" @click="seatQuery">在线排座</el-button>
                 </el-col> 
             </el-row>
             <!-- 第一种排序方法 -->
@@ -416,48 +416,48 @@ export default {
           label: '方式四'
         }],
         timeoptions:[{
-          value: 1,
+          value: 7,
           label: '一星期'
         }, {
-          value: 2,
+          value: 14,
           label: '两星期'
         }, {
-          value: 3,
+          value: 30,
           label: '一个月'
         }, {
-          value: 4,
+          value: 90,
           label: '三个月'
         }],
         value: '',
-            token: '',
-              cateProps: {
-               label: 'name', //看到的是哪个属性
-               value: 'id', // 选中的是谁的值
-               children: 'children' //哪个属性实现父子节点嵌套
-            },
-              options: [],
-              stu_cat: [],
-              schoolId: '',
-              classId: '',
-              studentList: [],
-              editRecordDialogVisible: false,
-              editRecordForm: {
-                curvatureLeft: '',
-                curvatureRight: '',
-                cvaLeft: '',
-                cvaRight: '',
-                diopterLeft: '',
-                diopterRight: '',
-                eyeAxisLengthLeft: '',
-                eyeAxisLengthRight: '',
-                visionLeft: '',
-                visionLeft: '',
-                record_cat: '',
-                studentName: '',
-                schoolName:'',
-                classesName:''
-            },
-           
+        time: '',
+        token: '',
+            cateProps: {
+            label: 'name', //看到的是哪个属性
+            value: 'id', // 选中的是谁的值
+            children: 'children' //哪个属性实现父子节点嵌套
+        },
+            options: [],
+            stu_cat: [],
+            schoolId: '',
+            classId: '',
+            studentList: [],
+            editRecordDialogVisible: false,
+            editRecordForm: {
+            curvatureLeft: '',
+            curvatureRight: '',
+            cvaLeft: '',
+            cvaRight: '',
+            diopterLeft: '',
+            diopterRight: '',
+            eyeAxisLengthLeft: '',
+            eyeAxisLengthRight: '',
+            visionLeft: '',
+            visionLeft: '',
+            record_cat: '',
+            studentName: '',
+            schoolName:'',
+            classesName:''
+        }, 
         }
     },
     methods: {
@@ -485,20 +485,32 @@ export default {
         },
         seatQuery() {
             let param = new URLSearchParams();
-            param.append('token', this.token);
-            param.append('classId', this.classId);
-            param.append('type', this.value);
-            axios({
-                method: 'post',
-                data: param,
-                url: '/api/sortList'
-            }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
+            if(!this.token) {
+                return this.$router.push('/login');
+            }else if(!this.classId) {
+                 return this.$message.error('请选择学校班级');
+            }else if(!this.value) {
+                return this.$message.error('请选择排座方式');    
+            }else if(!this.time) {
+                return this.$message.error('请选择排座周期'); 
+            }else{
+                param.append('token', this.token);
+                param.append('classId', this.classId);
+                param.append('type', this.value);
+                param.append('time', this.time * 86400000);
+                axios({
+                    method: 'post',
+                    data: param,
+                    url: '/api/sortList'
+                }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
+            }
         },
         handleGetSeatQuerySucc(res) {
-            if(res.status !== 200) return this.$message.error('查询座位失败');  
+            if(res.status !== 200) return this.$message.error('查询座位失败');
+            if(res.data.data.length == 0) return this.$message.error('请先添加学生');
             this.studentList =res.data.data;
-            window.sessionStorage.setItem('classId', this.classId); //存入缓存，向座位查询页面传递班级id
-            window.sessionStorage.setItem('schoolId', this.schoolId);
+            // window.sessionStorage.setItem('classId', this.classId); //存入缓存，向座位查询页面传递班级id
+            // window.sessionStorage.setItem('schoolId', this.schoolId);
         },
         handleGetSeatQueryErr(err) {
             console.log(err)
@@ -524,11 +536,14 @@ export default {
         handleEditRecordErr(err) {
             console.log(err)
         },
+        //排座类型
         handleTypeChange(value) {
             window.sessionStorage.setItem('type', value)
-            this.studentList = [];
-            // this.seatQuery();
-            
+            this.studentList = []; 
+        },
+        //排座周期
+        changeTime(time) {
+            console.log(time);
         }
     }
     
