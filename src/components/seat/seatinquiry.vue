@@ -9,16 +9,16 @@
          <!-- 卡片视图 -->
         <el-card>
              <el-row :gutter="10">
-                <el-col :span="6">
+                <!-- <el-col :span="6">
                      <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                 </el-col>
                 <el-col :span="3">
                         <el-button type="primary" @click="seatQuery">座位查询</el-button>
-                </el-col> 
+                </el-col>  -->
             </el-row>
             <!-- 第一种排序方法 -->
-            <!-- <table class="seat">
-                <thead>
+            <table class="seat" v-if="this.type == 1"> 
+                <thead v-show="this.studentList.length">
                     <tr align="center">
                         <th></th>
                         <th>第1列</th>
@@ -95,10 +95,10 @@
                     </td>
                     
                 </tbody>
-            </table> -->
+            </table>
               <!-- 第二种排序方法 -->
-            <!-- <table class="seat">
-                <thead>
+            <table class="seat" v-else-if="this.type == 2">
+                <thead v-show="this.studentList.length">
                     <tr align="center">
                         <th></th>
                         <th>第1列</th>
@@ -183,11 +183,11 @@
                     </td>
                     
                 </tbody>
-            </table> -->
+            </table>
            <!--第三种排序方法 -->
-            <table class="seat">
-                <thead>
-                    <tr align="center">
+            <table class="seat" v-else-if="this.type == 3">
+                <thead v-show="this.studentList.length">
+                    <tr align="center" >
                         <th></th>
                         <th>第1列</th>
                         <th style="width: 64px">&nbsp;</th>
@@ -252,8 +252,8 @@
                 </tbody>
             </table>
             <!-- 第四种排序方法-->
-            <!-- <table class="seat">
-                <thead>
+            <table class="seat" v-else>
+                <thead v-show="this.studentList.length">
                     <tr align="center">
                         <th></th>
                         <th>第1列</th>
@@ -317,7 +317,7 @@
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
-            </table> -->
+            </table>
         </el-card>
         <!-- 点击打开弹框    -->
          <!-- 修改记录 -->
@@ -377,20 +377,24 @@ import axios from 'axios'
 export default {
      created() {
         this.token = window.sessionStorage.getItem('token');
+        this.classId = window.sessionStorage.getItem('classId');
+        this.type= window.sessionStorage.getItem('type');
         this.getOPtions();
+        this.seatQuery();
     },
     data() {
         return {
             token: '',
-              cateProps: {
-               label: 'name', //看到的是哪个属性
-               value: 'id', // 选中的是谁的值
-               children: 'children' //哪个属性实现父子节点嵌套
+            classId: '',
+            type: '',
+            cateProps: {
+            label: 'name', //看到的是哪个属性
+            value: 'id', // 选中的是谁的值
+            children: 'children' //哪个属性实现父子节点嵌套
             },
               options: [],
               stu_cat: [],
               schoolId: '',
-              classId: '',
               studentList: [],
               editRecordDialogVisible: false,
               editRecordForm: {
@@ -439,7 +443,7 @@ export default {
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('classId', this.classId);
-            param.append('type', 3);
+            param.append('type', this.type);
             axios({
                 method: 'post',
                 data: param,

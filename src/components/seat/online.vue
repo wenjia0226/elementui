@@ -19,8 +19,17 @@
                      <div class="schoolSet">排座方式选择：</div>
                 </el-col>
                 <el-col :span="3">
-                    <el-select v-model="value" placeholder="请选择排座方式">
-                    <el-option v-for="item in typeoptions" :key="item.value"  :label="item.label"  :value="item.value">
+                    <el-select v-model="value" placeholder="请选择排座方式" @change="handleTypeChange" clearable>
+                    <el-option v-for="item in typeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
+                    </el-option>
+                </el-select> 
+                </el-col>
+                <el-col :span="2">
+                     <div class="schoolSet">排座周期：</div>
+                </el-col>
+                <el-col :span="3">
+                    <el-select v-model="value" @change="handleTypeChange" clearable>
+                    <el-option v-for="item in timeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
                     </el-option>
                 </el-select> 
                 </el-col>
@@ -29,9 +38,9 @@
                 </el-col> 
             </el-row>
             <!-- 第一种排序方法 -->
-            <!-- <table class="seat">
+            <table class="seat" v-if="this.value == 1">
                 <thead>
-                    <tr align="center">
+                    <tr align="center"  v-show="this.studentList.length">
                         <th></th>
                         <th>第1列</th>
                         <th>第2列</th>
@@ -107,11 +116,11 @@
                     </td>
                     
                 </tbody>
-            </table> -->
+            </table>
               <!-- 第二种排序方法 -->
-            <!-- <table class="seat">
+            <table class="seat" v-else-if="this.value == 2">
                 <thead>
-                    <tr align="center">
+                    <tr align="center"  v-show="this.studentList.length">
                         <th></th>
                         <th>第1列</th>
                         <th>第2列</th>
@@ -195,11 +204,11 @@
                     </td>
                     
                 </tbody>
-            </table> -->
+            </table>
            <!--第三种排序方法 -->
-            <table class="seat">
+            <table class="seat" v-else-if="this.value == 3">
                 <thead>
-                    <tr align="center">
+                    <tr align="center"  v-show="this.studentList.length">
                         <th></th>
                         <th>第1列</th>
                         <th style="width: 64px">&nbsp;</th>
@@ -264,9 +273,9 @@
                 </tbody>
             </table>
             <!-- 第四种排序方法-->
-            <!-- <table class="seat">
+            <table class="seat" v-else>
                 <thead>
-                    <tr align="center">
+                    <tr align="center" v-show="this.studentList.length">
                         <th></th>
                         <th>第1列</th>
                         <th>第2列</th>
@@ -329,7 +338,7 @@
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
-            </table> -->
+            </table>
         </el-card>
         <!-- 点击打开弹框    -->
          <!-- 修改记录 -->
@@ -393,7 +402,7 @@ export default {
     },
     data() {
         return {
-             typeoptions: [{
+          typeoptions: [{
           value: 1,
           label: '方式一'
         }, {
@@ -405,6 +414,19 @@ export default {
         }, {
           value: 4,
           label: '方式四'
+        }],
+        timeoptions:[{
+          value: 1,
+          label: '一星期'
+        }, {
+          value: 2,
+          label: '两星期'
+        }, {
+          value: 3,
+          label: '一个月'
+        }, {
+          value: 4,
+          label: '三个月'
         }],
         value: '',
             token: '',
@@ -450,7 +472,6 @@ export default {
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
-          
             if(res.status !==200) return this.$message.error('获取级联数据失败');
             this.options =  res.data.data;
         },
@@ -458,12 +479,11 @@ export default {
             console.log(err)
         },
         //级联选择器选择变化会触发这个函数
-        handleChange() {
+        handleChange(value) {
            this.schoolId = this.stu_cat[0];
            this.classId = this.stu_cat[1];
         },
         seatQuery() {
-            console.log(this.value)
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('classId', this.classId);
@@ -477,6 +497,8 @@ export default {
         handleGetSeatQuerySucc(res) {
             if(res.status !== 200) return this.$message.error('查询座位失败');  
             this.studentList =res.data.data;
+            window.sessionStorage.setItem('classId', this.classId); //存入缓存，向座位查询页面传递班级id
+            window.sessionStorage.setItem('schoolId', this.schoolId);
         },
         handleGetSeatQueryErr(err) {
             console.log(err)
@@ -493,15 +515,21 @@ export default {
             }).then(this.handleEditRecordSucc.bind(this))
             .catch(this.handleEditRecordErr.bind(this))
             },
-            handleEditRecordSucc(res) {
-                if(res.status !== 200) return;
-                res ? res = res.data: '';
-                this.editRecordForm = res.data;
-                this.editRecordDialogVisible = true;
-            },
-            handleEditRecordErr(err) {
-                console.log(err)
-            },
+        handleEditRecordSucc(res) {
+            if(res.status !== 200) return;
+            res ? res = res.data: '';
+            this.editRecordForm = res.data;
+            this.editRecordDialogVisible = true;
+        },
+        handleEditRecordErr(err) {
+            console.log(err)
+        },
+        handleTypeChange(value) {
+            window.sessionStorage.setItem('type', value)
+            this.studentList = [];
+            // this.seatQuery();
+            
+        }
     }
     
 }
@@ -511,7 +539,7 @@ export default {
     line-height: 40px;
     text-align: center;
 }
-.el-cascade {
+.el-cascader {
     width: 100% !important;
 }
 .seat a {
