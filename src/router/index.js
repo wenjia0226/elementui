@@ -12,6 +12,7 @@ import Role from '@/components/power/role'
 import Account from '@/components/power/account'
 import Seat from '@/components/seat/seatinquiry'
 import Online from '@/components/seat/online'
+import detailSeat from '@/components/seat/detailSeat'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -21,6 +22,7 @@ const router = new Router({
   routes: [
     {path: '/', redirect: '/login'},
     {path: '/login',component: Login},
+    {path: '/detailSeat',component: detailSeat},
     {
       path: '/home', 
       component: Home,
