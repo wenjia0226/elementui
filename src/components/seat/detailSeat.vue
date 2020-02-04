@@ -1,5 +1,6 @@
 <template>
     <div>
+        <el-button type="primary" @click="back">返回</el-button>
         <el-card>
               <!-- 第一种排序方法 -->
             <table class="seat" v-if="this.type == '方式一'"> 
@@ -312,7 +313,6 @@ export default {
    created() {
        this.token = window.sessionStorage.getItem('token');
        this.type = window.sessionStorage.getItem('tabletype');
-       console.log(this.type)
        this.id = this.$router.history.current.params.id;
        this.getSeatTable();
        
@@ -336,13 +336,15 @@ export default {
             }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
         },
         handleGetSeatTableSucc(res) {
-            console.log(res)
             if(res.status !== 200) return ;
               this.studentList = res.data.data;
               this.type = window.sessionStorage.getItem('tabletype');
         },
         hanadleGetSeatTableErr(err) {
             console.log(err)
+        },
+        back() {
+            this.$router.back(-1);
         }
     }
 }

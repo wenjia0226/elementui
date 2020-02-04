@@ -36,7 +36,7 @@ const router = new Router({
         {path: '/permission', component: Right},
         {path: '/role', component: Role},
         {path: '/account', component: Account},
-        {path: '/seatinquiry', component: Seat},
+        {path: '/seatinquiry', component: Seat, meta:{keepAlive: true}},
         {path: '/online', component: Online},
         {path: '/detailSeat/:id',component: detailSeat},
       ]
