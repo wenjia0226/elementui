@@ -543,7 +543,7 @@ export default {
         },
         //排座周期
         changeTime(time) {
-            console.log(time);
+         
         }
     }
     

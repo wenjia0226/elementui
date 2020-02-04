@@ -17,52 +17,19 @@
                 </el-col> 
             </el-row>
             <!-- 排座结果列表 -->
-            <!-- <el-table :data="classRecordList.slice((currentPage-1) * pageSize, currentPage * pageSize)"   stripe style="width: 100%"   row-key="id" row-click="handleRow">
+            <el-table :data="classRecordList.slice((currentPage-1) * pageSize, currentPage * pageSize)"   stripe style="width: 100%"   row-key="id" row-click="handleRow">
+               
                <el-table-column type="index"></el-table-column>
                <el-table-column label="排列次数" prop="name"></el-table-column>
                 <el-table-column label="排列方式" prop="type"></el-table-column>
-                <el-table-column label="到期时间" prop="endTime"></el-table-column> 
-            </el-table> -->
-            <!-- <table>
-               <thead>
-                   <th>排列次数</th>
-                   <th>排列方式</th>
-                   <th>到期时间</th>
-               </thead> -->
-               <el-row class="classTitle">
-                   <el-col :span="8">排列次数</el-col>
-                   <el-col :span="8">排列方式</el-col>
-                   <el-col :span="8">到期时间</el-col>
-               </el-row>
-               <template slot-scope="scope"> 
-                   
-               </template>
-                  <el-row  class="classList" v-for="(item,index) in classRecordList" :key="index" @click="getItem">
-                    <router-link to="/detailSeat">
-                    <el-col :span="8">
-                       {{item.name || window.sesstionStorage.setItem('id', item.id)}}
-                   </el-col>
-                   <el-col :span="8">
-                       {{item.type}}
-                   </el-col>
-                   <el-col :span="8">
-                       {{item.endTime}}
-                   </el-col>
-                   </router-link>
-               </el-row>  
-               
-              
-               
-              
-               <!-- <tbody>
-                   <tr >
-                       <a href="#" @click="showClass">
-                            <td>{{item.name}}</td>
-                            <td>{{item.type}}</td>
-                            <td>{{item.endTime}}</td>
-                       </a>
-                   </tr>
-               </tbody> -->
+                <el-table-column label="到期时间" prop="endTime"></el-table-column>
+                <el-table-column label="" prop="endTime"></el-table-column>
+                 <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showSeat(scope.row.id)" ></el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
            
             <!-- 分页功能 -->
             <el-pagination
@@ -568,8 +535,9 @@ export default {
         handleCurrentChange(val) {
            this.currentPage = val;
         },
-        getItem() {
-            console.log(123)
+        showSeat(id) {
+            console.log(id)
+            this.$router.push('/detailSeat/'+id)
         }
         }
         

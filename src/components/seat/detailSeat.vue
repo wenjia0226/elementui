@@ -1,6 +1,7 @@
 <template>
-<el-card>
-     <!-- 第一种排序方法 -->
+    <div>
+        <el-card>
+              <!-- 第一种排序方法 -->
             <table class="seat" v-if="this.type == 1"> 
                 <thead v-show="this.studentList.length">
                     <tr align="center">
@@ -303,18 +304,50 @@
                 </tbody>
             </table>
         </el-card>
+    </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
+   created() {
+       this.token = window.sessionStorage.getItem('token');
+       this.id = this.$router.history.current.params.id;
+       this.getSeatTable();
+       
+   },
     data() {
         return {
-            studentList: [],
-            type: 1
+            id: '',
+            token: '',
+            studentList: []
         }
-        
+    },
+    methods:{
+        getSeatTable() {
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('sortId', this.id);
+            axios({
+                method: 'post',
+                url: "/api/showSort",
+                data: param
+            }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
+        },
+        handleGetSeatTableSucc(res) {
+            console.log(res)
+            if(res.status !== 200) return ;
+            if(res.data.data) {
+                this.studentList = res.data.data;
+            }else {
+                this.$message.error('学生为空')
+            }
+        },
+        hanadleGetSeatTableErr(err) {
+            console.log(err)
+        }
     }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 
 </style>

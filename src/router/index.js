@@ -22,7 +22,7 @@ const router = new Router({
   routes: [
     {path: '/', redirect: '/login'},
     {path: '/login',component: Login},
-    {path: '/detailSeat',component: detailSeat},
+   
     {
       path: '/home', 
       component: Home,
@@ -37,7 +37,8 @@ const router = new Router({
         {path: '/role', component: Role},
         {path: '/account', component: Account},
         {path: '/seatinquiry', component: Seat},
-        {path: '/online', component: Online}
+        {path: '/online', component: Online},
+        {path: '/detailSeat/:id',component: detailSeat},
       ]
     }
   ]
