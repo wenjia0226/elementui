@@ -21,7 +21,8 @@
                
                <el-table-column type="index"></el-table-column>
                <el-table-column label="排列次数" prop="name"></el-table-column>
-                <el-table-column label="排列方式" prop="type"></el-table-column>
+               
+                <el-table-column  label="排列方式" prop="type"  class="red"></el-table-column>
                 <el-table-column label="是否过期" prop="endTime"></el-table-column>
                  <el-table-column label="查看">
                     <template slot-scope="scope">
@@ -569,6 +570,10 @@ export default {
 }
 </script>
 <style lang="less" scope>
+    .red {
+        color: red;
+        font-size: 24px;
+    }
 .el-cascader {
     width: 100%;
 }

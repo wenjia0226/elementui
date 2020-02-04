@@ -7,6 +7,8 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/global.css'
 import store from './store/index.js'
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 Vue.use(ElementUI);
 // //挂载原型属性
 // Vue.prototype.$http = axios

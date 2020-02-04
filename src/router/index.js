@@ -13,6 +13,9 @@ import Account from '@/components/power/account'
 import Seat from '@/components/seat/seatinquiry'
 import Online from '@/components/seat/online'
 import detailSeat from '@/components/seat/detailSeat'
+import SchoolAnalysis  from '@/components/analysis/school.vue'
+import ClassAnalysis  from '@/components/analysis/class.vue'
+import PersonAnalysis  from '@/components/analysis/person.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -39,6 +42,9 @@ const router = new Router({
         {path: '/seatinquiry', component: Seat, meta:{keepAlive: true}},
         {path: '/online', component: Online},
         {path: '/detailSeat/:id',component: detailSeat},
+        {path: '/schoolStatistics', component: SchoolAnalysis},
+        {path: '/classStatistics', component: ClassAnalysis},
+        {path: '/personal', component: PersonAnalysis},
       ]
     }
   ]
