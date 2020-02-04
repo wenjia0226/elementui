@@ -22,15 +22,14 @@
                <el-table-column type="index"></el-table-column>
                <el-table-column label="排列次数" prop="name"></el-table-column>
                 <el-table-column label="排列方式" prop="type"></el-table-column>
-                <el-table-column label="到期时间" prop="endTime"></el-table-column>
-                <el-table-column label="" prop="endTime"></el-table-column>
-                 <el-table-column label="操作">
+                <el-table-column label="是否过期" prop="endTime"></el-table-column>
+                 <el-table-column label="查看">
                     <template slot-scope="scope">
-                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showSeat(scope.row.id)" ></el-button>
+                        <el-button type="primary" size="middle"   @click="showSeat(scope.row.id, scope.row.type)">排座表</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-           
+    
             <!-- 分页功能 -->
             <el-pagination
                 @size-change="handleSizeChange"
@@ -41,7 +40,7 @@
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="classRecordList.length">
             </el-pagination>
-            <!-- 第一种排序方法 -->
+            <!-- 第一种排序方法-->
             <table class="seat" v-if="this.type == 1"> 
                 <thead v-show="this.studentList.length">
                     <tr align="center">
@@ -342,7 +341,7 @@
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
-            </table>
+            </table> 
         </el-card>
         <!-- 点击打开弹框    -->
          <!-- 修改记录 -->
@@ -517,10 +516,34 @@ export default {
             .catch(this.handleGetClassRecordErr.bind(this))
         },
         handleGetClassReorcdSucc(res) {
+            
+            
             if(res.status !== 200) return;
             if(res.data.data) {
                 this.classRecordList = res.data.data;
-                console.log(this.classRecordList)
+                this.classRecordList.forEach((item, index) => {
+                    if(item.type == 1) {
+                        item.type = '方式一'
+                    }else if(item.type == 2) {
+                        item.type = '方式二'
+                    }else if(item.type == 3) {
+                        item.type = '方式三'
+                    }else {
+                        item.type = '方式四'
+                    }
+                })
+                this.classRecordList.forEach((item, index) => {
+                    let end = item.endTime;
+                    let myDate = new Date(end).getTime();
+                    let now = new Date().getTime();
+                    if(myDate > now ) {
+                        item.endTime = '未过期'
+                    }else {
+                          item.endTime = '过期'
+                    }
+                })
+             
+               
             }
         },
         handleGetClassRecordErr(err) {
@@ -535,8 +558,8 @@ export default {
         handleCurrentChange(val) {
            this.currentPage = val;
         },
-        showSeat(id) {
-            console.log(id)
+        showSeat(id ,type) {
+            window.sessionStorage.setItem('tabletype', type)
             this.$router.push('/detailSeat/'+id)
         }
         }

@@ -2,7 +2,7 @@
     <div>
         <el-card>
               <!-- 第一种排序方法 -->
-            <table class="seat" v-if="this.type == 1"> 
+            <table class="seat" v-if="this.type == '方式一'"> 
                 <thead v-show="this.studentList.length">
                     <tr align="center">
                         <th></th>
@@ -82,7 +82,7 @@
                 </tbody>
             </table>
               <!-- 第二种排序方法 -->
-            <table class="seat" v-else-if="this.type == 2">
+            <table class="seat" v-else-if="this.type == '方式二'">
                 <thead v-show="this.studentList.length">
                     <tr align="center">
                         <th></th>
@@ -170,7 +170,7 @@
                 </tbody>
             </table>
            <!--第三种排序方法 -->
-            <table class="seat" v-else-if="this.type == 3">
+            <table class="seat" v-else-if="this.type == '方式三'">
                 <thead v-show="this.studentList.length">
                     <tr align="center" >
                         <th></th>
@@ -311,6 +311,8 @@ import axios from 'axios'
 export default {
    created() {
        this.token = window.sessionStorage.getItem('token');
+       this.type = window.sessionStorage.getItem('tabletype');
+       console.log(this.type)
        this.id = this.$router.history.current.params.id;
        this.getSeatTable();
        
@@ -336,11 +338,8 @@ export default {
         handleGetSeatTableSucc(res) {
             console.log(res)
             if(res.status !== 200) return ;
-            if(res.data.data) {
-                this.studentList = res.data.data;
-            }else {
-                this.$message.error('学生为空')
-            }
+              this.studentList = res.data.data;
+              this.type = window.sessionStorage.getItem('tabletype');
         },
         hanadleGetSeatTableErr(err) {
             console.log(err)
