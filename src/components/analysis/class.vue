@@ -71,10 +71,9 @@ export default {
       }else{
          var myChart = echarts.init(this.$refs.double);
       }
-      console.log(id, lengend, option)
        this.option = {
           title: {
-              text: '',
+              text: '班级概况',
               subtext: '',
               left: 'center'
           },
@@ -86,7 +85,6 @@ export default {
               orient: 'vertical',
               left: 'left',
               data: lengend
-              // data: ['左眼良好数量', '左眼轻度不良数量', '左眼中度不良数量', '左眼重度不良数量'],
               },
           series: [
               {
@@ -95,12 +93,6 @@ export default {
                   radius: '80%',
                   center: ['50%', '60%'],
                   data: option,
-                  // data: [
-                  //     {value: 7, name: '左眼良好数量'},
-                  //     {value: 10, name: '左眼轻度不良数量'},
-                  //     {value: 5, name: '左眼中度不良数量'},
-                  //     {value: 1, name: '左眼重度不良数量'}
-                  // ],
                   emphasis: {
                       itemStyle: {
                           shadowBlur: 10,
@@ -144,8 +136,6 @@ export default {
       this.doubleOption.forEach((item, index) => {
         this.doubleLegend.push(item.name);
       })
-      console.log(this.leftOption, this.rightOption, this.doubleOption)
-      console.log(this.leftLegend, this.rightLegend, this.doubleLegend)
         this.drawLine('left', this.leftLegend, this.leftOption);
         this.drawLine('right', this.rightLegend, this.rightOption);
         this.drawLine('double', this.doubleLegend,this.doubleOption);

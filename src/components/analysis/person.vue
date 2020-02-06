@@ -11,7 +11,7 @@
            <div class="schoolSet">学校班级选择：</div>
       </el-col>
 	      <el-col :span="4">
-	           <el-cascader  width= "100%" :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+	           <el-cascader  :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
 	      </el-col>
         <el-col :span="2">
              <div class="schoolSet">请填写学生姓名：</div>
@@ -25,10 +25,25 @@
             clearable
             @select="handleSelect"></el-autocomplete>
         </el-col>
-	      <el-col :span="6">
+	      <el-col :span="4">
 	         <el-button type="primary" @click="showPerson">查看个人分析</el-button>
 	      </el-col>
 	  </el-row>
+    <el-row style="margin: 10px 0">
+       <el-col :span="24">
+         <div ref="left" style="width: 100%;height: 400px"></div>
+       </el-col>
+     </el-row>
+     <el-row style="margin: 10px 0">
+       <el-col :span="24">
+         <div ref="right" style="width: 100%;height: 400px"></div>
+       </el-col>
+     </el-row>
+     <el-row style="margin: 10px 0">
+       <el-col :span="24">
+         <div ref="both" style="width: 100%;height: 400px"></div>
+       </el-col>
+    </el-row>
 	</el-card>
 	</div>
 </template>
@@ -54,10 +69,147 @@ export default {
 			schoolId: '',
       restaurants: [],
       state1: '',
-      studentList: []
+      studentList: [],
+      studetId: '',
+      leftLuoX: [],
+      leftLuoY: [],
+      rightLuoX: [],
+      rightLuoY: [],
+      leftZhouX: [],
+      leftZhouY: [],
+      rightZhouX: [],
+      rightZhouY: [],
+      leftQuX:[],
+      leftQuY:[],
+      rightQuX: [],
+      rightQuY: []
 		}
 	},
 	methods: {
+	  drawLine() {
+      let myChart = echarts.init(this.$refs.left);
+	     this.option = {
+        title: {
+             text: '裸眼视力分析',
+             subtext: '',
+             left: 'center'
+         },
+        legend: {
+                   data: ['左眼裸眼视力', '右眼裸眼视力'],
+                   left: 'left',
+               },
+        xAxis: {
+            type: 'category',
+            symbol: 'none',
+            boundaryGap: false,
+            data: this.leftLuoX
+        },
+        yAxis: {
+            type: 'value',
+            min:0,
+            max:1,
+            splitNumber:10
+        },
+        series: [{
+           name: '左眼裸眼视力',
+            data: this.leftLuoY,
+            type: 'line',
+            smooth: true,
+             color: 'blue'
+        },
+        {
+            name: '右眼裸眼视力',
+            data: this.rightLuoY,
+            type: 'line',
+             smooth: true,
+            color: 'red'
+        }]
+      }
+      myChart.setOption(this.option)
+	   },
+     drawLine3() {
+       let myChart = echarts.init(this.$refs.both);
+       this.option = {
+         title: {
+              text: '曲率分析',
+              subtext: '',
+              left: 'center'
+          },
+         legend: {
+                    data: ['左眼曲率', '右眼曲率'],
+                    left: 'left',
+                },
+         xAxis: {
+             type: 'category',
+             symbol: 'none',
+             boundaryGap: false,
+             data: this.leftQuX
+         },
+         yAxis: {
+             type: 'value',
+             min:0,
+             max:50,
+             splitNumber:100
+         },
+         series: [{
+            name: '左眼曲率',
+             data: this.leftQuY,
+             type: 'line',
+             smooth: true,
+             color: 'blue'
+         },
+         {
+             name: '右眼曲率',
+             data: this.rightQuY,
+             type: 'line',
+             smooth: true,
+             color: 'red'
+         }]
+      }
+       myChart.setOption(this.option)
+     },
+     drawLine2() {
+       let myChart = echarts.init(this.$refs.right);
+       this.option = {
+         title: {
+              text: '眼轴分析',
+              subtext: '',
+              left: 'center'
+          },
+         legend: {
+                    data: ['左眼眼轴长度', '右眼眼轴长度'],
+                    left: 'left',
+                },
+         xAxis: {
+             type: 'category',
+             symbol: 'none',
+             boundaryGap: false,
+             data: this.leftZhouX
+         },
+         yAxis: {
+             type: 'value',
+             min:0,
+             max:50,
+             splitNumber:100
+         },
+         series: [{
+            name: '左眼眼轴长度',
+             data: this.leftZhouY,
+             type: 'line',
+             smooth: true,
+              color: 'blue'
+         },
+         {
+             name: '右眼眼轴长度',
+             data: this.rightZhouY,
+             type: 'line',
+              smooth: true,
+             color: 'red'
+         }]
+      }
+       myChart.setOption(this.option)
+     },
+    //模糊查询学生名
     getStudentName() {
       let param = new URLSearchParams();
       param.append('token', this.token);
@@ -74,7 +226,8 @@ export default {
       res ? res = res.data.data: '';
       for(let i  =0; i <res.length; i++) {
         this.studentList.push({
-          value: res[i].name
+          value: res[i].name,
+          id: res[i].id
         })
       }
 
@@ -90,13 +243,12 @@ export default {
       cb(results);
     },
     createFilter(queryString) {
-      console.log(queryString);
-      return (studentList) => {
-        return (studentList.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      return (student) => {
+        return (student.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
     handleSelect(item) {
-      // console.log(item);
+       this.studentId = item.id;
      },
 		//获取级联选择器中的数据
 		getOPtions() {
@@ -121,11 +273,53 @@ export default {
        this.getStudentName();
 		},
     showPerson() {
-
+        let param = new URLSearchParams();
+        param.append('token', this.token);
+        param.append('studentId', 15);
+        axios({
+          method: 'post',
+          data: param,
+          url: '/api/studentRecords'
+        }).then(this.handleGetStudentRecordSucc.bind(this)).catch(this.handleGetStudentRecordErr.bind(this))
+    },
+    handleGetStudentRecordSucc(res) {
+      if(res.status !== 200) return;
+      console.log(res);
+      res? res= res.data.data: '';
+      for(let i = 0; i < res.length; i++) {
+        if(res[i].name=="左眼裸眼视力") {
+          this.leftLuoX = res[0].xDataList;
+          this.leftLuoY = res[0].yDataList;
+        }else if(res[i].name == '右眼裸眼视力') {
+           this.rightLuoX = res[1].xDataList;
+           this.rightLuoY = res[1].yDataList;
+         }else if(res[i].name=="左眼眼轴长度") {
+           this.leftZhouX = res[2].xDataList;
+           this.leftZhouY = res[2].yDataList;
+         }else if(res[i].name == '右眼眼轴长度') {
+            this.rightZhouX = res[3].xDataList;
+            this.rightZhouY = res[3].yDataList
+          }else if(res[i].name == '左眼曲率') {
+            this.leftQuX = res[4].xDataList;
+            this.leftQuY = res[4].yDataList;
+          }else {
+            this.rightQuX = res[5].xDataList;
+            this.rightQuY = res[5].yDataList;
+          }
+         }
+        console.log(this.rightQuY, this.leftQuY)
+      this.drawLine();
+      this.drawLine2();
+      this.drawLine3();
+    },
+    handleGetStudentRecordErr(err) {
+      console.log(err)
     }
 	}
 }
 </script>
 <style lang="less">
-
+.el-cascader {
+  width: 100%;
+}
 </style>

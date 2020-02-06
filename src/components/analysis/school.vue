@@ -74,7 +74,7 @@ export default {
       console.log(id, lengend, option)
        this.option = {
           title: {
-              text: '',
+              text: '校园概况',
               subtext: '',
               left: 'center'
           },

@@ -3,7 +3,7 @@
         <el-button type="primary" @click="back">返回</el-button>
         <el-card>
               <!-- 第一种排序方法 -->
-            <table class="seat" v-if="this.type == '方式一'"> 
+            <table class="seat" v-if="this.type == '方式一'">
                 <thead v-show="this.studentList.length">
                     <tr align="center">
                         <th></th>
@@ -21,65 +21,65 @@
                 </thead>
                 <tbody v-for="(item, index) in studentList" :key="index">
                      <th>第{{index+1}}排</th>
-                    <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId">
-                       <a href="#"> 
+                    <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                     <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
-                       <a href="#"> 
+                     <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                   <td  v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
-                       <a href="#"> 
+                   <td  v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
-                    <td  v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
-                       <a href="#"> 
+                    <td  v-for="(item2) in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td  v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
-                       <a href="#"> 
+                    <td  v-for="(item2) in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
-                    <td  v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
-                       <a href="#"> 
+                    <td>&nbsp;</td>
+                    <td  v-for="(item2) in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                     <td  v-for="(item2) in item.slice(6,7)" :key="item2.studentId">
-                       <a href="#"> 
+                     <td  v-for="(item2) in item.slice(6,7)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                   <td  v-for="(item2) in item.slice(7,8)" :key="item2.studentId">
-                       <a href="#"> 
+                   <td  v-for="(item2) in item.slice(7,8)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    
+
                 </tbody>
             </table>
               <!-- 第二种排序方法 -->
@@ -102,72 +102,72 @@
                 </thead>
                 <tbody v-for="(item, index) in studentList" :key="index">
                      <th>第{{index + 1}}排</th>
-                    <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId">
+                    <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                     <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
+                     <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                   <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
+                   <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
-                    <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
+                    <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                     <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
+                     <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                   <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
+                   <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
-                    <td v-for="(item2) in item.slice(6,7)" :key="item2.studentId">
+                    <td>&nbsp;</td>
+                    <td v-for="(item2) in item.slice(6,7)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                     <td v-for="(item2) in item.slice(7,8)" :key="item2.studentId">
+                     <td v-for="(item2) in item.slice(7,8)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                   <td v-for="(item2) in item.slice(8,9)" :key="item2.studentId">
+                   <td v-for="(item2) in item.slice(8,9)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    
+
                 </tbody>
             </table>
            <!--第三种排序方法 -->
@@ -189,42 +189,42 @@
                 </thead>
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <th>第{{index + 1}}排</th>
-                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId"> 
+                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                         <a href="#"   @click="showRecordEditDialog(item2.studentId)">
                         <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                         {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
-                    <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
-                       <a href="#" @click="showRecordEditDialog(item2.studentId)"> 
+                    <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" >
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
+                    <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                      <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
@@ -232,7 +232,7 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
@@ -256,55 +256,104 @@
                 </thead>
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <th>第{{index + 1}}排</th>
-                   <td v-for="item2 in item.slice(0,1)" :key="item2.studentId">
-                       <a href="#">
+                   <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" >
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td v-for="item2 in item.slice(1,2)" :key="item2.studentId">
-                       <a href="#">
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(2,3)" :key="item2.studentId">
-                       <a href="#">
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(3,4)" :key="item2.studentId">
-                       <a href="#">
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(4,5)" :key="item2.studentId">
-                       <a href="#">
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                       <td v-for="item2 in item.slice(5,6)" :key="item2.studentId">
-                       <a href="#">
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
             </table>
         </el-card>
+		<el-dialog title="学生信息" :visible.sync="editRecordDialogVisible"  width="30%">
+		    <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px">
+		        <!-- <el-form-item label="所属学校班级" prop="">
+		            <el-cascader :options="options" v-model="editRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+		        </el-form-item> -->
+		        <el-form-item label="姓名" >
+		            <el-input v-model="editRecordForm.studentName" disabled></el-input>
+		        </el-form-item>
+		        <el-form-item label="所属学校" >
+		            <el-input v-model="editRecordForm.schoolName"  disabled></el-input>
+		        </el-form-item>
+		        <el-form-item label="所属班级" >
+		            <el-input v-model="editRecordForm.classesName" disabled></el-input>
+		        </el-form-item>
+		        <el-form-item label="左眼曲率">
+		            <el-input  v-model="editRecordForm.curvatureLeft" disabled></el-input>
+		        </el-form-item>
+		         <el-form-item label="右眼曲率">
+		            <el-input  v-model="editRecordForm.curvatureRight" disabled></el-input>
+		        </el-form-item>
+		         <el-form-item label="左眼矫正视力">
+		            <el-input v-model="editRecordForm.cvaLeft" disabled></el-input>
+		        </el-form-item>
+		         <el-form-item label="右眼矫正视力">
+		            <el-input  v-model="editRecordForm.cvaRight" disabled></el-input>
+		        </el-form-item>
+		         <el-form-item label="左眼屈光度">
+		            <el-input v-model="editRecordForm.diopterLeft" disabled></el-input>
+		        </el-form-item>
+		         <el-form-item label="右眼屈光度">
+		            <el-input v-model="editRecordForm.diopterRight" disabled></el-input>
+		        </el-form-item>
+		         <el-form-item label="左眼眼轴长度">
+		            <el-input v-model="editRecordForm.eyeAxisLengthLeft" disabled></el-input>
+		        </el-form-item>
+		        <el-form-item label="右眼眼轴长度">
+		            <el-input v-model.number="editRecordForm.eyeAxisLengthRight	" disabled></el-input>
+		        </el-form-item>
+		        <el-form-item label="左眼裸眼视力">
+		            <el-input v-model="editRecordForm.visionLeft" disabled></el-input>
+		        </el-form-item>
+		         <el-form-item label="右眼裸眼视力">
+		            <el-input v-model="editRecordForm.visionRight" disabled></el-input>
+		        </el-form-item>
+		    </el-form>
+		    <span slot="footer" class="dialog-footer">
+		        <el-button  type="primary" @click="editRecordDialogVisible = false">确 定</el-button>
+		    </span>
+		</el-dialog>
     </div>
 </template>
 <script>
@@ -315,16 +364,54 @@ export default {
        this.type = window.sessionStorage.getItem('tabletype');
        this.id = this.$router.history.current.params.id;
        this.getSeatTable();
-       
+
    },
     data() {
         return {
             id: '',
             token: '',
-            studentList: []
+            studentList: [],
+			editRecordDialogVisible: false,
+			    editRecordForm: {
+			    curvatureLeft: '',
+			    curvatureRight: '',
+			    cvaLeft: '',
+			    cvaRight: '',
+			    diopterLeft: '',
+			    diopterRight: '',
+			    eyeAxisLengthLeft: '',
+			    eyeAxisLengthRight: '',
+			    visionLeft: '',
+			    visionLeft: '',
+			    record_cat: '',
+			    studentName: '',
+			    schoolName:'',
+			    classesName:''
+			},
         }
     },
     methods:{
+		//编辑出现编辑页面
+		showRecordEditDialog(id) {
+		    let param = new URLSearchParams();
+		    param.append('id', id);
+		    param.append('token',this.token)
+		    axios({
+		        method: 'post',
+		        url: '/api/studentRecord',
+		        data: param
+		    }).then(this.handleEditRecordSucc.bind(this))
+		    .catch(this.handleEditRecordErr.bind(this))
+		    },
+		handleEditRecordSucc(res) {
+		    if(res.status !== 200) return;
+		    res ? res = res.data: '';
+		    this.editRecordForm = res.data;
+		    this.editRecordDialogVisible = true;
+		},
+		handleEditRecordErr(err) {
+		    console.log(err)
+		},
         getSeatTable() {
             let param = new URLSearchParams();
             param.append('token', this.token);
@@ -344,7 +431,7 @@ export default {
             console.log(err)
         },
         back() {
-            this.$router.back(-1);
+            this.$router.push('/seatinquiry');
         }
     }
 }
