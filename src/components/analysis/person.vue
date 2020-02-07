@@ -92,19 +92,19 @@ export default {
       leftQuY:[],
       rightQuX: [],
       rightQuY: [],
-      time: '',
+      time: 30,
       timeoptions:[{
-        value: 7,
-        label: '一星期'
-      }, {
-        value: 14,
-        label: '两星期'
-      }, {
-        value: 30,
+        value: 30 ,
         label: '一个月'
       }, {
         value: 90,
         label: '三个月'
+      }, {
+        value: 180,
+        label: '六个月'
+      }, {
+        value: 365,
+        label: '一年'
       }],
 		}
 	},
@@ -118,9 +118,16 @@ export default {
              left: 'center'
          },
         legend: {
+                  orient: 'vertical',
                    data: ['左眼裸眼视力', '右眼裸眼视力'],
                    left: 'left',
-               },
+                   y: 'top',
+                   top:'5%',
+                 },
+       grid: {                   // 折线位置
+               top:'8%',
+               right: '10%',
+             },
         xAxis: {
             type: 'category',
             symbol: 'none',
@@ -159,20 +166,32 @@ export default {
               left: 'center'
           },
          legend: {
+                    orient: 'vertical',
                     data: ['左眼曲率', '右眼曲率'],
                     left: 'left',
+                    y: 'top',
+                    top:'5%',
                 },
-         xAxis: {
-             type: 'category',
-             symbol: 'none',
-             boundaryGap: false,
-             data: this.leftQuX
+       grid: {                   // 折线位置
+               top:40,
+               right: '10%',
+             },
+        xAxis: {
+               type: 'category',
+               symbol: 'none',
+               boundaryGap: false,
+               data: this.leftQuX
          },
+         grid: {                   // 折线位置
+                 top:'8%',
+                 right: '10%',
+               },
          yAxis: {
+             name: '单位为(D)',
              type: 'value',
-             min:0,
-             max:50,
-             splitNumber:100
+             min:35,
+             max:55,
+             splitNumber:20,
          },
          series: [{
             name: '左眼曲率',
@@ -197,12 +216,20 @@ export default {
          title: {
               text: '眼轴分析',
               subtext: '',
-              left: 'center'
+              left: 'center',
+              padding:[5 , 0 ,10, 0]
           },
          legend: {
+                    orient: 'vertical',
                     data: ['左眼眼轴长度', '右眼眼轴长度'],
                     left: 'left',
+                    y: 'top',
+                    top:'5%',
                 },
+        grid: {                   // 折线位置
+                top:'8%',
+                right: '10%',
+              },
          xAxis: {
              type: 'category',
              symbol: 'none',
@@ -210,10 +237,11 @@ export default {
              data: this.leftZhouX
          },
          yAxis: {
+             name: '单位为(mm)',
              type: 'value',
-             min:0,
-             max:50,
-             splitNumber:100
+             min:15,
+             max:35,
+             splitNumber:20
          },
          series: [{
             name: '左眼眼轴长度',
@@ -304,6 +332,7 @@ export default {
         }else if(!this.time) {
           this.$message.error('请选择查看时间范围')
         } else{
+          console.log(this.time)
           param.append('token', this.token);
           param.append('time', this.time * 86400 )
           param.append('studentId', 15);
@@ -315,9 +344,10 @@ export default {
         }
     },
     handleGetStudentRecordSucc(res) {
-      if(res.status !== 200) return;
       console.log(res);
+      if(res.status !== 200) return;
       res? res= res.data.data: '';
+      console.log(res)
       for(let i = 0; i < res.length; i++) {
         if(res[i].name=="左眼裸眼视力") {
           this.leftLuoX = res[0].xDataList;
@@ -339,10 +369,16 @@ export default {
             this.rightQuY = res[5].yDataList;
           }
          }
-        console.log(this.rightQuY, this.leftQuY)
+
       this.drawLine();
       this.drawLine2();
       this.drawLine3();
+      this.leftLuoY = [];
+      this.rightLuoY = [];
+      this.leftZhouY = [];
+      this.rightZhouY = [];
+      this.leftQuY = [];
+      this.rightQuY = [];
     },
     handleGetStudentRecordErr(err) {
       console.log(err)
