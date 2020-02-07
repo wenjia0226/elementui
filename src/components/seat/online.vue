@@ -497,7 +497,7 @@ export default {
                 param.append('token', this.token);
                 param.append('classId', this.classId);
                 param.append('type', this.value);
-                param.append('time', this.time * 86400000);
+                param.append('time', this.time * 86400);
                 axios({
                     method: 'post',
                     data: param,

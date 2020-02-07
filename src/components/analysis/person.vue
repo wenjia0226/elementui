@@ -25,6 +25,15 @@
             clearable
             @select="handleSelect"></el-autocomplete>
         </el-col>
+        <el-col :span="2">
+             <div class="schoolSet">查看范围：</div>
+        </el-col>
+        <el-col :span="3">
+            <el-select v-model="time" @change="changeTime"  clearable>
+            <el-option v-for="item in timeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
+            </el-option>
+        </el-select>
+        </el-col>
 	      <el-col :span="4">
 	         <el-button type="primary" @click="showPerson">查看个人分析</el-button>
 	      </el-col>
@@ -82,7 +91,21 @@ export default {
       leftQuX:[],
       leftQuY:[],
       rightQuX: [],
-      rightQuY: []
+      rightQuY: [],
+      time: '',
+      timeoptions:[{
+        value: 7,
+        label: '一星期'
+      }, {
+        value: 14,
+        label: '两星期'
+      }, {
+        value: 30,
+        label: '一个月'
+      }, {
+        value: 90,
+        label: '三个月'
+      }],
 		}
 	},
 	methods: {
@@ -274,13 +297,22 @@ export default {
 		},
     showPerson() {
         let param = new URLSearchParams();
-        param.append('token', this.token);
-        param.append('studentId', 15);
-        axios({
-          method: 'post',
-          data: param,
-          url: '/api/studentRecords'
-        }).then(this.handleGetStudentRecordSucc.bind(this)).catch(this.handleGetStudentRecordErr.bind(this))
+        if(!this.token) {
+          this.$message.error('请重新登录');
+        }else if(!this.studentId) {
+          this.$message.error('请先选择学生')
+        }else if(!this.time) {
+          this.$message.error('请选择查看时间范围')
+        } else{
+          param.append('token', this.token);
+          param.append('time', this.time * 86400 )
+          param.append('studentId', 15);
+          axios({
+            method: 'post',
+            data: param,
+            url: '/api/studentRecords'
+          }).then(this.handleGetStudentRecordSucc.bind(this)).catch(this.handleGetStudentRecordErr.bind(this))
+        }
     },
     handleGetStudentRecordSucc(res) {
       if(res.status !== 200) return;
@@ -314,6 +346,10 @@ export default {
     },
     handleGetStudentRecordErr(err) {
       console.log(err)
+    },
+    //排座周期
+    changeTime(time) {
+
     }
 	}
 }
