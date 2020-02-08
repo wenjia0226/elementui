@@ -16,7 +16,7 @@
                     </el-input>
                 </el-col>
                 <el-col :span="6">
-                   <el-button type="primary" @click="addClass">添加班级</el-button> 
+                   <el-button type="primary" @click="addClass">添加班级</el-button>
                 </el-col>
             </el-row>
              <!-- 班级列表 -->
@@ -56,8 +56,16 @@
         <el-dialog title="添加班级" ref="addClassRef" :visible.sync="addClassVisible" width="50%">
             <el-form :model="addClassForm" :rules="addClassRules" ref="addClassRef" label-width="120px" class="demo-ruleForm">
                 <el-form-item label="所属学校" prop="schoolName">
-                    <el-cascader v-model="selectedOptions"  :options="school" :props ="cateProps" @change="handleChange">
-                    </el-cascader> 
+                    <!-- <el-cascader v-model="selectedOptions"  :options="school" :props ="cateProps" @change="handleChange">
+                    </el-cascader> -->
+                    <el-select v-model="value" placeholder="请选择" prop="schoolName">
+                        <el-option
+                          v-for="item in school"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
                 </el-form-item>
                 <el-form-item label="班级" prop="className">
                     <el-input v-model="addClassForm.className" clearable></el-input>
@@ -74,7 +82,7 @@
                 <el-form-item label="人数" prop="volume">
                     <el-input v-model.number="addClassForm.volume" clearable></el-input>
                 </el-form-item>
-            
+
                 <el-form-item label="是否实验班" prop="experiment">
                     <el-radio-group  size="medium"  v-model="addClassForm.experiment">
                     <el-radio border  label="1">是</el-radio>
@@ -154,6 +162,7 @@ export default {
             addClassVisible: false,
             editVisible: false,
             school: [],
+            value: '',
             schoolId: '',
             labelNum1: 1,
             labelNum2: 0,
@@ -176,7 +185,7 @@ export default {
                 bbLength:  { required: true,  validator: valiNumberPass1,message: '请输入黑板长度', trigger: 'blur' },
                 volume:  { required: true, type:'number', message: '请输入班级容量', trigger: 'blur' },
                 experiment: {required: true, message: '请选择是否是实验班', trigger: 'blur'}
-               
+
             },
             cateProps: {
                 label: 'name', //看到的是哪个属性
@@ -206,12 +215,12 @@ export default {
                 volume:  { required: true, type:'number', message: '请输入班级容量', trigger: 'blur' },
                 experiment: {required: true, message: '请选择是否是实验班', trigger: 'blur'}
             }
-            
+
         }
     },
     methods: {
         addClass() {
-            this.addClassVisible = true  
+            this.addClassVisible = true
         },
         //获取班级列表
         getClassList () {
@@ -243,7 +252,7 @@ export default {
            this.currentPage = val;
         },
         // 添加班级
-        sumitClass() { 
+        sumitClass() {
             this.$refs.addClassRef.validate((valid) => {
                 if(!valid)  return;
                 var param = new URLSearchParams();
@@ -265,7 +274,9 @@ export default {
             })
         },
          handleChange(item) {
-           this.schoolId = this.addClassForm.schoolName;
+           console.log(item);
+           this.schoolId = item;
+           console.log(this.schoolId)
         },
         handleAddClassSucc(res) {
             if(res.status !== 200) return this.$message.error('添加班级失败');
@@ -321,11 +332,11 @@ export default {
                     url: '/saveClasses',
                     data: param
                 }).then(this.handleEditSaveClassSucc.bind(this))
-                .catch(this.handleEditSaveClassErr.bind(this))   
+                .catch(this.handleEditSaveClassErr.bind(this))
                 })
         },
          handleEditSaveClassSucc(res) {
-             if(res.status !==200) return; 
+             if(res.status !==200) return;
             //发起修改用户信息的数据请求
              this.classlList = res.data.data;
             //隐藏编辑框
@@ -355,6 +366,7 @@ export default {
         handleGetSchoolSucc(res) {
             if(res.status !== 200) return this.$message.error('获取学校列表失败');
             this.school = res.data.data;
+            console.log(this.school)
         },
         handleGetSchoolErr(err) {
             console.log(err)
@@ -382,13 +394,13 @@ export default {
         handleDeleteClassSucc(res) {
             if(res.status !== 200) return this.$message.error('删除班级失败');
             this.$message.success('删除班级成功');
-            this.getClassList();  
+            this.getClassList();
         },
         handleDeleteClassErr(err) {
             console.log(err)
         }
     }
-    
+
 }
 </script>
 <style lang="less" scoped>

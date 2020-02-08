@@ -9,7 +9,7 @@
                     <el-input  v-model="loginForm.loginname" prefix-icon="el-icon-user-solid"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input v-model="loginForm.password" prefix-icon="el-icon-lock"></el-input>
+                    <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" @keyup.enter.native="submitForm"></el-input>
                 </el-form-item>
                 <el-form-item class="btns">
                     <el-button type="primary" @click="submitForm">登录</el-button>
@@ -38,7 +38,8 @@ export default {
                     {required: true,  message: '请输入姓名', trigger: 'blur'}
                 ],
                 password: [
-                     {required: true,  message: '请输入密码', trigger: 'blur'}
+                     {required: true,  message: '请输入密码', trigger: 'blur'},
+
                 ]
             }
         }
@@ -50,7 +51,7 @@ export default {
         submitForm() {
             this.$refs.loginFormRef.validate( async(valid) => {
                 //预验证
-                if(!valid) return;
+                if(!valid) return this.$message.error('请输入正确的账号密码');
                 //如果验证成功，发起登录请求
                let param = new URLSearchParams();
                param.append('loginname', this.loginForm.loginname);
@@ -69,14 +70,15 @@ export default {
             window.sessionStorage.setItem('token', res.data.data.token)
             this.$message.success('登录成功');
             window.sessionStorage.setItem('loginName', this.loginForm.loginname)
-            this.$router.push('/home') 
+            this.$router.push('/home')
         },
         handleLoginErr(err) {
-            console.log(err)
+          this.$message.error('账号密码不存在')
+            console.log(err, err.msg)
         }
     }
-    
-    
+
+
 }
 </script>
 <style lang="less" scoped>
