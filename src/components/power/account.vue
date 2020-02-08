@@ -148,7 +148,7 @@ import axios from 'axios'
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/api/userList',
+                 url: '/userList',
                  data: param
              }).then(this.handleGetUserListSucc.bind(this))
              .catch(this.handleGetUserListErr.bind(this))
@@ -165,7 +165,7 @@ import axios from 'axios'
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/api/roleList',
+                 url: '/roleList',
                  data: param
              }).then(this.handleGetRoleListSucc.bind(this))
              .catch(this.handleGetRoleListErr.bind(this))
@@ -194,7 +194,7 @@ import axios from 'axios'
                 param.append('wechatName', this.addAccountForm.wechatName);
                 axios({
                     method: 'post',
-                    url: '/api/addUser',
+                    url: '/addUser',
                     data: param
                 }).then(this.handleAddUserSucc.bind(this))
                 .catch(this.handleAddUserErr.bind(this))
@@ -221,7 +221,7 @@ import axios from 'axios'
             param.append('token', this.token);
             axios({
                 method: 'post',
-                url: '/api/cascade1',
+                url: '/cascade1',
                 data: param
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
@@ -268,7 +268,7 @@ import axios from 'axios'
             param.append('id', id);
             axios({
                 method: 'post',
-                url: '/api/deleteUser',
+                url: '/deleteUser',
                 data: param
             }).then(this.handleDeleteUserSucc.bind(this))
             .catch(this.handleDeleteUserErr.bind(this))

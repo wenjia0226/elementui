@@ -73,7 +73,7 @@ import axios from 'axios'
                     listparam.append('token', this.token);
                     axios({
                         method: 'post',
-                        url: '/api/menuList',
+                        url: '/menuList',
                         data: listparam
                     }).then(this.handleGetMenuListSucc.bind(this)).catch(this.handleGetMenuListErr.bind(this))
                 }else {

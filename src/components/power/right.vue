@@ -37,7 +37,7 @@ export default {
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/api/rightList',
+                 url: '/rightList',
                  data: param
              }).then(this.handleGetRightSucc.bind(this))
                .catch(this.handleGetRightErr.bind(this))

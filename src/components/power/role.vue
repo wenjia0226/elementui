@@ -170,7 +170,7 @@ export default {
                param.append('token', this.token)
                axios({
                    method: 'post',
-                   url: '/api/addRole',
+                   url: '/addRole',
                    data: param
                }).then(this.handleAddRoleSucc.bind(this))
                .catch(this.handleAddRoleErr.bind(this))
@@ -192,7 +192,7 @@ export default {
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/api/roleList',
+                 url: '/roleList',
                  data: param
              }).then(this.handleGetRoleSucc.bind(this))
                .catch(this.handleGetRoleErr.bind(this))
@@ -222,7 +222,7 @@ export default {
             param.append('token',this.token)
             axios({
                 method: 'post',
-                url: '/api/editRole',
+                url: '/editRole',
                 data: param
             }).then(this.handleEditRoleSucc.bind(this))
             .catch(this.handleEditRoleErr.bind(this))
@@ -245,7 +245,7 @@ export default {
                 param.append('id', this.editRoleForm.id)
                 axios({
                     method: 'post',
-                    url: '/api/saveRole',
+                    url: '/saveRole',
                     data: param
                 }).then(this.handleEditSaveSchoolSucc.bind(this))
                 .catch(this.handleEditSaveSchoolErr.bind(this))   
@@ -280,7 +280,7 @@ export default {
             param.append('id', id)
             axios({
                 method: 'post',
-                url: '/api/deleteRole',
+                url: '/deleteRole',
                 data: param
             }).then(this.handleDeleteRoleSucc.bind(this))
             .catch(this.handleDeleteRoleErr.bind(this))
@@ -303,7 +303,7 @@ export default {
             //获取权限列表
             axios({
                 method: 'post',
-                url: '/api/menuList',
+                url: '/menuList',
                 data: param
             }).then(this.handleGetMenuListSucc.bind(this))
             .catch(this.getMenuListErr.bind(this))          
@@ -340,7 +340,7 @@ export default {
             axios({
                 method: 'post',
                 data: param,
-                url: '/api/roleRight'
+                url: '/roleRight'
 
             }).then(this.handleSaveRightSucc.bind(this))
             .catch(this.handleSaveRightErr.bind(this))

@@ -467,7 +467,7 @@ export default {
             param.append('token', this.token);
             axios({
                 method: 'post',
-                url: '/api/cascade1',
+                url: '/cascade1',
                 data: param
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
@@ -501,7 +501,7 @@ export default {
                 axios({
                     method: 'post',
                     data: param,
-                    url: '/api/sortList'
+                    url: '/sortList'
                 }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
             }
         },
@@ -522,7 +522,7 @@ export default {
             param.append('token',this.token)
             axios({
                 method: 'post',
-                url: '/api/studentRecord',
+                url: '/studentRecord',
                 data: param
             }).then(this.handleEditRecordSucc.bind(this))
             .catch(this.handleEditRecordErr.bind(this))

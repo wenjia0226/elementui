@@ -398,7 +398,7 @@ export default {
 		    param.append('token',this.token)
 		    axios({
 		        method: 'post',
-		        url: '/api/studentRecord',
+		        url: '/studentRecord',
 		        data: param
 		    }).then(this.handleEditRecordSucc.bind(this))
 		    .catch(this.handleEditRecordErr.bind(this))
@@ -418,7 +418,7 @@ export default {
             param.append('sortId', this.id);
             axios({
                 method: 'post',
-                url: "/api/showSort",
+                url: "/showSort",
                 data: param
             }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
         },

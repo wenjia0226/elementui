@@ -247,7 +247,7 @@ export default {
             param.append('name', this.query);
             axios({
                 method: "post",
-                url: '/api/queryRecord',
+                url: '/queryRecord',
                 data: param 
             }).then(this.handleQuerySucc.bind(this))
             .catch(this.handleQueryErr.bind(this))
@@ -266,7 +266,7 @@ export default {
             axios({
                 method: 'post',
                 data: param,
-                url: '/api/recordList'
+                url: '/recordList'
             }).then(this.handleGetRecordSucc.bind(this))
             .catch(this.handleGetRecordErr.bind(this)
             )
@@ -309,7 +309,7 @@ export default {
             param.append('visionRight', this.addRecordForm.visionRight)
             axios({
                 method: 'post',
-                url: '/api/addRecord',
+                url: '/addRecord',
                 data: param
             }).then(this.handleAddRecordSucc.bind(this)).catch(this.handleAddRecordErr.bind(this))
             })
@@ -338,7 +338,7 @@ export default {
             param.append('token',this.token)
             axios({
                 method: 'post',
-                url: '/api/editRecord',
+                url: '/editRecord',
                 data: param
             }).then(this.handleEditRecordSucc.bind(this))
             .catch(this.handleEditRecordErr.bind(this))
@@ -377,7 +377,7 @@ export default {
             param.append('id', this.id);
             axios({
                 method: 'post',
-                url: '/api/saveRecord',
+                url: '/saveRecord',
                 data: param
             }).then(this.handleSaveEditSucc.bind(this)).catch(this.handleSaveEditErr.bind(this))
             })
@@ -408,7 +408,7 @@ export default {
         param.append('id', id)
         axios({
             method: 'post',
-            url: '/api/deleteRecord',
+            url: '/deleteRecord',
             data: param
         }).then(this.handleDeleteRecordSucc.bind(this))
         .catch(this.handleDeleteRecordErr.bind(this))
@@ -427,7 +427,7 @@ export default {
         param.append('token', this.token);
         axios({
             method: 'post',
-            url: '/api/cascade',
+            url: '/cascade',
             data: param
         }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
     },

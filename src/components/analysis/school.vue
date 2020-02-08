@@ -119,7 +119,7 @@ export default {
        param.append('token', this.token);
        axios({
          method:'post',
-         url: '/api/schoolList',
+         url: '/schoolList',
          data: param
        }).then(this.handleGetSchoolLisSucc.bind(this)).catch(this.handleGetSchoolListErr.bind(this))
      },
@@ -143,7 +143,7 @@ export default {
       param.append('schoolId', this.schoolId);
       axios({
         method: 'post',
-        url:'/api/schoolStatistics',
+        url:'/schoolStatistics',
         data: param
       }).then(this.getSchoolAnalysisSucc.bind(this)).catch(this.handleGetSchoolAnalysisErr.bind(this))
     },

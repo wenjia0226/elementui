@@ -268,7 +268,7 @@ export default {
       param.append('classId', this.classId);
       axios({
         method: 'post',
-        url: '/api/queryStudentBySidCid',
+        url: '/queryStudentBySidCid',
         data: param
       }).then(this.getStudentListSucc.bind(this)).catch(this.getStudnentListErr.bind(this))
     },
@@ -307,7 +307,7 @@ export default {
 		    param.append('token', this.token);
 		    axios({
 		        method: 'post',
-		        url: '/api/cascade1',
+		        url: '/cascade1',
 		        data: param
 		    }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
 		},
@@ -339,7 +339,7 @@ export default {
           axios({
             method: 'post',
             data: param,
-            url: '/api/studentRecords'
+            url: '/studentRecords'
           }).then(this.handleGetStudentRecordSucc.bind(this)).catch(this.handleGetStudentRecordErr.bind(this))
         }
     },

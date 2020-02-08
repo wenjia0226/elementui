@@ -220,7 +220,7 @@ export default {
             axios({
                 method: 'post',
                 data: param2,
-                url: '/api/classesList'
+                url: '/classesList'
             }).then(this.handleGetClassSucc.bind(this))
             .catch(this.handleGetClassErr.bind(this)
             )
@@ -259,7 +259,7 @@ export default {
                 axios({
                     method: 'post',
                     data: param,
-                    url:'/api/addClasses'
+                    url:'/addClasses'
                 }).then(this.handleAddClassSucc.bind(this))
                 .catch(this.handleAddClassErr.bind(this))
             })
@@ -286,7 +286,7 @@ export default {
             param.append('token',this.token)
             axios({
                 method: 'post',
-                url: '/api/editClasses',
+                url: '/editClasses',
                 data: param
             }).then(this.handleEditClassSucc.bind(this))
             .catch(this.handleEditclassErr.bind(this))
@@ -318,7 +318,7 @@ export default {
                 param.append('id', this.editClassForm.id)
                 axios({
                     method: 'post',
-                    url: '/api/saveClasses',
+                    url: '/saveClasses',
                     data: param
                 }).then(this.handleEditSaveClassSucc.bind(this))
                 .catch(this.handleEditSaveClassErr.bind(this))   
@@ -347,7 +347,7 @@ export default {
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/api/schoolList',
+                 url: '/schoolList',
                  data: param
              }).then(this.handleGetSchoolSucc.bind(this))
                .catch(this.handleGetSchoolErr.bind(this))
@@ -374,7 +374,7 @@ export default {
         param.append('id', id)
         axios({
             method: 'post',
-            url: '/api/deleteClasses',
+            url: '/deleteClasses',
             data: param
         }).then(this.handleDeleteClassSucc.bind(this))
         .catch(this.handleDeleteClassErr.bind(this))

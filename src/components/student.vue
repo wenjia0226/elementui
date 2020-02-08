@@ -245,7 +245,7 @@ export default {
             param.append('name', this.query);
             axios({
                 method: "post",
-                url: '/api/queryStudent',
+                url: '/queryStudent',
                 data: param 
             }).then(this.handleQuerySucc.bind(this))
             .catch(this.handleQueryErr.bind(this))
@@ -282,7 +282,7 @@ export default {
                 // param.append('stu_cat', this.addStudentForm.stu_cat)
                 axios({
                     method: 'post',
-                    url: '/api/addStudent',
+                    url: '/addStudent',
                     data: param
                 }).then(this.handleAddStuSucc.bind(this)).catch(this.handleAddStuErr.bind(this))
                 })
@@ -304,7 +304,7 @@ export default {
             param.append('token', this.token);
             axios({
                 method: 'post',
-                url: '/api/cascade1',
+                url: '/cascade1',
                 data: param
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
@@ -326,7 +326,7 @@ export default {
             param.append('token', this.token);
             axios({
                 method: 'post',
-                url: '/api/studentList',
+                url: '/studentList',
                 data: param
             }).then(this.handleGetStudentList.bind(this)).catch(this.handleGetStudentErr.bind(this))
         },
@@ -369,7 +369,7 @@ export default {
             param.append('id', id);
             axios({
                 method: 'post', 
-                url: '/api/editStudent',
+                url: '/editStudent',
                 data: param
             }).then(this.handleEditStuSucc.bind(this)).catch(this.handleEditStuErr.bind(this))
         },
@@ -412,7 +412,7 @@ export default {
             param.append('id', this.id)
             axios({
                 method: 'post',
-                url: '/api/saveStudent',
+                url: '/saveStudent',
                 data: param
             }).then(this.handldEditStuSucc.bind(this)).catch(this.handleEditStuErr.bind(this))
             })
@@ -445,7 +445,7 @@ export default {
             param.append('token', this.token);
             axios({
                 method: 'post',
-                url: '/api/deleteStudent',
+                url: '/deleteStudent',
                 data: param
             }).then(this.handleDeleteStuSucc.bind(this)).catch(this.handleDeleteStuErr.bind(this))
         },

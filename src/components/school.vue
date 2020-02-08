@@ -124,7 +124,7 @@ export default {
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/api/schoolList',
+                 url: '/schoolList',
                  data: param
              }).then(this.handleGetSchoolSucc.bind(this))
                .catch(this.handleGetSchoolErr.bind(this))
@@ -144,7 +144,7 @@ export default {
             param.append('name', this.query);
             axios({
                 method: "post",
-                url: '/api/querySchool',
+                url: '/querySchool',
                 data: param 
             }).then(this.handleQuerySucc.bind(this))
             .catch(this.handleQueryErr.bind(this))
@@ -166,7 +166,7 @@ export default {
                param.append('token', this.token)
                axios({
                    method: 'post',
-                   url: '/api/addSchool',
+                   url: '/addSchool',
                    data: param
                }).then(this.handleAddSchoolSucc.bind(this))
                .catch(this.handleAddSchoolErr.bind(this))
@@ -199,7 +199,7 @@ export default {
             param.append('token',this.token)
             axios({
                 method: 'post',
-                url: '/api/editSchool',
+                url: '/editSchool',
                 data: param
             }).then(this.handleEditSchoolSucc.bind(this))
             .catch(this.handleEditSchoolErr.bind(this))
@@ -226,7 +226,7 @@ export default {
                 param.append('id', this.editSchoolForm.id)
                 axios({
                     method: 'post',
-                    url: '/api/saveSchool',
+                    url: '/saveSchool',
                     data: param
                 }).then(this.handleEditSaveSchoolSucc.bind(this))
                 .catch(this.handleEditSaveSchoolErr.bind(this))   
@@ -259,7 +259,7 @@ export default {
             param.append('id', id)
             axios({
                 method: 'post',
-                url: '/api/deleteSchool',
+                url: '/deleteSchool',
                 data: param
             }).then(this.handleDeleteShoolSucc.bind(this))
             .catch(this.handleDeleteSchoolErr.bind(this))
