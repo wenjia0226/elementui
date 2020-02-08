@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://192.168.2.201:8080/lightspace/',   
+        target: 'http://192.168.2.201:8080/',
         changeOrigin: true,  //允许跨域
         pathRewrite: {
           '^/api': ''

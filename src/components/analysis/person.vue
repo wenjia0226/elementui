@@ -344,10 +344,8 @@ export default {
         }
     },
     handleGetStudentRecordSucc(res) {
-      console.log(res);
       if(res.status !== 200) return;
       res? res= res.data.data: '';
-      console.log(res)
       for(let i = 0; i < res.length; i++) {
         if(res[i].name=="左眼裸眼视力") {
           this.leftLuoX = res[0].xDataList;
@@ -373,12 +371,12 @@ export default {
       this.drawLine();
       this.drawLine2();
       this.drawLine3();
-      this.leftLuoY = [];
-      this.rightLuoY = [];
-      this.leftZhouY = [];
-      this.rightZhouY = [];
-      this.leftQuY = [];
-      this.rightQuY = [];
+      // this.leftLuoY = [];
+      // this.rightLuoY = [];
+      // this.leftZhouY = [];
+      // this.rightZhouY = [];
+      // this.leftQuY = [];
+      // this.rightQuY = [];
     },
     handleGetStudentRecordErr(err) {
       console.log(err)
