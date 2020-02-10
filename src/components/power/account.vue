@@ -62,7 +62,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="" prop="selectedOptions" width="100%" v-if="addAccountForm.role == '超级管理员' " v-show="false">
+                <el-form-item label="" width="100%" v-if="addAccountForm.role == '超级管理员' " v-show="false">
                     <!-- <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader> -->
                 </el-form-item>
                 <el-form-item label="所属学校" prop="schoolOptions" width="100%" v-else-if="addAccountForm.role == '校级管理员' ">
@@ -74,7 +74,7 @@
                <!-- <el-form-item label="所属学校/班级" prop="selectedOptions" width="100%" v-else>
                     <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange"  v-show = "false" clearable></el-cascader>
                 </el-form-item> -->
-               
+
            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addAccountDialogVisible = false">取 消</el-button>
@@ -128,7 +128,7 @@ import axios from 'axios'
             show: true,
             options: [], //级联绑定的数据
             schoolOptions: []
-           
+
          }
      },
      methods: {
@@ -169,7 +169,7 @@ import axios from 'axios'
                  data: param
              }).then(this.handleGetRoleListSucc.bind(this))
              .catch(this.handleGetRoleListErr.bind(this))
-          
+
 
          },
          handleGetRoleListSucc(res) {
@@ -232,8 +232,8 @@ import axios from 'axios'
             for(var i in arr1) {
                     this.schoolOptions.push({
                         name: arr1[i].name,
-                        id: arr1[i].id    
-            }) 
+                        id: arr1[i].id
+            })
             }
         },
         handleGetOptionErr(err) {
@@ -274,10 +274,9 @@ import axios from 'axios'
             .catch(this.handleDeleteUserErr.bind(this))
             },
             handleDeleteUserSucc(res) {
-                console.log(res);
                 if(res.status !== 200) return this.$message.error('删除用户失败');
                 this.$message.success('删除用户成功');
-                this.getUserList();  
+                this.getUserList();
             },
             handleDeleteUserErr(err) {
                 console.log(err)

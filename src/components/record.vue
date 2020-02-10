@@ -24,16 +24,17 @@
                 <el-table-column label="所属学校" prop="schoolName"></el-table-column>
                 <el-table-column label="所属班级" prop="classesName"></el-table-column>
                 <el-table-column label="姓名" prop="studentName"></el-table-column>
+                <el-table-column label="左眼裸眼视力" prop="visionLeft"></el-table-column>
+                <el-table-column label="右眼裸眼视力" prop="visionRight"></el-table-column>
+                <el-table-column label="左眼眼轴长度" prop="eyeAxisLengthLeft"></el-table-column>
+                <el-table-column label="右眼眼轴长度" prop="eyeAxisLengthRight"></el-table-column>
                 <el-table-column label="左眼曲率" prop="curvatureLeft"></el-table-column>
                 <el-table-column label="右眼曲率" prop="curvatureRight"></el-table-column>
-                 <el-table-column label="左眼矫正视力" prop="cvaLeft"></el-table-column>
+                <el-table-column label="左眼矫正视力" prop="cvaLeft"></el-table-column>
                 <el-table-column label="右眼矫正视力" prop="cvaRight"></el-table-column>
                 <el-table-column label="左眼屈光度" prop="diopterLeft"></el-table-column>
                 <el-table-column label="右眼屈光度" prop="diopterRight"></el-table-column>
-                <el-table-column label="左眼眼轴长度" prop="eyeAxisLengthLeft"></el-table-column>
-                <el-table-column label="右眼眼轴长度" prop="eyeAxisLengthRight"></el-table-column>
-                <el-table-column label="左眼裸眼视力" prop="visionLeft"></el-table-column>
-                <el-table-column label="右眼裸眼视力" prop="visionRight"></el-table-column>
+                
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showRecordEditDialog(scope.row.id)" ></el-button>
@@ -61,6 +62,19 @@
                     <el-form-item label="所属学校班级" prop="record_cat">
                         <el-cascader :options="options" v-model="addRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
+                    <el-form-item label="左眼裸眼视力" prop="visionLeft">
+                        <el-input v-model="addRecordForm.visionLeft" clearable></el-input>
+                    </el-form-item>
+                     <el-form-item label="右眼裸眼视力" prop="visionRight">
+                        <el-input v-model="addRecordForm.visionRight" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="左眼眼轴长度" prop="eyeAxisLengthLeft">
+                        <el-input v-model="addRecordForm.eyeAxisLengthLeft" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight">
+                        <el-input v-model="addRecordForm.eyeAxisLengthRight" clearable></el-input>
+                    </el-form-item>
+
                     <el-form-item label="左眼曲率" prop="curvatureLeft">
                         <el-input v-model="addRecordForm.curvatureLeft" clearable></el-input>
                     </el-form-item>
@@ -81,18 +95,7 @@
                      <el-form-item label="右眼屈光度">
                         <el-input v-model="addRecordForm.diopterRight" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="左眼眼轴长度" prop="eyeAxisLengthLeft">
-                        <el-input v-model="addRecordForm.eyeAxisLengthLeft" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight">
-                        <el-input v-model="addRecordForm.eyeAxisLengthRight" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="左眼裸眼视力" prop="visionLeft">
-                        <el-input v-model="addRecordForm.visionLeft" clearable></el-input>
-                    </el-form-item>
-                     <el-form-item label="右眼裸眼视力" prop="visionRight">
-                        <el-input v-model="addRecordForm.visionRight" clearable></el-input>
-                    </el-form-item>
+
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click=" handleReset">取 消</el-button>
@@ -105,14 +108,20 @@
                    <el-form-item label="所属学校班级" prop="">
                         <el-cascader :options="options" v-model="editRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
-                 <!--  <el-form-item label="所属学校" prop="schoolName">
-                        <el-input v-model="editRecordForm.schoolName"   clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="所属班级" prop="className">
-                        <el-input v-model="editRecordForm.classesName"   clearable></el-input>
-                    </el-form-item> -->
                     <el-form-item label="学生姓名">
                         <el-input v-model="editRecordForm.studentName"   clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="左眼裸眼视力" prop="visionLeft">
+                        <el-input v-model="editRecordForm.visionLeft" clearable></el-input>
+                    </el-form-item>
+                     <el-form-item label="右眼裸眼视力" prop="visionRight">
+                        <el-input v-model="editRecordForm.visionRight" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="左眼眼轴长度" prop="eyeAxisLengthLeft">
+                        <el-input v-model="editRecordForm.eyeAxisLengthLeft" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight">
+                        <el-input v-model="editRecordForm.eyeAxisLengthRight" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="左眼曲率" prop="curvatureLeft">
                         <el-input  v-model="editRecordForm.curvatureLeft" clearable></el-input>
@@ -132,18 +141,8 @@
                      <el-form-item label="右眼屈光度" >
                         <el-input v-model="editRecordForm.diopterRight" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="左眼眼轴长度" prop="eyeAxisLengthLeft">
-                        <el-input v-model="editRecordForm.eyeAxisLengthLeft" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight">
-                        <el-input v-model="editRecordForm.eyeAxisLengthRight" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="左眼裸眼视力" prop="visionLeft">
-                        <el-input v-model="editRecordForm.visionLeft" clearable></el-input>
-                    </el-form-item>
-                     <el-form-item label="右眼裸眼视力" prop="visionRight">
-                        <el-input v-model="editRecordForm.visionRight" clearable></el-input>
-                    </el-form-item>
+
+
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="editRecordDialogVisible = false">取 消</el-button>
@@ -284,6 +283,20 @@ export default {
         handleGetRecordSucc(res) {
             if(res.status !== 200) return this.$message.error('获取记录列表失败');
             this.recordList = res.data.data;
+            this.recordList.forEach((item ,index) => {
+              if(item.cvaLeft == 0) {
+                 item.cvaLeft = '无'
+              }
+              if(item.cvaRight == 0) {
+                 item.cvaRight = '无'
+              }
+              if(item.diopterLeft == '') {
+                item.diopterLeft = '--/--'
+               }
+             if(item.diopterRight == '') {
+                item.diopterRight = '--/--'
+              }
+            })
         },
         handleGetRecordErr(err) {
             console.log(err)

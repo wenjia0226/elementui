@@ -74,22 +74,22 @@
                 :total="roleList.length">
             </el-pagination>
         </el-card>
-         <!-- 添加角色对话框 -->
-        <el-dialog title="添加角色" ref=" ":visible.sync="addRoleDialogVisible" width="50%">
-           <el-form addRoleForm" :rules="addRoleRules" ref="roleFormRef" label-width="100px">
-                <el-form-item label="角色名称" prop="roleName">
-                    <el-input v-model="addRoleForm.roleName" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="角色描述" prop="description">
-                    <el-input v-model="addRoleForm.description" clearable></el-input>
-                </el-form-item>
-           </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="reset">重置</el-button>
-                <el-button type="primary" @click="submitRole" >确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 编辑角色对话框 -->
+        <!-- 添加角色对话框 -->
+         <el-dialog title="添加角色" :visible.sync="addRoleDialogVisible" width="50%">
+            <el-form :model="addRoleForm"  :rules="addRoleRules" ref="roleFormRef" label-width="100px">
+                 <el-form-item label="角色名称" prop="roleName">
+                     <el-input v-model="addRoleForm.roleName" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="角色描述" prop="description">
+                     <el-input v-model="addRoleForm.description" clearable></el-input>
+                 </el-form-item>
+            </el-form>
+             <span slot="footer" class="dialog-footer">
+                 <el-button @click="resetAdd">取消</el-button>
+                 <el-button type="primary" @click=" submitRole" >确 定</el-button>
+             </span>
+         </el-dialog>
+       <!-- 编辑角色对话框 -->
         <el-dialog title="修改角色" :visible.sync="editRoleDialogVisible" width="50%">
            <el-form :model="editRoleForm" :rules="editRoleRules" ref="editroleFormRef" label-width="100px">
                 <el-form-item label="角色名称" prop="roleName">
@@ -159,7 +159,10 @@ export default {
        }
    },
    methods: {
-     
+        resetAdd() {
+          this.$refs.roleFormRef.resetFields();
+          this.addRoleDialogVisible = false;
+        },
         //提交表单
         submitRole() {
            this.$refs.roleFormRef.validate((valid) => {
