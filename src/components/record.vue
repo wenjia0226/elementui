@@ -362,25 +362,20 @@ export default {
             }).then(this.handleEditRecordSucc.bind(this))
             .catch(this.handleEditRecordErr.bind(this))
             },
-            handleEditRecordSucc(res) {
-                if(res.status !== 200) return;
-                res ? res = res.data: '';
-                this.editRecordForm = res.data;
-                console.log(this.editRecordForm)
-
-                console.log(this.editRecordForm.record_cat)
-                this.editRecordDialogVisible = true;
-                this.getRecordList()
-            },
-            handleEditRecordErr(err) {
-              this.$message.error('修改记录失败');
-                console.log(err)
-            },
-
-
+        handleEditRecordSucc(res) {
+          if(res.status !== 200) return;
+          res ? res = res.data: '';
+          this.editRecordForm = res.data;
+          this.editRecordDialogVisible = true;
+          },
+        handleEditRecordErr(err) {
+          this.$message.error('修改记录失败');
+            console.log(err)
+        },
 
         //修改后保存
         saveEditInfo() {
+          console.log(this.editRecordForm.cvaLeft, this.editRecordForm.cvaRight)
             this.$refs.recordEditFormRef.validate((valid) => {
             if(!valid) return this.$message.error('验证失败');
             let param = new URLSearchParams();
@@ -408,9 +403,10 @@ export default {
         },
     handleSaveEditSucc(res) {
         if(res.status != 200) return this.$message.error('添加记录失败');
+        console.log(res)
         this.editRecordDialogVisible = false;
-        this.$message.success('修改记录成功');
         this.$refs.recordEditFormRef.resetFields();
+        this.$message.success('修改记录成功');
         this.getRecordList();
 
     },

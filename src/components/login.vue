@@ -70,7 +70,13 @@ export default {
             window.sessionStorage.setItem('token', res.data.data.token)
             this.$message.success('登录成功');
             window.sessionStorage.setItem('loginName', this.loginForm.loginname)
-            this.$router.push('/home')
+            if(window.sessionStorage.getItem('token')) {
+                this.$router.push('/home')
+            }else {
+              this.$message.error('账号过期，请重新登录');
+              this.$router.push('/login')
+            }
+          
         },
         handleLoginErr(err) {
           this.$message.error('账号密码不存在')

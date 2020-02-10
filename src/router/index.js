@@ -25,9 +25,9 @@ const router = new Router({
   routes: [
     {path: '/', redirect: '/login'},
     {path: '/login',component: Login},
-   
+
     {
-      path: '/home', 
+      path: '/home',
       component: Home,
       redirect: '/schoolsetting',
       children: [
@@ -39,12 +39,13 @@ const router = new Router({
         {path: '/permission', component: Right},
         {path: '/role', component: Role},
         {path: '/account', component: Account},
-        {path: '/seatinquiry', component: Seat, meta:{keepAlive: true}},
-        {path: '/online', component: Online},
+        {path: '/seatinquiry', component: Seat, },
+        {path: '/online', component: Online },
         {path: '/detailSeat/:id',component: detailSeat},
         {path: '/schoolStatistics', component: SchoolAnalysis},
         {path: '/classStatistics', component: ClassAnalysis},
         {path: '/personal', component: PersonAnalysis},
+        // meta:{keepAlive: true}
       ]
     }
   ]

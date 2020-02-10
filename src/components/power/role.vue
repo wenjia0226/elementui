@@ -75,9 +75,8 @@
             </el-pagination>
         </el-card>
          <!-- 添加角色对话框 -->
-        <el-dialog title="添加角色" :visible.sync="addRoleDialogVisible" width="50%">
-        
-           <el-form :model="addRoleForm" :rules="addRoleRules" ref="roleFormRef" label-width="100px">
+        <el-dialog title="添加角色" ref=" ":visible.sync="addRoleDialogVisible" width="50%">
+           <el-form addRoleForm" :rules="addRoleRules" ref="roleFormRef" label-width="100px">
                 <el-form-item label="角色名称" prop="roleName">
                     <el-input v-model="addRoleForm.roleName" clearable></el-input>
                 </el-form-item>
@@ -86,7 +85,7 @@
                 </el-form-item>
            </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addRoleDialogVisible = false">取 消</el-button>
+                <el-button @click="reset">重置</el-button>
                 <el-button type="primary" @click="submitRole" >确 定</el-button>
             </span>
         </el-dialog>
@@ -120,7 +119,7 @@ import axios from 'axios'
 export default {
     created() {
         this.token = window.sessionStorage.getItem('token');
-        this.getRoleList();       
+        this.getRoleList();
     },
    data() {
        return {
@@ -160,6 +159,7 @@ export default {
        }
    },
    methods: {
+     
         //提交表单
         submitRole() {
            this.$refs.roleFormRef.validate((valid) => {
@@ -174,7 +174,7 @@ export default {
                    data: param
                }).then(this.handleAddRoleSucc.bind(this))
                .catch(this.handleAddRoleErr.bind(this))
-           })  
+           })
         },
         handleAddRoleSucc(res) {
             if(res.status !== 200)  return this.$message.error('添加角色失败');
@@ -199,7 +199,7 @@ export default {
         },
         handleGetRoleSucc(res) {
             if(res.status !== 200) return this.$message.error('获取角色列表失败');
-            this.roleList = res.data.data; 
+            this.roleList = res.data.data;
         },
         handleGetRoleErr(error) {
            console.log(error)
@@ -230,7 +230,7 @@ export default {
         handleEditRoleSucc(res) {
             res ? res = res.data: '';
             this.editRoleForm = res.data;
-            
+
         },
         handleEditRoleErr(err) {
             console.log(err)
@@ -248,12 +248,12 @@ export default {
                     url: '/saveRole',
                     data: param
                 }).then(this.handleEditSaveSchoolSucc.bind(this))
-                .catch(this.handleEditSaveSchoolErr.bind(this))   
+                .catch(this.handleEditSaveSchoolErr.bind(this))
                 })
         },
         //编辑后保存
         handleEditSaveSchoolSucc(res) {
-             if(res.status !==200) return; 
+             if(res.status !==200) return;
             //发起修改用户信息的数据请求
              this.schoolList = res.data.data;
             //隐藏编辑框
@@ -288,7 +288,7 @@ export default {
         handleDeleteRoleSucc(res) {
             if(res.status !== 200) return this.$message.error('删除角色失败');
             this.$message.success('删除角色成功');
-            this.getRoleList();  
+            this.getRoleList();
         },
         handleDeleteRoleErr(err) {
             console.log(err)
@@ -306,7 +306,7 @@ export default {
                 url: '/menuList',
                 data: param
             }).then(this.handleGetMenuListSucc.bind(this))
-            .catch(this.getMenuListErr.bind(this))          
+            .catch(this.getMenuListErr.bind(this))
         },
         handleGetMenuListSucc(res) {
             if(res.status !== 200) return this.$message.error('获取列表失败');
@@ -344,7 +344,7 @@ export default {
 
             }).then(this.handleSaveRightSucc.bind(this))
             .catch(this.handleSaveRightErr.bind(this))
-             
+
         },
         handleSaveRightSucc(res) {
             this.settingDialogVisible = false;

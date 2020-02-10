@@ -17,25 +17,25 @@
                 background-color="#333744"
                 text-color="#fff"
                 active-text-color="#409eff"
-                default-active = '2'
+                :default-active = 'activePath'
                 router
                 :unique-opened= true>
                 <!-- 一级菜单 -->
-                <el-submenu :index="'/' +item.id"  v-for="item in menuList" :key="item.id">
+                <el-submenu :index="'/' +item.id"  v-for="item in menuList" :key="item.id" >
                     <!-- 一级菜单模板 -->
                     <template slot="title">
                     <i class="el-icon-location"></i>
                     <span>{{item.authName}}</span>
                     </template>
                     <!-- 二级菜单 -->
-                    <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id">
+                    <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
                         <template slot="title">
                             <i class="el-icon-location"></i>
                             <span>{{subItem.authName}}</span>
                         </template>
                     </el-menu-item>
                 </el-submenu>
-                
+
                 </el-menu>
             </el-aside>
             <!-- 右侧主体区 -->
@@ -58,7 +58,7 @@ import axios from 'axios'
         created() {
             this.getMenuList();
             this.activePath = window.sessionStorage.getItem('activePath')
-            
+
         },
         methods: {
             logout () {
@@ -68,6 +68,7 @@ import axios from 'axios'
             getMenuList() {
                 //获取所都菜单
                  this.token = window.sessionStorage.getItem('token');
+
                 if(this.token) {
                     let listparam = new URLSearchParams();
                     listparam.append('token', this.token);
@@ -91,7 +92,6 @@ import axios from 'axios'
             },
             //保存链接的激活状态
             saveNavState(activePath) {
-                console.log(activePath)
                 window.sessionStorage.setItem('activePath', activePath)
                 this.activePath = activePath;
             }

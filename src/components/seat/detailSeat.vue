@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button type="primary" @click="back">返回</el-button>
+        <el-button type="primary" @click="back" class="mb">返回</el-button>
         <el-card>
               <!-- 第一种排序方法 -->
             <table class="seat" v-if="this.type == '方式一'">
@@ -437,5 +437,7 @@ export default {
 }
 </script>
 <style lang="less">
-
+.mb {
+  margin: 10px 0 20px 0;
+}
 </style>
