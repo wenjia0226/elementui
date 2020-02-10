@@ -58,7 +58,7 @@
             <!-- 添加记录 -->
             <el-dialog title="添加记录" :visible.sync="addRecordDialogVisible" width="50%">
                 <el-form :model="addRecordForm" :rules="addRecordRules" ref="recordFormRef" label-width="120px">
-                    <el-form-item label="所属学校班级" prop="name">
+                    <el-form-item label="所属学校班级" prop="record_cat">
                         <el-cascader :options="options" v-model="addRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="左眼曲率" prop="curvatureLeft">
@@ -67,44 +67,52 @@
                      <el-form-item label="右眼曲率" prop="curvatureRight">
                         <el-input v-model="addRecordForm.curvatureRight" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="左眼矫正视力" prop="cvaLeft">
+                    <!-- 左右眼矫正视力是非必填项 -->
+                     <el-form-item label="左眼矫正视力" >
                         <el-input v-model="addRecordForm.cvaLeft" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="右眼矫正视力" prop="cvaRight">
+                     <el-form-item label="右眼矫正视力">
                         <el-input v-model="addRecordForm.cvaRight" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="左眼屈光度" prop="diopterLeft">
+                   <!-- 屈光度是非必填项 -->
+                     <el-form-item label="左眼屈光度" >
                         <el-input v-model="addRecordForm.diopterLeft" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="右眼屈光度" prop="diopterRight">
+                     <el-form-item label="右眼屈光度">
                         <el-input v-model="addRecordForm.diopterRight" clearable></el-input>
                     </el-form-item>
                      <el-form-item label="左眼眼轴长度" prop="eyeAxisLengthLeft">
                         <el-input v-model="addRecordForm.eyeAxisLengthLeft" clearable></el-input>
                     </el-form-item>
-                    <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight	">
-                        <el-input v-model="addRecordForm.eyeAxisLengthRight	" clearable></el-input>
+                    <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight">
+                        <el-input v-model="addRecordForm.eyeAxisLengthRight" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="左眼裸眼视力" prop="visionLeft">
                         <el-input v-model="addRecordForm.visionLeft" clearable></el-input>
                     </el-form-item>
                      <el-form-item label="右眼裸眼视力" prop="visionRight">
-                        <el-input v-model="addRecordForm.visionRight	" clearable></el-input>
+                        <el-input v-model="addRecordForm.visionRight" clearable></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="addRecordDialogVisible = false">取 消</el-button>
+                    <el-button @click=" handleReset">取 消</el-button>
                     <el-button type="primary" @click="submitRecord" >确 定</el-button>
                 </span>
             </el-dialog>
             <!-- 修改记录 -->
              <el-dialog title="修改记录" :visible.sync="editRecordDialogVisible" width="50%">
                 <el-form :model="editRecordForm" :rules="editRecordRules" ref="recordEditFormRef" label-width="120px">
-                    <!-- <el-form-item label="所属学校班级" prop="">
+                   <el-form-item label="所属学校班级" prop="">
                         <el-cascader :options="options" v-model="editRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                    </el-form-item>
+                 <!--  <el-form-item label="所属学校" prop="schoolName">
+                        <el-input v-model="editRecordForm.schoolName"   clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属班级" prop="className">
+                        <el-input v-model="editRecordForm.classesName"   clearable></el-input>
                     </el-form-item> -->
-                    <el-form-item label="学生姓名" prop="schoolName">
-                        <el-input v-model="editRecordForm.schoolName" clearable></el-input>
+                    <el-form-item label="学生姓名">
+                        <el-input v-model="editRecordForm.studentName"   clearable></el-input>
                     </el-form-item>
                     <el-form-item label="左眼曲率" prop="curvatureLeft">
                         <el-input  v-model="editRecordForm.curvatureLeft" clearable></el-input>
@@ -112,23 +120,23 @@
                      <el-form-item label="右眼曲率" prop="curvatureRight">
                         <el-input  v-model="editRecordForm.curvatureRight" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="左眼矫正视力" prop="cvaLeft">
+                     <el-form-item label="左眼矫正视力" >
                         <el-input v-model="editRecordForm.cvaLeft" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="右眼矫正视力" prop="cvaRight">
+                     <el-form-item label="右眼矫正视力">
                         <el-input  v-model="editRecordForm.cvaRight" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="左眼屈光度" prop="diopterLeft">
+                     <el-form-item label="左眼屈光度" >
                         <el-input v-model="editRecordForm.diopterLeft" clearable></el-input>
                     </el-form-item>
-                     <el-form-item label="右眼屈光度" prop="diopterRight">
+                     <el-form-item label="右眼屈光度" >
                         <el-input v-model="editRecordForm.diopterRight" clearable></el-input>
                     </el-form-item>
                      <el-form-item label="左眼眼轴长度" prop="eyeAxisLengthLeft">
                         <el-input v-model="editRecordForm.eyeAxisLengthLeft" clearable></el-input>
                     </el-form-item>
-                    <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight	">
-                        <el-input v-model.number="editRecordForm.eyeAxisLengthRight	" clearable></el-input>
+                    <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight">
+                        <el-input v-model="editRecordForm.eyeAxisLengthRight" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="左眼裸眼视力" prop="visionLeft">
                         <el-input v-model="editRecordForm.visionLeft" clearable></el-input>
@@ -144,7 +152,7 @@
             </el-dialog>
         </el-card>
     </div>
-    
+
 </template>
 <script>
 import axios from 'axios'
@@ -182,17 +190,18 @@ export default {
                 eyeAxisLengthRight: '',
                 visionLeft: '',
                 visionLeft: '',
-                record_cat: ''
+                record_cat: []
             },
             addRecordRules: {
+                record_cat: {required: true,  message: '请选择学校班级', trigger: 'blur' },
                 curvatureLeft:  { required: true, validator: valiNumberPass1, message: '请输入左眼曲率', trigger: 'blur' },
                 curvatureRight:  { required: true, validator: valiNumberPass1, message: '请输入右眼曲率', trigger: 'blur' },
                 cvaLeft:  { required: true, validator: valiNumberPass1, message: '请输入左眼矫正视力', trigger: 'blur' },
                 cvaRight:  { required: true, validator: valiNumberPass1, message: '请输入右眼矫正视力', trigger: 'blur' },
                 diopterLeft:  { required: true,validator: valiNumberPass1, message: '请输入左眼屈光度', trigger: 'blur' },
                 diopterRight:  { required: true,validator: valiNumberPass1, message: '请输入右眼屈光度', trigger: 'blur' },
-                eyeAxisLengthLeft:  { required: true,validator: valiNumberPass1, message: '请输入左眼眼轴长度', trigger: 'blur' },
-                eyeAxisLengthRight:  { required: true, validator: valiNumberPass1, type: 'number',message: '请输入右眼眼轴长度', trigger: 'blur' },
+                eyeAxisLengthLeft: { required: true,validator: valiNumberPass1, message: '请输入左眼眼轴长度', trigger: 'blur' },
+                eyeAxisLengthRight: { required: true, validator: valiNumberPass1, message: '请输入右眼眼轴长度', trigger: 'blur' },
                 visionLeft:  { required: true, validator: valiNumberPass1, message: '请输入左眼裸眼视力', trigger: 'blur' },
                 visionRight:  { required: true, validator: valiNumberPass1, message: '请输入右眼裸眼视力', trigger: 'blur' },
             },
@@ -208,10 +217,11 @@ export default {
                 eyeAxisLengthRight: '',
                 visionLeft: '',
                 visionLeft: '',
-                record_cat: '',
+                record_cat: [],
                 studentName: ''
             },
             editRecordRules: {
+                record_cat: {required: true,  message: '请选择学校班级', trigger: 'blur' },
                 curvatureLeft:  { required: true,validator: valiNumberPass1, message: '请输入左眼曲率', trigger: 'blur' },
                 curvatureRight:  { required: true, validator: valiNumberPass1,message: '请输入右眼曲率', trigger: 'blur' },
                 cvaLeft:  { required: true, validator: valiNumberPass1, message: '请输入左眼矫正视力', trigger: 'blur' },
@@ -219,7 +229,7 @@ export default {
                 diopterLeft:  { required: true,validator: valiNumberPass1, message: '请输入左眼屈光度', trigger: 'blur' },
                 diopterRight:  { required: true,validator: valiNumberPass1, message: '请输入右眼屈光度', trigger: 'blur' },
                 eyeAxisLengthLeft:  { required: true, validator: valiNumberPass1, message: '请输入左眼眼轴长度', trigger: 'blur' },
-                eyeAxisLengthRight:  { required: true, type: 'number', message: '请输入右眼眼轴长度', trigger: 'blur' },
+                eyeAxisLengthRight:  { required: true, validator: valiNumberPass1, message: '请输入右眼眼轴长度', trigger: 'blur' },
                 visionLeft:  { required: true, validator: valiNumberPass1, message: '请输入左眼裸眼视力', trigger: 'blur' },
                 visionRight:  { required: true, validator: valiNumberPass1, message: '请输入右眼裸眼视力', trigger: 'blur' },
                 studentName:  { required: true, validator: valiNumberPass1, message: '请输入学生姓名',trigger: 'blur' },
@@ -248,7 +258,7 @@ export default {
             axios({
                 method: "post",
                 url: '/queryRecord',
-                data: param 
+                data: param
             }).then(this.handleQuerySucc.bind(this))
             .catch(this.handleQueryErr.bind(this))
         },
@@ -319,12 +329,21 @@ export default {
             this.addRecordDialogVisible = false;
             this.$message.success('添加记录成功');
             this.$refs.recordFormRef.resetFields();
+            this.addRecordForm.cvaLeft = '';
+            this.addRecordForm.cvaRight = "";
+            this.addRecordForm.diopterLeft = '';
+            this.addRecordForm.diopterRight = '';
             this.getRecordList();
-            
+
         },
         handleAddRecordErr(err) {
+          this.$message.error('添加记录失败')
             console.log(err)
         },
+        handleReset() {
+         this.$refs.recordFormRef.resetFields();
+        },
+
         handleChange() {
             this.schoolId = this.addRecordForm.record_cat[0];
             this.classId = this.addRecordForm.record_cat[1];
@@ -332,7 +351,7 @@ export default {
         },
         //编辑出现编辑页面
         showRecordEditDialog(id) {
-            this.id = id;    
+            this.id = id;
             let param = new URLSearchParams();
             param.append('id', id);
             param.append('token',this.token)
@@ -347,14 +366,19 @@ export default {
                 if(res.status !== 200) return;
                 res ? res = res.data: '';
                 this.editRecordForm = res.data;
+                console.log(this.editRecordForm)
+
+                console.log(this.editRecordForm.record_cat)
                 this.editRecordDialogVisible = true;
+                this.getRecordList()
             },
             handleEditRecordErr(err) {
+              this.$message.error('修改记录失败');
                 console.log(err)
             },
-        
-        
-        
+
+
+
         //修改后保存
         saveEditInfo() {
             this.$refs.recordEditFormRef.validate((valid) => {
@@ -388,7 +412,7 @@ export default {
         this.$message.success('修改记录成功');
         this.$refs.recordEditFormRef.resetFields();
         this.getRecordList();
-        
+
     },
     handleSaveEditErr(err) {
         console.log(err)
@@ -416,7 +440,7 @@ export default {
     handleDeleteRecordSucc(res) {
         if(res.status !== 200) return this.$message.error('删除记录失败');
         this.$message.success('删除记录成功');
-        this.getRecordList();  
+        this.getRecordList();
     },
     handleDeleteRecordErr(err) {
         console.log(err)
@@ -440,7 +464,7 @@ export default {
     }
 }
 }
-    
+
 </script>
 <style lang="less" scoped>
 

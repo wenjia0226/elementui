@@ -14,14 +14,14 @@
                 </el-col>
                 <el-col :span="3">
                         <el-button type="primary" @click="getSeatList">座位查询</el-button>
-                </el-col> 
+                </el-col>
             </el-row>
             <!-- 排座结果列表 -->
-            <el-table :data="classRecordList.slice((currentPage-1) * pageSize, currentPage * pageSize)"   stripe style="width: 100%"   row-key="id" row-click="handleRow">
-               
+            <el-table  v-if= "classRecordList.length" :data="classRecordList.slice((currentPage-1) * pageSize, currentPage * pageSize)"   stripe style="width: 100%"   row-key="id" row-click="handleRow">
+
                <el-table-column type="index"></el-table-column>
                <el-table-column label="排列次数" prop="name"></el-table-column>
-               
+
                 <el-table-column  label="排列方式" prop="type"  class="red"></el-table-column>
                 <el-table-column label="是否过期" prop="endTime"></el-table-column>
                  <el-table-column label="查看">
@@ -30,9 +30,10 @@
                     </template>
                 </el-table-column>
             </el-table>
-    
+
             <!-- 分页功能 -->
             <el-pagination
+                v-if="classRecordList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -42,7 +43,7 @@
                 :total="classRecordList.length">
             </el-pagination>
             <!-- 第一种排序方法-->
-            <table class="seat" v-if="this.type == 1"> 
+            <table class="seat" v-if="this.type == 1">
                 <thead v-show="this.studentList.length">
                     <tr align="center">
                         <th></th>
@@ -61,64 +62,64 @@
                 <tbody v-for="(item, index) in studentList" :key="index">
                      <th>第{{index+1}}排</th>
                     <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td  v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td  v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td  v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
+                    <td>&nbsp;</td>
                     <td  v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td  v-for="(item2) in item.slice(6,7)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td  v-for="(item2) in item.slice(7,8)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    
+
                 </tbody>
             </table>
               <!-- 第二种排序方法 -->
@@ -146,21 +147,21 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
@@ -168,45 +169,45 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
+                    <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(6,7)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(7,8)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td v-for="(item2) in item.slice(8,9)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    
+
                 </tbody>
             </table>
            <!--第三种排序方法 -->
@@ -228,42 +229,42 @@
                 </thead>
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <th>第{{index + 1}}排</th>
-                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId"> 
+                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId">
                         <a href="#"   @click="showRecordEditDialog(item2.studentId)">
                         <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                         {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
-                       <a href="#" @click="showRecordEditDialog(item2.studentId)"> 
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
+                    <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                      <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
@@ -271,7 +272,7 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
@@ -300,14 +301,14 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td v-for="item2 in item.slice(1,2)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(2,3)" :key="item2.studentId">
@@ -315,7 +316,7 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(3,4)" :key="item2.studentId">
@@ -323,7 +324,7 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(4,5)" :key="item2.studentId">
@@ -331,18 +332,18 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                       <td v-for="item2 in item.slice(5,6)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
-            </table> 
+            </table>
         </el-card>
         <!-- 点击打开弹框    -->
          <!-- 修改记录 -->
@@ -356,7 +357,7 @@
                     </el-form-item>
                     <el-form-item label="所属学校" >
                         <el-input v-model="editRecordForm.schoolName"  disabled></el-input>
-                    </el-form-item> 
+                    </el-form-item>
                     <el-form-item label="所属班级" >
                         <el-input v-model="editRecordForm.classesName" disabled></el-input>
                     </el-form-item>
@@ -453,7 +454,7 @@ export default {
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
-          
+
             if(res.status !==200) return this.$message.error('获取级联数据失败');
             this.options =  res.data.data;
         },
@@ -477,7 +478,7 @@ export default {
             }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
         },
         handleGetSeatQuerySucc(res) {
-            if(res.status !== 200) return this.$message.error('查询座位失败');  
+            if(res.status !== 200) return this.$message.error('查询座位失败');
             this.studentList =res.data.data;
         },
         handleGetSeatQueryErr(err) {
@@ -517,8 +518,8 @@ export default {
             .catch(this.handleGetClassRecordErr.bind(this))
         },
         handleGetClassReorcdSucc(res) {
-            
-            
+
+
             if(res.status !== 200) return;
             if(res.data.data) {
                 this.classRecordList = res.data.data;
@@ -543,8 +544,8 @@ export default {
                           item.endTime = '过期'
                     }
                 })
-             
-               
+
+
             }
         },
         handleGetClassRecordErr(err) {
@@ -564,9 +565,9 @@ export default {
             this.$router.push('/detailSeat/'+id)
         }
         }
-        
-    
-    
+
+
+
 }
 </script>
 <style lang="less" scope>

@@ -56,16 +56,16 @@
         <el-dialog title="添加班级" ref="addClassRef" :visible.sync="addClassVisible" width="50%">
             <el-form :model="addClassForm" :rules="addClassRules" ref="addClassRef" label-width="120px" class="demo-ruleForm">
                 <el-form-item label="所属学校" prop="schoolName">
-                    <!-- <el-cascader v-model="selectedOptions"  :options="school" :props ="cateProps" @change="handleChange">
-                    </el-cascader> -->
-                    <el-select v-model="value" placeholder="请选择" prop="schoolName">
+                    <el-cascader v-model="addClassForm.schoolName"  :options="school" :props ="cateProps" @change="handleChange">
+                    </el-cascader>
+                  <!--  <el-select v-model="addClassForm.schoolName" placeholder="请选择" >
                         <el-option
                           v-for="item in school"
                           :key="item.id"
                           :label="item.name"
                           :value="item.id">
                         </el-option>
-                      </el-select>
+                      </el-select> -->
                 </el-form-item>
                 <el-form-item label="班级" prop="className">
                     <el-input v-model="addClassForm.className" clearable></el-input>
@@ -166,7 +166,6 @@ export default {
             schoolId: '',
             labelNum1: 1,
             labelNum2: 0,
-            selectedOptions: [],
             addClassForm: {
                 className:'',
                 roomLength: '',
@@ -196,6 +195,7 @@ export default {
             currentPage: 1,
             pageSize: 5,
             total: 0,
+            selectedOptions: [],
             editClassForm: {
                 className:'',
                 roomLength: '',
@@ -274,15 +274,16 @@ export default {
             })
         },
          handleChange(item) {
-           console.log(item);
            this.schoolId = item;
-           console.log(this.schoolId)
         },
         handleAddClassSucc(res) {
             if(res.status !== 200) return this.$message.error('添加班级失败');
+            if(res.status == 200) {
+            this.$message.success('添加班级成功')
             this.addClassVisible = false;
             this.$refs.addClassRef.resetFields();
             this.getClassList();
+            }
         },
         handleAddClassErr(err) {
             console.log(err)
@@ -366,7 +367,6 @@ export default {
         handleGetSchoolSucc(res) {
             if(res.status !== 200) return this.$message.error('获取学校列表失败');
             this.school = res.data.data;
-            console.log(this.school)
         },
         handleGetSchoolErr(err) {
             console.log(err)
