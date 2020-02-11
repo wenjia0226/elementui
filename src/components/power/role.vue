@@ -54,7 +54,7 @@
                 </el-table-column>
                  <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="danger"  size="mini" icon="el-icon-delete" @click="removeRoleById(scope.row.id)">删除</el-button>
+                        <el-button type="danger"  size="mini" icon="el-icon-delete" @click="removeRoleById(scope.row.roleId)">删除</el-button>
                     </template>
                 </el-table-column>
                   <el-table-column label="操作">
@@ -270,7 +270,7 @@ export default {
         },
         //根据id删除学校
         async removeRoleById(id) {
-            const confirmResult = await this.$confirm('此操作将永久删除该学校, 是否继续?', '提示', {
+            const confirmResult = await this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -280,7 +280,7 @@ export default {
             }
             let param = new URLSearchParams();
             param.append('token', this.token);
-            param.append('id', id)
+            param.append('roleId', id)
             axios({
                 method: 'post',
                 url: '/deleteRole',
@@ -291,6 +291,11 @@ export default {
         handleDeleteRoleSucc(res) {
             if(res.status !== 200) return this.$message.error('删除角色失败');
             this.$message.success('删除角色成功');
+            this.roleList = res.data.data;
+            const totalPage = Math.ceil(this.roleList.length / this.pageSize) // 总页数
+            this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+            this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+
             this.getRoleList();
         },
         handleDeleteRoleErr(err) {

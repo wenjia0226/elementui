@@ -76,9 +76,6 @@
                    <el-form-item label="体重(KG)" prop="weight">
                         <el-input v-model="addStudentForm.weight" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="性格" prop="nature">
-                        <el-input v-model="addStudentForm.nature" clearable></el-input>
-                   </el-form-item>
                    <el-form-item label="椅子高度(米)" prop="chairHeight">
                         <el-input v-model="addStudentForm.chairHeight" clearable></el-input>
                    </el-form-item>
@@ -88,6 +85,9 @@
                    <el-form-item label="是否矫正" prop="correct">
                             <el-radio v-model="addStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
                             <el-radio v-model="addStudentForm.correct" size="medium" border :label="0">未校正</el-radio>
+                   </el-form-item>
+                   <el-form-item label="性格">
+                        <el-input v-model="addStudentForm.nature" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="备注" prop="description">
                         <el-input v-model="addStudentForm.description" clearable></el-input>
@@ -120,9 +120,6 @@
                    <el-form-item label="体重(KG)" prop="weight">
                         <el-input v-model="editStudentForm.weight" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="性格" prop="nature">
-                        <el-input v-model="editStudentForm.nature" clearable></el-input>
-                   </el-form-item>
                    <el-form-item label="椅子高度(米)" prop="chairHeight">
                         <el-input v-model="editStudentForm.chairHeight" clearable></el-input>
                    </el-form-item>
@@ -133,6 +130,9 @@
                             <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
                             <el-radio v-model="editStudentForm.correct" size="medium" border :label="0">未矫正</el-radio>
                    </el-form-item>
+                   <el-form-item label="性格">
+                        <el-input v-model="editStudentForm.nature" clearable></el-input>
+                   </el-form-item>
                    <el-form-item label="备注" prop="description">
                         <el-input v-model="editStudentForm.description" clearable></el-input>
                    </el-form-item>
@@ -142,7 +142,7 @@
                         <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
                     </span>
             </el-dialog>
-        </el-card> 
+        </el-card>
      </div>
 </template>
 <script>
@@ -189,7 +189,7 @@ export default {
                 "weight": '',
                 "name":"",
                 "nature":""
-                
+
             },
             addStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -246,7 +246,7 @@ export default {
             axios({
                 method: "post",
                 url: '/queryStudent',
-                data: param 
+                data: param
             }).then(this.handleQuerySucc.bind(this))
             .catch(this.handleQueryErr.bind(this))
         },
@@ -258,8 +258,8 @@ export default {
             console.log(err)
         },
          //点击出现添加学生框
-        addStudent() { 
-            this.addStudentVisible = true   
+        addStudent() {
+            this.addStudentVisible = true
         },
         //添加学生
         sumitAddStudent() {
@@ -293,7 +293,7 @@ export default {
            this.$message.success('添加学生信息成功');
            this.$refs.studentFormRef.resetFields();
            this.getStudentList();
-          
+
         },
         handleAddStuErr(err) {
            console.log(err)
@@ -356,7 +356,7 @@ export default {
                     value.correct = '未矫正'
                 }
             })
-            
+
         },
         handleGetStudentErr(err) {
             console.log(err)
@@ -368,7 +368,7 @@ export default {
             param.append('token', this.token);
             param.append('id', id);
             axios({
-                method: 'post', 
+                method: 'post',
                 url: '/editStudent',
                 data: param
             }).then(this.handleEditStuSucc.bind(this)).catch(this.handleEditStuErr.bind(this))
@@ -381,12 +381,12 @@ export default {
                 this.selectedOptions.push(res.data.data.schoolId)
                 this.selectedOptions.push(res.data.data.classesId)
                 this.getStudentList();
-            }            
+            }
         },
         handleAddressFun(e, form, thsAreaCode) {
             thsAreaCode = this.$refs['cascaderAddr'].currentLabels;
             alert(thsAreaCode)
-            
+
         },
         handleEditStuErr(err) {
             console.log(err)
@@ -430,7 +430,7 @@ export default {
         handleEditStuErr(err) {
             console.log(err)
         },
-        //删除学生    
+        //删除学生
        async removeStudentsById(id) {
         const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
             confirmButtonText: '确定',

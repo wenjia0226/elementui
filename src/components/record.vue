@@ -34,7 +34,7 @@
                 <el-table-column label="右眼矫正视力" prop="cvaRight"></el-table-column>
                 <el-table-column label="左眼屈光度" prop="diopterLeft"></el-table-column>
                 <el-table-column label="右眼屈光度" prop="diopterRight"></el-table-column>
-                
+
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showRecordEditDialog(scope.row.id)" ></el-button>
@@ -59,8 +59,8 @@
             <!-- 添加记录 -->
             <el-dialog title="添加记录" :visible.sync="addRecordDialogVisible" width="50%">
                 <el-form :model="addRecordForm" :rules="addRecordRules" ref="recordFormRef" label-width="120px">
-                    <el-form-item label="所属学校班级" prop="record_cat">
-                        <el-cascader :options="options" v-model="addRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                    <el-form-item label="学校班级姓名" prop="record_cat">
+                        <el-cascader :options="options" v-model="addRecordForm.record_cat" :props="cateProps" @change="handleChange"clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="左眼裸眼视力" prop="visionLeft">
                         <el-input v-model="addRecordForm.visionLeft" clearable></el-input>
@@ -98,17 +98,17 @@
 
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click=" handleReset">取 消</el-button>
+                    <el-button @click=" handleReset">重置</el-button>
                     <el-button type="primary" @click="submitRecord" >确 定</el-button>
                 </span>
             </el-dialog>
             <!-- 修改记录 -->
              <el-dialog title="修改记录" :visible.sync="editRecordDialogVisible" width="50%">
                 <el-form :model="editRecordForm" :rules="editRecordRules" ref="recordEditFormRef" label-width="120px">
-                   <el-form-item label="所属学校班级" prop="">
-                        <el-cascader :options="options" v-model="editRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                   <el-form-item label="所属学校班级"  prop="record_cat">
+                        <el-cascader :options="options" v-model="editRecordForm.record_cat"   props.checkStrictly  :props="cateProps" @change="handleEditChange" clearable></el-cascader>
                     </el-form-item>
-                    <el-form-item label="学生姓名">
+                    <el-form-item label="学生姓名"  prop="sudentName">
                         <el-input v-model="editRecordForm.studentName"   clearable></el-input>
                     </el-form-item>
                     <el-form-item label="左眼裸眼视力" prop="visionLeft">
@@ -249,6 +249,7 @@ export default {
         }
     },
     methods: {
+
         //搜索
         queryStudent() {
             let param = new URLSearchParams();
@@ -355,12 +356,23 @@ export default {
         },
         handleReset() {
          this.$refs.recordFormRef.resetFields();
+         this.addRecordForm.cvaLeft= '';
+         this.addRecordForm.cvaRight = ';'
+         this.addRecordForm.diopterLeft = '';
+         this.addRecordForm.diopterRight = '';
+         
         },
 
         handleChange() {
             this.schoolId = this.addRecordForm.record_cat[0];
             this.classId = this.addRecordForm.record_cat[1];
             this.studentId = this.addRecordForm.record_cat[2];
+            console.log(this.schoolId, this.classId);
+        },
+        handleEditChange() {
+          this.schoolId = this.editRecordForm.record_cat[0];
+          this.classId = this.editRecordForm.record_cat[1];
+          this.studentId = this.editRecordForm.record_cat[2];
         },
         //编辑出现编辑页面
         showRecordEditDialog(id) {
@@ -378,7 +390,10 @@ export default {
         handleEditRecordSucc(res) {
           if(res.status !== 200) return;
           res ? res = res.data: '';
-          this.editRecordForm = res.data;
+            this.editRecordForm = res.data;
+            console.log(this.editRecordForm)
+
+           console.log(this.editRecordForm.record_cat)
           this.editRecordDialogVisible = true;
           },
         handleEditRecordErr(err) {
@@ -388,7 +403,6 @@ export default {
 
         //修改后保存
         saveEditInfo() {
-          console.log(this.editRecordForm.cvaLeft, this.editRecordForm.cvaRight)
             this.$refs.recordEditFormRef.validate((valid) => {
             if(!valid) return this.$message.error('验证失败');
             let param = new URLSearchParams();
@@ -449,7 +463,10 @@ export default {
     handleDeleteRecordSucc(res) {
         if(res.status !== 200) return this.$message.error('删除记录失败');
         this.$message.success('删除记录成功');
-        this.getRecordList();
+        this.recordList = res.data.data;
+        const totalPage = Math.ceil(this.recordList.length / this.pageSize) // 总页数
+        this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+        this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
     },
     handleDeleteRecordErr(err) {
         console.log(err)

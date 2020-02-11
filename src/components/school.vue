@@ -106,12 +106,12 @@ export default {
            editSchoolRules: {
                 name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
                 address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
-           }           
-       } 
+           }
+       }
     },
     created() {
         this.token = window.sessionStorage.getItem('token');
-        this.getSchoolList();       
+        this.getSchoolList();
     },
     // computed: {
     //     ...mapGetters([
@@ -132,20 +132,20 @@ export default {
         handleGetSchoolSucc(res) {
             if(res.status !== 200) return this.$message.error('获取学校列表失败');
             this.schoolList = res.data.data;
-            
+
         },
         handleGetSchoolErr(error) {
            console.log(error)
         },
         //搜索
-        querySchool() {   
+        querySchool() {
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('name', this.query);
             axios({
                 method: "post",
                 url: '/querySchool',
-                data: param 
+                data: param
             }).then(this.handleQuerySucc.bind(this))
             .catch(this.handleQueryErr.bind(this))
         },
@@ -170,7 +170,7 @@ export default {
                    data: param
                }).then(this.handleAddSchoolSucc.bind(this))
                .catch(this.handleAddSchoolErr.bind(this))
-           })  
+           })
         },
         handleAddSchoolSucc(res) {
             if(res.status !== 200)  return this.$message.error('添加学校失败');
@@ -229,11 +229,11 @@ export default {
                     url: '/saveSchool',
                     data: param
                 }).then(this.handleEditSaveSchoolSucc.bind(this))
-                .catch(this.handleEditSaveSchoolErr.bind(this))   
+                .catch(this.handleEditSaveSchoolErr.bind(this))
                 })
         },
          handleEditSaveSchoolSucc(res) {
-             if(res.status !==200) return; 
+             if(res.status !==200) return;
             //发起修改用户信息的数据请求
              this.schoolList = res.data.data;
             //隐藏编辑框
@@ -267,7 +267,10 @@ export default {
             handleDeleteShoolSucc(res) {
                 if(res.status !== 200) return this.$message.error('删除学校失败');
                 this.$message.success('删除学校成功');
-                this.getSchoolList();  
+                this.schoolList = res.data.data;
+                const totalPage = Math.ceil(this.schoolList.length / this.pageSize) // 总页数
+                this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+                this.currentPage = this.currentPage < 1 ? 1 : this.currentPage;
             },
             handleDeleteSchoolErr(err) {
                 console.log(err)
@@ -277,6 +280,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .el-card{
-    
+
 }
 </style>

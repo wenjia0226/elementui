@@ -276,7 +276,10 @@ import axios from 'axios'
             handleDeleteUserSucc(res) {
                 if(res.status !== 200) return this.$message.error('删除用户失败');
                 this.$message.success('删除用户成功');
-                this.getUserList();
+                this.userList = res.data.data;
+                const totalPage = Math.ceil(this.userList.length / this.pageSize) // 总页数
+                this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+                this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
             },
             handleDeleteUserErr(err) {
                 console.log(err)

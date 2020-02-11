@@ -394,7 +394,12 @@ export default {
         handleDeleteClassSucc(res) {
             if(res.status !== 200) return this.$message.error('删除班级失败');
             this.$message.success('删除班级成功');
-            this.getClassList();
+            console.log(res)
+            this.classList = res.data.data;
+            const totalPage = Math.ceil(this.classList.length / this.pageSize) // 总页数
+            this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+            this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+            
         },
         handleDeleteClassErr(err) {
             console.log(err)
