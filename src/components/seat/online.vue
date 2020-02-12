@@ -19,10 +19,16 @@
                      <div class="schoolSet">排座方式选择：</div>
                 </el-col>
                 <el-col :span="3">
-                    <el-select v-model="value" placeholder="请选择排座方式" @change="handleTypeChange" clearable>
+                    <el-select v-model="value" placeholder="请选择排座方式" @focus="handleTypeChange(value)" clearable>
                     <el-option v-for="item in typeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
                     </el-option>
-                </el-select> 
+                    <el-popover
+                      placement="right"
+                      width="400"
+                      trigger="hover">
+                    </el-popover>
+                </el-select>
+
                 </el-col>
                 <el-col :span="2">
                      <div class="schoolSet">排座周期：</div>
@@ -31,11 +37,67 @@
                     <el-select v-model="time" @change="changeTime"  clearable>
                     <el-option v-for="item in timeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
                     </el-option>
-                </el-select> 
+                    </el-select>
                 </el-col>
                 <el-col :span="3">
                         <el-button type="primary" @click="seatQuery">在线排座</el-button>
-                </el-col> 
+                </el-col>
+            </el-row>
+            <!-- 点击打开弹框    -->
+
+            <el-row style="margin: 20px 0px">
+              <el-col :span="6" >
+                <el-popover
+                    placement="top-start"
+                    title="标题"
+                    width="200"
+                    trigger="hover">
+                    <el-image
+                          style="width: 100px; height: 100px"
+                          :src="style1.url" :title="style1.title"
+                          fit="contain"></el-image>
+                  <el-button slot="reference">方式一</el-button>
+                  </el-popover>
+              </el-col>
+              <el-col :span="6">
+                <el-popover
+                    placement="top-start"
+                    title="标题"
+                    width="200"
+                    trigger="hover">
+                    <el-image
+                          style="width: 100px; height: 100px"
+                          :src="style2.url" :title="style2.title"
+                          fit="contain"></el-image>
+                  <el-button slot="reference">方式二</el-button>
+                 </el-popover>
+              </el-col>
+              <el-col :span="6" >
+               <el-popover
+                   placement="top-start"
+                   title="标题"
+                   width="200"
+                   trigger="hover">
+                   <el-image
+                         style="width: 100px; height: 100px"
+                         :src="style3.url" :title="style3.title"
+                         fit="contain"></el-image>
+                 <el-button slot="reference">方式三</el-button>
+                 </el-popover>
+              </el-col>
+              <el-col :span="6">
+                <el-popover
+                    placement="top-start"
+                    title="标题"
+                    width="200"
+                    trigger="hover">
+                    <el-image
+                          style="width: 100px; height: 100px"
+                          :src="style4.url" :title="style4.title"
+                          fit="contain"></el-image>
+                  <el-button slot="reference">方式四</el-button>
+                  </el-popover>
+              </el-col>
             </el-row>
             <!-- 第一种排序方法 -->
             <table class="seat" v-if="this.value == 1">
@@ -57,64 +119,64 @@
                 <tbody v-for="(item, index) in studentList" :key="index">
                      <th>第{{index+1}}排</th>
                     <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td  v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td  v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td  v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
+                    <td>&nbsp;</td>
                     <td  v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td  v-for="(item2) in item.slice(6,7)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td  v-for="(item2) in item.slice(7,8)" :key="item2.studentId">
-                       <a href="#"> 
+                       <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                               {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    
+
                 </tbody>
             </table>
               <!-- 第二种排序方法 -->
@@ -142,21 +204,21 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
@@ -164,45 +226,45 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
+                    <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(6,7)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(7,8)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                    <td v-for="(item2) in item.slice(8,9)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    
+
                 </tbody>
             </table>
            <!--第三种排序方法 -->
@@ -224,42 +286,42 @@
                 </thead>
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <th>第{{index + 1}}排</th>
-                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId"> 
+                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId">
                         <a href="#"   @click="showRecordEditDialog(item2.studentId)">
                         <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                         {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId">
-                       <a href="#" @click="showRecordEditDialog(item2.studentId)"> 
+                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
-                    <td>&nbsp;</td> 
+                    <td>&nbsp;</td>
                     <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
                        <a href="#" @click="showRecordEditDialog(item2.studentId)">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                      <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
@@ -267,7 +329,7 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                            <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
@@ -296,14 +358,14 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td v-for="item2 in item.slice(1,2)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(2,3)" :key="item2.studentId">
@@ -311,7 +373,7 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                      <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(3,4)" :key="item2.studentId">
@@ -319,7 +381,7 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                     <td v-for="item2 in item.slice(4,5)" :key="item2.studentId">
@@ -327,20 +389,21 @@
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                       <td v-for="item2 in item.slice(5,6)" :key="item2.studentId">
                        <a href="#">
                            <img src="../../assets/image/e12.png"  width="64px" alt="">
                             <br>
                            {{item2.studentName}}
-                        </a> 
+                        </a>
                     </td>
                     <td>&nbsp;</td>
                 </tbody>
             </table>
         </el-card>
-        <!-- 点击打开弹框    -->
+
+
          <!-- 修改记录 -->
              <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible"  width="30%">
                 <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px">
@@ -352,7 +415,7 @@
                     </el-form-item>
                     <el-form-item label="所属学校" >
                         <el-input v-model="editRecordForm.schoolName"  disabled></el-input>
-                    </el-form-item> 
+                    </el-form-item>
                     <el-form-item label="所属班级" >
                         <el-input v-model="editRecordForm.classesName" disabled></el-input>
                     </el-form-item>
@@ -402,6 +465,12 @@ export default {
     },
     data() {
         return {
+          showTu: false,
+          style1: {url:require('../../assets/image/1.jpg'), title: '方式一', id: 1},
+          style2: {url:require('../../assets/image/2.jpg'), title: '方式二', id: 2},
+          style3: {url:require('../../assets/image/3.jpg'), title: '方式三', id: 3},
+          style4: {url:require('../../assets/image/4.jpg'), title: '方式四', id: 4}
+          ,
           typeoptions: [{
           value: 1,
           label: '方式一'
@@ -457,7 +526,7 @@ export default {
             studentName: '',
             schoolName:'',
             classesName:''
-        }, 
+        },
         }
     },
     methods: {
@@ -490,9 +559,9 @@ export default {
             }else if(!this.classId) {
                  return this.$message.error('请选择学校班级');
             }else if(!this.value) {
-                return this.$message.error('请选择排座方式');    
+                return this.$message.error('请选择排座方式');
             }else if(!this.time) {
-                return this.$message.error('请选择排座周期'); 
+                return this.$message.error('请选择排座周期');
             }else{
                 param.append('token', this.token);
                 param.append('classId', this.classId);
@@ -538,15 +607,17 @@ export default {
         },
         //排座类型
         handleTypeChange(value) {
+          console.log(value)
+          this.showTu = true;
             window.sessionStorage.setItem('type', value)
-            this.studentList = []; 
+            this.studentList = [];
         },
         //排座周期
         changeTime(time) {
-         
+
         }
     }
-    
+
 }
 </script>
 <style lang="less" scope>

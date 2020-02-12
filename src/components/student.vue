@@ -55,8 +55,8 @@
                 :total="studentList.length">
             </el-pagination>
               <!-- 添加学生 -->
-            <el-dialog title="添加学生" :visible.sync="addStudentVisible" width="50%">
-                <el-form :model="addStudentForm" :rules="addStudentRules" ref="studentFormRef" label-width="120px">
+            <el-dialog title="添加学生" :visible.sync="addStudentVisible" width="50%" :before-close="handleClose">
+                <el-form :model="addStudentForm" :rules="addStudentRules" ref="studentFormRef" label-width="120px" >
                     <el-form-item label="所属学校班级" prop='stu_cat'>
                         <el-cascader :options="options" v-model="addStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
@@ -94,12 +94,12 @@
                    </el-form-item>
                 </el-form>
                     <span slot="footer" class="dialog-footer">
-                        <el-button @click="addStudentVisible = false">取 消</el-button>
+                        <el-button @click="handleClose">取 消</el-button>
                         <el-button type="primary" @click="sumitAddStudent" >确 定</el-button>
                     </span>
             </el-dialog>
             <!-- 编辑学生 -->
-             <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%">
+             <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%" >>
                 <el-form :model="editStudentForm" :rules="editStudentRules" ref="studentEditFormRef" label-width="120px">
                     <el-form-item label="所属学校/班级" prop="name" width="100%">
                         <el-cascader ref="myCascader" :options="options" v-model="selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
@@ -138,7 +138,7 @@
                    </el-form-item>
                 </el-form>
                     <span slot="footer" class="dialog-footer">
-                        <el-button @click="editStudentVisible = false">取 消</el-button>
+                      <!--  <el-button @click="reset">取 消</el-button> -->
                         <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
                     </span>
             </el-dialog>
@@ -238,6 +238,15 @@ export default {
         }
     },
      methods: {
+       //关闭按钮
+         handleClose() {
+          this.addStudentVisible = false;
+          this.$refs.studentFormRef.resetFields();
+          this.addStudentForm.nature = '';
+          this.addStudentForm.description = ''
+         },
+       
+
         //搜索学生
         queryStudent() {
             let param = new URLSearchParams();
@@ -451,7 +460,12 @@ export default {
         },
         handleDeleteStuSucc(res) {
             if(res.status !== 200) return this.$message.error('删除学生失败');
-            this.getStudentList();
+            this.studentList = res.data.data;
+            const totalPage = Math.ceil(this.studentList.length / this.pageSize) // 总页数
+            this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+            this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+            console.log(this.currentPage)
+            // this.getStudentList();
         },
         handleDeleteStuErr(err) {
             console.log(err)

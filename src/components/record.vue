@@ -18,6 +18,7 @@
                     <el-button type="primary" @click="addRecordDialogVisible = true">添加检测记录</el-button>
                 </el-col>
             </el-row>
+
             <!-- 记录列表 -->
             <el-table :data="recordList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%">
                 <el-table-column type="index"></el-table-column>
@@ -57,7 +58,7 @@
                 :total="recordList.length">
             </el-pagination>
             <!-- 添加记录 -->
-            <el-dialog title="添加记录" :visible.sync="addRecordDialogVisible" width="50%">
+            <el-dialog title="添加记录" :visible.sync="addRecordDialogVisible" width="50%" :before-close="handleClose">
                 <el-form :model="addRecordForm" :rules="addRecordRules" ref="recordFormRef" label-width="120px">
                     <el-form-item label="学校班级姓名" prop="record_cat">
                         <el-cascader :options="options" v-model="addRecordForm.record_cat" :props="cateProps" @change="handleChange"clearable></el-cascader>
@@ -98,7 +99,7 @@
 
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click=" handleReset">重置</el-button>
+                    <el-button @click=" handleClose">重置</el-button>
                     <el-button type="primary" @click="submitRecord" >确 定</el-button>
                 </span>
             </el-dialog>
@@ -106,8 +107,9 @@
              <el-dialog title="修改记录" :visible.sync="editRecordDialogVisible" width="50%">
                 <el-form :model="editRecordForm" :rules="editRecordRules" ref="recordEditFormRef" label-width="120px">
                    <el-form-item label="所属学校班级"  prop="record_cat">
-                        <el-cascader :options="options" v-model="editRecordForm.record_cat"   props.checkStrictly  :props="cateProps" @change="handleEditChange" clearable></el-cascader>
+                        <el-cascader :options="options" v-model="record_cat"   props.checkStrictly  :props="cateProps" @change="handleEditChange" clearable></el-cascader>
                     </el-form-item>
+
                     <el-form-item label="学生姓名"  prop="sudentName">
                         <el-input v-model="editRecordForm.studentName"   clearable></el-input>
                     </el-form-item>
@@ -174,9 +176,13 @@ export default {
             }
         };
         return {
+          schoolList: [],
+          schoolName: '',
+            url: ['../../assets/image/1.jpg'],
             id: '',
             token: '',
             query: '',
+            record_cat: [],
             addRecordDialogVisible: false,
             addRecordForm: {
                 curvatureLeft: '',
@@ -250,6 +256,16 @@ export default {
     },
     methods: {
 
+      //关闭按钮
+        handleClose() {
+         this.addRecordDialogVisible = false;
+         this.$refs.recordFormRef.resetFields();
+         this.addRecordForm.cvaLeft = '';
+         this.addRecordForm.cvaRight = "";
+         this.addRecordForm.diopterLeft = '';
+         this.addRecordForm.diopterRight = '';
+
+        },
         //搜索
         queryStudent() {
             let param = new URLSearchParams();
@@ -354,15 +370,6 @@ export default {
           this.$message.error('添加记录失败')
             console.log(err)
         },
-        handleReset() {
-         this.$refs.recordFormRef.resetFields();
-         this.addRecordForm.cvaLeft= '';
-         this.addRecordForm.cvaRight = ';'
-         this.addRecordForm.diopterLeft = '';
-         this.addRecordForm.diopterRight = '';
-         
-        },
-
         handleChange() {
             this.schoolId = this.addRecordForm.record_cat[0];
             this.classId = this.addRecordForm.record_cat[1];
@@ -391,9 +398,9 @@ export default {
           if(res.status !== 200) return;
           res ? res = res.data: '';
             this.editRecordForm = res.data;
-            console.log(this.editRecordForm)
+            this.record_cat = res.data.record_cat;
 
-           console.log(this.editRecordForm.record_cat)
+           console.log(this.record_cat)
           this.editRecordDialogVisible = true;
           },
         handleEditRecordErr(err) {
@@ -477,7 +484,7 @@ export default {
         param.append('token', this.token);
         axios({
             method: 'post',
-            url: '/cascade',
+            url: '/cascade1',
             data: param
         }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
     },

@@ -42,7 +42,7 @@
             </el-pagination>
         </el-card>
          <!-- 添加角色对话框 -->
-        <el-dialog title="添加角色"  :visible.sync="addAccountDialogVisible" width="50%">
+        <el-dialog title="添加角色"  :visible.sync="addAccountDialogVisible" width="50%"  :before-close="handleClose">
            <el-form :model="addAccountForm" :rules="addAccountRules" ref="accountFormRef" label-width="120px">
                 <el-form-item label="所属人" prop="name" >
                     <el-input v-model="addAccountForm.name" clearable></el-input>
@@ -77,7 +77,7 @@
 
            </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addAccountDialogVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="submitAccount" >确 定</el-button>
             </span>
         </el-dialog>
@@ -132,6 +132,12 @@ import axios from 'axios'
          }
      },
      methods: {
+       //关闭按钮
+         handleClose() {
+          this.addAccountDialogVisible = false;
+          this.$refs.accountFormRef.resetFields();
+          this.addAccountForm.wechatName = ''
+         },
          showCascade() {
             if(this.addAccountForm.role == '超级管理员') {
                  this.show = false;

@@ -53,7 +53,7 @@
             </el-pagination>
         </el-card>
         <!-- 添加班级 -->
-        <el-dialog title="添加班级" ref="addClassRef" :visible.sync="addClassVisible" width="50%">
+        <el-dialog title="添加班级" ref="addClassRef" :visible.sync="addClassVisible" width="50%" :before-close="handleClose">
             <el-form :model="addClassForm" :rules="addClassRules" ref="addClassRef" label-width="120px" class="demo-ruleForm">
                 <el-form-item label="所属学校" prop="schoolName">
                     <el-cascader v-model="addClassForm.schoolName"  :options="school" :props ="cateProps" @change="handleChange">
@@ -94,7 +94,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="resetAddClass">重置</el-button>
+                <el-button@click=" handleClose">重置</el-button>
                 <el-button type="primary" @click=" sumitClass">确 定</el-button>
             </span>
         </el-dialog>
@@ -219,6 +219,13 @@ export default {
         }
     },
     methods: {
+      //关闭按钮
+        handleClose() {
+         this.addClassVisible = false;
+         this.$refs.addClassRef.resetFields();
+         this.addClassForm.description = ''
+        },
+
         addClass() {
             this.addClassVisible = true
         },
@@ -373,6 +380,8 @@ export default {
         },
         //删除班级
         async removeClassById(id) {
+          console.log(id);
+          console.log(this.token)
         const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -399,7 +408,7 @@ export default {
             const totalPage = Math.ceil(this.classList.length / this.pageSize) // 总页数
             this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
             this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
-            
+
         },
         handleDeleteClassErr(err) {
             console.log(err)

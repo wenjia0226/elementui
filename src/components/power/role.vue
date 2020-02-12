@@ -75,7 +75,7 @@
             </el-pagination>
         </el-card>
         <!-- 添加角色对话框 -->
-         <el-dialog title="添加角色" :visible.sync="addRoleDialogVisible" width="50%">
+         <el-dialog title="添加角色" :visible.sync="addRoleDialogVisible" width="50%"  :before-close="handleClose">
             <el-form :model="addRoleForm"  :rules="addRoleRules" ref="roleFormRef" label-width="100px">
                  <el-form-item label="角色名称" prop="roleName">
                      <el-input v-model="addRoleForm.roleName" clearable></el-input>
@@ -85,7 +85,7 @@
                  </el-form-item>
             </el-form>
              <span slot="footer" class="dialog-footer">
-                 <el-button @click="resetAdd">取消</el-button>
+                 <el-button @click="handleClose">取消</el-button>
                  <el-button type="primary" @click=" submitRole" >确 定</el-button>
              </span>
          </el-dialog>
@@ -159,6 +159,11 @@ export default {
        }
    },
    methods: {
+     handleClose() {
+      this.addRoleDialogVisible = false;
+      this.$refs.roleFormRef.resetFields();
+      this.addRoleForm.description = ''
+     },
         resetAdd() {
           this.$refs.roleFormRef.resetFields();
           this.addRoleDialogVisible = false;
