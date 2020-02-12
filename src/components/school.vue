@@ -42,7 +42,7 @@
             </el-pagination>
         </el-card>
         <!-- 添加学校对话框 -->
-        <el-dialog title="添加学校" :visible.sync="addDialogVisible" width="50%">
+        <el-dialog title="添加学校" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
            <!-- 添加学校 -->
            <el-form :model="addSchoolForm" :rules="addSchoolRules" ref="schoolFormRef" label-width="100px">
                 <el-form-item label="学校名称" prop="name">
@@ -53,7 +53,7 @@
                 </el-form-item>
            </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button @click="handleClose">取 消</el-button>
                 <el-button type="primary" @click="submitSchool" >确 定</el-button>
             </span>
         </el-dialog>
@@ -113,12 +113,13 @@ export default {
         this.token = window.sessionStorage.getItem('token');
         this.getSchoolList();
     },
-    // computed: {
-    //     ...mapGetters([
-    //     'schoolList'
-    //     ]),
-    // },
+
     methods:{
+      //关闭按钮
+        handleClose() {
+         this.addDialogVisible = false;
+         this.$refs.schoolFormRef.resetFields();
+        },
         getSchoolList() {
             let param = new URLSearchParams();
              param.append('token', this.token);
@@ -163,7 +164,7 @@ export default {
                let param = new URLSearchParams();
                param.append('name', this.addSchoolForm.name);
                param.append('address', this.addSchoolForm.address);
-               param.append('token', this.token)
+               param.append('token', this.token);
                axios({
                    method: 'post',
                    url: '/addSchool',
@@ -173,11 +174,19 @@ export default {
            })
         },
         handleAddSchoolSucc(res) {
-            if(res.status !== 200)  return this.$message.error('添加学校失败');
-            this.addDialogVisible = false;
-            this.$message.success('添加学校成功');
-            this.$refs.schoolFormRef.resetFields();
-            this.getSchoolList();
+            if(res.status !== 200) {
+               this.$message.error('添加学校失败');
+            }else if(res.data.status == 10206) {
+               this.$message.error(res.data.msg);
+              this.addSchoolForm.name = '';
+            }else{
+              this.addDialogVisible = false;
+              this.$message.success('添加学校成功');
+              this.$refs.schoolFormRef.resetFields();
+              this.getSchoolList();
+            }
+
+
         },
         handleAddSchoolErr(err) {
             console.log(err)

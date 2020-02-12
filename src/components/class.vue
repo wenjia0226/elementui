@@ -261,7 +261,7 @@ export default {
         // 添加班级
         sumitClass() {
             this.$refs.addClassRef.validate((valid) => {
-                if(!valid)  return;
+                if(!valid)  return this.$message.error('验证失败');
                 var param = new URLSearchParams();
                 param.append('token', this.token);
                 param.append('schoolId',this.schoolId);
@@ -284,12 +284,17 @@ export default {
            this.schoolId = item;
         },
         handleAddClassSucc(res) {
-            if(res.status !== 200) return this.$message.error('添加班级失败');
-            if(res.status == 200) {
-            this.$message.success('添加班级成功')
-            this.addClassVisible = false;
-            this.$refs.addClassRef.resetFields();
-            this.getClassList();
+            if(res.status !== 200) {
+              this.$message.error('添加班级失败');
+            }else if(res.data.status == 10207)  {
+               this.$message.error(res.data.msg);
+                this.addClassForm.className = '';
+            }else {
+              this.$message.success('添加班级成功')
+              this.addClassVisible = false;
+              this.$refs.addClassRef.resetFields();
+              this.addClassForm.description = '';
+              this.getClassList();
             }
         },
         handleAddClassErr(err) {
@@ -380,8 +385,6 @@ export default {
         },
         //删除班级
         async removeClassById(id) {
-          console.log(id);
-          console.log(this.token)
         const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

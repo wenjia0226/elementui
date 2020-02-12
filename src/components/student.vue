@@ -99,7 +99,7 @@
                     </span>
             </el-dialog>
             <!-- 编辑学生 -->
-             <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%" >>
+             <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%" >
                 <el-form :model="editStudentForm" :rules="editStudentRules" ref="studentEditFormRef" label-width="120px">
                     <el-form-item label="所属学校/班级" prop="name" width="100%">
                         <el-cascader ref="myCascader" :options="options" v-model="selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
