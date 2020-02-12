@@ -22,13 +22,7 @@
                     <el-select v-model="value" placeholder="请选择排座方式" @focus="handleTypeChange(value)" clearable>
                     <el-option v-for="item in typeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
                     </el-option>
-                    <el-popover
-                      placement="right"
-                      width="400"
-                      trigger="hover">
-                    </el-popover>
                 </el-select>
-
                 </el-col>
                 <el-col :span="2">
                      <div class="schoolSet">排座周期：</div>
@@ -43,60 +37,30 @@
                         <el-button type="primary" @click="seatQuery">在线排座</el-button>
                 </el-col>
             </el-row>
-            <!-- 点击打开弹框    -->
-
-            <el-row style="margin: 20px 0px">
-              <el-col :span="6" >
-                <el-popover
-                    placement="top-start"
-                    title="标题"
-                    width="200"
-                    trigger="hover">
-                    <el-image
-                          style="width: 100px; height: 100px"
-                          :src="style1.url" :title="style1.title"
-                          fit="contain"></el-image>
-                  <el-button slot="reference">方式一</el-button>
-                  </el-popover>
+            <el-row class="row " style=" font-size: 20px;font-weight: bold; margin: 20px 0 10px 0 " v-if="!this.studentList.length">
+              <el-col :span="6">方式一:</el-col>
+              <el-col :span="6">方式二:</el-col>
+              <el-col :span="6">方式三:</el-col>
+              <el-col :span="6">方式四:</el-col>
+            </el-row>
+            <el-row class="row" style="font-size: 20px"  v-if="!this.studentList.length">
+              <el-col :span="6">8列排布</el-col>
+              <el-col :span="6">9列排布</el-col>
+              <el-col :span="6">6列排布</el-col>
+              <el-col :span="6">6列排布</el-col>
+            </el-row>
+            <el-row style="margin: 20px 0px" v-if="!this.studentList.length">
+              <el-col :span="6">
+                    <el-image  style="min-height: 200px":src="style1.url" :title="style1.title" fit="fit"></el-image>
               </el-col>
               <el-col :span="6">
-                <el-popover
-                    placement="top-start"
-                    title="标题"
-                    width="200"
-                    trigger="hover">
-                    <el-image
-                          style="width: 100px; height: 100px"
-                          :src="style2.url" :title="style2.title"
-                          fit="contain"></el-image>
-                  <el-button slot="reference">方式二</el-button>
-                 </el-popover>
+                    <el-image  style="min-height: 200px":src="style2.url" :title="style2.title" fit="fit"></el-image>
               </el-col>
-              <el-col :span="6" >
-               <el-popover
-                   placement="top-start"
-                   title="标题"
-                   width="200"
-                   trigger="hover">
-                   <el-image
-                         style="width: 100px; height: 100px"
-                         :src="style3.url" :title="style3.title"
-                         fit="contain"></el-image>
-                 <el-button slot="reference">方式三</el-button>
-                 </el-popover>
-              </el-col>
+             <el-col :span="6">
+                   <el-image  style="min-height: 200px":src="style3.url" :title="style3.title" fit="fit"></el-image>
+             </el-col>
               <el-col :span="6">
-                <el-popover
-                    placement="top-start"
-                    title="标题"
-                    width="200"
-                    trigger="hover">
-                    <el-image
-                          style="width: 100px; height: 100px"
-                          :src="style4.url" :title="style4.title"
-                          fit="contain"></el-image>
-                  <el-button slot="reference">方式四</el-button>
-                  </el-popover>
+                    <el-image  style="min-height: 200px":src="style4.url" :title="style4.title" fit="fit"></el-image>
               </el-col>
             </el-row>
             <!-- 第一种排序方法 -->
@@ -621,6 +585,12 @@ export default {
 }
 </script>
 <style lang="less" scope>
+.row {
+  vertical-align: bottom;
+  line-height: 30px;
+  height: 30px;
+  text-align: center;
+}
 .schoolSet {
     line-height: 40px;
     text-align: center;
