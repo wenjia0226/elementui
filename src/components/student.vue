@@ -102,7 +102,7 @@
              <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%" >
                 <el-form :model="editStudentForm" :rules="editStudentRules" ref="studentEditFormRef" label-width="120px">
                     <el-form-item label="所属学校/班级" prop="name" width="100%">
-                        <el-cascader ref="myCascader" :options="options" v-model="selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                        <el-cascader ref="myCascader" :options="options" v-model="editStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                     </el-form-item>
                     <el-form-item label="学生姓名" prop="name">
                         <el-input v-model="editStudentForm.name" clearable></el-input>
@@ -245,7 +245,7 @@ export default {
           this.addStudentForm.nature = '';
           this.addStudentForm.description = ''
          },
-       
+
 
         //搜索学生
         queryStudent() {
@@ -387,8 +387,6 @@ export default {
             if(res.data) {
                 this.editStudentForm = res.data.data;
                 this.editStudentVisible = true;
-                this.selectedOptions.push(res.data.data.schoolId)
-                this.selectedOptions.push(res.data.data.classesId)
                 this.getStudentList();
             }
         },

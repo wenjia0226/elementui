@@ -107,7 +107,7 @@
              <el-dialog title="修改记录" :visible.sync="editRecordDialogVisible" width="50%">
                 <el-form :model="editRecordForm" :rules="editRecordRules" ref="recordEditFormRef" label-width="120px">
                    <el-form-item label="所属学校班级"  prop="record_cat">
-                        <el-cascader :options="options" v-model="record_cat"   props.checkStrictly  :props="cateProps" @change="handleEditChange" clearable></el-cascader>
+                        <el-cascader :options="secondClass" v-model="editRecordForm.record_cat"    :props="cateProps" @change="handleEditChange" clearable></el-cascader>
                     </el-form-item>
 
                     <el-form-item label="学生姓名"  prop="sudentName">
@@ -162,6 +162,7 @@ export default {
     created() {
         this.token = window.sessionStorage.getItem('token');
         this.getOPtions();
+        this.getSecondClass();
         this.getRecordList();
     },
     data() {
@@ -178,6 +179,7 @@ export default {
         return {
           schoolList: [],
           schoolName: '',
+          secondClass: [],
             url: ['../../assets/image/1.jpg'],
             id: '',
             token: '',
@@ -255,7 +257,24 @@ export default {
         }
     },
     methods: {
-
+      //获取级联选择器中的数据
+      getSecondClass() {
+          let param = new URLSearchParams();
+          param.append('token', this.token);
+          axios({
+              method: 'post',
+              url: '/cascade1',
+              data: param
+          }).then(this.handleGetSecondSucc.bind(this)).catch(this.handleGetSecondErr.bind(this))
+      },
+      handleGetSecondSucc (res) {
+          if(res.status !==200) return this.$message.error('获取级联数据失败');
+          this.secondClass =  res.data.data;
+          console.log(this.secondClass)
+      },
+      handleGetSecondErr(err) {
+          console.log(err)
+      },
       //关闭按钮
         handleClose() {
          this.addRecordDialogVisible = false;
@@ -398,9 +417,8 @@ export default {
           if(res.status !== 200) return;
           res ? res = res.data: '';
             this.editRecordForm = res.data;
-            this.record_cat = res.data.record_cat;
-
-           console.log(this.record_cat)
+            console.log(this.editRecordForm)
+            // this.secondClass = res.data.record_cat;
           this.editRecordDialogVisible = true;
           },
         handleEditRecordErr(err) {
@@ -484,7 +502,7 @@ export default {
         param.append('token', this.token);
         axios({
             method: 'post',
-            url: '/cascade1',
+            url: '/cascade',
             data: param
         }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
     },
