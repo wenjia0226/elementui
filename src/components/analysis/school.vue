@@ -84,6 +84,7 @@ export default {
           legend: {
               orient: 'vertical',
               left: 'left',
+              
               data: lengend
               },
           series: [
@@ -93,12 +94,6 @@ export default {
                   radius: '80%',
                   center: ['50%', '60%'],
                   data: option,
-                  // data: [
-                  //     {value: 7, name: '左眼良好数量'},
-                  //     {value: 10, name: '左眼轻度不良数量'},
-                  //     {value: 5, name: '左眼中度不良数量'},
-                  //     {value: 1, name: '左眼重度不良数量'}
-                  // ],
                   emphasis: {
                       itemStyle: {
                           shadowBlur: 10,
@@ -122,9 +117,12 @@ export default {
        }).then(this.handleGetSchoolLisSucc.bind(this)).catch(this.handleGetSchoolListErr.bind(this))
      },
      handleGetSchoolLisSucc(res) {
-       if(res.status !== 200) return;
-       this.schooloptions = res.data.data;
-
+       if(res.data.status === 10204) {
+           this.$message.error(res.data.msg);
+           this.$router.push('/login');
+       } else if(res.data.status == 200) {
+          this.schooloptions = res.data.data;
+       }
      },
      handleGetSchoolListErr(err) {
        console.log(err)
@@ -146,21 +144,25 @@ export default {
       }).then(this.getSchoolAnalysisSucc.bind(this)).catch(this.handleGetSchoolAnalysisErr.bind(this))
     },
     getSchoolAnalysisSucc(res) {
-      if(res.status !== 200) return;
-      res.data.data ? res = res.data.data: '';
-      this.leftOption = res[0];
-      this.rightOption = res[1];
-      this.doubleOption = res[2];
-      this.leftOption.forEach((item, index) => {
-        this.leftLegend.push(item.name);
-      })
-      this.rightOption.forEach((item, index) => {
-        this.rightLegend.push(item.name);
-      })
-      this.doubleOption.forEach((item, index) => {
-        this.doubleLegend.push(item.name);
-      })
-     
+      if(res.data.status === 10204) {
+          this.$message.error(res.data.msg);
+          this.$router.push('/login');
+      } else if(res.data.status == 200) {
+          res.data.data ? res = res.data.data: '';
+          console.log(res)
+          this.leftOption = res[0];
+          this.rightOption = res[1];
+          this.doubleOption = res[2];
+          this.leftOption.forEach((item, index) => {
+            this.leftLegend.push(item.name);
+          })
+          this.rightOption.forEach((item, index) => {
+            this.rightLegend.push(item.name);
+          })
+          this.doubleOption.forEach((item, index) => {
+            this.doubleLegend.push(item.name);
+          })
+         }
         this.drawLine('left', this.leftLegend, this.leftOption, '左眼概况');
         this.drawLine('right', this.rightLegend, this.rightOption,'右眼概况');
         this.drawLine('double', this.doubleLegend,this.doubleOption, '双眼概况');

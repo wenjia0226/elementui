@@ -166,11 +166,14 @@ import axios from 'axios'
             .catch(this.handleQueryErr.bind(this))
         },
        handleQuerySucc(res) {
-          if(res.data.status == 10213) {
+         if(res.data.status === 10204) {
+             this.$message.error(res.data.msg);
+             this.$router.push('/login');
+         } else if(res.data.status == 10213) {
              this.$message.error(res.data.msg);
              this.getUserList();
              this.searchAccountList = [];
-          }else if(res.status == 200) {
+          }else if(res.data.status == 200) {
              this.$message.success('搜索成功');
              this.searchAccountList = res.data.data;
            }
@@ -209,8 +212,13 @@ import axios from 'axios'
              console.log(err)
          },
          handleGetUserListSucc(res) {
-             if(res.status !== 200) return;
-              this.userList = res.data.data;
+             if(res.data.status === 10204) {
+                 this.$message.error(res.data.msg);
+                 this.$router.push('/login');
+             } else if(res.data.status == 200) {
+                 this.userList = res.data.data;
+             }
+
          },
          showAddCountDiaglog() {
              let param = new URLSearchParams();
@@ -225,9 +233,13 @@ import axios from 'axios'
 
          },
          handleGetRoleListSucc(res) {
-             if(res.status !== 200) return;
-             this.roleList = res.data.data;
-            this.addAccountDialogVisible = true
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+               this.roleList = res.data.data;
+               this.addAccountDialogVisible = true
+            }
          },
          handleGetRoleListErr(err) {
              console.log(err)
@@ -253,18 +265,18 @@ import axios from 'axios'
                 })
          },
          handleAddUserSucc(res) {
-             if(res.status !== 200)  {
-                this.$message.error('添加用户失败');
-             } else if(res.data.status == 10205) {
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 10205) {
                this.$message.error(res.data.msg);
                this.addAccountForm.loginName = '';
-             }else {
+             }else if(res.data.status == 200) {
                this.$message.success('添加用户成功');
                this.addAccountDialogVisible  = false;
                this.$refs.accountFormRef.resetFields();
                this.getUserList();
              }
-
          },
          handleAddUserErr(err) {
              console.log(err)
@@ -285,14 +297,18 @@ import axios from 'axios'
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
-            if(res.status !==200) return this.$message.error('获取级联数据失败');
-            this.options =  res.data.data;
-            let arr1 = this.options;
-            for(var i in arr1) {
-                    this.schoolOptions.push({
-                        name: arr1[i].name,
-                        id: arr1[i].id
-            })
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+               this.options =  res.data.data;
+               let arr1 = this.options;
+               for(var i in arr1) {
+                       this.schoolOptions.push({
+                           name: arr1[i].name,
+                           id: arr1[i].id
+               })
+               }
             }
         },
         handleGetOptionErr(err) {
@@ -333,12 +349,17 @@ import axios from 'axios'
             .catch(this.handleDeleteUserErr.bind(this))
             },
             handleDeleteUserSucc(res) {
-                if(res.status !== 200) return this.$message.error('删除用户失败');
-                this.$message.success('删除用户成功');
-                this.userList = res.data.data;
-                const totalPage = Math.ceil(this.userList.length / this.pageSize) // 总页数
-                this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-                this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+                if(res.data.status === 10204) {
+                   this.$message.error(res.data.msg);
+                   this.$router.push('/login');
+                } else if(res.data.status == 200) {
+                  this.$message.success('删除用户成功');
+                  this.userList = res.data.data;
+                  const totalPage = Math.ceil(this.userList.length / this.pageSize) // 总页数
+                  this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+                  this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+                }
+               
             },
             handleDeleteUserErr(err) {
                 console.log(err)

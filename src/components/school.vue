@@ -333,12 +333,17 @@ export default {
             .catch(this.handleDeleteSchoolErr.bind(this))
             },
             handleDeleteShoolSucc(res) {
-                if(res.status !== 200) return this.$message.error('删除学校失败');
-                this.$message.success('删除学校成功');
-                this.schoolList = res.data.data;
-                const totalPage = Math.ceil(this.schoolList.length / this.pageSize) // 总页数
-                this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-                this.currentPage = this.currentPage < 1 ? 1 : this.currentPage;
+                if(res.data.status === 10204) {
+                    this.$message.error(res.data.msg);
+                    this.$router.push('/login');
+                } else if(res.data.status == 200) {
+                  this.$message.success('删除学校成功');
+                  this.schoolList = res.data.data;
+                  const totalPage = Math.ceil(this.schoolList.length / this.pageSize) // 总页数
+                  this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+                  this.currentPage = this.currentPage < 1 ? 1 : this.currentPage;
+                }
+               
             },
             handleDeleteSchoolErr(err) {
                 console.log(err)

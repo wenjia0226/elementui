@@ -122,8 +122,11 @@ export default {
       }).then(this.getClassAnalysisSucc.bind(this)).catch(this.handleGetClassAnalysisErr.bind(this))
     },
     getClassAnalysisSucc(res) {
-      console.log(res)
-      if(res.status !== 200) return;
+      if(res.data.status === 10204) {
+          this.$message.error(res.data.msg);
+          this.$router.push('/login');
+      } else if(res.data.status == 200) {
+         this.menuList = res.data.data;  
       res.data.data ? res = res.data.data: '';
       this.leftOption = res[0];
       this.rightOption = res[1];
@@ -137,6 +140,7 @@ export default {
       this.doubleOption.forEach((item, index) => {
         this.doubleLegend.push(item.name);
       })
+    }
         this.drawLine('left', this.leftLegend, this.leftOption);
         this.drawLine('right', this.rightLegend, this.rightOption);
         this.drawLine('double', this.doubleLegend,this.doubleOption);

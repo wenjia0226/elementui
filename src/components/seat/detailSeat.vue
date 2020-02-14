@@ -423,9 +423,13 @@ export default {
             }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
         },
         handleGetSeatTableSucc(res) {
-            if(res.status !== 200) return ;
-              this.studentList = res.data.data;
-              this.type = window.sessionStorage.getItem('tabletype');
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+             this.studentList = res.data.data;
+             this.type = window.sessionStorage.getItem('tabletype');
+           }    
         },
         hanadleGetSeatTableErr(err) {
             console.log(err)

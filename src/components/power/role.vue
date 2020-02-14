@@ -224,11 +224,14 @@ export default {
           .catch(this.handleQueryErr.bind(this))
       },
      handleQuerySucc(res) {
-        if(res.data.status == 10212) {
+       if(res.data.status === 10204) {
+           this.$message.error(res.data.msg);
+           this.$router.push('/login');
+       } else if(res.data.status == 10212) {
            this.$message.error(res.data.msg);
            this.getRoleList();
            this.searchRoleList = [];
-        }else if(res.status == 200) {
+        }else if(res.data.status == 200) {
            this.$message.success('搜索成功');
            this.searchRoleList = res.data.data;
          }
@@ -262,11 +265,15 @@ export default {
            })
         },
         handleAddRoleSucc(res) {
-            if(res.status !== 200)  return this.$message.error('添加角色失败');
-            this.addRoleDialogVisible = false;
-            this.$message.success('添加角色成功');
-            this.$refs.roleFormRef.resetFields();
-            this.getRoleList();
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+              this.addRoleDialogVisible = false;
+              this.$message.success('添加角色成功');
+              this.$refs.roleFormRef.resetFields();
+              this.getRoleList();
+           }
         },
         handleAddRoleErr(err) {
             console.log(err)
@@ -283,8 +290,13 @@ export default {
                .catch(this.handleGetRoleErr.bind(this))
         },
         handleGetRoleSucc(res) {
-            if(res.status !== 200) return this.$message.error('获取角色列表失败');
-            this.roleList = res.data.data;
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+               this.roleList = res.data.data;
+            }
+
         },
         handleGetRoleErr(error) {
            console.log(error)
@@ -313,16 +325,19 @@ export default {
             .catch(this.handleEditRoleErr.bind(this))
         },
         handleEditRoleSucc(res) {
-            res ? res = res.data: '';
-            this.editRoleForm = res.data;
-
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+              this.editRoleForm = res.data.data
+           }
         },
         handleEditRoleErr(err) {
             console.log(err)
         },
         editRoleInfo() {
             this.$refs.editroleFormRef.validate((valid) => {
-                if(!valid)  return;
+                if(!valid)  return this.$message.error('验证失败');
                 let param = new URLSearchParams();
                 param.append('token', this.token);
                 param.append('roleName', this.editRoleForm.roleName);
@@ -338,14 +353,18 @@ export default {
         },
         //编辑后保存
         handleEditSaveSchoolSucc(res) {
-             if(res.status !==200) return;
-            //发起修改用户信息的数据请求
-             this.schoolList = res.data.data;
-            //隐藏编辑框
-           this.editRoleDialogVisible = false;
-            //提示修改成功
-            this.$message.success('更新学校信息成功');
-            this.getRoleList();
+             if(res.data.status === 10204) {
+                 this.$message.error(res.data.msg);
+                 this.$router.push('/login');
+             } else if(res.data.status == 200) {
+               //发起修改用户信息的数据请求
+                 this.schoolList = res.data.data;
+                //隐藏编辑框
+               this.editRoleDialogVisible = false;
+                //提示修改成功
+                this.$message.success('更新学校信息成功');
+                this.getRoleList();
+             }
         },
         handleEditSaveSchoolErr(err) {
             console.log(err)
@@ -371,13 +390,16 @@ export default {
             .catch(this.handleDeleteRoleErr.bind(this))
             },
         handleDeleteRoleSucc(res) {
-            if(res.status !== 200) return this.$message.error('删除角色失败');
-            this.$message.success('删除角色成功');
-            this.roleList = res.data.data;
-            const totalPage = Math.ceil(this.roleList.length / this.pageSize) // 总页数
-            this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-            this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
-
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+               this.$message.success('删除角色成功');
+               this.roleList = res.data.data;
+               const totalPage = Math.ceil(this.roleList.length / this.pageSize) // 总页数
+               this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+               this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+            }
             this.getRoleList();
         },
         handleDeleteRoleErr(err) {
@@ -385,7 +407,6 @@ export default {
         },
         //展示分配权限对话框
         showSetRightDialog(role) {
-            console.log(role)
             this.roleId = role.roleId;
             this.role= role;
             let param = new URLSearchParams();
@@ -399,10 +420,14 @@ export default {
             .catch(this.getMenuListErr.bind(this))
         },
         handleGetMenuListSucc(res) {
-            if(res.status !== 200) return this.$message.error('获取列表失败');
-            this.rightList = res.data.data;
-            this.getLeafKeys(this.role,this.defkeys);   //递归获取三级节点的id
-            this.settingDialogVisible = true;
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+              this.rightList = res.data.data;
+              this.getLeafKeys(this.role,this.defkeys);   //递归获取三级节点的id
+              this.settingDialogVisible = true;
+           }
         },
         getMenuListErr(err) {
             console.log(err)
@@ -437,8 +462,14 @@ export default {
 
         },
         handleSaveRightSucc(res) {
-            this.settingDialogVisible = false;
-            this.getRoleList();
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 200) {
+             this.settingDialogVisible = false;
+             this.getRoleList();
+          }
+           
         },
         handleSaveRightErr(err) {
             console.log(err)

@@ -92,7 +92,6 @@ export default {
     methods: {
       getTableList() {
         if(window.sessionStorage.getItem('classId')) {
-
           this.classId= window.sessionStorage.getItem('classId');
           this.schoolId = window.sessionStorage.getItem('schoolId');
           this.stu_cat[0] = Number(this.schoolId);
@@ -112,9 +111,12 @@ export default {
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
-
-            if(res.status !==200) return this.$message.error('获取级联数据失败');
-            this.options =  res.data.data;
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 200) {
+              this.options =  res.data.data;
+          }
         },
         handleGetOptionErr(err) {
             console.log(err)
@@ -138,8 +140,12 @@ export default {
             }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
         },
         handleGetSeatQuerySucc(res) {
-            if(res.status !== 200) return this.$message.error('查询座位失败');
-            this.studentList =res.data.data;
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+               this.studentList =res.data.data;
+            }
         },
         handleGetSeatQueryErr(err) {
             console.log(err)
@@ -158,9 +164,13 @@ export default {
             },
         handleEditRecordSucc(res) {
             if(res.status !== 200) return;
-            res ? res = res.data: '';
-            this.editRecordForm = res.data;
-            this.editRecordDialogVisible = true;
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+               this.editRecordForm = res.data.data;
+               this.editRecordDialogVisible = true;
+            }
         },
         handleEditRecordErr(err) {
             console.log(err)
@@ -178,34 +188,35 @@ export default {
             .catch(this.handleGetClassRecordErr.bind(this))
         },
         handleGetClassReorcdSucc(res) {
-
-            if(res.status !== 200) return;
-            if(res.data.data.length) {
-                this.classRecordList = res.data.data;
-                this.classRecordList.forEach((item, index) => {
-                 if(item.type == 1) {
-                        item.type = '方式一'
-                    }else if(item.type == 2) {
-                        item.type = '方式二'
-                    }else if(item.type == 3) {
-                        item.type = '方式三'
-                    }else {
-                        item.type = '方式四'
-                    }
-                })
-                this.classRecordList.forEach((item, index) => {
-                    let end = item.endTime;
-                    let myDate = new Date(end).getTime();
-                    let now = new Date().getTime();
-                    if(myDate > now ) {
-                        item.endTime = '未过期'
-                    }else {
-                          item.endTime = '过期'
-                    }
-                })
-            }else  {
-                  this.$message.error('未查询到结果')
-             }
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+              if(res.data.data.length) {
+                  this.classRecordList = res.data.data;
+                  this.classRecordList.forEach((item, index) => {
+                   if(item.type == 1) {
+                          item.type = '方式一'
+                      }else if(item.type == 2) {
+                          item.type = '方式二'
+                      }else if(item.type == 3) {
+                          item.type = '方式三'
+                      }else {
+                          item.type = '方式四'
+                      }
+                  })
+           }
+              this.classRecordList.forEach((item, index) => {
+                  let end = item.endTime;
+                  let myDate = new Date(end).getTime();
+                  let now = new Date().getTime();
+                  if(myDate > now ) {
+                      item.endTime = '未过期'
+                  }else {
+                        item.endTime = '过期'
+                  }
+              })
+            }
         },
         handleGetClassRecordErr(err) {
             console.log(err)

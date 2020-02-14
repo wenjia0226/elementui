@@ -273,15 +273,18 @@ export default {
       }).then(this.getStudentListSucc.bind(this)).catch(this.getStudnentListErr.bind(this))
     },
     getStudentListSucc(res) {
-      if(res.status !== 200) return;
-      res ? res = res.data.data: '';
-      for(let i  =0; i <res.length; i++) {
-        this.studentList.push({
-          value: res[i].name,
-          id: res[i].id
-        })
+      if(res.data.status === 10204) {
+          this.$message.error(res.data.msg);
+          this.$router.push('/login');
+      } else if(res.data.status == 200) {
+        res ? res = res.data.data: '';
+        for(let i  =0; i <res.length; i++) {
+          this.studentList.push({
+            value: res[i].name,
+            id: res[i].id
+          })
+        }
       }
-
     },
     getStudnentListErr(err) {
       console.log(err)
@@ -312,8 +315,12 @@ export default {
 		    }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
 		},
 		handleGetOptionSucc (res) {
-		    if(res.status !==200) return this.$message.error('获取级联数据失败');
-		    this.options =  res.data.data;
+		    if(res.data.status === 10204) {
+		        this.$message.error(res.data.msg);
+		        this.$router.push('/login');
+		    } else if(res.data.status == 200) {
+		       this.options =  res.data.data;
+		    }
 		},
 		handleGetOptionErr(err) {
 		    console.log(err)
@@ -344,7 +351,10 @@ export default {
         }
     },
     handleGetStudentRecordSucc(res) {
-      if(res.status !== 200) return;
+      if(res.data.status === 10204) {
+          this.$message.error(res.data.msg);
+          this.$router.push('/login');
+      } else if(res.data.status == 200) {  
       res? res= res.data.data: '';
       for(let i = 0; i < res.length; i++) {
         if(res[i].name=="左眼裸眼视力") {
@@ -366,17 +376,11 @@ export default {
             this.rightQuX = res[5].xDataList;
             this.rightQuY = res[5].yDataList;
           }
-         }
-
-      this.drawLine();
-      this.drawLine2();
-      this.drawLine3();
-      // this.leftLuoY = [];
-      // this.rightLuoY = [];
-      // this.leftZhouY = [];
-      // this.rightZhouY = [];
-      // this.leftQuY = [];
-      // this.rightQuY = [];
+         }        
+        this.drawLine();
+        this.drawLine2();
+        this.drawLine3();
+      }
     },
     handleGetStudentRecordErr(err) {
       console.log(err)

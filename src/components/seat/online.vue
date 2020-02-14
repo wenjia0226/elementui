@@ -505,8 +505,12 @@ export default {
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
-            if(res.status !==200) return this.$message.error('获取级联数据失败');
-            this.options =  res.data.data;
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+                this.options =  res.data.data;
+            }        
         },
         handleGetOptionErr(err) {
             console.log(err)
@@ -539,11 +543,13 @@ export default {
             }
         },
         handleGetSeatQuerySucc(res) {
-            if(res.status !== 200) return this.$message.error('查询座位失败');
-            if(res.data.data.length == 0) return this.$message.error('请先添加学生');
-            this.studentList =res.data.data;
-            // window.sessionStorage.setItem('classId', this.classId); //存入缓存，向座位查询页面传递班级id
-            // window.sessionStorage.setItem('schoolId', this.schoolId);
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+              if(res.data.data.length == 0) return this.$message.error('请先添加学生');
+              this.studentList =res.data.data;
+           }       
         },
         handleGetSeatQueryErr(err) {
             console.log(err)
@@ -561,24 +567,25 @@ export default {
             .catch(this.handleEditRecordErr.bind(this))
             },
         handleEditRecordSucc(res) {
-            if(res.status !== 200) return;
-            res ? res = res.data: '';
-            this.editRecordForm = res.data;
-            this.editRecordDialogVisible = true;
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+               this.editRecordForm = res.data.data;
+               this.editRecordDialogVisible = true;
+            } 
         },
         handleEditRecordErr(err) {
             console.log(err)
         },
         //排座类型
         handleTypeChange(value) {
-          console.log(value)
           this.showTu = true;
             window.sessionStorage.setItem('type', value)
             this.studentList = [];
         },
         //排座周期
         changeTime(time) {
-
         }
     }
 

@@ -43,9 +43,12 @@ export default {
                .catch(this.handleGetRightErr.bind(this))
         },
     handleGetRightSucc(res) {
-        if(res.status !== 200) return this.$message.error('获取权限列表失败');
-        this.rgihtList = res.data.data;
-        
+      if(res.data.status === 10204) {
+          this.$message.error(res.data.msg);
+          this.$router.push('/login');
+      } else if(res.data.status == 200) {
+          this.rgihtList = res.data.data;
+      }
     },
     handleGetRightErr(error) {
         console.log(error)

@@ -78,8 +78,7 @@ import axios from 'axios'
                     }).then(this.handleGetMenuListSucc.bind(this)).catch(this.handleGetMenuListErr.bind(this))
                }
             },
-            handleGetMenuListSucc (res){
-              console.log(res)
+            handleGetMenuListSucc (res){ 
               if(res.data.status === 10204) {
                   this.$message.error(res.data.msg);
                   this.$router.push('/login');
