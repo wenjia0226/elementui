@@ -10,7 +10,7 @@
         <el-card>
             <el-row :gutter="20">
                 <el-col :span="6">
-                    <el-input placeholder="输入账号"   v-model="query" clearable>
+                    <el-input placeholder="输入账号"   v-model="query" clearable @clear="searchAccount">
                     <el-button slot="append" icon="el-icon-search"  @click="searchAccount"></el-button>
                     </el-input>
                 </el-col>

@@ -10,7 +10,7 @@
         <el-card>
              <el-row :gutter="20">
                  <el-col :span="6">
-                    <el-input placeholder="输入学校名称" v-model="query" clearable @clear="getSchoolList">
+                    <el-input placeholder="输入学校名称" v-model="query" clearable @clear="querySchool">
                         <el-button slot="append" icon="el-icon-search" @click="querySchool"></el-button>
                      </el-input>
                     <!-- <el-autocomplete

@@ -11,7 +11,7 @@
             <el-row :gutter="20">
                 <el-col :span="12"></el-col>
                 <el-col :span="6">
-                    <el-input placeholder="输入班级"  clearable v-model="query" clearable @clear="getClassList">
+                    <el-input placeholder="输入班级"  clearable v-model="query" clearable @clear="searchClass">
                         <el-button slot="append" icon="el-icon-search" @click="searchClass"></el-button>
                     </el-input>
                 </el-col>

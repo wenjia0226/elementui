@@ -10,7 +10,7 @@
         <el-card>
             <el-row :gutter="20">
                 <el-col :span="6">
-                    <el-input placeholder="输入学生姓名"  clearable v-model="query"  @clear="getRecordList">
+                    <el-input placeholder="输入学生姓名"  clearable v-model="query"  @clear="queryStudent">
                     <el-button slot="append" icon="el-icon-search" @click="queryStudent"></el-button>
                     </el-input>
                 </el-col>
