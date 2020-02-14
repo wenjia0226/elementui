@@ -318,7 +318,7 @@ export default {
         queryStudent() {
             let param = new URLSearchParams();
             if(this.query == "") {
-               this.getRecordList();
+              this.getRecordList();
               this.searchRecordList = [];
               return;
             }
@@ -334,6 +334,8 @@ export default {
         handleQuerySucc(res) {
            if(res.data.status == 10209) {
               this.$message.error(res.data.msg);
+              this.getRecordList();
+              this.searchRecordList = [];
            }else if(res.status == 200) {
               this.$message.success('搜索成功');
               this.searchRecordList = res.data.data;

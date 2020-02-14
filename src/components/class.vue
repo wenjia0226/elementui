@@ -262,8 +262,10 @@ export default {
           .catch(this.handleQueryErr.bind(this))
       },
      handleQuerySucc(res) {
-        if(res.data.status == 10208) {
+        if(res.data.status == 10210) {
            this.$message.error(res.data.msg);
+           this.getClassList();
+           this.searchClassList = [];
         }else if(res.status == 200) {
            this.$message.success('搜索成功');
            this.searchClassList = res.data.data;

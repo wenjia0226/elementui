@@ -203,6 +203,8 @@ export default {
         handleQuerySucc(res) {
            if(res.data.status == 10208) {
               this.$message.error(res.data.msg);
+              this.getSchoolList();
+              this.searchSchoolList = [];
            }else if(res.status == 200) {
               this.$message.success('搜索成功');
               this.searchSchoolList = res.data.data;

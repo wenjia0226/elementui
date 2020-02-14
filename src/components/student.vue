@@ -294,8 +294,10 @@ export default {
             .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
-           if(res.data.status == 10208) {
+           if(res.data.status == 10211) {
               this.$message.error(res.data.msg);
+              this.getStudentList();
+              this.searchStudentList = [];
            }else if(res.status == 200) {
               this.$message.success('搜索成功');
               this.searchStudentList = res.data.data;

@@ -10,16 +10,61 @@
         <el-card>
              <el-row :gutter="20">
                  <el-col :span="6">
-                     <el-input placeholder="输入角色名称"  clearable>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
+                     <el-input placeholder="输入角色名称"  v-model="query"  clearable>
+                        <el-button slot="append" icon="el-icon-search"  @click="searchRole"></el-button>
                      </el-input>
                  </el-col>
                  <el-col :span="6">
                         <el-button type="primary" @click="addRoleDialogVisible = true">添加角色</el-button>
                  </el-col>
              </el-row>
-           <!-- j角色列表 -->
-            <el-table :data="roleList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
+           <!-- 角色列表 -->
+            <el-table :data="roleList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchRoleList.length">
+                <el-table-column type="expand">
+                    <template slot-scope="scope">
+                        <!-- {{scope.row}} -->
+                        <el-row :class="['bdbottom', 'vcenter', i1 === 0 ? 'bdtop': '']" v-for="(item1, i1) in scope.row.children" :key="item1.id">
+                            <!-- 渲染一级权限 -->
+                            <el-col :span="10">
+                                <el-tag >
+                                    {{item1.authName}}
+                                </el-tag>
+                                <i class="el-icon-caret-right"></i>
+                            </el-col>
+                            <!-- 渲染二级权限 -->
+                            <el-col :span="14" >
+                                <el-row :class="['bdtop', 'vcenter', i2 === 0 ? 'bdtop': '']" v-for="(item2, i2) in item1.children" :key="item2.id">
+                                    <el-col :span="10" >
+                                        <el-tag type="success">
+                                            {{item2.authName}}
+                                        </el-tag>
+                                    </el-col>
+                                </el-row>
+                            </el-col>
+                        </el-row>
+                    </template>
+                </el-table-column>
+                <el-table-column type="index"></el-table-column>
+                <el-table-column label="角色名称" prop="roleName"></el-table-column>
+                <el-table-column label="描述" prop="description"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="mini" icon="el-icon-edit"  @click="showEditDialog(scope.row.roleId)" >编辑</el-button>
+                    </template>
+                </el-table-column>
+                 <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="danger"  size="mini" icon="el-icon-delete" @click="removeRoleById(scope.row.roleId)">删除</el-button>
+                    </template>
+                </el-table-column>
+                  <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="warning"  size="mini" icon="el-icon-setting" @click="showSetRightDialog(scope.row)">权限分配</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 搜索角色 -->
+            <el-table :data="searchRoleList" border  stripe style="width: 100%" v-show="this.searchRoleList.length">
                 <el-table-column type="expand">
                     <template slot-scope="scope">
                         <!-- {{scope.row}} -->
@@ -65,6 +110,7 @@
             </el-table>
             <!-- 分页功能 -->
             <el-pagination
+                 v-show="!this.searchRoleList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -127,6 +173,8 @@ export default {
            addRoleDialogVisible: false,
            editRoleDialogVisible: false,
            settingDialogVisible: false,
+           query: '',
+           searchRoleList: [],
            addRoleForm: {
                roleName: '',
                description: ''
@@ -159,6 +207,35 @@ export default {
        }
    },
    methods: {
+     searchRole() {
+        if(this.query == "") {
+           this.getRoleList();
+           this.searchRoleList = [];
+           return;
+        }
+          let param = new URLSearchParams();
+          param.append('token', this.token);
+          param.append('name', this.query);
+          axios({
+              method: "post",
+              url: '/queryRole',
+              data: param
+          }).then(this.handleQuerySucc.bind(this))
+          .catch(this.handleQueryErr.bind(this))
+      },
+     handleQuerySucc(res) {
+        if(res.data.status == 10212) {
+           this.$message.error(res.data.msg);
+           this.getRoleList();
+           this.searchRoleList = [];
+        }else if(res.status == 200) {
+           this.$message.success('搜索成功');
+           this.searchRoleList = res.data.data;
+         }
+     },
+      handleQueryErr(err) {
+          console.log(err)
+      },
      handleClose() {
       this.addRoleDialogVisible = false;
       this.$refs.roleFormRef.resetFields();

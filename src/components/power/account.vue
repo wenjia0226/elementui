@@ -19,7 +19,20 @@
                 </el-col>
             </el-row>
               <!-- 用户列表 -->
-            <el-table :data="userList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
+            <el-table :data="userList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchAccountList.length">
+                <el-table-column type="index"></el-table-column>
+                <el-table-column label="创建用户者" prop="loginName"></el-table-column>
+                <el-table-column label="用户名" prop="name"></el-table-column>
+                 <el-table-column label="角色" prop="roleName"></el-table-column>
+                <el-table-column label="创建时间" prop="genTime"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeUserById(scope.row.id)"></el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 搜索列表 -->
+            <el-table :data="searchAccountList" border  stripe style="width: 100%" v-show="this.searchAccountList.length">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="创建用户者" prop="loginName"></el-table-column>
                 <el-table-column label="用户名" prop="name"></el-table-column>
@@ -33,6 +46,7 @@
             </el-table>
             <!-- 分页功能 -->
             <el-pagination
+                v-show="!this.searchAccountList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -152,9 +166,10 @@ import axios from 'axios'
             .catch(this.handleQueryErr.bind(this))
         },
        handleQuerySucc(res) {
-         console.log(res)
-          if(res.data.status == 10210) {
+          if(res.data.status == 10213) {
              this.$message.error(res.data.msg);
+             this.getUserList();
+             this.searchAccountList = [];
           }else if(res.status == 200) {
              this.$message.success('搜索成功');
              this.searchAccountList = res.data.data;
@@ -194,7 +209,6 @@ import axios from 'axios'
              console.log(err)
          },
          handleGetUserListSucc(res) {
-           console.log(res.data.data)
              if(res.status !== 200) return;
               this.userList = res.data.data;
          },
