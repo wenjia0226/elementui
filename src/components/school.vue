@@ -144,22 +144,6 @@ export default {
     },
 
     methods:{
-      //模糊查询
-      // querySearch(queryString, cb) {
-      //   var schoolList = this.schoolList;
-
-      //   var results = queryString ? schoolList.filter(this.createFilter(queryString)) : schoolList;
-      //   // 调用 callback 返回建议列表的数据
-      //   cb(results);
-      // },
-      // createFilter(queryString) {
-      //   return (schooList) => {
-      //     return (schooList.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-      //   };
-      // },
-      // handleSelect(item) {
-      //    console.log(item);
-      //  },
       //关闭按钮
         handleClose() {
          this.addDialogVisible = false;
@@ -176,9 +160,12 @@ export default {
                .catch(this.handleGetSchoolErr.bind(this))
         },
         handleGetSchoolSucc(res) {
-            if(res.status !== 200) return this.$message.error('获取学校列表失败');
-            this.schoolList = res.data.data;
-
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+             } else if(res.data.status == 200) {
+               this.schoolList = res.data.data;
+            }
         },
         handleGetSchoolErr(error) {
            console.log(error)
@@ -201,7 +188,10 @@ export default {
             .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
-           if(res.data.status == 10208) {
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+             } else if(res.data.status == 10208) {
               this.$message.error(res.data.msg);
               this.getSchoolList();
               this.searchSchoolList = [];
@@ -230,12 +220,14 @@ export default {
            })
         },
         handleAddSchoolSucc(res) {
-            if(res.status !== 200) {
-               this.$message.error('添加学校失败');
-            }else if(res.data.status == 10206) {
+          console.log(res);
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+             } else if(res.data.status == 10206) {
                this.$message.error(res.data.msg);
               this.addSchoolForm.name = '';
-            }else{
+            }else if(res.status == 200){
               this.addDialogVisible = false;
               this.$message.success('添加学校成功');
               this.$refs.schoolFormRef.resetFields();
@@ -271,8 +263,13 @@ export default {
             .catch(this.handleEditSchoolErr.bind(this))
         },
         handleEditSchoolSucc(res) {
-            res ? res = res.data: '';
-            this.editSchoolForm = res.data
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+               } else if(res.data.status == 200) {
+                this.editSchoolForm = res.data.data;
+              }
+
         },
         handleEditSchoolErr(err) {
             console.log(err)
@@ -299,13 +296,18 @@ export default {
                 })
         },
          handleEditSaveSchoolSucc(res) {
-             if(res.status !==200) return;
-            //发起修改用户信息的数据请求
-             this.schoolList = res.data.data;
-            //隐藏编辑框
-            this.editDialogVisible = false;
-            //提示修改成功
-            this.$message.success('更新学校信息成功');
+             if(res.data.status === 10204) {
+                 this.$message.error(res.data.msg);
+                 this.$router.push('/login');
+                }else if(res.data.status == 200) {
+                  //发起修改用户信息的数据请求
+                   this.schoolList = res.data.data;
+                  //隐藏编辑框
+                  this.editDialogVisible = false;
+                  //提示修改成功
+                  this.$message.success('更新学校信息成功');
+                }
+
         },
         handleEditSaveSchoolErr(err) {
             console.log(err)

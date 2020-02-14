@@ -63,7 +63,7 @@ export default {
     },
 
   methods: {
-    drawLine(id,lengend, option) {
+    drawLine(id,lengend, option, text) {
       if(id == 'left') {
          var myChart = echarts.init(this.$refs.left);
       }else if(id == 'right') {
@@ -71,10 +71,9 @@ export default {
       }else{
          var myChart = echarts.init(this.$refs.double);
       }
-      console.log(id, lengend, option)
        this.option = {
           title: {
-              text: '校园概况',
+              text: text,
               subtext: '',
               left: 'center'
           },
@@ -86,7 +85,6 @@ export default {
               orient: 'vertical',
               left: 'left',
               data: lengend
-              // data: ['左眼良好数量', '左眼轻度不良数量', '左眼中度不良数量', '左眼重度不良数量'],
               },
           series: [
               {
@@ -162,11 +160,10 @@ export default {
       this.doubleOption.forEach((item, index) => {
         this.doubleLegend.push(item.name);
       })
-      console.log(this.leftOption, this.rightOption, this.doubleOption)
-      console.log(this.leftLegend, this.rightLegend, this.doubleLegend)
-        this.drawLine('left', this.leftLegend, this.leftOption);
-        this.drawLine('right', this.rightLegend, this.rightOption);
-        this.drawLine('double', this.doubleLegend,this.doubleOption);
+     
+        this.drawLine('left', this.leftLegend, this.leftOption, '左眼概况');
+        this.drawLine('right', this.rightLegend, this.rightOption,'右眼概况');
+        this.drawLine('double', this.doubleLegend,this.doubleOption, '双眼概况');
 
 
 

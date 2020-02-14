@@ -294,11 +294,14 @@ export default {
             .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
-           if(res.data.status == 10211) {
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 10211) {
               this.$message.error(res.data.msg);
               this.getStudentList();
               this.searchStudentList = [];
-           }else if(res.status == 200) {
+           }else if(res.data.status == 200) {
               this.$message.success('搜索成功');
               this.searchStudentList = res.data.data;
             }
@@ -337,12 +340,15 @@ export default {
                 })
         },
         handleAddStuSucc(res) {
-           if(res.status != 200) return this.$message.error('添加学生信息失败');
-           this.addStudentVisible = false;
-           this.$message.success('添加学生信息成功');
-           this.$refs.studentFormRef.resetFields();
-           this.getStudentList();
-
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+              this.addStudentVisible = false;
+              this.$message.success('添加学生信息成功');
+              this.$refs.studentFormRef.resetFields();
+              this.getStudentList();
+           }
         },
         handleAddStuErr(err) {
            console.log(err)
@@ -358,8 +364,12 @@ export default {
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
-            if(res.status !==200) return this.$message.error('获取级联数据失败');
-            this.options =  res.data.data;
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 200) {
+             this.options =  res.data.data;
+          }
         },
         handleGetOptionErr(err) {
             console.log(err)
@@ -390,22 +400,24 @@ export default {
            this.currentPage = val;
         },
         handleGetStudentList(res) {
-            if(res.status !==200) return this.$message.error('获取学生列表失败');
-            this.studentList = res.data.data;
-            // console.log(this.studentList)
-            this.studentList.forEach((value, index) => {
-                if(value.gender == 1) {
-                    value.gender = '女'
-                }else{
-                    value.gender = '男'
-                }
-                if(value.correct ==1 ) {
-                    value.correct = '已矫正'
-                }else {
-                    value.correct = '未矫正'
-                }
-            })
-
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+               this.studentList = res.data.data;
+               this.studentList.forEach((value, index) => {
+                   if(value.gender == 1) {
+                       value.gender = '女'
+                   }else{
+                       value.gender = '男'
+                   }
+                   if(value.correct ==1 ) {
+                       value.correct = '已矫正'
+                   }else {
+                       value.correct = '未矫正'
+                   }
+               })
+            }
         },
         handleGetStudentErr(err) {
             console.log(err)
@@ -423,11 +435,13 @@ export default {
             }).then(this.handleEditStuSucc.bind(this)).catch(this.handleEditStuErr.bind(this))
         },
         handleEditStuSucc(res) {
-            if(res.status !== 200) return;
-            if(res.data) {
-                this.editStudentForm = res.data.data;
-                this.editStudentVisible = true;
-                this.getStudentList();
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+              this.editStudentForm = res.data.data;
+              this.editStudentVisible = true;
+              this.getStudentList();
             }
         },
         handleAddressFun(e, form, thsAreaCode) {
@@ -465,14 +479,17 @@ export default {
             })
         },
         handldEditStuSucc(res) {
-            if(res.status !== 200) return;
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
              this.studentList = res.data.data;
-             //console.log(this.studentList)
-            //隐藏编辑框
-            this.editStudentVisible = false;
-            //提示修改成功
-            this.$message.success('更新学生信息成功');
-            this.getStudentList();
+             //隐藏编辑框
+             this.editStudentVisible = false;
+             //提示修改成功
+             this.$message.success('更新学生信息成功');
+             this.getStudentList();
+           }
         },
         handleEditStuErr(err) {
             console.log(err)
@@ -497,16 +514,18 @@ export default {
             }).then(this.handleDeleteStuSucc.bind(this)).catch(this.handleDeleteStuErr.bind(this))
         },
         handleDeleteStuSucc(res) {
-            if(res.status !== 200) return this.$message.error('删除学生失败');
-            this.studentList = res.data.data;
-            const totalPage = Math.ceil(this.studentList.length / this.pageSize) // 总页数
-            this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-            this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
-            console.log(this.currentPage)
-            // this.getStudentList();
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+              this.studentList = res.data.data;
+              const totalPage = Math.ceil(this.studentList.length / this.pageSize) // 总页数
+              this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+              this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+            }
         },
         handleDeleteStuErr(err) {
-            console.log(err)
+          console.log(err)
         },
     }
 }

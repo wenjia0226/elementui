@@ -262,11 +262,14 @@ export default {
           .catch(this.handleQueryErr.bind(this))
       },
      handleQuerySucc(res) {
-        if(res.data.status == 10210) {
+       if(res.data.status === 10204) {
+           this.$message.error(res.data.msg);
+           this.$router.push('/login');
+       } else if(res.data.status == 10210) {
            this.$message.error(res.data.msg);
            this.getClassList();
            this.searchClassList = [];
-        }else if(res.status == 200) {
+        }else if(res.data.status == 200) {
            this.$message.success('搜索成功');
            this.searchClassList = res.data.data;
          }
@@ -297,8 +300,15 @@ export default {
             )
         },
         handleGetClassSucc(res) {
+          console.log(res)
             if(res.status !== 200) return this.$message.error('获取班级列表失败');
             this.classList = res.data.data;
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+               } else if(res.data.status == 200) {
+                 this.classList = res.data.data;
+              }
         },
         handleGetClassErr(err) {
             console.log(err)
@@ -339,12 +349,13 @@ export default {
            this.schoolId = item;
         },
         handleAddClassSucc(res) {
-            if(res.status !== 200) {
-              this.$message.error('添加班级失败');
+           if(res.data.status == 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
             }else if(res.data.status == 10207)  {
                this.$message.error(res.data.msg);
                 this.addClassForm.className = '';
-            }else {
+            }else if(res.data.status == 200) {
               this.$message.success('添加班级成功')
               this.addClassVisible = false;
               this.$refs.addClassRef.resetFields();
@@ -371,11 +382,16 @@ export default {
             .catch(this.handleEditclassErr.bind(this))
         },
         handleEditClassSucc(res) {
-            if(res.status !== 200) return;
-            res ? res = res.data: '';
-            this.editClassForm = res.data;
-            this.selectedOptions = res.data.schoolId;
-            this.editVisible = true;
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+              this.editClassForm = res.data.data;
+              this.selectedOptions = res.data.data.schoolId;
+              this.editVisible = true;
+            }
+
+
         },
         handleEditclassErr(err) {
             console.log(err)
@@ -404,14 +420,19 @@ export default {
                 })
         },
          handleEditSaveClassSucc(res) {
-             if(res.status !==200) return;
-            //发起修改用户信息的数据请求
-             this.classlList = res.data.data;
-            //隐藏编辑框
-            this.editVisible = false;
-            //提示修改成功
-            this.$message.success('更新班级信息成功');
-            this.getClassList();
+             if(res.data.status === 10204) {
+                 this.$message.error(res.data.msg);
+                 this.$router.push('/login');
+             } else if(res.data.status == 200) {
+                //发起修改用户信息的数据请求
+                 this.classlList = res.data.data;
+                //隐藏编辑框
+                this.editVisible = false;
+                //提示修改成功
+                this.$message.success('更新班级信息成功');
+                this.getClassList();
+             }
+           
         },
         handleEditSaveClassErr(err) {
             console.log(err)
@@ -432,8 +453,12 @@ export default {
                .catch(this.handleGetSchoolErr.bind(this))
         },
         handleGetSchoolSucc(res) {
-            if(res.status !== 200) return this.$message.error('获取学校列表失败');
-            this.school = res.data.data;
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 200) {
+              this.school = res.data.data;
+          }
         },
         handleGetSchoolErr(err) {
             console.log(err)
@@ -459,14 +484,16 @@ export default {
         .catch(this.handleDeleteClassErr.bind(this))
         },
         handleDeleteClassSucc(res) {
-            if(res.status !== 200) return this.$message.error('删除班级失败');
-            this.$message.success('删除班级成功');
-            console.log(res)
-            this.classList = res.data.data;
-            const totalPage = Math.ceil(this.classList.length / this.pageSize) // 总页数
-            this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-            this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
-
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 200) {
+             this.$message.success('删除班级成功');
+             this.classList = res.data.data;
+             const totalPage = Math.ceil(this.classList.length / this.pageSize) // 总页数
+             this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+             this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+          }
         },
         handleDeleteClassErr(err) {
             console.log(err)

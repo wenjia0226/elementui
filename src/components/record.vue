@@ -237,7 +237,7 @@ export default {
                 cvaRight:  { required: true, validator: valiNumberPass1, message: '请输入右眼矫正视力', trigger: 'blur' },
                 diopterLeft:  { required: true,validator: valiNumberPass1, message: '请输入左眼屈光度', trigger: 'blur' },
                 diopterRight:  { required: true,validator: valiNumberPass1, message: '请输入右眼屈光度', trigger: 'blur' },
-                eyeAxisLengthLeft: { required: true,validator: valiNumberPass1, message: '请输入左眼眼轴长度', trigger: 'blur' },
+                eyeAxisLengthLeft: { required: true,validator: valiNumberPass1, message: '请输入左眼眼轴长度取值范围25-35', trigger: 'blur',min: 25,max: 35 },
                 eyeAxisLengthRight: { required: true, validator: valiNumberPass1, message: '请输入右眼眼轴长度', trigger: 'blur' },
                 visionLeft:  { required: true, validator: valiNumberPass1, message: '请输入左眼裸眼视力', trigger: 'blur' },
                 visionRight:  { required: true, validator: valiNumberPass1, message: '请输入右眼裸眼视力', trigger: 'blur' },
@@ -298,8 +298,13 @@ export default {
           }).then(this.handleGetSecondSucc.bind(this)).catch(this.handleGetSecondErr.bind(this))
       },
       handleGetSecondSucc (res) {
-          if(res.status !==200) return this.$message.error('获取级联数据失败');
-          this.secondClass =  res.data.data;
+         if(res.data.status === 10204) {
+             this.$message.error(res.data.msg);
+             this.$router.push('/login');
+         } else if(res.data.status == 200) {
+             this.secondClass =  res.data.data;
+         }
+
       },
       handleGetSecondErr(err) {
           console.log(err)
@@ -332,7 +337,10 @@ export default {
             .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
-           if(res.data.status == 10209) {
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          }else if(res.data.status == 10209) {
               this.$message.error(res.data.msg);
               this.getRecordList();
               this.searchRecordList = [];
@@ -367,8 +375,12 @@ export default {
             )
         },
         handleGetRecordSucc(res) {
-            if(res.status !== 200) return this.$message.error('获取记录列表失败');
-            this.recordList = res.data.data;
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+               this.recordList = res.data.data;
+           }
             this.recordList.forEach((item ,index) => {
               if(item.cvaLeft == 0) {
                  item.cvaLeft = '无'
@@ -424,16 +436,19 @@ export default {
             })
         },
         handleAddRecordSucc(res) {
-            if(res.status != 200) return this.$message.error('添加记录失败');
-            this.addRecordDialogVisible = false;
-            this.$message.success('添加记录成功');
-            this.$refs.recordFormRef.resetFields();
-            this.addRecordForm.cvaLeft = '';
-            this.addRecordForm.cvaRight = "";
-            this.addRecordForm.diopterLeft = '';
-            this.addRecordForm.diopterRight = '';
-            this.getRecordList();
-
+            if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+            } else if(res.data.status == 200) {
+              this.addRecordDialogVisible = false;
+              this.$message.success('添加记录成功');
+              this.$refs.recordFormRef.resetFields();
+              this.addRecordForm.cvaLeft = '';
+              this.addRecordForm.cvaRight = "";
+              this.addRecordForm.diopterLeft = '';
+              this.addRecordForm.diopterRight = '';
+              this.getRecordList();
+            }
         },
         handleAddRecordErr(err) {
           this.$message.error('添加记录失败')
@@ -464,16 +479,19 @@ export default {
             .catch(this.handleEditRecordErr.bind(this))
             },
         handleEditRecordSucc(res) {
-          if(res.status !== 200) return;
-          res ? res = res.data: '';
-            this.editRecordForm = res.data;
-            console.log(this.editRecordForm)
-            // this.secondClass = res.data.record_cat;
-          this.editRecordDialogVisible = true;
+         if(res.data.status === 10204) {
+             this.$message.error(res.data.msg);
+             this.$router.push('/login');
+         } else if(res.data.status == 200) {
+            this.editRecordForm = res.data.data;
+            this.editRecordDialogVisible = true;
+         }
+
+
           },
         handleEditRecordErr(err) {
           this.$message.error('修改记录失败');
-            console.log(err)
+          console.log(err)
         },
 
         //修改后保存
@@ -504,12 +522,16 @@ export default {
             })
         },
     handleSaveEditSucc(res) {
-        if(res.status != 200) return this.$message.error('添加记录失败');
-        console.log(res)
-        this.editRecordDialogVisible = false;
-        this.$refs.recordEditFormRef.resetFields();
-        this.$message.success('修改记录成功');
-        this.getRecordList();
+        if(res.data.status === 10204) {
+            this.$message.error(res.data.msg);
+            this.$router.push('/login');
+        } else if(res.data.status == 200) {
+           this.editRecordDialogVisible = false;
+           this.$refs.recordEditFormRef.resetFields();
+           this.$message.success('修改记录成功');
+           this.getRecordList();
+        }
+
 
     },
     handleSaveEditErr(err) {
@@ -536,12 +558,16 @@ export default {
         .catch(this.handleDeleteRecordErr.bind(this))
     },
     handleDeleteRecordSucc(res) {
-        if(res.status !== 200) return this.$message.error('删除记录失败');
-        this.$message.success('删除记录成功');
-        this.recordList = res.data.data;
-        const totalPage = Math.ceil(this.recordList.length / this.pageSize) // 总页数
-        this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-        this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+        if(res.data.status === 10204) {
+            this.$message.error(res.data.msg);
+            this.$router.push('/login');
+        } else if(res.data.status == 200) {
+           this.$message.success('删除记录成功');
+           this.recordList = res.data.data;
+           const totalPage = Math.ceil(this.recordList.length / this.pageSize) // 总页数
+           this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+           this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+        }
     },
     handleDeleteRecordErr(err) {
         console.log(err)
@@ -557,8 +583,12 @@ export default {
         }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
     },
     handleGetOptionSucc (res) {
-        if(res.status !==200) return this.$message.error('获取级联数据失败');
-        this.options = res.data.data;
+       if(res.data.status === 10204) {
+           this.$message.error(res.data.msg);
+           this.$router.push('/login');
+       } else if(res.data.status == 200) {
+           this.options = res.data.data;
+       }
     },
     handleGetOptionErr(err) {
         console.log(err)

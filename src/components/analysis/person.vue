@@ -14,7 +14,7 @@
 	           <el-cascader  :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
 	      </el-col>
         <el-col :span="2">
-             <div class="schoolSet">请填写学生姓名：</div>
+             <div class="schoolSet">学生姓名选择：</div>
         </el-col>
         <el-col :span="4">
           <el-autocomplete

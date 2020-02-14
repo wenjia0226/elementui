@@ -68,7 +68,6 @@ import axios from 'axios'
             getMenuList() {
                 //获取所都菜单
                  this.token = window.sessionStorage.getItem('token');
-
                 if(this.token) {
                     let listparam = new URLSearchParams();
                     listparam.append('token', this.token);
@@ -77,18 +76,21 @@ import axios from 'axios'
                         url: '/menuList',
                         data: listparam
                     }).then(this.handleGetMenuListSucc.bind(this)).catch(this.handleGetMenuListErr.bind(this))
-                }else {
-                    this.$message.error('请登录');
-                    this.$router.push('/login')
-                }
+               }
             },
             handleGetMenuListSucc (res){
-                 res? res= res.data: '';
-                if (res.status !== 200) return;
-                this.menuList = res.data;
+              console.log(res)
+              if(res.data.status === 10204) {
+                  this.$message.error(res.data.msg);
+                  this.$router.push('/login');
+              } else if(res.data.status == 200) {
+                 this.menuList = res.data.data;
+              }
+
             },
             handleGetMenuListErr(err) {
                 console.log(err)
+
             },
             //保存链接的激活状态
             saveNavState(activePath) {

@@ -122,6 +122,7 @@ export default {
       }).then(this.getClassAnalysisSucc.bind(this)).catch(this.handleGetClassAnalysisErr.bind(this))
     },
     getClassAnalysisSucc(res) {
+      console.log(res)
       if(res.status !== 200) return;
       res.data.data ? res = res.data.data: '';
       this.leftOption = res[0];
@@ -158,7 +159,6 @@ export default {
         }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
     },
     handleGetOptionSucc (res) {
-
         if(res.status !==200) return this.$message.error('获取级联数据失败');
         this.options =  res.data.data;
     },
@@ -172,6 +172,8 @@ export default {
    }
 }
 </script>
-<style  scoped>
-
+<style  scoped style="less">
+.el-cascader{
+  width: 100%;
+}
 </style>
