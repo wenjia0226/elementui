@@ -10,16 +10,41 @@
         <el-card>
              <el-row :gutter="20">
                  <el-col :span="6">
-                     <el-input placeholder="输入学校名称" v-model="query" clearable @clear="getSchoolList">
+                    <el-input placeholder="输入学校名称" v-model="query" clearable @clear="getSchoolList">
                         <el-button slot="append" icon="el-icon-search" @click="querySchool"></el-button>
                      </el-input>
+                    <!-- <el-autocomplete
+                       class="inline-input"
+                       v-model="state1"
+                       :fetch-suggestions="querySearch"
+                       placeholder="请输入学生姓名"
+                       clearable
+                       @select="handleSelect">
+
+                       </el-autocomplete> -->
+
                  </el-col>
                  <el-col :span="6">
                         <el-button type="primary" @click="addDialogVisible = true">添加学校</el-button>
                  </el-col>
              </el-row>
             <!-- 学校列表 -->
-            <el-table :data="schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
+            <el-table :data="this.schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchSchoolList.length" >
+                <el-table-column type="index"></el-table-column>
+                <el-table-column label="学校名称" prop="name"></el-table-column>
+                <el-table-column label="学校地址" prop="address"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
+                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSchoolById(scope.row.id)"></el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 搜索 -->
+           <el-row v-show="this.searchSchoolList.length">
+             <el-col>搜索结果</el-col>
+            </el-row>
+            <el-table :data="this.searchSchoolList" border  stripe style="width: 100%" v-show="this.searchSchoolList.length">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="学校名称" prop="name"></el-table-column>
                 <el-table-column label="学校地址" prop="address"></el-table-column>
@@ -32,6 +57,8 @@
             </el-table>
             <!-- 分页功能 -->
             <el-pagination
+
+                v-show="!this.searchSchoolList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -86,6 +113,7 @@ export default {
            currentPage: 1,
            pageSize: 5,
            total: 0,
+           state1: '',
            schoolList: [],
            editDialogVisible: false,
            addDialogVisible: false, //控制对话框的显示隐藏
@@ -106,7 +134,8 @@ export default {
            editSchoolRules: {
                 name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
                 address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
-           }
+           },
+           searchSchoolList:[]
        }
     },
     created() {
@@ -115,6 +144,22 @@ export default {
     },
 
     methods:{
+      //模糊查询
+      // querySearch(queryString, cb) {
+      //   var schoolList = this.schoolList;
+
+      //   var results = queryString ? schoolList.filter(this.createFilter(queryString)) : schoolList;
+      //   // 调用 callback 返回建议列表的数据
+      //   cb(results);
+      // },
+      // createFilter(queryString) {
+      //   return (schooList) => {
+      //     return (schooList.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      //   };
+      // },
+      // handleSelect(item) {
+      //    console.log(item);
+      //  },
       //关闭按钮
         handleClose() {
          this.addDialogVisible = false;
@@ -140,6 +185,11 @@ export default {
         },
         //搜索
         querySchool() {
+          if(this.query == "") {
+             this.getSchoolList();
+             this.searchSchoolList = [];
+             return;
+          }
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('name', this.query);
@@ -151,8 +201,12 @@ export default {
             .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
-            if(res.status !== 200) return this.$message.error('未搜索到内容');
-            this.schoolList = res.data.data;
+           if(res.data.status == 10208) {
+              this.$message.error(res.data.msg);
+           }else if(res.status == 200) {
+              this.$message.success('搜索成功');
+              this.searchSchoolList = res.data.data;
+            }
         },
         handleQueryErr(err) {
             console.log(err)
@@ -199,6 +253,7 @@ export default {
         //监听页码值改变事件
         handleCurrentChange(val) {
            this.currentPage = val;
+
         },
         //点击展示编辑页面
         showEditDialog (id) {

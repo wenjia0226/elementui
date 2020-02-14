@@ -10,8 +10,8 @@
         <el-card>
             <el-row :gutter="20">
                 <el-col :span="6">
-                    <el-input placeholder="输入账号"  clearable>
-                    <el-button slot="append" icon="el-icon-search"></el-button>
+                    <el-input placeholder="输入账号"   v-model="query" clearable>
+                    <el-button slot="append" icon="el-icon-search"  @click="searchAccount"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="6">
@@ -97,6 +97,8 @@ import axios from 'axios'
             token: '',
             addAccountDialogVisible: false,
             roleList: [],  //角色列表
+            query: '',
+            searchAccountList: [],
             addAccountForm: {
                name: '',
                loginName: '',
@@ -133,6 +135,34 @@ import axios from 'axios'
          }
      },
      methods: {
+       searchAccount() {
+          if(this.query == "") {
+             this.getUserList();
+             this.searchAccountList = [];
+             return;
+          }
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('name', this.query);
+            axios({
+                method: "post",
+                url: '/queryUser',
+                data: param
+            }).then(this.handleQuerySucc.bind(this))
+            .catch(this.handleQueryErr.bind(this))
+        },
+       handleQuerySucc(res) {
+         console.log(res)
+          if(res.data.status == 10210) {
+             this.$message.error(res.data.msg);
+          }else if(res.status == 200) {
+             this.$message.success('搜索成功');
+             this.searchAccountList = res.data.data;
+           }
+       },
+        handleQueryErr(err) {
+            console.log(err)
+        },
        //关闭按钮
          handleClose() {
           this.addAccountDialogVisible = false;

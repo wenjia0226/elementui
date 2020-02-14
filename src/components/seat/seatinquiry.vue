@@ -179,12 +179,11 @@ export default {
         },
         handleGetClassReorcdSucc(res) {
 
-
             if(res.status !== 200) return;
-            if(res.data.data) {
+            if(res.data.data.length) {
                 this.classRecordList = res.data.data;
                 this.classRecordList.forEach((item, index) => {
-                    if(item.type == 1) {
+                 if(item.type == 1) {
                         item.type = '方式一'
                     }else if(item.type == 2) {
                         item.type = '方式二'
@@ -204,9 +203,9 @@ export default {
                           item.endTime = '过期'
                     }
                 })
-
-
-            }
+            }else  {
+                  this.$message.error('未查询到结果')
+             }
         },
         handleGetClassRecordErr(err) {
             console.log(err)

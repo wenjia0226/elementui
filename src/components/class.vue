@@ -11,8 +11,8 @@
             <el-row :gutter="20">
                 <el-col :span="12"></el-col>
                 <el-col :span="6">
-                    <el-input placeholder="输入班级"  clearable>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
+                    <el-input placeholder="输入班级"  clearable v-model="query" clearable @clear="getClassList">
+                        <el-button slot="append" icon="el-icon-search" @click="searchClass"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="6">
@@ -20,29 +20,53 @@
                 </el-col>
             </el-row>
              <!-- 班级列表 -->
-            <el-table border  :data="classList.slice((currentPage-1) * pageSize, currentPage * pageSize)" stripe style="width: 100%">
-                <el-table-column type="index"></el-table-column>
-                <el-table-column label="所属学校" prop="schoolName"></el-table-column>
-                <el-table-column label="班级名称" prop="className"></el-table-column>
-                <el-table-column label="容纳人数" prop="volume"></el-table-column>
-                 <el-table-column label="教室长度" prop="roomLength"></el-table-column>
-                <el-table-column label="教室宽度" prop="roomWidth"></el-table-column>
-                <el-table-column label="黑板长度" prop="bbLength"></el-table-column>
-                <el-table-column label="是否是实验班" prop="experiment"></el-table-column>
-                <el-table-column label="备注" prop="description"></el-table-column>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassEditDialog(scope.row.id)" ></el-button>
-                    </template>
-                </el-table-column>
-                 <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeClassById(scope.row.id)"></el-button>
-                    </template>
-                </el-table-column>
+            <el-table border  :data="classList.slice((currentPage-1) * pageSize, currentPage * pageSize)" stripe style="width: 100%"  v-show="!this.searchClassList.length">
+              <el-table-column type="index"></el-table-column>
+              <el-table-column label="所属学校" prop="schoolName"></el-table-column>
+              <el-table-column label="班级名称" prop="className"></el-table-column>
+              <el-table-column label="容纳人数" prop="volume"></el-table-column>
+               <el-table-column label="教室长度" prop="roomLength"></el-table-column>
+              <el-table-column label="教室宽度" prop="roomWidth"></el-table-column>
+              <el-table-column label="黑板长度" prop="bbLength"></el-table-column>
+              <el-table-column label="是否是实验班" prop="experiment"></el-table-column>
+              <el-table-column label="备注" prop="description"></el-table-column>
+              <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassEditDialog(scope.row.id)" ></el-button>
+                  </template>
+              </el-table-column>
+               <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeClassById(scope.row.id)"></el-button>
+                  </template>
+              </el-table-column>
             </el-table>
+            <!-- 搜索班级 -->
+            <el-table border  :data="this.searchClassList" stripe style="width: 100%" v-show="this.searchClassList.length">
+              <el-table-column type="index"></el-table-column>
+              <el-table-column label="所属学校" prop="schoolName"></el-table-column>
+              <el-table-column label="班级名称" prop="className"></el-table-column>
+              <el-table-column label="容纳人数" prop="volume"></el-table-column>
+               <el-table-column label="教室长度" prop="roomLength"></el-table-column>
+              <el-table-column label="教室宽度" prop="roomWidth"></el-table-column>
+              <el-table-column label="黑板长度" prop="bbLength"></el-table-column>
+              <el-table-column label="是否是实验班" prop="experiment"></el-table-column>
+              <el-table-column label="备注" prop="description"></el-table-column>
+              <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassEditDialog(scope.row.id)" ></el-button>
+                  </template>
+              </el-table-column>
+               <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeClassById(scope.row.id)"></el-button>
+                  </template>
+              </el-table-column>
+            </el-table>
+
             <!-- 分页功能 -->
             <el-pagination
+                v-show="!this.searchClassList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -166,6 +190,8 @@ export default {
             schoolId: '',
             labelNum1: 1,
             labelNum2: 0,
+            query: '',
+            searchClassList: [],
             addClassForm: {
                 className:'',
                 roomLength: '',
@@ -215,10 +241,37 @@ export default {
                 volume:  { required: true, type:'number', message: '请输入班级容量', trigger: 'blur' },
                 experiment: {required: true, message: '请选择是否是实验班', trigger: 'blur'}
             }
-
         }
     },
     methods: {
+      //搜索
+      searchClass() {
+        if(this.query == "") {
+           this.getClassList();
+           this.searchClassList = [];
+           return;
+        }
+          let param = new URLSearchParams();
+          param.append('token', this.token);
+          param.append('name', this.query);
+          axios({
+              method: "post",
+              url: '/queryClasses',
+              data: param
+          }).then(this.handleQuerySucc.bind(this))
+          .catch(this.handleQueryErr.bind(this))
+      },
+     handleQuerySucc(res) {
+        if(res.data.status == 10208) {
+           this.$message.error(res.data.msg);
+        }else if(res.status == 200) {
+           this.$message.success('搜索成功');
+           this.searchClassList = res.data.data;
+         }
+     },
+      handleQueryErr(err) {
+          console.log(err)
+      },
       //关闭按钮
         handleClose() {
          this.addClassVisible = false;

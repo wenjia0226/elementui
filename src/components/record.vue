@@ -20,7 +20,35 @@
             </el-row>
 
             <!-- 记录列表 -->
-            <el-table :data="recordList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%">
+            <el-table :data="recordList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%" v-show="!this.searchRecordList.length">
+                <el-table-column type="index"></el-table-column>
+                <el-table-column label="所属学校" prop="schoolName"></el-table-column>
+                <el-table-column label="所属班级" prop="classesName"></el-table-column>
+                <el-table-column label="姓名" prop="studentName"></el-table-column>
+                <el-table-column label="左眼裸眼视力" prop="visionLeft"></el-table-column>
+                <el-table-column label="右眼裸眼视力" prop="visionRight"></el-table-column>
+                <el-table-column label="左眼眼轴长度" prop="eyeAxisLengthLeft"></el-table-column>
+                <el-table-column label="右眼眼轴长度" prop="eyeAxisLengthRight"></el-table-column>
+                <el-table-column label="左眼曲率" prop="curvatureLeft"></el-table-column>
+                <el-table-column label="右眼曲率" prop="curvatureRight"></el-table-column>
+                <el-table-column label="左眼矫正视力" prop="cvaLeft"></el-table-column>
+                <el-table-column label="右眼矫正视力" prop="cvaRight"></el-table-column>
+                <el-table-column label="左眼屈光度" prop="diopterLeft"></el-table-column>
+                <el-table-column label="右眼屈光度" prop="diopterRight"></el-table-column>
+
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showRecordEditDialog(scope.row.id)" ></el-button>
+                    </template>
+                </el-table-column>
+                 <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeRecordById(scope.row.id)"></el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 搜索记录 -->
+            <el-table :data="searchRecordList" border stripe style="width: 100%" v-show="this.searchRecordList.length">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="所属学校" prop="schoolName"></el-table-column>
                 <el-table-column label="所属班级" prop="classesName"></el-table-column>
@@ -49,6 +77,7 @@
             </el-table>
              <!-- 分页功能 -->
             <el-pagination
+                v-show="!this.searchRecordList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -184,6 +213,7 @@ export default {
             id: '',
             token: '',
             query: '',
+            searchRecordList: [],
             record_cat: [],
             addRecordDialogVisible: false,
             addRecordForm: {
@@ -270,7 +300,6 @@ export default {
       handleGetSecondSucc (res) {
           if(res.status !==200) return this.$message.error('获取级联数据失败');
           this.secondClass =  res.data.data;
-          console.log(this.secondClass)
       },
       handleGetSecondErr(err) {
           console.log(err)
@@ -285,9 +314,14 @@ export default {
          this.addRecordForm.diopterRight = '';
 
         },
-        //搜索
+        //搜索学生
         queryStudent() {
             let param = new URLSearchParams();
+            if(this.query == "") {
+               this.getRecordList();
+              this.searchRecordList = [];
+              return;
+            }
             param.append('token', this.token);
             param.append('name', this.query);
             axios({
@@ -298,11 +332,25 @@ export default {
             .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
-            if(res.status !== 200) return this.$message.error('未搜索到内容');
-            this.recordList = res.data.data;
+           if(res.data.status == 10209) {
+              this.$message.error(res.data.msg);
+           }else if(res.status == 200) {
+              this.$message.success('搜索成功');
+              this.searchRecordList = res.data.data;
+            }
         },
         handleQueryErr(err) {
             console.log(err)
+        },
+        //获取学生列表
+        getStudentList() {
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            axios({
+                method: 'post',
+                url: '/studentList',
+                data: param
+            }).then(this.handleGetStudentList.bind(this)).catch(this.handleGetStudentErr.bind(this))
         },
         //获取列表
         getRecordList() {

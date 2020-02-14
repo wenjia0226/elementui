@@ -19,7 +19,33 @@
                  </el-col>
              </el-row>
               <!-- 学生列表 -->
-            <el-table :data="studentList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%">
+            <el-table :data="studentList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%" v-show="!this.searchStudentList.length">
+                <el-table-column type="index"></el-table-column>
+                <el-table-column label="所属学校" prop="schoolName"></el-table-column>
+                <el-table-column label="所属班级" prop="classesName"></el-table-column>
+                <el-table-column label="姓名" prop="name"></el-table-column>
+                <el-table-column label="性别" prop="gender"></el-table-column>
+                <el-table-column label="年龄" prop="age"></el-table-column>
+                <el-table-column label="身高" prop="height"></el-table-column>
+                <el-table-column label="体重" prop="weight"></el-table-column>
+                <el-table-column label="性格" prop="nature"></el-table-column>
+                <el-table-column label="椅子高度" prop="chairHeight"></el-table-column>
+                <el-table-column label="坐姿高度" prop="sittingHeight"></el-table-column>
+                <el-table-column label="是否矫正" prop="correct"></el-table-column>
+                <el-table-column label="备注" prop="description"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showStudentEditDialog(scope.row.id)" ></el-button>
+                    </template>
+                </el-table-column>
+                 <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeStudentsById(scope.row.id)"></el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 搜索学生 -->
+            <el-table :data="this.searchStudentList" border stripe style="width: 100%" v-show="this.searchStudentList.length">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="所属学校" prop="schoolName"></el-table-column>
                 <el-table-column label="所属班级" prop="classesName"></el-table-column>
@@ -46,6 +72,7 @@
             </el-table>
             <!-- 分页功能 -->
             <el-pagination
+                v-show="!this.searchStudentList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -178,6 +205,8 @@ export default {
             pageSize: 5,
             total:0,
             selectedOptions: [],
+            query: '',
+            searchStudentList: [],
             addStudentForm: {
                 "age":'' ,
                 "chairHeight": '',
@@ -250,6 +279,11 @@ export default {
         //搜索学生
         queryStudent() {
             let param = new URLSearchParams();
+            if(this.query == "") {
+              this.getStudentList();
+              this.searchStudentList = [];
+              return;
+            }
             param.append('token', this.token);
             param.append('name', this.query);
             axios({
@@ -260,8 +294,12 @@ export default {
             .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
-            if(res.status !== 200) return this.$message.error('未搜索到内容');
-            this.studentList = res.data.data;
+           if(res.data.status == 10208) {
+              this.$message.error(res.data.msg);
+           }else if(res.status == 200) {
+              this.$message.success('搜索成功');
+              this.searchStudentList = res.data.data;
+            }
         },
         handleQueryErr(err) {
             console.log(err)
