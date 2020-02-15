@@ -22,7 +22,7 @@
                <el-button type="primary" @click="showSchool">查看校园概况</el-button>
             </el-col>
         </el-row>
-        <el-row style="margin: 10px 0">
+        <el-row style="margin: 30px 0">
            <el-col :span="12">
              <div ref="left" style="width: 600px;height:400px;;"></div>
            </el-col>
@@ -30,7 +30,7 @@
              <div ref="right" style="width: 600px;height:400px;;"></div>
            </el-col>
         </el-row>
-        <el-row>
+        <el-row style="margin: 20px 0">
           <el-col :span = "12" :offset="6">
              <div ref="double" style="width: 600px;height:400px;"></div>
           </el-col>
@@ -79,12 +79,10 @@ export default {
           },
           tooltip: {
               trigger: 'item',
-              formatter: '{a} <br/>{b} : {c} ({d}%)'
           },
           legend: {
               orient: 'vertical',
-              left: 'left',
-              
+              left: 'right',
               data: lengend
               },
           series: [
@@ -92,15 +90,30 @@ export default {
                   name: '访问来源',
                   type: 'pie',
                   radius: '80%',
-                  center: ['50%', '60%'],
+                  center: ['50%', '50%'],
+                  label: {formatter: '{b}:{c}: ({d}%)'},
                   data: option,
+                  itemStyle: {
+                    normal: {
+                      borderWidth:4,	//边框的宽度
+                      borderColor:'#fff',//边框的颜色
+                    }
+                  },
                   emphasis: {
                       itemStyle: {
                           shadowBlur: 10,
                           shadowOffsetX: 0,
-                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                          shadowColor: 'rgba(0, 0, 0, 0.5)',
+
                       }
-                  }
+                  },
+                  normal:{
+                          label:{
+                              show: true,
+                              formatter: '{b} : {c} ({d}%)'
+                          },
+                          labelLine :{show:true}
+                      }
               }
           ]
       };
