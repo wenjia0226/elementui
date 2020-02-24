@@ -218,7 +218,7 @@ export default {
           param.append('name', this.query);
           axios({
               method: "post",
-              url: '/queryRole',
+              url: '/lightspace/queryRole',
               data: param
           }).then(this.handleQuerySucc.bind(this))
           .catch(this.handleQueryErr.bind(this))
@@ -258,7 +258,7 @@ export default {
                param.append('token', this.token)
                axios({
                    method: 'post',
-                   url: '/addRole',
+                   url: '/lightspace/addRole',
                    data: param
                }).then(this.handleAddRoleSucc.bind(this))
                .catch(this.handleAddRoleErr.bind(this))
@@ -284,7 +284,7 @@ export default {
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/roleList',
+                 url: '/lightspace/roleList',
                  data: param
              }).then(this.handleGetRoleSucc.bind(this))
                .catch(this.handleGetRoleErr.bind(this))
@@ -319,7 +319,7 @@ export default {
             param.append('token',this.token)
             axios({
                 method: 'post',
-                url: '/editRole',
+                url: '/lightspace/editRole',
                 data: param
             }).then(this.handleEditRoleSucc.bind(this))
             .catch(this.handleEditRoleErr.bind(this))
@@ -345,7 +345,7 @@ export default {
                 param.append('id', this.editRoleForm.id)
                 axios({
                     method: 'post',
-                    url: '/saveRole',
+                    url: '/lightspace/saveRole',
                     data: param
                 }).then(this.handleEditSaveSchoolSucc.bind(this))
                 .catch(this.handleEditSaveSchoolErr.bind(this))
@@ -384,7 +384,7 @@ export default {
             param.append('roleId', id)
             axios({
                 method: 'post',
-                url: '/deleteRole',
+                url: '/lightspace/deleteRole',
                 data: param
             }).then(this.handleDeleteRoleSucc.bind(this))
             .catch(this.handleDeleteRoleErr.bind(this))
@@ -414,7 +414,7 @@ export default {
             //获取权限列表
             axios({
                 method: 'post',
-                url: '/menuList',
+                url: '/lightspace/menuList',
                 data: param
             }).then(this.handleGetMenuListSucc.bind(this))
             .catch(this.getMenuListErr.bind(this))
@@ -455,7 +455,7 @@ export default {
             axios({
                 method: 'post',
                 data: param,
-                url: '/roleRight'
+                url: '/lightspace/roleRight'
 
             }).then(this.handleSaveRightSucc.bind(this))
             .catch(this.handleSaveRightErr.bind(this))
@@ -464,7 +464,7 @@ export default {
         handleSaveRightSucc(res) {
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
-              this.$router.push('/login');
+              this.$router.push('/lightspace/login');
           } else if(res.data.status == 200) {
              this.settingDialogVisible = false;
              this.getRoleList();

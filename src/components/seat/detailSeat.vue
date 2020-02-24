@@ -418,7 +418,7 @@ export default {
             param.append('sortId', this.id);
             axios({
                 method: 'post',
-                url: "/showSort",
+                url: "/lightspace/showSort",
                 data: param
             }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
         },

@@ -73,7 +73,7 @@ import axios from 'axios'
                     listparam.append('token', this.token);
                     axios({
                         method: 'post',
-                        url: '/menuList',
+                        url: '/lightspace/menuList',
                         data: listparam
                     }).then(this.handleGetMenuListSucc.bind(this)).catch(this.handleGetMenuListErr.bind(this))
                }
@@ -81,7 +81,7 @@ import axios from 'axios'
             handleGetMenuListSucc (res){ 
               if(res.data.status === 10204) {
                   this.$message.error(res.data.msg);
-                  this.$router.push('/login');
+                  this.$router.push('/lightspace/login');
               } else if(res.data.status == 200) {
                  this.menuList = res.data.data;
               }

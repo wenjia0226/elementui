@@ -268,14 +268,14 @@ export default {
       param.append('classId', this.classId);
       axios({
         method: 'post',
-        url: '/queryStudentBySidCid',
+        url: '/lightspace/queryStudentBySidCid',
         data: param
       }).then(this.getStudentListSucc.bind(this)).catch(this.getStudnentListErr.bind(this))
     },
     getStudentListSucc(res) {
       if(res.data.status === 10204) {
           this.$message.error(res.data.msg);
-          this.$router.push('/login');
+          this.$router.push('/lightspace/login');
       } else if(res.data.status == 200) {
         res ? res = res.data.data: '';
         for(let i  =0; i <res.length; i++) {
@@ -310,7 +310,7 @@ export default {
 		    param.append('token', this.token);
 		    axios({
 		        method: 'post',
-		        url: '/cascade1',
+		        url: '/lightspace/cascade1',
 		        data: param
 		    }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
 		},
@@ -346,7 +346,7 @@ export default {
           axios({
             method: 'post',
             data: param,
-            url: '/studentRecords'
+            url: '/lightspace/lightspacestudentRecords'
           }).then(this.handleGetStudentRecordSucc.bind(this)).catch(this.handleGetStudentRecordErr.bind(this))
         }
     },
@@ -354,7 +354,7 @@ export default {
       if(res.data.status === 10204) {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
-      } else if(res.data.status == 200) {  
+      } else if(res.data.status == 200) {
       res? res= res.data.data: '';
       for(let i = 0; i < res.length; i++) {
         if(res[i].name=="左眼裸眼视力") {
@@ -376,7 +376,7 @@ export default {
             this.rightQuX = res[5].xDataList;
             this.rightQuY = res[5].yDataList;
           }
-         }        
+         }
         this.drawLine();
         this.drawLine2();
         this.drawLine3();

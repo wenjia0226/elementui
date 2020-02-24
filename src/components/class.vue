@@ -256,7 +256,7 @@ export default {
           param.append('name', this.query);
           axios({
               method: "post",
-              url: '/queryClasses',
+              url: '/lightspace/queryClasses',
               data: param
           }).then(this.handleQuerySucc.bind(this))
           .catch(this.handleQueryErr.bind(this))
@@ -294,7 +294,7 @@ export default {
             axios({
                 method: 'post',
                 data: param2,
-                url: '/classesList'
+                url: '/lightspace/classesList'
             }).then(this.handleGetClassSucc.bind(this))
             .catch(this.handleGetClassErr.bind(this)
             )
@@ -340,7 +340,7 @@ export default {
                 axios({
                     method: 'post',
                     data: param,
-                    url:'/addClasses'
+                    url:'/lightspace/addClasses'
                 }).then(this.handleAddClassSucc.bind(this))
                 .catch(this.handleAddClassErr.bind(this))
             })
@@ -376,7 +376,7 @@ export default {
             param.append('token',this.token)
             axios({
                 method: 'post',
-                url: '/editClasses',
+                url: '/lightspace/editClasses',
                 data: param
             }).then(this.handleEditClassSucc.bind(this))
             .catch(this.handleEditclassErr.bind(this))
@@ -413,7 +413,7 @@ export default {
                 param.append('id', this.editClassForm.id)
                 axios({
                     method: 'post',
-                    url: '/saveClasses',
+                    url: '/lightspace/saveClasses',
                     data: param
                 }).then(this.handleEditSaveClassSucc.bind(this))
                 .catch(this.handleEditSaveClassErr.bind(this))
@@ -447,7 +447,7 @@ export default {
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/schoolList',
+                 url: '/lightspace/schoolList',
                  data: param
              }).then(this.handleGetSchoolSucc.bind(this))
                .catch(this.handleGetSchoolErr.bind(this))
@@ -478,7 +478,7 @@ export default {
         param.append('id', id)
         axios({
             method: 'post',
-            url: '/deleteClasses',
+            url: '/lightspace/deleteClasses',
             data: param
         }).then(this.handleDeleteClassSucc.bind(this))
         .catch(this.handleDeleteClassErr.bind(this))

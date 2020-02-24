@@ -58,7 +58,7 @@ export default {
                param.append('password', this.loginForm.password);
                 axios({
                     method: 'post',
-                    url: '/login',
+                    url: '/lightspace/login',
                     data: param
                 }).then(this.handleLoginSucc.bind(this))
                 .catch(this.handleLoginErr.bind(this))

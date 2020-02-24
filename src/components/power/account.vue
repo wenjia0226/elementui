@@ -160,7 +160,7 @@ import axios from 'axios'
             param.append('name', this.query);
             axios({
                 method: "post",
-                url: '/queryUser',
+                url: '/lightspace/queryUser',
                 data: param
             }).then(this.handleQuerySucc.bind(this))
             .catch(this.handleQueryErr.bind(this))
@@ -203,7 +203,7 @@ import axios from 'axios'
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/userList',
+                 url: '/lightspace/userList',
                  data: param
              }).then(this.handleGetUserListSucc.bind(this))
              .catch(this.handleGetUserListErr.bind(this))
@@ -225,7 +225,7 @@ import axios from 'axios'
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/roleList',
+                 url: '/lightspace/roleList',
                  data: param
              }).then(this.handleGetRoleListSucc.bind(this))
              .catch(this.handleGetRoleListErr.bind(this))
@@ -258,7 +258,7 @@ import axios from 'axios'
                 param.append('wechatName', this.addAccountForm.wechatName);
                 axios({
                     method: 'post',
-                    url: '/addUser',
+                    url: '/lightspace/addUser',
                     data: param
                 }).then(this.handleAddUserSucc.bind(this))
                 .catch(this.handleAddUserErr.bind(this))
@@ -292,7 +292,7 @@ import axios from 'axios'
             param.append('token', this.token);
             axios({
                 method: 'post',
-                url: '/cascade1',
+                url: '/lightspace/cascade1',
                 data: param
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
@@ -343,7 +343,7 @@ import axios from 'axios'
             param.append('id', id);
             axios({
                 method: 'post',
-                url: '/deleteUser',
+                url: '/lightspace/deleteUser',
                 data: param
             }).then(this.handleDeleteUserSucc.bind(this))
             .catch(this.handleDeleteUserErr.bind(this))

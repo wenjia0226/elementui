@@ -500,7 +500,7 @@ export default {
             param.append('token', this.token);
             axios({
                 method: 'post',
-                url: '/cascade1',
+                url: '/lightspace/cascade1',
                 data: param
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
@@ -538,7 +538,7 @@ export default {
                 axios({
                     method: 'post',
                     data: param,
-                    url: '/sortList'
+                    url: '/lightspace/sortList'
                 }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
             }
         },
@@ -561,7 +561,7 @@ export default {
             param.append('token',this.token)
             axios({
                 method: 'post',
-                url: '/studentRecord',
+                url: '/lightspace/studentRecord',
                 data: param
             }).then(this.handleEditRecordSucc.bind(this))
             .catch(this.handleEditRecordErr.bind(this))

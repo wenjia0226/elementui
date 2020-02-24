@@ -125,7 +125,7 @@ export default {
        param.append('token', this.token);
        axios({
          method:'post',
-         url: '/schoolList',
+         url: '/lightspace/schoolList',
          data: param
        }).then(this.handleGetSchoolLisSucc.bind(this)).catch(this.handleGetSchoolListErr.bind(this))
      },
@@ -152,7 +152,7 @@ export default {
       param.append('schoolId', this.schoolId);
       axios({
         method: 'post',
-        url:'/schoolStatistics',
+        url:'/lightspace/schoolStatistics',
         data: param
       }).then(this.getSchoolAnalysisSucc.bind(this)).catch(this.handleGetSchoolAnalysisErr.bind(this))
     },

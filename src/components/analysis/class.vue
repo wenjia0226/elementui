@@ -117,7 +117,7 @@ export default {
       param.append('classId', this.classId);
       axios({
         method: 'post',
-        url:'/classStatistics',
+        url:'/lightspace/classStatistics',
         data: param
       }).then(this.getClassAnalysisSucc.bind(this)).catch(this.handleGetClassAnalysisErr.bind(this))
     },
@@ -158,7 +158,7 @@ export default {
         param.append('token', this.token);
         axios({
             method: 'post',
-            url: '/cascade1',
+            url: '/lightspace/cascade1',
             data: param
         }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
     },

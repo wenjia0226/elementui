@@ -11,13 +11,10 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/': {
+      '/lightspace': {
         // target: 'localhost: 8080/',
-         target: 'http://47.104.222.22:8080/lightspace',
+         target: 'http://47.104.222.22:8080/',
         changeOrigin: true,  //允许跨域
-        // pathRewrite: {
-        //   '^/': '/'
-        // }
       }
     },
     // Various Dev Server settings

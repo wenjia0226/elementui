@@ -37,7 +37,7 @@ export default {
              param.append('token', this.token);
              axios({
                  method: 'post',
-                 url: '/rightList',
+                 url: '/lightspace/rightList',
                  data: param
              }).then(this.handleGetRightSucc.bind(this))
                .catch(this.handleGetRightErr.bind(this))
@@ -45,7 +45,7 @@ export default {
     handleGetRightSucc(res) {
       if(res.data.status === 10204) {
           this.$message.error(res.data.msg);
-          this.$router.push('/login');
+          this.$router.push('/lightspace/login');
       } else if(res.data.status == 200) {
           this.rgihtList = res.data.data;
       }
