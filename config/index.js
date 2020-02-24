@@ -13,10 +13,10 @@ module.exports = {
     proxyTable: {
       '/': {
         // target: 'localhost: 8080/',
-         target: 'http://192.168.2.201:8080/',
+         target: 'http://192.168.2.201:8080/lightspace',
         changeOrigin: true,  //允许跨域
         // pathRewrite: {
-        //   '^/api': '/'
+        //   '^/': '/'
         // }
       }
     },
