@@ -17,6 +17,9 @@
                  <el-col :span="6">
                         <el-button type="primary" @click="addStudent">添加学生</el-button>
                  </el-col>
+                 <el-col :span="6" :offset="1">
+                        <el-button type="primary" @click="addStudent">批量导入</el-button>
+                 </el-col>
              </el-row>
               <!-- 学生列表 -->
             <el-table :data="studentList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%" v-show="!this.searchStudentList.length">
@@ -296,7 +299,7 @@ export default {
         handleQuerySucc(res) {
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
-              this.$router.push('/login');
+              this.$router.push('/lightspace/login');
           } else if(res.data.status == 10211) {
               this.$message.error(res.data.msg);
               this.getStudentList();
@@ -366,7 +369,7 @@ export default {
         handleGetOptionSucc (res) {
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
-              this.$router.push('/login');
+              this.$router.push('/lightspace/login');
           } else if(res.data.status == 200) {
              this.options =  res.data.data;
           }
@@ -402,7 +405,7 @@ export default {
         handleGetStudentList(res) {
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
-                this.$router.push('/login');
+                this.$router.push('/lightspace/login');
             } else if(res.data.status == 200) {
                this.studentList = res.data.data;
                this.studentList.forEach((value, index) => {
@@ -437,7 +440,7 @@ export default {
         handleEditStuSucc(res) {
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
-                this.$router.push('/login');
+                this.$router.push('/lightspace/login');
             } else if(res.data.status == 200) {
               this.editStudentForm = res.data.data;
               this.editStudentVisible = true;
@@ -481,7 +484,7 @@ export default {
         handldEditStuSucc(res) {
            if(res.data.status === 10204) {
                this.$message.error(res.data.msg);
-               this.$router.push('/login');
+               this.$router.push('/lightspace/login');
            } else if(res.data.status == 200) {
              this.studentList = res.data.data;
              //隐藏编辑框
@@ -516,7 +519,7 @@ export default {
         handleDeleteStuSucc(res) {
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
-                this.$router.push('/login');
+                this.$router.push('/lightspace/login');
             } else if(res.data.status == 200) {
               this.studentList = res.data.data;
               const totalPage = Math.ceil(this.studentList.length / this.pageSize) // 总页数

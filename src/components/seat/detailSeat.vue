@@ -398,7 +398,7 @@ export default {
 		    param.append('token',this.token)
 		    axios({
 		        method: 'post',
-		        url: '/studentRecord',
+		        url: '/lightspace/studentRecord',
 		        data: param
 		    }).then(this.handleEditRecordSucc.bind(this))
 		    .catch(this.handleEditRecordErr.bind(this))
@@ -425,11 +425,11 @@ export default {
         handleGetSeatTableSucc(res) {
            if(res.data.status === 10204) {
                this.$message.error(res.data.msg);
-               this.$router.push('/login');
+               this.$router.push('/lightspace/login');
            } else if(res.data.status == 200) {
              this.studentList = res.data.data;
              this.type = window.sessionStorage.getItem('tabletype');
-           }    
+           }
         },
         hanadleGetSeatTableErr(err) {
             console.log(err)
