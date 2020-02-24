@@ -14,17 +14,17 @@
                <el-button type="primary" @click="showClass">查看班级概况</el-button>
             </el-col>
         </el-row>
-        <el-row style="margin: 10px 0">
+        <el-row style="margin: 20px 0">
            <el-col :span="12">
-             <div ref="left" style="width: 600px;height:400px;;"></div>
+             <div ref="left" style="width: 600px;height:400px;margin: 0 auto;"></div>
            </el-col>
            <el-col :span="12">
-             <div ref="right" style="width: 600px;height:400px;;"></div>
+             <div ref="right" style="width: 600px;height:400px;margin: 0 auto;"></div>
            </el-col>
         </el-row>
-        <el-row>
-          <el-col :span = "12" :offset="6">
-             <div ref="double" style="width: 600px;height:400px;"></div>
+        <el-row style="margin: 40px 0">
+          <el-col :span = "12" :offset="6" >
+             <div ref="double" style="width: 600px;height:400px;margin: 0 auto"></div>
           </el-col>
         </el-row>
         </el-card>
@@ -63,7 +63,7 @@ export default {
     },
 
   methods: {
-    drawLine(id,lengend, option) {
+    drawLine(id,lengend, option, text) {
       if(id == 'left') {
          var myChart = echarts.init(this.$refs.left);
       }else if(id == 'right') {
@@ -73,8 +73,7 @@ export default {
       }
        this.option = {
           title: {
-              text: '班级概况',
-              subtext: '',
+              text: text,
               left: 'center'
           },
           tooltip: {
@@ -92,6 +91,7 @@ export default {
                   type: 'pie',
                   radius: '80%',
                   center: ['50%', '60%'],
+                  label: {formatter: '{b}:{c}: ({d}%)'},
                   data: option,
                   emphasis: {
                       itemStyle: {
@@ -99,6 +99,12 @@ export default {
                           shadowOffsetX: 0,
                           shadowColor: 'rgba(0, 0, 0, 0.5)'
                       }
+                  },
+                  itemStyle: {
+                    normal: {
+                      borderWidth:4,	//边框的宽度
+                      borderColor:'#fff',//边框的颜色
+                    }
                   }
               }
           ]
@@ -126,7 +132,7 @@ export default {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
       } else if(res.data.status == 200) {
-         this.menuList = res.data.data;  
+         this.menuList = res.data.data;
       res.data.data ? res = res.data.data: '';
       this.leftOption = res[0];
       this.rightOption = res[1];
@@ -141,9 +147,9 @@ export default {
         this.doubleLegend.push(item.name);
       })
     }
-        this.drawLine('left', this.leftLegend, this.leftOption);
-        this.drawLine('right', this.rightLegend, this.rightOption);
-        this.drawLine('double', this.doubleLegend,this.doubleOption);
+        this.drawLine('left', this.leftLegend, this.leftOption, '左眼概况');
+        this.drawLine('right', this.rightLegend, this.rightOption, '右眼概况');
+        this.drawLine('double', this.doubleLegend,this.doubleOption, '双眼概况');
 
 
 

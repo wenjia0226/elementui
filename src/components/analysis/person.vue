@@ -317,7 +317,7 @@ export default {
 		handleGetOptionSucc (res) {
 		    if(res.data.status === 10204) {
 		        this.$message.error(res.data.msg);
-		        this.$router.push('/login');
+		        this.$router.push('/lightspace/login');
 		    } else if(res.data.status == 200) {
 		       this.options =  res.data.data;
 		    }
@@ -339,14 +339,13 @@ export default {
         }else if(!this.time) {
           this.$message.error('请选择查看时间范围')
         } else{
-          console.log(this.time)
           param.append('token', this.token);
           param.append('time', this.time * 86400 )
           param.append('studentId', 15);
           axios({
             method: 'post',
             data: param,
-            url: '/lightspace/lightspacestudentRecords'
+            url: '/lightspace/studentRecords'
           }).then(this.handleGetStudentRecordSucc.bind(this)).catch(this.handleGetStudentRecordErr.bind(this))
         }
     },

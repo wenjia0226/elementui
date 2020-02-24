@@ -22,17 +22,17 @@
                <el-button type="primary" @click="showSchool">查看校园概况</el-button>
             </el-col>
         </el-row>
-        <el-row style="margin: 30px 0">
+        <el-row style="margin: 30px 0" >
            <el-col :span="12">
-             <div ref="left" style="width: 600px;height:400px;;"></div>
+             <div ref="left" style="width: 600px;height:400px; margin: 0 auto"></div>
            </el-col>
            <el-col :span="12">
-             <div ref="right" style="width: 600px;height:400px;;"></div>
+             <div ref="right" style="width: 600px;height:400px; margin: 0 auto"></div>
            </el-col>
         </el-row>
-        <el-row style="margin: 20px 0">
-          <el-col :span = "12" :offset="6">
-             <div ref="double" style="width: 600px;height:400px;"></div>
+        <el-row type="flex" style="margin: 40px 0">
+          <el-col :span = "12" :offset="6" >
+             <div ref="double" style="width: 600px;height:400px;margin: 0 auto"></div>
           </el-col>
         </el-row>
 
@@ -132,7 +132,7 @@ export default {
      handleGetSchoolLisSucc(res) {
        if(res.data.status === 10204) {
            this.$message.error(res.data.msg);
-           this.$router.push('/login');
+           this.$router.push('/lightspace/login');
        } else if(res.data.status == 200) {
           this.schooloptions = res.data.data;
        }
@@ -159,7 +159,7 @@ export default {
     getSchoolAnalysisSucc(res) {
       if(res.data.status === 10204) {
           this.$message.error(res.data.msg);
-          this.$router.push('/login');
+          this.$router.push('/lightspace/login');
       } else if(res.data.status == 200) {
           res.data.data ? res = res.data.data: '';
           console.log(res)
