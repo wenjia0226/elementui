@@ -83,6 +83,7 @@ export default {
           legend: {
               orient: 'vertical',
               left: 'left',
+              selectedMode:false,
               data: lengend
               },
           series: [

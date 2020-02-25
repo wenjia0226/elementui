@@ -223,6 +223,7 @@ export default {
                     orient: 'vertical',
                     data: ['左眼眼轴长度', '右眼眼轴长度'],
                     left: 'left',
+                    selectedMode:false,
                     y: 'top',
                     top:'5%',
                 },
@@ -275,7 +276,7 @@ export default {
     getStudentListSucc(res) {
       if(res.data.status === 10204) {
           this.$message.error(res.data.msg);
-          this.$router.push('/lightspace/login');
+          this.$router.push('/login');
       } else if(res.data.status == 200) {
         res ? res = res.data.data: '';
         for(let i  =0; i <res.length; i++) {
@@ -317,7 +318,7 @@ export default {
 		handleGetOptionSucc (res) {
 		    if(res.data.status === 10204) {
 		        this.$message.error(res.data.msg);
-		        this.$router.push('/lightspace/login');
+		        this.$router.push('/login');
 		    } else if(res.data.status == 200) {
 		       this.options =  res.data.data;
 		    }

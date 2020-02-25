@@ -83,6 +83,7 @@ export default {
           legend: {
               orient: 'vertical',
               left: 'right',
+              selectedMode:false,
               data: lengend
               },
           series: [
@@ -132,7 +133,7 @@ export default {
      handleGetSchoolLisSucc(res) {
        if(res.data.status === 10204) {
            this.$message.error(res.data.msg);
-           this.$router.push('/lightspace/login');
+           this.$router.push('/login');
        } else if(res.data.status == 200) {
           this.schooloptions = res.data.data;
        }
@@ -159,7 +160,7 @@ export default {
     getSchoolAnalysisSucc(res) {
       if(res.data.status === 10204) {
           this.$message.error(res.data.msg);
-          this.$router.push('/lightspace/login');
+          this.$router.push('/login');
       } else if(res.data.status == 200) {
           res.data.data ? res = res.data.data: '';
           console.log(res)

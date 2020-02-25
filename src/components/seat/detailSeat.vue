@@ -425,7 +425,7 @@ export default {
         handleGetSeatTableSucc(res) {
            if(res.data.status === 10204) {
                this.$message.error(res.data.msg);
-               this.$router.push('/lightspace/login');
+               this.$router.push('/login');
            } else if(res.data.status == 200) {
              this.studentList = res.data.data;
              this.type = window.sessionStorage.getItem('tabletype');

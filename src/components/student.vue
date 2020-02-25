@@ -17,9 +17,10 @@
                  <el-col :span="6">
                         <el-button type="primary" @click="addStudent">添加学生</el-button>
                  </el-col>
-                 <el-col :span="6" :offset="1">
-                        <el-button type="primary" @click="addStudent">批量导入</el-button>
+                 <el-col :span="3" >
+                        <el-button type="primary" @click="showDialog" >批量导入</el-button>
                  </el-col>
+                 <el-col :span="3"><el-button @click="DownLoadTemplate" type="primary" size="small">下载模板</el-button></el-col>
              </el-row>
               <!-- 学生列表 -->
             <el-table :data="studentList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%" v-show="!this.searchStudentList.length">
@@ -129,49 +130,69 @@
                     </span>
             </el-dialog>
             <!-- 编辑学生 -->
-             <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%" >
-                <el-form :model="editStudentForm" :rules="editStudentRules" ref="studentEditFormRef" label-width="120px">
-                    <el-form-item label="所属学校/班级" prop="name" width="100%">
-                        <el-cascader ref="myCascader" :options="options" v-model="editStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
-                    </el-form-item>
-                    <el-form-item label="学生姓名" prop="name">
-                        <el-input v-model="editStudentForm.name" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="性别" prop="gender">
-                        <el-radio v-model="editStudentForm.gender" size="medium" border :label="0">男</el-radio>
-                        <el-radio v-model="editStudentForm.gender" size="medium" border :label="1">女</el-radio>
-                   </el-form-item>
-                   <el-form-item label="年龄" prop="age">
-                        <el-input v-model.number="editStudentForm.age" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="身高(米)" prop="height">
-                        <el-input v-model="editStudentForm.height" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="体重(KG)" prop="weight">
-                        <el-input v-model="editStudentForm.weight" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="椅子高度(米)" prop="chairHeight">
-                        <el-input v-model="editStudentForm.chairHeight" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="坐姿高度(米)" prop="sittingHeight">
-                        <el-input v-model="editStudentForm.sittingHeight" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="是否矫正" prop="correct">
-                            <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
-                            <el-radio v-model="editStudentForm.correct" size="medium" border :label="0">未矫正</el-radio>
-                   </el-form-item>
-                   <el-form-item label="性格">
-                        <el-input v-model="editStudentForm.nature" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="备注" prop="description">
-                        <el-input v-model="editStudentForm.description" clearable></el-input>
-                   </el-form-item>
-                </el-form>
-                    <span slot="footer" class="dialog-footer">
-                      <!--  <el-button @click="reset">取 消</el-button> -->
-                        <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
-                    </span>
+            <el-dialog title="编辑学生" :visible.sync="editStudentVisible" width="50%" >
+              <el-form :model="editStudentForm" :rules="editStudentRules" ref="studentEditFormRef" label-width="120px">
+                  <el-form-item label="所属学校/班级" prop="name" width="100%">
+                      <el-cascader ref="myCascader" :options="options" v-model="editStudentForm.stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                  </el-form-item>
+                  <el-form-item label="学生姓名" prop="name">
+                      <el-input v-model="editStudentForm.name" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="性别" prop="gender">
+                      <el-radio v-model="editStudentForm.gender" size="medium" border :label="0">男</el-radio>
+                      <el-radio v-model="editStudentForm.gender" size="medium" border :label="1">女</el-radio>
+                 </el-form-item>
+                 <el-form-item label="年龄" prop="age">
+                      <el-input v-model.number="editStudentForm.age" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="身高(米)" prop="height">
+                      <el-input v-model="editStudentForm.height" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="体重(KG)" prop="weight">
+                      <el-input v-model="editStudentForm.weight" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="椅子高度(米)" prop="chairHeight">
+                      <el-input v-model="editStudentForm.chairHeight" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="坐姿高度(米)" prop="sittingHeight">
+                      <el-input v-model="editStudentForm.sittingHeight" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="是否矫正" prop="correct">
+                          <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
+                          <el-radio v-model="editStudentForm.correct" size="medium" border :label="0">未矫正</el-radio>
+                 </el-form-item>
+                 <el-form-item label="性格">
+                      <el-input v-model="editStudentForm.nature" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="备注" prop="description">
+                      <el-input v-model="editStudentForm.description" clearable></el-input>
+                 </el-form-item>
+              </el-form>
+              <span slot="footer" class="dialog-footer">
+                <!--  <el-button @click="reset">取 消</el-button> -->
+                  <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
+              </span>
             </el-dialog>
+        <el-dialog :visible.sync="showDialog">
+          <el-row>
+            <el-col :span="6"> </el-col>
+            <el-col :span="6">
+              <el-upload
+                class="upload-demo"
+                action="/"
+                :on-success='handlesuccess'
+                multiple
+                :limit="3"
+                :on-exceed="handleExceed"
+                :on-change="handleChange"
+                :file-list="fileList">
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
+            </el-col>
+          </el-row>
+
+        </el-dialog>
+
         </el-card>
      </div>
 </template>
@@ -200,6 +221,7 @@ export default {
             query:"",
             token: '',
             options: [],
+            showDialog: false,
             addStudentVisible: false,
             schoolId: '',
             classId: '',
@@ -209,6 +231,7 @@ export default {
             total:0,
             selectedOptions: [],
             query: '',
+            fileList: [],//此数组中存入所有提交的文档信息
             searchStudentList: [],
             addStudentForm: {
                 "age":'' ,
@@ -270,44 +293,75 @@ export default {
         }
     },
      methods: {
-       //关闭按钮
-         handleClose() {
-          this.addStudentVisible = false;
-          this.$refs.studentFormRef.resetFields();
-          this.addStudentForm.nature = '';
-          this.addStudentForm.description = ''
+       // 下载模板
+       DownLoadTemplate() {
+         let param = new URLSearchParams();
+         param.append('token' , this.token);
+         axios({
+           method:"post",
+           data: param,
+           url:'/lightspace/downloadStudent'
+         }).then(this.handleGetDownLoadSuccss.bind(this)).catch(this.hanadleGetDownLoadErr.bind(this))
+       },
+       handleGetDownLoadSuccss(res) {
+         console.log(res)
+       },
+       hanadleGetDownLoadErr(err) {
+         console.log(err)
+       },
+      handleChange(file, fileList) {
+        console.log(fileList)
+             this.fileList = fileList;
+           },
+     //文件上传
+       handleExceed(files, fileList) {
+             this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+           },
+          handlesuccess(response, file, fileList){
+         //response即为后台返回的全部内容
+          if(response.success === 1){
+            console.log('解析成功')
+          }else{
+             console.log('解析失败')
+            }
          },
+     //关闭按钮
+      handleClose() {
+        this.addStudentVisible = false;
+        this.$refs.studentFormRef.resetFields();
+        this.addStudentForm.nature = '';
+        this.addStudentForm.description = ''
+       },
+      //搜索学生
+      queryStudent() {
+          let param = new URLSearchParams();
+          if(this.query == "") {
+            this.getStudentList();
+            this.searchStudentList = [];
+            return;
+          }
+          param.append('token', this.token);
+          param.append('name', this.query);
+          axios({
+              method: "post",
+              url: '/lightspace/queryStudent',
+              data: param,
 
-
-        //搜索学生
-        queryStudent() {
-            let param = new URLSearchParams();
-            if(this.query == "") {
-              this.getStudentList();
-              this.searchStudentList = [];
-              return;
-            }
-            param.append('token', this.token);
-            param.append('name', this.query);
-            axios({
-                method: "post",
-                url: '/lightspace/queryStudent',
-                data: param
-            }).then(this.handleQuerySucc.bind(this))
-            .catch(this.handleQueryErr.bind(this))
-        },
-        handleQuerySucc(res) {
-          if(res.data.status === 10204) {
-              this.$message.error(res.data.msg);
-              this.$router.push('/lightspace/login');
-          } else if(res.data.status == 10211) {
-              this.$message.error(res.data.msg);
-              this.getStudentList();
-              this.searchStudentList = [];
-           }else if(res.data.status == 200) {
-              this.$message.success('搜索成功');
-              this.searchStudentList = res.data.data;
-            }
+          }).then(this.handleQuerySucc.bind(this))
+          .catch(this.handleQueryErr.bind(this))
+      },
+      handleQuerySucc(res) {
+        if(res.data.status === 10204) {
+            this.$message.error(res.data.msg);
+            this.$router.push('/login');
+        } else if(res.data.status == 10211) {
+            this.$message.error(res.data.msg);
+            this.getStudentList();
+            this.searchStudentList = [];
+         }else if(res.data.status == 200) {
+            this.$message.success('搜索成功');
+            this.searchStudentList = res.data.data;
+          }
         },
         handleQueryErr(err) {
             console.log(err)
@@ -318,29 +372,29 @@ export default {
         },
         //添加学生
         sumitAddStudent() {
-            this.$refs.studentFormRef.validate((valid) => {
-                if(!valid) return this.$message.error('验证失败');
-                let param = new URLSearchParams();
-                param.append('token', this.token);
-                param.append('schoolId', this.schoolId);
-                param.append('classId', this.classId);
-                param.append('chairHeight', this.addStudentForm.chairHeight)
-                param.append('sittingHeight',this.addStudentForm.sittingHeight)
-                param.append('correct', this.addStudentForm.correct)
-                param.append('description', this.addStudentForm.description)
-                param.append('gender', this.addStudentForm.gender)
-                param.append('height', this.addStudentForm.height)
-                param.append('weight', this.addStudentForm.weight)
-                param.append('name', this.addStudentForm.name)
-                param.append('nature', this.addStudentForm.nature)
-                param.append('age', this.addStudentForm.age)
-                // param.append('stu_cat', this.addStudentForm.stu_cat)
-                axios({
-                    method: 'post',
-                    url: '/lightspace/addStudent',
-                    data: param
-                }).then(this.handleAddStuSucc.bind(this)).catch(this.handleAddStuErr.bind(this))
-                })
+          this.$refs.studentFormRef.validate((valid) => {
+            if(!valid) return this.$message.error('验证失败');
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('schoolId', this.schoolId);
+            param.append('classId', this.classId);
+            param.append('chairHeight', this.addStudentForm.chairHeight)
+            param.append('sittingHeight',this.addStudentForm.sittingHeight)
+            param.append('correct', this.addStudentForm.correct)
+            param.append('description', this.addStudentForm.description)
+            param.append('gender', this.addStudentForm.gender)
+            param.append('height', this.addStudentForm.height)
+            param.append('weight', this.addStudentForm.weight)
+            param.append('name', this.addStudentForm.name)
+            param.append('nature', this.addStudentForm.nature)
+            param.append('age', this.addStudentForm.age)
+            // param.append('stu_cat', this.addStudentForm.stu_cat)
+            axios({
+                method: 'post',
+                url: '/lightspace/addStudent',
+                data: param
+            }).then(this.handleAddStuSucc.bind(this)).catch(this.handleAddStuErr.bind(this))
+            })
         },
         handleAddStuSucc(res) {
            if(res.data.status === 10204) {
@@ -369,7 +423,7 @@ export default {
         handleGetOptionSucc (res) {
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
-              this.$router.push('/lightspace/login');
+              this.$router.push('/login');
           } else if(res.data.status == 200) {
              this.options =  res.data.data;
           }
@@ -405,7 +459,7 @@ export default {
         handleGetStudentList(res) {
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
-                this.$router.push('/lightspace/login');
+                this.$router.push('/login');
             } else if(res.data.status == 200) {
                this.studentList = res.data.data;
                this.studentList.forEach((value, index) => {
@@ -440,7 +494,7 @@ export default {
         handleEditStuSucc(res) {
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
-                this.$router.push('/lightspace/login');
+                this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.editStudentForm = res.data.data;
               this.editStudentVisible = true;
@@ -484,7 +538,7 @@ export default {
         handldEditStuSucc(res) {
            if(res.data.status === 10204) {
                this.$message.error(res.data.msg);
-               this.$router.push('/lightspace/login');
+               this.$router.push('/login');
            } else if(res.data.status == 200) {
              this.studentList = res.data.data;
              //隐藏编辑框
@@ -519,7 +573,7 @@ export default {
         handleDeleteStuSucc(res) {
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
-                this.$router.push('/lightspace/login');
+                this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.studentList = res.data.data;
               const totalPage = Math.ceil(this.studentList.length / this.pageSize) // 总页数
