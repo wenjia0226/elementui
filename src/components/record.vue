@@ -17,6 +17,9 @@
                 <el-col :span="6">
                     <el-button type="primary" @click="addRecordDialogVisible = true">添加检测记录</el-button>
                 </el-col>
+                <el-col :span="3" >
+                       <el-button type="primary" @click="handdlePi" >批量导入</el-button>
+                </el-col>
             </el-row>
 
             <!-- 记录列表 -->
@@ -180,6 +183,32 @@
                     <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog :visible.sync="showDialog"  width="30%" center >
+              <el-row>
+                <el-col :span="12">
+                  <a class="download" href="http://47.104.222.22:8080/download/检查数据导入模板.xlsx">下载模板</a>
+                  <!-- <el-button @click="DownLoadTemplate" type="primary" size="small">下载模板</el-button> -->
+                </el-col>
+                <el-col :span="12">
+                  <el-upload
+                    :data="pdfData"
+                    class="upload-demo"
+                    ref="upload"
+                    action="/lightspace/studentExcel"
+                    :before-upload="beforeUpload"
+                    accept=".xlsx"
+                    :limit="1"
+                    :on-success="handleSuccess"
+                    :file-list="fileList"
+                    :on-exceed="handleExceed"
+                    :auto-upload="false">
+                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                    <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传.xlsx文件，且不超过500kb</div>
+                  </el-upload>
+                </el-col>
+              </el-row>
+            </el-dialog>
         </el-card>
     </div>
 
@@ -206,6 +235,13 @@ export default {
             }
         };
         return {
+          fileList: [],//此数组中存入所有提交的文档信息
+
+          pdfData: {
+              file: '',
+              token: ''
+          },
+          showDialog: true,
           schoolList: [],
           schoolName: '',
           secondClass: [],
@@ -287,6 +323,30 @@ export default {
         }
     },
     methods: {
+      handleExceed(files, fileList) {
+         this.$message.warning(`每次只能选择1个文件`);
+      },
+      beforeUpload(file) {
+        this.pdfData.file = file;
+        this.pdfData.token = this.token;
+       },
+       submitUpload() {
+         this.$refs.upload.submit();
+         this.$message.success('上传成功');
+       },
+       handleRemove(file, fileList) {
+         console.log(file, fileList);
+       },
+       handlePreview(file) {
+         console.log(file);
+       },
+       handleSuccess(res, file, fileList) {
+        this.fileList = [];
+         console.log(res)
+       },
+      handdlePi() {
+        this.showDialog = true;
+      },
       //获取级联选择器中的数据
       getSecondClass() {
           let param = new URLSearchParams();

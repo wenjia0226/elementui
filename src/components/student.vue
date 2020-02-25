@@ -18,9 +18,9 @@
                         <el-button type="primary" @click="addStudent">添加学生</el-button>
                  </el-col>
                  <el-col :span="3" >
-                        <el-button type="primary" @click="showDialog" >批量导入</el-button>
+                        <el-button type="primary" @click="handdlePi" >批量导入</el-button>
                  </el-col>
-                 <el-col :span="3"><el-button @click="DownLoadTemplate" type="primary" size="small">下载模板</el-button></el-col>
+
              </el-row>
               <!-- 学生列表 -->
             <el-table :data="studentList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%" v-show="!this.searchStudentList.length">
@@ -173,26 +173,32 @@
                   <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
               </span>
             </el-dialog>
-        <el-dialog :visible.sync="showDialog">
+        <el-dialog :visible.sync="showDialog"  width="30%" center >
           <el-row>
-            <el-col :span="6"> </el-col>
-            <el-col :span="6">
+            <el-col :span="12">
+              <a class="download" href="http://47.104.222.22:8080/download/学生导入模板.xlsx">下载模板</a>
+              <!-- <el-button @click="DownLoadTemplate" type="primary" size="small">下载模板</el-button> -->
+            </el-col>
+            <el-col :span="12">
               <el-upload
+                :data="pdfData"
                 class="upload-demo"
-                action="/"
-                :on-success='handlesuccess'
-                multiple
-                :limit="3"
+                ref="upload"
+                action="/lightspace/studentExcel"
+                :before-upload="beforeUpload"
+                accept=".xlsx"
+                :limit="1"
+                :on-success="handleSuccess"
+                :file-list="fileList"
                 :on-exceed="handleExceed"
-                :on-change="handleChange"
-                :file-list="fileList">
-                <el-button size="small" type="primary">点击上传</el-button>
+                :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传.xlsx文件，且不超过500kb</div>
               </el-upload>
             </el-col>
           </el-row>
-
         </el-dialog>
-
         </el-card>
      </div>
 </template>
@@ -221,7 +227,7 @@ export default {
             query:"",
             token: '',
             options: [],
-            showDialog: false,
+            showDialog: true,
             addStudentVisible: false,
             schoolId: '',
             classId: '',
@@ -232,6 +238,11 @@ export default {
             selectedOptions: [],
             query: '',
             fileList: [],//此数组中存入所有提交的文档信息
+
+            pdfData: {
+                file: '',
+                token: ''
+            },
             searchStudentList: [],
             addStudentForm: {
                 "age":'' ,
@@ -244,7 +255,6 @@ export default {
                 "weight": '',
                 "name":"",
                 "nature":""
-
             },
             addStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -293,38 +303,59 @@ export default {
         }
     },
      methods: {
-       // 下载模板
-       DownLoadTemplate() {
-         let param = new URLSearchParams();
-         param.append('token' , this.token);
-         axios({
-           method:"post",
-           data: param,
-           url:'/lightspace/downloadStudent'
-         }).then(this.handleGetDownLoadSuccss.bind(this)).catch(this.hanadleGetDownLoadErr.bind(this))
+       handleExceed(files, fileList) {
+          this.$message.warning(`每次只能选择1个文件`);
        },
+       beforeUpload(file) {
+         this.pdfData.file = file;
+         this.pdfData.token = this.token;
+        },
+        submitUpload() {
+          this.$refs.upload.submit();
+          this.$message.success('上传成功');
+        },
+        handleRemove(file, fileList) {
+          console.log(file, fileList);
+        },
+        handlePreview(file) {
+          console.log(file);
+        },
+        handleSuccess(res, file, fileList) {
+         this.fileList = [];
+          console.log(res)
+        },
+       handdlePi() {
+         this.showDialog = true;
+       },
+       // 下载模板  post 方式，现在没用
+     DownLoadTemplate() {
+       let param = new URLSearchParams();
+       param.append('token' , this.token);
+       axios({
+         method:"post",
+         data: param,
+         url:'/lightspace/downloadStudent',
+         responseType: "blob"
+       }).then(this.handleGetDownLoadSuccss.bind(this)).catch(this.hanadleGetDownLoadErr.bind(this))
+     },
        handleGetDownLoadSuccss(res) {
-         console.log(res)
+         this.download(res.data)
        },
+       // 下载文件
+      download (data) {
+         if (!data) return;
+         let url = window.URL.createObjectURL(new Blob([data]))
+         let link = document.createElement('a')
+         link.style.display = 'none'
+         link.href = url
+         link.setAttribute('download', '数据检查导入模板.xlsx')
+         document.body.appendChild(link);
+         link.click()
+        },
        hanadleGetDownLoadErr(err) {
          console.log(err)
        },
-      handleChange(file, fileList) {
-        console.log(fileList)
-             this.fileList = fileList;
-           },
-     //文件上传
-       handleExceed(files, fileList) {
-             this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-           },
-          handlesuccess(response, file, fileList){
-         //response即为后台返回的全部内容
-          if(response.success === 1){
-            console.log('解析成功')
-          }else{
-             console.log('解析失败')
-            }
-         },
+
      //关闭按钮
       handleClose() {
         this.addStudentVisible = false;
@@ -588,5 +619,16 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+.download {
+  display: block;
+  width: 50%;
+  height: 30px;
+  background: red;
+  text-decoration: none;
+  line-height: 30px;
+  text-align: center;
+  background: #66b1ff;
+  color: #fff;
+  border-radius: 10px;
+}
 </style>
