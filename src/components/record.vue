@@ -658,5 +658,16 @@ export default {
 
 </script>
 <style lang="less" scoped>
-
+.download {
+  display: block;
+  width: 50%;
+  height: 30px;
+  background: red;
+  text-decoration: none;
+  line-height: 30px;
+  text-align: center;
+  background: #66b1ff;
+  color: #fff;
+  border-radius: 10px;
+}
 </style>
