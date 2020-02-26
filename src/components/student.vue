@@ -586,7 +586,7 @@ export default {
             param.append('weight', this.editStudentForm.weight)
             param.append('name', this.editStudentForm.name)
             param.append('nature', this.editStudentForm.nature)
-            param.append('parentPhone', this.editStudentForm.parentPhone)
+            param.append('parentPhone', this.editStudentForm.parentPhone )
             param.append('id', this.id)
             axios({
                 method: 'post',
