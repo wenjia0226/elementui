@@ -22,6 +22,11 @@
                <el-button type="primary" @click="showSchool">查看校园概况</el-button>
             </el-col>
         </el-row>
+        <el-row style="margin: 30px 0;padding: 10px;font-size: 30px;border-bottom: 2px solid"v-show="this.totaldoubleLegend.length">
+          <el-col :span="8" class="center">学校总人数：{{schoolTotal}}人</el-col>
+          <el-col :span="8" class="center">实验班人数：{{schoolTest}}人</el-col>
+          <el-col :span="8"  class="center">非实验班人数：{{schoolNormal}}人</el-col>
+        </el-row>
         <!-- 校园 -->
         <el-row >
           <el-col :span="6" :offset="9" style="padding: 20px; fong-weight: bold;font-size: 34px;" v-show="this.totaldoubleLegend.length">校园概况</el-col>
@@ -34,7 +39,7 @@
              <div ref="totalright" style="width: 600px;height:400px; margin: 0 auto"></div>
            </el-col>
         </el-row>
-        <el-row type="flex" style="margin: 40px 0" v-show="this.totaldoubleLegend.length">
+        <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee" v-show="this.totaldoubleLegend.length">
           <el-col :span = "12" :offset="6" >
              <div ref="totaldouble" style="width: 600px;height:400px;margin: 0 auto"></div>
         </el-col>
@@ -51,7 +56,7 @@
              <div ref="testright" style="width: 600px;height:400px; margin: 0 auto"></div>
            </el-col>
         </el-row>
-        <el-row type="flex" style="margin: 40px 0" v-show="this.totaldoubleLegend.length">
+        <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee"  v-show="this.totaldoubleLegend.length">
           <el-col :span = "12" :offset="6" >
              <div ref="testdouble" style="width: 600px;height:400px;margin: 0 auto"></div>
           </el-col>
@@ -68,7 +73,7 @@
              <div ref="normalright" style="width: 600px;height:400px; margin: 0 auto"></div>
            </el-col>
         </el-row>
-        <el-row type="flex" style="margin: 40px 0" v-show="this.totaldoubleLegend.length">
+        <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee"  v-show="this.totaldoubleLegend.length">
           <el-col :span = "12" :offset="6" >
              <div ref="normaldouble" style="width: 600px;height:400px;margin: 0 auto"></div>
           </el-col>
@@ -108,6 +113,9 @@ export default {
             totalleftLegend: [],
             totalrightLegend: [],
             totaldoubleLegend: [],
+            schoolTotal: '',
+            schoolTest: '',
+            schoolNormal: ''
         }
     },
 
@@ -227,6 +235,9 @@ export default {
       } else if(res.data.status == 200) {
           res.data.data ? res = res.data.data: '';
           console.log(res)
+          this.schoolTotal = res.schoolTotal;
+          this.schoolTest = res.schoolTest;
+          this.schoolNormal = res.schoolNormal;
           let normal = res.normalData;
           let test = res.testData;
           let total = res.totalData;
@@ -287,5 +298,7 @@ export default {
 }
 </script>
 <style  scoped>
-
+.center{
+  text-align: center;
+}
 </style>

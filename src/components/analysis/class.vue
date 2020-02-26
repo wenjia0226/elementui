@@ -14,6 +14,11 @@
                <el-button type="primary" @click="showClass">查看班级概况</el-button>
             </el-col>
         </el-row>
+        <el-row style="margin: 30px 0;padding: 10px;font-size: 30px;border-bottom: 2px solid #eee" v-show="this.totalStudent">
+          <el-col :span="8" class="center">班级总人数：{{totalStudent}}人</el-col>
+          <el-col :span="8" class="center">矫正人数：{{correctedStudent}}人</el-col>
+          <el-col :span="8" class="center">未矫正人数：{{uncorrectedStudent}}人</el-col>
+        </el-row>
         <el-row style="margin: 20px 0">
            <el-col :span="12">
              <div ref="left" style="width: 600px;height:400px;margin: 0 auto;"></div>
@@ -50,6 +55,9 @@ export default {
             leftLegend: [],
             rightLegend: [],
             doubleLegend: [],
+            totalStudent: '',
+            correctedStudent: '',
+            uncorrectedStudent: '',
             stu_cat: [],
             cateProps: {
             label: 'name', //看到的是哪个属性
@@ -135,9 +143,13 @@ export default {
       } else if(res.data.status == 200) {
          this.menuList = res.data.data;
       res.data.data ? res = res.data.data: '';
-      this.leftOption = res[0];
-      this.rightOption = res[1];
-      this.doubleOption = res[2];
+      console.log(res)
+      this.totalStudent = res.totalStudent;
+      this.correctedStudent = res.correctedStudent;
+      this.uncorrectedStudent = res.uncorrectStudent;
+      this.leftOption = res.data[0];
+      this.rightOption = res.data[1];
+      this.doubleOption = res.data[2];
       this.leftOption.forEach((item, index) => {
         this.leftLegend.push(item.name);
       })
@@ -186,5 +198,8 @@ export default {
 <style  scoped style="less">
 .el-cascader{
   width: 100%;
+}
+.center {
+  text-align: center;
 }
 </style>
