@@ -227,7 +227,7 @@ export default {
             query:"",
             token: '',
             options: [],
-            showDialog: true,
+            showDialog: false,
             addStudentVisible: false,
             schoolId: '',
             classId: '',
@@ -322,7 +322,6 @@ export default {
         },
         handleSuccess(res, file, fileList) {
          this.fileList = [];
-          console.log(res)
         },
        handdlePi() {
          this.showDialog = true;

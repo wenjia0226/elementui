@@ -241,7 +241,7 @@ export default {
               file: '',
               token: ''
           },
-          showDialog: true,
+          showDialog: false,
           schoolList: [],
           schoolName: '',
           secondClass: [],
