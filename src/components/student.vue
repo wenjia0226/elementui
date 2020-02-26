@@ -36,6 +36,7 @@
                 <el-table-column label="椅子高度" prop="chairHeight"></el-table-column>
                 <el-table-column label="坐姿高度" prop="sittingHeight"></el-table-column>
                 <el-table-column label="是否矫正" prop="correct"></el-table-column>
+                <el-table-column label="家长手机号" prop="parentPhone"></el-table-column>
                 <el-table-column label="备注" prop="description"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -61,6 +62,7 @@
                 <el-table-column label="性格" prop="nature"></el-table-column>
                 <el-table-column label="椅子高度" prop="chairHeight"></el-table-column>
                 <el-table-column label="坐姿高度" prop="sittingHeight"></el-table-column>
+                <el-table-column label="家长手机号" prop="parentPhone"></el-table-column>
                 <el-table-column label="是否矫正" prop="correct"></el-table-column>
                 <el-table-column label="备注" prop="description"></el-table-column>
                 <el-table-column label="操作">
@@ -117,6 +119,9 @@
                             <el-radio v-model="addStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
                             <el-radio v-model="addStudentForm.correct" size="medium" border :label="0">未校正</el-radio>
                    </el-form-item>
+                   <el-form-item label="家长手机号" prop="parentPhone">
+                        <el-input v-model="addStudentForm.parentPhone" clearable></el-input>
+                   </el-form-item>
                    <el-form-item label="性格">
                         <el-input v-model="addStudentForm.nature" clearable></el-input>
                    </el-form-item>
@@ -160,6 +165,9 @@
                  <el-form-item label="是否矫正" prop="correct">
                           <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
                           <el-radio v-model="editStudentForm.correct" size="medium" border :label="0">未矫正</el-radio>
+                 </el-form-item>
+                 <el-form-item label="家长手机号" prop="parentPhone">
+                      <el-input v-model="editStudentForm.parentPhone" clearable></el-input>
                  </el-form-item>
                  <el-form-item label="性格">
                       <el-input v-model="editStudentForm.nature" clearable></el-input>
@@ -221,6 +229,16 @@ export default {
         } else {
             callback();
         }
+       }
+        var validPhone=(rule, value,callback)=>{
+           let reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+              if (!value){
+                  callback(new Error('请输入电话号码'))
+              }else  if (!reg.test(value)){
+                callback(new Error('请输入正确的11位手机号码'))
+              }else {
+                  callback()
+              }
         };
         return {
             id: '', //学生id
@@ -238,7 +256,6 @@ export default {
             selectedOptions: [],
             query: '',
             fileList: [],//此数组中存入所有提交的文档信息
-
             pdfData: {
                 file: '',
                 token: ''
@@ -254,7 +271,8 @@ export default {
                 "height":'',
                 "weight": '',
                 "name":"",
-                "nature":""
+                "nature":"",
+                "parentPhone": ''
             },
             addStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -266,7 +284,8 @@ export default {
                 height:  { required: true, validator: valiNumberPass1, message: '请输入身高(m)', trigger: 'blur' },
                 weight:  { required: true,validator: valiNumberPass1, message: '请输入体重(kg)', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
-                stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'}
+                stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'},
+                parentPhone: {required: true, message: '请输入手机号', validator:validPhone, trigger: 'blur' }
             },
             cateProps: {
                label: 'name', //看到的是哪个属性
@@ -285,7 +304,8 @@ export default {
                 "weight": '',
                 "name":"",
                 "nature":"",
-                "stu_cat":[]
+                "stu_cat":[],
+                 "parentPhone": ''
             },
             editStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -297,9 +317,9 @@ export default {
                 height:  { required: true,validator: valiNumberPass1, message: '请输入身高', trigger: 'blur' },
                 weight:  { required: true,validator: valiNumberPass1, message: '请输入体重', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
-                stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'}
+                stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'},
+                parentPhone: {required: true, message: '请输入手机号', validator:validPhone, trigger: 'blur' }
             }
-
         }
     },
      methods: {
@@ -425,6 +445,7 @@ export default {
             param.append('name', this.addStudentForm.name)
             param.append('nature', this.addStudentForm.nature)
             param.append('age', this.addStudentForm.age)
+            param.append('parentPhone', this.addStudentForm.parentPhone)
             // param.append('stu_cat', this.addStudentForm.stu_cat)
             axios({
                 method: 'post',
@@ -534,6 +555,7 @@ export default {
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.editStudentForm = res.data.data;
+              console.log(this.editStudentForm)
               this.editStudentVisible = true;
               this.getStudentList();
             }
@@ -564,6 +586,7 @@ export default {
             param.append('weight', this.editStudentForm.weight)
             param.append('name', this.editStudentForm.name)
             param.append('nature', this.editStudentForm.nature)
+            param.append('parentPhone', this.editStudentForm.parentPhone)
             param.append('id', this.id)
             axios({
                 method: 'post',
