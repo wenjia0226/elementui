@@ -143,7 +143,6 @@ export default {
       } else if(res.data.status == 200) {
          this.menuList = res.data.data;
       res.data.data ? res = res.data.data: '';
-      console.log(res)
       this.totalStudent = res.totalStudent;
       this.correctedStudent = res.correctedStudent;
       this.uncorrectedStudent = res.uncorrectStudent;
@@ -160,13 +159,9 @@ export default {
         this.doubleLegend.push(item.name);
       })
     }
-        this.drawLine('left', this.leftLegend, this.leftOption, '左眼概况');
-        this.drawLine('right', this.rightLegend, this.rightOption, '右眼概况');
-        this.drawLine('double', this.doubleLegend,this.doubleOption, '双眼概况');
-
-
-
-
+      this.drawLine('left', this.leftLegend, this.leftOption, '左眼概况');
+      this.drawLine('right', this.rightLegend, this.rightOption, '右眼概况');
+      this.drawLine('double', this.doubleLegend,this.doubleOption, '双眼概况');
     },
     handleGetClassAnalysisErr(err) {
       console.log(err)

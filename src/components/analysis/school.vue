@@ -121,7 +121,6 @@ export default {
 
   methods: {
     drawLine(id,lengend, option, text) {
-      console.log(id, 'normlleft' )
       if(id == 'normalleft') {
          var myChart = echarts.init(this.$refs.normalleft);
       }else if(id == 'normalright') {
@@ -188,7 +187,6 @@ export default {
               }
           ]
       };
-      console.log(myChart, this.option)
       myChart.setOption(this.option)
      },
      //获取学校下拉列表
