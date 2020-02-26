@@ -33,15 +33,15 @@
         </el-row>
         <el-row style="margin: 30px 0" v-show="this.totaldoubleLegend.length" >
            <el-col :span="12">
-             <div ref="totalleft" style="width: 600px;height:400px; margin: 0 auto"></div>
+             <div ref="totalleft" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
            <el-col :span="12">
-             <div ref="totalright" style="width: 600px;height:400px; margin: 0 auto"></div>
+             <div ref="totalright" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
         </el-row>
         <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee" v-show="this.totaldoubleLegend.length">
           <el-col :span = "12" :offset="6" >
-             <div ref="totaldouble" style="width: 600px;height:400px;margin: 0 auto"></div>
+             <div ref="totaldouble" style="width: 600px;height:420px;margin: 0 auto"></div>
         </el-col>
         </el-row>
         <!-- 实验班 -->
@@ -50,15 +50,15 @@
         </el-row>
         <el-row style="margin: 30px 0" v-show="this.totaldoubleLegend.length">
            <el-col :span="12">
-             <div ref="testleft" style="width: 600px;height:400px; margin: 0 auto"></div>
+             <div ref="testleft" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
            <el-col :span="12">
-             <div ref="testright" style="width: 600px;height:400px; margin: 0 auto"></div>
+             <div ref="testright" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
         </el-row>
         <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee"  v-show="this.totaldoubleLegend.length">
           <el-col :span = "12" :offset="6" >
-             <div ref="testdouble" style="width: 600px;height:400px;margin: 0 auto"></div>
+             <div ref="testdouble" style="width: 600px;height:420px;margin: 0 auto"></div>
           </el-col>
         </el-row>
        <!-- 非实验班 -->
@@ -67,15 +67,15 @@
         </el-row>
         <el-row style="margin: 30px 0" v-show="this.totaldoubleLegend.length">
            <el-col :span="12">
-             <div ref="normalleft" style="width: 600px;height:400px; margin: 0 auto"></div>
+             <div ref="normalleft" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
            <el-col :span="12">
-             <div ref="normalright" style="width: 600px;height:400px; margin: 0 auto"></div>
+             <div ref="normalright" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
         </el-row>
         <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee"  v-show="this.totaldoubleLegend.length">
           <el-col :span = "12" :offset="6" >
-             <div ref="normaldouble" style="width: 600px;height:400px;margin: 0 auto"></div>
+             <div ref="normaldouble" style="width: 600px;height:420px;margin: 0 auto"></div>
           </el-col>
         </el-row>
         </el-card>
@@ -232,7 +232,6 @@ export default {
           this.$router.push('/login');
       } else if(res.data.status == 200) {
           res.data.data ? res = res.data.data: '';
-          console.log(res)
           this.schoolTotal = res.schoolTotal;
           this.schoolTest = res.schoolTest;
           this.schoolNormal = res.schoolNormal;

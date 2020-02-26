@@ -19,17 +19,17 @@
           <el-col :span="8" class="center">矫正人数：{{correctedStudent}}人</el-col>
           <el-col :span="8" class="center">未矫正人数：{{uncorrectedStudent}}人</el-col>
         </el-row>
-        <el-row style="margin: 20px 0">
+        <el-row style="margin: 40px 0">
            <el-col :span="12">
-             <div ref="left" style="width: 600px;height:400px;margin: 0 auto;"></div>
+             <div ref="left" style="width: 700px;height:500px;margin: 0 auto;"></div>
            </el-col>
            <el-col :span="12">
-             <div ref="right" style="width: 600px;height:400px;margin: 0 auto;"></div>
+             <div ref="right" style="width: 700px;height:500px;margin: 0 auto;"></div>
            </el-col>
         </el-row>
         <el-row style="margin: 40px 0">
           <el-col :span = "12" :offset="6" >
-             <div ref="double" style="width: 600px;height:400px;margin: 0 auto"></div>
+             <div ref="double" style="width: 700px;height:500px;margin: 0 auto;"></div>
           </el-col>
         </el-row>
         </el-card>
