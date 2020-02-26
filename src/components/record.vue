@@ -341,7 +341,7 @@ export default {
        },
        handleSuccess(res, file, fileList) {
         this.fileList = [];
-         console.log(res);
+         // console.log(res);
          if(res.status == 10215) {
            this.$message.error(res.msg);
            return;
