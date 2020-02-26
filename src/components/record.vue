@@ -194,7 +194,7 @@
                     :data="pdfData"
                     class="upload-demo"
                     ref="upload"
-                    action="/lightspace/studentExcel"
+                    action="/lightspace/recordExcel"
                     :before-upload="beforeUpload"
                     accept=".xlsx"
                     :limit="1"
@@ -332,7 +332,6 @@ export default {
        },
        submitUpload() {
          this.$refs.upload.submit();
-         this.$message.success('上传成功');
        },
        handleRemove(file, fileList) {
          console.log(file, fileList);
@@ -342,7 +341,13 @@ export default {
        },
        handleSuccess(res, file, fileList) {
         this.fileList = [];
-         console.log(res)
+         console.log(res);
+         if(res.status == 10215) {
+           this.$message.error(res.msg);
+           return;
+         }else if(res.status == 200) {
+           this.$message.success(res.msg);
+         }
        },
       handdlePi() {
         this.showDialog = true;
