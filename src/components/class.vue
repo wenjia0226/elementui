@@ -124,7 +124,7 @@
         </el-dialog>
         <!-- 修改班级对话框 -->
         <el-dialog title="修改班级" :visible.sync="editVisible" width="50%" @close="editDialogClosed">
-            <el-form :model="editClassForm" :rules="editClassRules" ref="editClassRef" label-width="100px">
+            <el-form :model="editClassForm" :rules="editClassRules" ref="editClassRef" label-width="120px">
                 <el-form-item label="所属学校" prop="schoolName" >
                     <el-cascader v-model="selectedOptions"  :options="school" :props ="cateProps" @change="handleChange">
                     </el-cascader>
@@ -300,7 +300,6 @@ export default {
             )
         },
         handleGetClassSucc(res) {
-          console.log(res)
             if(res.status !== 200) return this.$message.error('获取班级列表失败');
             this.classList = res.data.data;
             if(res.data.status === 10204) {
@@ -308,6 +307,13 @@ export default {
                 this.$router.push('/login');
                } else if(res.data.status == 200) {
                  this.classList = res.data.data;
+                 this.classList.forEach((item, index) => {
+                   if(item.experiment == '1') {
+                     item.experiment = '是'
+                   }else{
+                      item.experiment = '否'
+                   }
+                 })
               }
         },
         handleGetClassErr(err) {
@@ -432,7 +438,7 @@ export default {
                 this.$message.success('更新班级信息成功');
                 this.getClassList();
              }
-           
+
         },
         handleEditSaveClassErr(err) {
             console.log(err)
