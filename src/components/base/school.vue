@@ -13,10 +13,20 @@
                     <el-input placeholder="输入学校名称" v-model="query" clearable @clear="querySchool">
                         <el-button slot="append" icon="el-icon-search" @click="querySchool"></el-button>
                      </el-input>
+                    <!-- <el-autocomplete
+                       class="inline-input"
+                       v-model="state1"
+                       :fetch-suggestions="querySearch"
+                       placeholder="请输入学生姓名"
+                       clearable
+                       @select="handleSelect">
+
+                       </el-autocomplete> -->
+
                  </el-col>
-                <!-- <el-col :span="6">
+                 <el-col :span="6">
                         <el-button type="primary" @click="addDialogVisible = true">添加学校</el-button>
-                 </el-col> -->
+                 </el-col>
              </el-row>
             <!-- 学校列表 -->
             <el-table :data="this.schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchSchoolList.length" >
@@ -25,15 +35,10 @@
                 <el-table-column label="学校地址" prop="address"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="getSchoolSurvey(scope.row)" >查看视力概况</el-button>
-                    </template>
-                </el-table-column>
-               <!-- <el-table-column label="操作">
-                    <template slot-scope="scope">
                         <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
                         <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSchoolById(scope.row.id)"></el-button>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <!-- 搜索 -->
            <el-row v-show="this.searchSchoolList.length">
@@ -43,20 +48,16 @@
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="学校名称" prop="name"></el-table-column>
                 <el-table-column label="学校地址" prop="address"></el-table-column>
-               <el-table-column label="操作">
-                   <template slot-scope="scope">
-                       <el-button type="primary" size="middle" icon="el-icon-edit"  @click="getSchoolSurvey(scope.row)" >查看视力概况</el-button>
-                   </template>
-               </el-table-column>
-                <!-- <el-table-column label="操作">
+                <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
                         <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSchoolById(scope.row.id)"></el-button>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <!-- 分页功能 -->
             <el-pagination
+
                 v-show="!this.searchSchoolList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -143,16 +144,6 @@ export default {
     },
 
     methods:{
-      //查看学校视力概况
-      getSchoolSurvey(row) {
-        window.sessionStorage.setItem('schoolName', row.name);
-        let id = row.id;
-         let routeUrl = this.$router.resolve({
-                  path: "/schoolSurvey/"+ id,
-                  // query: {id:id}
-             });
-             window.open(routeUrl .href, '_blank');
-      },
       //关闭按钮
         handleClose() {
          this.addDialogVisible = false;
@@ -352,7 +343,7 @@ export default {
                   this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
                   this.currentPage = this.currentPage < 1 ? 1 : this.currentPage;
                 }
-
+               
             },
             handleDeleteSchoolErr(err) {
                 console.log(err)
