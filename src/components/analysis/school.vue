@@ -1,301 +1,367 @@
 <template>
     <div>
+       <!-- 面包屑导航区域 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>数据分析</el-breadcrumb-item>
-          <el-breadcrumb-item>校园概况</el-breadcrumb-item>
-      </el-breadcrumb>
-      <el-card>
-        <el-row :gutter="20">
-            <el-col :span="12"></el-col>
-            <el-col :span="4">
-                 <el-select v-model="value" placeholder="请选择" @change="handleChangeSchool">
-                    <el-option
-                      v-for="item in schooloptions"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id">
-                    </el-option>
-                 </el-select>
-            </el-col>
-            <el-col :span="6">
-               <el-button type="primary" @click="showSchool">查看校园概况</el-button>
-            </el-col>
-        </el-row>
-        <el-row style="margin: 30px 0;padding: 10px;font-size: 30px;border-bottom: 2px solid"v-show="this.totaldoubleLegend.length">
-          <el-col :span="8" class="center">学校总人数：{{schoolTotal}}人</el-col>
-          <el-col :span="8" class="center">实验班人数：{{schoolTest}}人</el-col>
-          <el-col :span="8"  class="center">非实验班人数：{{schoolNormal}}人</el-col>
-        </el-row>
-        <!-- 校园 -->
-        <el-row >
-          <el-col :span="6" :offset="9" style="padding: 20px; fong-weight: bold;font-size: 34px;" v-show="this.totaldoubleLegend.length">校园概况</el-col>
-        </el-row>
-        <el-row style="margin: 30px 0" v-show="this.totaldoubleLegend.length" >
-           <el-col :span="12">
-             <div ref="totalleft" style="width: 600px;height:420px; margin: 0 auto"></div>
-           </el-col>
-           <el-col :span="12">
-             <div ref="totalright" style="width: 600px;height:420px; margin: 0 auto"></div>
-           </el-col>
-        </el-row>
-        <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee" v-show="this.totaldoubleLegend.length">
-          <el-col :span = "12" :offset="6" >
-             <div ref="totaldouble" style="width: 600px;height:420px;margin: 0 auto"></div>
-        </el-col>
-        </el-row>
-        <!-- 实验班 -->
-        <el-row v-show="this.totaldoubleLegend.length">
-          <el-col :span="6" :offset="9"  style="padding: 20px; fong-weight: bold;font-size: 34px;">实验班概况</el-col>
-        </el-row>
-        <el-row style="margin: 30px 0" v-show="this.totaldoubleLegend.length">
-           <el-col :span="12">
-             <div ref="testleft" style="width: 600px;height:420px; margin: 0 auto"></div>
-           </el-col>
-           <el-col :span="12">
-             <div ref="testright" style="width: 600px;height:420px; margin: 0 auto"></div>
-           </el-col>
-        </el-row>
-        <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee"  v-show="this.totaldoubleLegend.length">
-          <el-col :span = "12" :offset="6" >
-             <div ref="testdouble" style="width: 600px;height:420px;margin: 0 auto"></div>
-          </el-col>
-        </el-row>
-       <!-- 非实验班 -->
-        <el-row v-show="this.totaldoubleLegend.length">
-          <el-col :span="6" :offset="9"  style="padding: 20px; fong-weight: bold;font-size: 34px;">非实验班概况</el-col>
-        </el-row>
-        <el-row style="margin: 30px 0" v-show="this.totaldoubleLegend.length">
-           <el-col :span="12">
-             <div ref="normalleft" style="width: 600px;height:420px; margin: 0 auto"></div>
-           </el-col>
-           <el-col :span="12">
-             <div ref="normalright" style="width: 600px;height:420px; margin: 0 auto"></div>
-           </el-col>
-        </el-row>
-        <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee"  v-show="this.totaldoubleLegend.length">
-          <el-col :span = "12" :offset="6" >
-             <div ref="normaldouble" style="width: 600px;height:420px;margin: 0 auto"></div>
-          </el-col>
-        </el-row>
+            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>基础数据</el-breadcrumb-item>
+            <el-breadcrumb-item>学校设置</el-breadcrumb-item>
+        </el-breadcrumb>
+        <!-- 卡片视图 -->
+        <el-card>
+             <el-row :gutter="20">
+                 <el-col :span="6">
+                    <el-input placeholder="输入学校名称" v-model="query" clearable @clear="querySchool">
+                        <el-button slot="append" icon="el-icon-search" @click="querySchool"></el-button>
+                     </el-input>
+                 </el-col>
+                <!-- <el-col :span="6">
+                        <el-button type="primary" @click="addDialogVisible = true">添加学校</el-button>
+                 </el-col> -->
+             </el-row>
+            <!-- 学校列表 -->
+            <el-table :data="this.schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchSchoolList.length" >
+                <el-table-column type="index"></el-table-column>
+                <el-table-column label="学校名称" prop="name"></el-table-column>
+                <el-table-column label="学校地址" prop="address"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="getSchoolSurvey(scope.row)" >查看视力概况</el-button>
+                    </template>
+                </el-table-column>
+               <!-- <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
+                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSchoolById(scope.row.id)"></el-button>
+                    </template>
+                </el-table-column> -->
+            </el-table>
+            <!-- 搜索 -->
+           <el-row v-show="this.searchSchoolList.length">
+             <el-col>搜索结果</el-col>
+            </el-row>
+            <el-table :data="this.searchSchoolList" border  stripe style="width: 100%" v-show="this.searchSchoolList.length">
+                <el-table-column type="index"></el-table-column>
+                <el-table-column label="学校名称" prop="name"></el-table-column>
+                <el-table-column label="学校地址" prop="address"></el-table-column>
+               <el-table-column label="操作">
+                   <template slot-scope="scope">
+                       <el-button type="primary" size="middle" icon="el-icon-edit"  @click="getSchoolSurvey(scope.row)" >查看视力概况</el-button>
+                   </template>
+               </el-table-column>
+                <!-- <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
+                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSchoolById(scope.row.id)"></el-button>
+                    </template>
+                </el-table-column> -->
+            </el-table>
+            <!-- 分页功能 -->
+            <el-pagination
+                v-show="!this.searchSchoolList.length"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[1, 2, 5, 10]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="schoolList.length">
+            </el-pagination>
         </el-card>
+        <!-- 添加学校对话框 -->
+        <el-dialog title="添加学校" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
+           <!-- 添加学校 -->
+           <el-form :model="addSchoolForm" :rules="addSchoolRules" ref="schoolFormRef" label-width="100px">
+                <el-form-item label="学校名称" prop="name">
+                    <el-input v-model="addSchoolForm.name" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="学校地址" prop="address">
+                    <el-input v-model="addSchoolForm.address" clearable></el-input>
+                </el-form-item>
+           </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="handleClose">取 消</el-button>
+                <el-button type="primary" @click="submitSchool" >确 定</el-button>
+            </span>
+        </el-dialog>
+        <!-- 修改用户对话框 -->
+        <el-dialog title="修改学校" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+            <el-form :model="editSchoolForm" :rules="editSchoolRules" ref="editSchoolRef" label-width="100px">
+                <el-form-item label="学校名称" prop="name">
+                    <el-input v-model="editSchoolForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="学校地址" prop="address">
+                    <el-input v-model="editSchoolForm.address"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editSchoolInfo">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
-  import echarts from 'echarts'
-  import axios from 'axios'
+import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
-  created() {
-    this.token = window.sessionStorage.getItem('token');
-    this.getSchoolList();
-  },
-    data() {
-        return {
-          token: '',
-          schoolId: '',
-           schooloptions: [],
-            value: '',
-            normalleftOption: [],
-            normalrightOption: [],
-            normaldoubleOption: [],
-            normalleftLegend: [],
-            normalrightLegend: [],
-            normaldoubleLegend: [],
-            testleftOption: [],
-            testrightOption: [],
-            testdoubleOption: [],
-            testleftLegend: [],
-            testrightLegend: [],
-            testdoubleLegend: [],
-            totalleftOption: [],
-            totalrightOption: [],
-            totaldoubleOption: [],
-            totalleftLegend: [],
-            totalrightLegend: [],
-            totaldoubleLegend: [],
-            schoolTotal: '',
-            schoolTest: '',
-            schoolNormal: ''
-        }
-    },
-
-  methods: {
-    drawLine(id,lengend, option, text) {
-      if(id == 'normalleft') {
-         var myChart = echarts.init(this.$refs.normalleft);
-      }else if(id == 'normalright') {
-        var myChart = echarts.init(this.$refs.normalright);
-      }else if(id == 'normaldouble'){
-         var myChart = echarts.init(this.$refs.normaldouble);
-      }else if (id == 'testleft') {
-         var myChart = echarts.init(this.$refs.testleft);
-      }else if(id == 'testright') {
-        var myChart = echarts.init(this.$refs.testright);
-      }else if(id == 'testdouble'){
-         var myChart = echarts.init(this.$refs.testdouble);
-      }else if (id == 'totalleft') {
-         var myChart = echarts.init(this.$refs.totalleft);
-      }else if(id == 'totalright') {
-        var myChart = echarts.init(this.$refs.totalright);
-      }else if(id == 'totaldouble'){
-         var myChart = echarts.init(this.$refs.totaldouble);
-      }
-       this.option = {
-          title: {
-              text: text,
-              subtext: '',
-              left: 'center'
-          },
-          tooltip: {
-              trigger: 'item',
-          },
-          legend: {
-              orient: 'vertical',
-              left: 'right',
-              selectedMode:false,
-              data: lengend
-              },
-          series: [
-              {
-                  name: '访问来源',
-                  type: 'pie',
-                  radius: '80%',
-                  center: ['50%', '50%'],
-                  label: {formatter: '{b}:{c}: ({d}%)'},
-                  data: option,
-                  itemStyle: {
-                    normal: {
-                      borderWidth:4,	//边框的宽度
-                      borderColor:'#fff',//边框的颜色
-                    }
-                  },
-                  emphasis: {
-                      itemStyle: {
-                          shadowBlur: 10,
-                          shadowOffsetX: 0,
-                          shadowColor: 'rgba(0, 0, 0, 0.5)',
-
-                      }
-                  },
-                  normal:{
-                          label:{
-                              show: true,
-                              formatter: '{b} : {c} ({d}%)'
-                          },
-                          labelLine :{show:true}
-                      }
-              }
-          ]
-      };
-      myChart.setOption(this.option)
-     },
-     //获取学校下拉列表
-     getSchoolList() {
-       var param = new URLSearchParams();
-       param.append('token', this.token);
-       axios({
-         method:'post',
-         url: '/lightspace/schoolList',
-         data: param
-       }).then(this.handleGetSchoolLisSucc.bind(this)).catch(this.handleGetSchoolListErr.bind(this))
-     },
-     handleGetSchoolLisSucc(res) {
-       if(res.data.status === 10204) {
-           this.$message.error(res.data.msg);
-           this.$router.push('/login');
-       } else if(res.data.status == 200) {
-          this.schooloptions = res.data.data;
+    name: 'school',
+    data () {
+       return{
+           token: '',
+           query: '',
+           currentPage: 1,
+           pageSize: 5,
+           total: 0,
+           state1: '',
+           schoolList: [],
+           editDialogVisible: false,
+           addDialogVisible: false, //控制对话框的显示隐藏
+           addSchoolForm: {
+               num: '',
+               name: '',
+               address: ''
+           },
+           addSchoolRules: {
+               name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
+               address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
+           },
+           editSchoolForm: {
+               name: '',
+               address:'',
+               id: ''
+           },
+           editSchoolRules: {
+                name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
+                address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
+           },
+           searchSchoolList:[]
        }
-     },
-     handleGetSchoolListErr(err) {
-       console.log(err)
-     },
-     //改变选中数据
-     handleChangeSchool(val) {
-       this.schoolId = val;
-     },
-    //获取学校近视眼概况
-    showSchool() {
-      this.leftLegend = [];
-      let param = new URLSearchParams();
-      param.append('token', this.token);
-      param.append('schoolId', this.schoolId);
-      axios({
-        method: 'post',
-        url:'/lightspace/schoolStatistics',
-        data: param
-      }).then(this.getSchoolAnalysisSucc.bind(this)).catch(this.handleGetSchoolAnalysisErr.bind(this))
     },
-    getSchoolAnalysisSucc(res) {
-      if(res.data.status === 10204) {
-          this.$message.error(res.data.msg);
-          this.$router.push('/login');
-      } else if(res.data.status == 200) {
-          res.data.data ? res = res.data.data: '';
-          this.schoolTotal = res.schoolTotal;
-          this.schoolTest = res.schoolTest;
-          this.schoolNormal = res.schoolNormal;
-          let normal = res.normalData;
-          let test = res.testData;
-          let total = res.totalData;
-          //非实验班
-          this.normalleftOption = normal[0];
-          this.normalrightOption = normal[1];
-          this.normaldoubleOption = normal[2];
-          this.normalleftOption.forEach((item, index) => {
-            this.normalleftLegend.push(item.name);
-          })
-          this.normalrightOption.forEach((item, index) => {
-            this.normalrightLegend.push(item.name);
-          })
-          this.normaldoubleOption.forEach((item, index) => {
-            this.normaldoubleLegend.push(item.name);
-          })
-        this.drawLine('normalleft', this.normalleftLegend, this.normalleftOption, '左眼概况');
-        this.drawLine('normalright', this.normalrightLegend, this.normalrightOption,'右眼概况');
-        this.drawLine('normaldouble', this.normaldoubleLegend,this.normaldoubleOption, '双眼概况');
-        //实验班
-        this.testleftOption = test[0];
-        this.testrightOption = test[1];
-        this.testdoubleOption = test[2];
-        this.testleftOption.forEach((item, index) => {
-          this.testleftLegend.push(item.name);
-        })
-        this.testrightOption.forEach((item, index) => {
-          this.testrightLegend.push(item.name);
-        })
-        this.testdoubleOption.forEach((item, index) => {
-          this.testdoubleLegend.push(item.name);
-        })
-        this.drawLine('testleft', this.testleftLegend, this.testleftOption, '左眼概况');
-        this.drawLine('testright', this.testrightLegend, this.testrightOption,'右眼概况');
-        this.drawLine('testdouble', this.testdoubleLegend,this.testdoubleOption, '双眼概况');
-        //总共
-        this.totalleftOption = total[0];
-          this.totalrightOption = total[1];
-          this.totaldoubleOption = total[2];
-          this.totalleftOption.forEach((item, index) => {
-            this.totalleftLegend.push(item.name);
-          })
-          this.totalrightOption.forEach((item, index) => {
-            this.totalrightLegend.push(item.name);
-          })
-          this.totaldoubleOption.forEach((item, index) => {
-            this.totaldoubleLegend.push(item.name);
-          })
-        this.drawLine('totalleft', this.totalleftLegend, this.totalleftOption, '左眼概况');
-        this.drawLine('totalright', this.totalrightLegend, this.totalrightOption,'右眼概况');
-        this.drawLine('totaldouble', this.totaldoubleLegend,this.totaldoubleOption, '双眼概况');
-      }
+    created() {
+        this.token = window.sessionStorage.getItem('token');
+        this.getSchoolList();
     },
-    handleGetSchoolAnalysisErr(err) {
-      console.log(err)
-    },
-   }
+
+    methods:{
+      //查看学校视力概况
+      getSchoolSurvey(row) {
+        window.sessionStorage.setItem('schoolName', row.name);
+        let id = row.id;
+         let routeUrl = this.$router.resolve({
+                  path: "/schoolSurvey/"+ id,
+                  // query: {id:id}
+             });
+             window.open(routeUrl .href, '_blank');
+      },
+      //关闭按钮
+        handleClose() {
+         this.addDialogVisible = false;
+         this.$refs.schoolFormRef.resetFields();
+        },
+        getSchoolList() {
+            let param = new URLSearchParams();
+             param.append('token', this.token);
+             axios({
+                 method: 'post',
+                 url: '/lightspace/schoolList',
+                 data: param
+             }).then(this.handleGetSchoolSucc.bind(this))
+               .catch(this.handleGetSchoolErr.bind(this))
+        },
+        handleGetSchoolSucc(res) {
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+             } else if(res.data.status == 200) {
+               this.schoolList = res.data.data;
+            }
+        },
+        handleGetSchoolErr(error) {
+           console.log(error)
+        },
+        //搜索
+        querySchool() {
+          if(this.query == "") {
+             this.getSchoolList();
+             this.searchSchoolList = [];
+             return;
+          }
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('name', this.query);
+            axios({
+                method: "post",
+                url: '/lightspace/querySchool',
+                data: param
+            }).then(this.handleQuerySucc.bind(this))
+            .catch(this.handleQueryErr.bind(this))
+        },
+        handleQuerySucc(res) {
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+             } else if(res.data.status == 10208) {
+              this.$message.error(res.data.msg);
+              this.getSchoolList();
+              this.searchSchoolList = [];
+           }else if(res.status == 200) {
+              this.$message.success('搜索成功');
+              this.searchSchoolList = res.data.data;
+            }
+        },
+        handleQueryErr(err) {
+            console.log(err)
+        },
+        //提交表单
+        submitSchool() {
+           this.$refs.schoolFormRef.validate((valid) => {
+               if(!valid) return;
+               let param = new URLSearchParams();
+               param.append('name', this.addSchoolForm.name);
+               param.append('address', this.addSchoolForm.address);
+               param.append('token', this.token);
+               axios({
+                   method: 'post',
+                   url: '/lightspace/addSchool',
+                   data: param
+               }).then(this.handleAddSchoolSucc.bind(this))
+               .catch(this.handleAddSchoolErr.bind(this))
+           })
+        },
+        handleAddSchoolSucc(res) {
+          console.log(res);
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+             } else if(res.data.status == 10206) {
+               this.$message.error(res.data.msg);
+              this.addSchoolForm.name = '';
+            }else if(res.status == 200){
+              this.addDialogVisible = false;
+              this.$message.success('添加学校成功');
+              this.$refs.schoolFormRef.resetFields();
+              this.getSchoolList();
+            }
+
+
+        },
+        handleAddSchoolErr(err) {
+            console.log(err)
+        },
+        //监听pageSize改变事件
+        handleSizeChange(newSize) {
+            this.pageSize = newSize
+            this.getSchoolList();
+        },
+        //监听页码值改变事件
+        handleCurrentChange(val) {
+           this.currentPage = val;
+
+        },
+        //点击展示编辑页面
+        showEditDialog (id) {
+            this.editDialogVisible = true;
+           let param = new URLSearchParams();
+            param.append('id', id);
+            param.append('token',this.token)
+            axios({
+                method: 'post',
+                url: '/lightspace/editSchool',
+                data: param
+            }).then(this.handleEditSchoolSucc.bind(this))
+            .catch(this.handleEditSchoolErr.bind(this))
+        },
+        handleEditSchoolSucc(res) {
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+               } else if(res.data.status == 200) {
+                this.editSchoolForm = res.data.data;
+              }
+
+        },
+        handleEditSchoolErr(err) {
+            console.log(err)
+        },
+        //监听修改用户对话框的关闭事件
+        editDialogClosed() {
+            this.$refs.editSchoolRef.resetFields()
+        },
+        //修改保存
+        editSchoolInfo() {
+            this.$refs.editSchoolRef.validate((valid) => {
+                if(!valid)  return;
+                let param = new URLSearchParams();
+                param.append('token', this.token);
+                param.append('name', this.editSchoolForm.name);
+                param.append('address', this.editSchoolForm.address);
+                param.append('id', this.editSchoolForm.id)
+                axios({
+                    method: 'post',
+                    url: '/lightspace/saveSchool',
+                    data: param
+                }).then(this.handleEditSaveSchoolSucc.bind(this))
+                .catch(this.handleEditSaveSchoolErr.bind(this))
+                })
+        },
+         handleEditSaveSchoolSucc(res) {
+             if(res.data.status === 10204) {
+                 this.$message.error(res.data.msg);
+                 this.$router.push('/login');
+                }else if(res.data.status == 200) {
+                  //发起修改用户信息的数据请求
+                   this.schoolList = res.data.data;
+                  //隐藏编辑框
+                  this.editDialogVisible = false;
+                  //提示修改成功
+                  this.$message.success('更新学校信息成功');
+                }
+
+        },
+        handleEditSaveSchoolErr(err) {
+            console.log(err)
+        },
+        //根据id删除学校
+        async removeSchoolById(id) {
+            const confirmResult = await this.$confirm('此操作将永久删除该学校, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).catch(err => err)
+            if(confirmResult !== 'confirm') {
+                return this.$message.info('已经取消删除')
+            }
+            let param = new URLSearchParams();
+            param.append('token', this.token);
+            param.append('id', id)
+            axios({
+                method: 'post',
+                url: '/lightspace/deleteSchool',
+                data: param
+            }).then(this.handleDeleteShoolSucc.bind(this))
+            .catch(this.handleDeleteSchoolErr.bind(this))
+            },
+            handleDeleteShoolSucc(res) {
+                if(res.data.status === 10204) {
+                    this.$message.error(res.data.msg);
+                    this.$router.push('/login');
+                } else if(res.data.status == 200) {
+                  this.$message.success('删除学校成功');
+                  this.schoolList = res.data.data;
+                  const totalPage = Math.ceil(this.schoolList.length / this.pageSize) // 总页数
+                  this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+                  this.currentPage = this.currentPage < 1 ? 1 : this.currentPage;
+                }
+
+            },
+            handleDeleteSchoolErr(err) {
+                console.log(err)
+            }
+    }
 }
 </script>
-<style  scoped>
-.center{
-  text-align: center;
+<style lang="less" scoped>
+.el-card{
+
 }
 </style>

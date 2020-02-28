@@ -3,10 +3,10 @@ import Router from 'vue-router'
 import Login from '@/components/login'
 import Home from '@/components/home'
 import Welcome from '@/components/welcome'
-import School from '@/components/school'
-import Class from '@/components/class'
-import Student from '@/components/student'
-import Record from '@/components/record'
+import School from '@/components/base/school'
+import Class from '@/components/base/class'
+import Student from '@/components/base/student'
+import Record from '@/components/base/record'
 import Right from '@/components/power/right'
 import Role from '@/components/power/role'
 import Account from '@/components/power/account'
@@ -16,6 +16,8 @@ import detailSeat from '@/components/seat/detailSeat'
 import SchoolAnalysis  from '@/components/analysis/school.vue'
 import ClassAnalysis  from '@/components/analysis/class.vue'
 import PersonAnalysis  from '@/components/analysis/person.vue'
+import schoolSurvey  from '@/components/schoolSurvey'
+import classSurvey  from '@/components/classSurvey'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -25,7 +27,8 @@ const router = new Router({
   routes: [
     {path: '/', redirect: '/login'},
     {path: '/login',component: Login},
-
+	{path: '/schoolSurvey/:id',component: schoolSurvey},
+	{path: '/classSurvey/:id',component: classSurvey},
     {
       path: '/home',
       component: Home,
@@ -47,7 +50,8 @@ const router = new Router({
         {path: '/personal', component: PersonAnalysis},
         // meta:{keepAlive: true}
       ]
-    }
+    },
+
   ]
 })
 //挂载路由守卫
