@@ -1,5 +1,5 @@
 <template>
-     <div>
+     <div  v-loading="loading">
        <!-- 面包屑导航区域 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
@@ -181,10 +181,10 @@
                   <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
               </span>
             </el-dialog>
-        <el-dialog :visible.sync="showDialog"  width="30%" center >
+        <el-dialog :visible.sync="showDialog"  width="30%" center :before-close="handleFileClose">
           <el-row>
             <el-col :span="12">
-              <a class="download" href="http://47.104.222.22:8080/download/学生导入模板.xlsx">下载模板</a>
+              <a class="download" href="http://47.104.222.22:80/download/学生导入模板.xlsx">下载模板</a>
               <!-- <el-button @click="DownLoadTemplate" type="primary" size="small">下载模板</el-button> -->
             </el-col>
             <el-col :span="12">
@@ -195,10 +195,11 @@
                 action="/lightspace/studentExcel"
                 :before-upload="beforeUpload"
                 accept=".xlsx"
-                :limit="1"
+                show-file-list
+                :on-change="changeUpload"
                 :on-success="handleSuccess"
                 :file-list="fileList"
-                :on-exceed="handleExceed"
+                multiple
                 :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
@@ -241,6 +242,7 @@ export default {
               }
         };
         return {
+            loading: false,
             id: '', //学生id
             query:"",
             token: '',
@@ -255,7 +257,7 @@ export default {
             total:0,
             selectedOptions: [],
             query: '',
-            fileList: [],//此数组中存入所有提交的文档信息
+             fileList: [],//此数组中存入所有提交的文档信息
             pdfData: {
                 file: '',
                 token: ''
@@ -323,31 +325,31 @@ export default {
         }
     },
      methods: {
-       handleExceed(files, fileList) {
-          this.$message.warning(`每次只能选择1个文件`);
+       changeUpload(file, fileList) {
+        if(fileList.length == 2)  {
+          this.fileList = fileList.slice(1,2);
+        }
        },
+       //请求参数传递
        beforeUpload(file) {
          this.pdfData.file = file;
          this.pdfData.token = this.token;
         },
         submitUpload() {
           this.$refs.upload.submit();
+          this.showDialog = false;
+          this.loading = true;
 
         },
-        handleRemove(file, fileList) {
-          console.log(file, fileList);
-        },
-        handlePreview(file) {
-          console.log(file);
-        },
         handleSuccess(res, file, fileList) {
-         this.fileList = [];
-         // console.log(res)
+           this.loading = false;
          if(res.status == 10215) {
            this.$message.error(res.msg);
+           this.fileList = [];
            return;
          }else if(res.status == 200) {
            this.$message.success(res.msg);
+           this.fileList = [];
          }
         },
        handdlePi() {
@@ -380,6 +382,10 @@ export default {
         },
        hanadleGetDownLoadErr(err) {
          console.log(err)
+       },
+       handleFileClose() {
+         this.showDialog = false;
+          this.$refs.upload.clearFiles();
        },
 
      //关闭按钮
@@ -446,7 +452,6 @@ export default {
             param.append('nature', this.addStudentForm.nature)
             param.append('age', this.addStudentForm.age)
             param.append('parentPhone', this.addStudentForm.parentPhone)
-            // param.append('stu_cat', this.addStudentForm.stu_cat)
             axios({
                 method: 'post',
                 url: '/lightspace/addStudent',

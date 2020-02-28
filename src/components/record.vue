@@ -186,7 +186,7 @@
             <el-dialog :visible.sync="showDialog"  width="30%" center >
               <el-row>
                 <el-col :span="12">
-                  <a class="download" href="http://47.104.222.22:8080/download/检查数据导入模板.xlsx">下载模板</a>
+                  <a class="download" href="http://47.104.222.22:80/download/检查数据导入模板.xlsx">下载模板</a>
                   <!-- <el-button @click="DownLoadTemplate" type="primary" size="small">下载模板</el-button> -->
                 </el-col>
                 <el-col :span="12">
