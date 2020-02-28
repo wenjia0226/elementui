@@ -510,7 +510,7 @@ export default {
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
                 this.options =  res.data.data;
-            }        
+            }
         },
         handleGetOptionErr(err) {
             console.log(err)
@@ -525,7 +525,7 @@ export default {
             if(!this.token) {
                 return this.$router.push('/login');
             }else if(!this.classId) {
-                 return this.$message.error('请选择学校班级');
+                 return this.$message.error('请选择学校和班级');
             }else if(!this.value) {
                 return this.$message.error('请选择排座方式');
             }else if(!this.time) {
@@ -549,7 +549,10 @@ export default {
            } else if(res.data.status == 200) {
               if(res.data.data.length == 0) return this.$message.error('请先添加学生');
               this.studentList =res.data.data;
-           }       
+           } else if(res.data.status =10216) {
+              this.$message.error(res.data.msg);
+
+           }
         },
         handleGetSeatQueryErr(err) {
             console.log(err)
@@ -573,7 +576,7 @@ export default {
             } else if(res.data.status == 200) {
                this.editRecordForm = res.data.data;
                this.editRecordDialogVisible = true;
-            } 
+            }
         },
         handleEditRecordErr(err) {
             console.log(err)
