@@ -6,9 +6,14 @@
             <el-row :gutter="20">
                 <el-col :span="12"></el-col>
                 <el-col :span="6">
-                    <el-input placeholder="输入学校名称"  clearable v-model="query" clearable @clear="searchClass">
-                        <el-button slot="append" icon="el-icon-search" @click="searchClass"></el-button>
-                    </el-input>
+
+                     <el-autocomplete
+                          class="inline-input"
+                          v-model="state1"
+                          :fetch-suggestions="querySearch"
+                          placeholder="请输入学校名称"
+                          @select="handleSelect"
+                      ></el-autocomplete>
                 </el-col>
             </el-row>
              <!-- 班级列表 -->
@@ -17,9 +22,10 @@
               <el-table-column label="所属学校" prop="schoolName"></el-table-column>
               <el-table-column label="班级名称" prop="className"></el-table-column>
               <el-table-column label="容纳人数" prop="volume"></el-table-column>
+
               <el-table-column label="操作">
                   <template slot-scope="scope">
-                      <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassSurvey(scope.row)">查看视力概况</el-button>
+                      <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassSurvey(scope.row)" >查看视力概况</el-button>
                   </template>
               </el-table-column>
             </el-table>
@@ -71,6 +77,8 @@ export default {
             }
         };
         return {
+            state1: '',
+            schoolList: [],
             token: '',
             addClassVisible: false,
             editVisible: false,
@@ -96,14 +104,52 @@ export default {
         }
     },
     methods: {
+      querySearch(queryString, cb) {
+        var schoolList = this.schoolList;
+        var results = queryString ? schoolList.filter(this.createFilter(queryString)) : schoolList;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (schoolList) => {
+          return (schoolList.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+          }
+      },
+       handleSelect(item) {
+         this.getClassListBySchoolId(item.id);
+      },
+      getClassListBySchoolId(id) {
+        let param = new URLSearchParams();
+        param.append('token', this.token);
+        param.append('schoolId', id);
+        axios({
+          method: "post",
+          url: '/lightspace/queryClassesBySchool',
+          data: param
+        }).then(this.getClassBySchoolSucc.bind(this)).catch(this.getClassBySchoolErr.bind(this))
+      },
+      getClassBySchoolSucc(res) {
+        if(res.status == 200) {
+          if(res.data.data.length > 0) {
+            this.classList = res.data.data;
+          }else {
+            this.$message.error('请先添加班级');
+            this.getClassList();
+          }
+
+        }
+      },
+      getClassBySchoolErr(err) {
+        console.log(err)
+      },
       showClassSurvey(row) {
-         window.sessionStorage.setItem('className' , row.className);
-         window.sessionStorage.setItem('cscholName', row.schoolName);
-         let id = row.id;
-         let routeUrl = this.$router.resolve({
-                  path: "/classSurvey/"+ id,
-             });
-             window.open(routeUrl .href, '_blank');
+        window.sessionStorage.setItem('className' , row.className);
+        window.sessionStorage.setItem('cschoolName', row.schoolName);
+        let id = row.id;
+        let routeUrl = this.$router.resolve({
+                path: "/classSurvey/"+ id,
+          });
+         window.open(routeUrl .href, '_blank');
       },
       //搜索
       searchClass() {
@@ -325,6 +371,7 @@ export default {
               this.$router.push('/login');
           } else if(res.data.status == 200) {
               this.school = res.data.data;
+              this.schoolList = res.data.data;
           }
         },
         handleGetSchoolErr(err) {
