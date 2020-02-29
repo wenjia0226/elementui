@@ -255,7 +255,7 @@ export default {
         xAxis: {
             type: 'category',
             symbol: 'none',
-            boundaryGap: false,
+            boundaryGap: true,
             data: this.leftLuoX
         },
         yAxis: {
@@ -303,7 +303,7 @@ export default {
         xAxis: {
                type: 'category',
                symbol: 'none',
-               boundaryGap: false,
+               boundaryGap: true,
                data: this.leftQuX
          },
          grid: {                   // 折线位置
@@ -358,7 +358,7 @@ export default {
          xAxis: {
              type: 'category',
              symbol: 'none',
-             boundaryGap: false,
+             boundaryGap: true,
              data: this.leftZhouX
          },
          yAxis: {
@@ -466,7 +466,7 @@ export default {
         } else{
           param.append('token', this.token);
           param.append('time', this.time * 86400 )
-          param.append('studentId', 15);
+          param.append('studentId', this.studentId);
           axios({
             method: 'post',
             data: param,
