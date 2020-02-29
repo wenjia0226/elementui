@@ -38,6 +38,34 @@
 	         <el-button type="primary" @click="showPerson">查看个人分析</el-button>
 	      </el-col>
 	  </el-row>
+    <el-row>
+      <el-col>
+        学生视觉检查报告单
+      </el-col>
+    </el-row>
+   <el-row>
+     <el-col :span="16" :offset="4">
+       <!-- <table>
+         <tr>
+           <th>姓名</th>
+           <td>性别</td>
+           <td>生日</td>
+           <td>学校</td>
+           <td>电话</td>
+         </tr>
+       </table> -->
+       <table border="1">
+         <tr>
+           <th>姓名</th>
+           <th>性别</th>
+         </tr>
+         <tr>
+           <td>January</td>
+           <td>$100</td>
+         </tr>
+       </table>
+     </el-col>
+   </el-row>
     <el-row style="margin: 10px 0">
        <el-col :span="24">
          <div ref="left" style="width: 100%;height: 400px"></div>

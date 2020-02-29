@@ -12,10 +12,12 @@
           </el-col>
         </el-row>
         <el-row style="margin: 40px 0">
-           <el-col :span="12">
+           <el-col :span="24">
              <div ref="left" style="width: 700px;height:500px;margin: 0 auto;"></div>
            </el-col>
-           <el-col :span="12">
+        </el-row>
+         <el-row style="margin: 40px 0">
+           <el-col :span="24">
              <div ref="right" style="width: 700px;height:500px;margin: 0 auto;"></div>
            </el-col>
         </el-row>
@@ -87,7 +89,7 @@ export default {
           },
           legend: {
               orient: 'vertical',
-              left: 'left',
+              left: 'right',
               selectedMode:false,
               data: lengend
               },

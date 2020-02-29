@@ -12,10 +12,12 @@
           </el-col>
         </el-row>
         <el-row style="margin: 30px 0"  >
-           <el-col :span="12">
+           <el-col :span="24">
              <div ref="totalleft" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
-           <el-col :span="12">
+        </el-row>
+        <el-row style="margin: 30px 0"  >
+           <el-col :span="24">
              <div ref="totalright" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
         </el-row>
