@@ -39,30 +39,126 @@
 	      </el-col>
 	  </el-row>
     <el-row>
-      <el-col>
+      <el-col :span="24" style="font-size: 40px;padding: 20px;margin: 20rpx;text-align: center;">
         学生视觉检查报告单
       </el-col>
     </el-row>
    <el-row>
      <el-col :span="16" :offset="4">
-       <!-- <table>
+       <table cellpadding="0" cellspacing="0" class="report">
          <tr>
-           <th>姓名</th>
-           <td>性别</td>
-           <td>生日</td>
-           <td>学校</td>
-           <td>电话</td>
-         </tr>
-       </table> -->
-       <table border="1">
-         <tr>
-           <th>姓名</th>
-           <th>性别</th>
+           <th colspan="2">姓名:</th>
+           <th colspan="1">性别:</th>
+           <th colspan="2">生日:</th>
+           <th colspan="3">学校:</th>
+           <th colspan="2">电话:</th>
          </tr>
          <tr>
-           <td>January</td>
-           <td>$100</td>
+           <td rowspan="3">屈光度</td>
+           <td>眼别</td>
+           <td>远裸视</td>
+           <td>近裸视</td>
+           <td>球镜</td>
+           <td>柱镜</td>
+           <td>轴位</td>
+           <td>矫正视力</td>
+           <td>瞳距</td>
+           <td>主导眼</td>
          </tr>
+         <tr>
+           <td>左眼</td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+         </tr>
+         <tr>
+           <td>右眼</td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+         </tr>
+         <tr>
+           <td rowspan="5">视功能检查</td>
+           <td colspan="5">眼球运动:</td>
+           <td colspan="4">立体检查:</td>
+         </tr>
+         <tr>
+           <td colspan="5">遮盖眼位:</td>
+           <td colspan="4">Worth-4点:</td>
+         </tr>
+         <tr>
+           <td colspan="5">集合近点:</td>
+           <td rowspan="3" >调节灵敏度</td>
+           <td colspan="3">右眼:</td>
+         </tr>
+         <tr>
+           <td colspan="5" >色觉检查:</td>
+           <!-- <td >调节灵敏度</td> -->
+            <td colspan="3">左眼:</td>
+         </tr>
+         <tr>
+           <td colspan="5">色觉检查</td>
+          <!-- <td >调节灵敏度</td> -->
+           <td colspan="3">双眼:</td>
+         </tr>
+         <!-- 生物测量检查 -->
+         <tr>
+           <td rowspan="3">生物测量检查</td>
+           <td>眼别</td>
+           <td colspan="2">水平曲率值</td>
+           <td colspan="2">垂直曲率值</td>
+           <td colspan="2">眼轴长度</td>
+           <td >前房深度</td>
+           <td >晶体厚度</td>
+         </tr>
+         <tr>
+           <td>右眼</td>
+           <td colspan="2"></td>
+           <td colspan="2"></td>
+           <td colspan="2"></td>
+           <td ></td>
+           <td ></td>
+         </tr>
+         <tr>
+           <td>左眼</td>
+           <td colspan="2"></td>
+           <td colspan="2"></td>
+           <td colspan="2"></td>
+           <td ></td>
+           <td ></td>
+         </tr>
+         <!-- 眼部健康检查 -->
+         <tr  style="text-align: left;">
+           <td rowspan="2">眼部健康检查</td>
+           <td colspan="9">裂隙灯检查:</td>
+         </tr>
+         <tr>
+           <td colspan="9">眼底照相检查:</td>
+         </tr>
+         <!-- 身体情况 -->
+         <tr align="left">
+           <td rowspan="2">身体情况</td>
+           <td colspan="9">身高(cm):</td>
+         </tr>
+         <tr>
+           <td colspan="9">体重(kg):</td>
+         </tr>
+        <!-- 处理建议 -->
+        <tr>
+          <td >处理建议</td>
+          <td colspan="9"></td>
+        </tr>
+
        </table>
      </el-col>
    </el-row>
@@ -424,4 +520,7 @@ export default {
 .el-cascader {
   width: 100%;
 }
+.report{margin: 20px 0;}
+.report th, td {padding: 30px;text-align:center;border:1px solid #ccc; text-align: left;}
+.report tr:nth-child(2n+1) td{text-align: left;}
 </style>
