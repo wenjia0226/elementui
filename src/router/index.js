@@ -16,8 +16,8 @@ import detailSeat from '@/components/seat/detailSeat'
 import SchoolAnalysis  from '@/components/analysis/school.vue'
 import ClassAnalysis  from '@/components/analysis/class.vue'
 import PersonAnalysis  from '@/components/analysis/person.vue'
-import schoolSurvey  from '@/components/schoolSurvey'
-import classSurvey  from '@/components/classSurvey'
+import schoolSurvey  from '@/components/survey/schoolSurvey'
+import classSurvey  from '@/components/survey/classSurvey'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {

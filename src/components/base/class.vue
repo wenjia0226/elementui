@@ -25,7 +25,7 @@
               <el-table-column label="所属学校" prop="schoolName"></el-table-column>
               <el-table-column label="班级名称" prop="className"></el-table-column>
               <el-table-column label="容纳人数" prop="volume"></el-table-column>
-               <el-table-column label="教室长度" prop="roomLength"></el-table-column>
+              <el-table-column label="教室长度" prop="roomLength"></el-table-column>
               <el-table-column label="教室宽度" prop="roomWidth"></el-table-column>
               <el-table-column label="黑板长度" prop="bbLength"></el-table-column>
               <el-table-column label="是否是实验班" prop="experiment"></el-table-column>

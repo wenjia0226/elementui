@@ -1,200 +1,374 @@
 <template>
     <div>
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>数据分析</el-breadcrumb-item>
-          <el-breadcrumb-item>班级概况</el-breadcrumb-item>
-      </el-breadcrumb>
-      <el-card>
-        <el-row :gutter="20">
-            <el-col :span="4">
-                 <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
-            </el-col>
-            <el-col :span="6">
-               <el-button type="primary" @click="showClass">查看班级概况</el-button>
-            </el-col>
-        </el-row>
-        <el-row style="margin: 30px 0;padding: 10px;font-size: 30px;border-bottom: 2px solid #eee" v-show="this.totalStudent">
-          <el-col :span="8" class="center">班级总人数：{{totalStudent}}人</el-col>
-          <el-col :span="8" class="center">矫正人数：{{correctedStudent}}人</el-col>
-          <el-col :span="8" class="center">未矫正人数：{{uncorrectedStudent}}人</el-col>
-        </el-row>
-        <el-row style="margin: 40px 0">
-           <el-col :span="12">
-             <div ref="left" style="width: 700px;height:500px;margin: 0 auto;"></div>
-           </el-col>
-           <el-col :span="12">
-             <div ref="right" style="width: 700px;height:500px;margin: 0 auto;"></div>
-           </el-col>
-        </el-row>
-        <el-row style="margin: 40px 0">
-          <el-col :span = "12" :offset="6" >
-             <div ref="double" style="width: 700px;height:500px;margin: 0 auto;"></div>
-          </el-col>
-        </el-row>
+
+        <!-- 卡片视图 -->
+        <el-card class="box-card">
+            <el-row :gutter="20">
+                <el-col :span="12"></el-col>
+                <el-col :span="6">
+                    <el-input placeholder="输入学校名称"  clearable v-model="query" clearable @clear="searchClass">
+                        <el-button slot="append" icon="el-icon-search" @click="searchClass"></el-button>
+                    </el-input>
+                </el-col>
+            </el-row>
+             <!-- 班级列表 -->
+            <el-table border  :data="classList.slice((currentPage-1) * pageSize, currentPage * pageSize)" stripe style="width: 100%"  v-show="!this.searchClassList.length">
+              <el-table-column type="index"></el-table-column>
+              <el-table-column label="所属学校" prop="schoolName"></el-table-column>
+              <el-table-column label="班级名称" prop="className"></el-table-column>
+              <el-table-column label="容纳人数" prop="volume"></el-table-column>
+              <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassSurvey(scope.row)">查看视力概况</el-button>
+                  </template>
+              </el-table-column>
+            </el-table>
+            <!-- 搜索班级 -->
+            <el-table border  :data="this.searchClassList" stripe style="width: 100%" v-show="this.searchClassList.length">
+              <el-table-column type="index"></el-table-column>
+              <el-table-column label="所属学校" prop="schoolName"></el-table-column>
+              <el-table-column label="班级名称" prop="className"></el-table-column>
+              <el-table-column label="容纳人数" prop="volume"></el-table-column>
+              <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showClassSurvey(scope.row)" >查看视力概况</el-button>
+                  </template>
+              </el-table-column>
+            </el-table>
+
+            <!-- 分页功能 -->
+            <el-pagination
+                v-show="!this.searchClassList.length"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[5, 10, 20]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="classList.length">
+            </el-pagination>
         </el-card>
     </div>
 </template>
 <script>
-  import echarts from 'echarts'
-  import axios from 'axios'
+import { mapState, mapActions } from "vuex";
+import axios from 'axios'
 export default {
-  created() {
-    this.token = window.sessionStorage.getItem('token');
-     this.getOPtions();
-  },
+    created() {
+        this.token = window.sessionStorage.getItem('token');
+        this.getClassList();
+        this.getSchoolList();
+    },
     data() {
+        var valiNumberPass1 = (rule, value, callback) => {//包含小数的数字
+            let reg = /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/g;
+            if (value === '') {
+                callback(new Error('请输入内容'));
+            } else if (!reg.test(value)) {
+                callback(new Error('请输入数字'));
+            } else {
+                callback();
+            }
+        };
         return {
-          token: '',
-          schoolId: '',
-           schooloptions: [],
+            token: '',
+            addClassVisible: false,
+            editVisible: false,
+            school: [],
             value: '',
-            leftOption: [],
-            rightOption: [],
-            doubleOption: [],
-            leftLegend: [],
-            rightLegend: [],
-            doubleLegend: [],
-            totalStudent: '',
-            correctedStudent: '',
-            uncorrectedStudent: '',
-            stu_cat: [],
+            schoolId: '',
+            labelNum1: 1,
+            labelNum2: 0,
+            query: '',
+            searchClassList: [],
+
             cateProps: {
-            label: 'name', //看到的是哪个属性
-            value: 'id', // 选中的是谁的值
-            children: 'children' //哪个属性实现父子节点嵌套
+                label: 'name', //看到的是哪个属性
+                value: 'id', // 选中的是谁的值
+                children: 'children' //哪个属性实现父子节点嵌套
             },
-            options: [],
-            classId: '',
-            schoolId: ''
+            classList: [],
+            currentPage: 1,
+            pageSize: 5,
+            total: 0,
+            selectedOptions: [],
+
         }
     },
+    methods: {
+      showClassSurvey(row) {
+         window.sessionStorage.setItem('className' , row.className);
+         window.sessionStorage.setItem('cscholName', row.schoolName);
+         let id = row.id;
+         let routeUrl = this.$router.resolve({
+                  path: "/classSurvey/"+ id,
+             });
+             window.open(routeUrl .href, '_blank');
+      },
+      //搜索
+      searchClass() {
+        if(this.query == "") {
+           this.getClassList();
+           this.searchClassList = [];
+           return;
+        }
+          let param = new URLSearchParams();
+          param.append('token', this.token);
+          param.append('name', this.query);
+          axios({
+              method: "post",
+              url: '/lightspace/queryClasses',
+              data: param
+          }).then(this.handleQuerySucc.bind(this))
+          .catch(this.handleQueryErr.bind(this))
+      },
+     handleQuerySucc(res) {
+       if(res.data.status === 10204) {
+           this.$message.error(res.data.msg);
+           this.$router.push('/login');
+       } else if(res.data.status == 10210) {
+           this.$message.error(res.data.msg);
+           this.getClassList();
+           this.searchClassList = [];
+        }else if(res.data.status == 200) {
+           this.$message.success('搜索成功');
+           this.searchClassList = res.data.data;
+         }
+     },
+      handleQueryErr(err) {
+          console.log(err)
+      },
+      //关闭按钮
+        handleClose() {
+         this.addClassVisible = false;
+         this.$refs.addClassRef.resetFields();
+         this.addClassForm.description = ''
+        },
 
-  methods: {
-    drawLine(id,lengend, option, text) {
-      if(id == 'left') {
-         var myChart = echarts.init(this.$refs.left);
-      }else if(id == 'right') {
-        var myChart = echarts.init(this.$refs.right);
-      }else{
-         var myChart = echarts.init(this.$refs.double);
-      }
-       this.option = {
-          title: {
-              text: text,
-              left: 'center'
-          },
-          tooltip: {
-              trigger: 'item',
-              formatter: '{a} <br/>{b} : {c} ({d}%)'
-          },
-          legend: {
-              orient: 'vertical',
-              left: 'left',
-              selectedMode:false,
-              data: lengend
-              },
-          series: [
-              {
-                  name: '访问来源',
-                  type: 'pie',
-                  radius: '80%',
-                  center: ['50%', '60%'],
-                  label: {formatter: '{b}:{c}: ({d}%)'},
-                  data: option,
-                  emphasis: {
-                      itemStyle: {
-                          shadowBlur: 10,
-                          shadowOffsetX: 0,
-                          shadowColor: 'rgba(0, 0, 0, 0.5)'
-                      }
-                  },
-                  itemStyle: {
-                    normal: {
-                      borderWidth:4,	//边框的宽度
-                      borderColor:'#fff',//边框的颜色
-                    }
-                  }
+        addClass() {
+            this.addClassVisible = true
+        },
+        //获取班级列表
+        getClassList () {
+            let param2 = new URLSearchParams();
+            param2.append('token' ,this.token);
+            axios({
+                method: 'post',
+                data: param2,
+                url: '/lightspace/classesList'
+            }).then(this.handleGetClassSucc.bind(this))
+            .catch(this.handleGetClassErr.bind(this)
+            )
+        },
+        handleGetClassSucc(res) {
+            if(res.status !== 200) return this.$message.error('获取班级列表失败');
+            this.classList = res.data.data;
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+               } else if(res.data.status == 200) {
+                 this.classList = res.data.data;
+                 this.classList.forEach((item, index) => {
+                   if(item.experiment == '1') {
+                     item.experiment = '是'
+                   }else{
+                      item.experiment = '否'
+                   }
+                 })
               }
-          ]
-      };
-      myChart.setOption(this.option)
-     },
-     //改变选中数据
-     handleChangeSchool(val) {
-       this.schoolId = val;
-     },
-    //获取学校近视眼概况
-    showClass() {
-      this.leftLegend = [];
-      let param = new URLSearchParams();
-      param.append('token', this.token);
-      param.append('classId', this.classId);
-      axios({
-        method: 'post',
-        url:'/lightspace/classStatistics',
-        data: param
-      }).then(this.getClassAnalysisSucc.bind(this)).catch(this.handleGetClassAnalysisErr.bind(this))
-    },
-    getClassAnalysisSucc(res) {
-      if(res.data.status === 10204) {
-          this.$message.error(res.data.msg);
-          this.$router.push('/login');
-      } else if(res.data.status == 200) {
-         this.menuList = res.data.data;
-      res.data.data ? res = res.data.data: '';
-      this.totalStudent = res.totalStudent;
-      this.correctedStudent = res.correctedStudent;
-      this.uncorrectedStudent = res.uncorrectStudent;
-      this.leftOption = res.data[0];
-      this.rightOption = res.data[1];
-      this.doubleOption = res.data[2];
-      this.leftOption.forEach((item, index) => {
-        this.leftLegend.push(item.name);
-      })
-      this.rightOption.forEach((item, index) => {
-        this.rightLegend.push(item.name);
-      })
-      this.doubleOption.forEach((item, index) => {
-        this.doubleLegend.push(item.name);
-      })
-    }
-      this.drawLine('left', this.leftLegend, this.leftOption, '左眼概况');
-      this.drawLine('right', this.rightLegend, this.rightOption, '右眼概况');
-      this.drawLine('double', this.doubleLegend,this.doubleOption, '双眼概况');
-    },
-    handleGetClassAnalysisErr(err) {
-      console.log(err)
-    },
-    //获取级联选择器中的数据
-    getOPtions() {
+        },
+        handleGetClassErr(err) {
+            console.log(err)
+        },
+        //分页
+        //监听pageSize改变事件
+        handleSizeChange(newSize) {
+            this.pageSize = newSize
+            this.getClassList();
+        },
+        //监听页码值改变事件
+        handleCurrentChange(val) {
+           this.currentPage = val;
+        },
+        // 添加班级
+        sumitClass() {
+            this.$refs.addClassRef.validate((valid) => {
+                if(!valid)  return this.$message.error('验证失败');
+                var param = new URLSearchParams();
+                param.append('token', this.token);
+                param.append('schoolId',this.schoolId);
+                param.append('className',this.addClassForm.className);
+                param.append('roomLength',this.addClassForm.roomLength);
+                param.append('roomWidth',this.addClassForm.roomWidth);
+                param.append('volume',this.addClassForm.volume);
+                param.append('bbLength', this.addClassForm.bbLength);
+                param.append('description',this.addClassForm.description);
+                param.append('experiment',this.addClassForm.experiment);
+                axios({
+                    method: 'post',
+                    data: param,
+                    url:'/lightspace/addClasses'
+                }).then(this.handleAddClassSucc.bind(this))
+                .catch(this.handleAddClassErr.bind(this))
+            })
+        },
+         handleChange(item) {
+           this.schoolId = item;
+        },
+        handleAddClassSucc(res) {
+           if(res.data.status == 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+            }else if(res.data.status == 10207)  {
+               this.$message.error(res.data.msg);
+                this.addClassForm.className = '';
+            }else if(res.data.status == 200) {
+              this.$message.success('添加班级成功')
+              this.addClassVisible = false;
+              this.$refs.addClassRef.resetFields();
+              this.addClassForm.description = '';
+              this.getClassList();
+            }
+        },
+        handleAddClassErr(err) {
+            console.log(err)
+        },
+        resetAddClass() {
+            this.$refs.addClassRef.resetFields();
+        },
+        //点击展示编辑页面
+        showClassEditDialog (id) {
+            let param = new URLSearchParams();
+            param.append('id', id);
+            param.append('token',this.token)
+            axios({
+                method: 'post',
+                url: '/lightspace/editClasses',
+                data: param
+            }).then(this.handleEditClassSucc.bind(this))
+            .catch(this.handleEditclassErr.bind(this))
+        },
+        handleEditClassSucc(res) {
+            if(res.data.status === 10204) {
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
+            } else if(res.data.status == 200) {
+              this.editClassForm = res.data.data;
+              this.selectedOptions = res.data.data.schoolId;
+              this.editVisible = true;
+            }
+
+
+        },
+        handleEditclassErr(err) {
+            console.log(err)
+        },
+        //修改保存
+        editClassInfo() {
+            this.$refs.editClassRef.validate((valid) => {
+                if(!valid)  return;
+                let param = new URLSearchParams();
+                param.append('token', this.token);
+                param.append('schoolId',this.schoolId);
+                param.append('className',this.editClassForm.className);
+                param.append('roomLength',this.editClassForm.roomLength);
+                param.append('roomWidth',this.editClassForm.roomWidth);
+                param.append('volume',this.editClassForm.volume);
+                param.append('bbLength', this.editClassForm.bbLength);
+                param.append('description',this.editClassForm.description);
+                param.append('experiment',this.editClassForm.experiment);
+                param.append('id', this.editClassForm.id)
+                axios({
+                    method: 'post',
+                    url: '/lightspace/saveClasses',
+                    data: param
+                }).then(this.handleEditSaveClassSucc.bind(this))
+                .catch(this.handleEditSaveClassErr.bind(this))
+                })
+        },
+         handleEditSaveClassSucc(res) {
+             if(res.data.status === 10204) {
+                 this.$message.error(res.data.msg);
+                 this.$router.push('/login');
+             } else if(res.data.status == 200) {
+                //发起修改用户信息的数据请求
+                 this.classlList = res.data.data;
+                //隐藏编辑框
+                this.editVisible = false;
+                //提示修改成功
+                this.$message.success('更新班级信息成功');
+                this.getClassList();
+             }
+
+        },
+        handleEditSaveClassErr(err) {
+            console.log(err)
+        },
+         //监听修改用户对话框的关闭事件
+        editDialogClosed() {
+            this.$refs.editClassRef.resetFields()
+        },
+        // 获取学校列表
+         getSchoolList() {
+            let param = new URLSearchParams();
+             param.append('token', this.token);
+             axios({
+                 method: 'post',
+                 url: '/lightspace/schoolList',
+                 data: param
+             }).then(this.handleGetSchoolSucc.bind(this))
+               .catch(this.handleGetSchoolErr.bind(this))
+        },
+        handleGetSchoolSucc(res) {
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 200) {
+              this.school = res.data.data;
+          }
+        },
+        handleGetSchoolErr(err) {
+            console.log(err)
+        },
+        //删除班级
+        async removeClassById(id) {
+        const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+        }).catch(err => err)
+        if(confirmResult !== 'confirm') {
+            return this.$message.info('已经取消删除')
+        }
         let param = new URLSearchParams();
         param.append('token', this.token);
+        param.append('id', id)
         axios({
             method: 'post',
-            url: '/lightspace/cascade1',
+            url: '/lightspace/deleteClasses',
             data: param
-        }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
-    },
-    handleGetOptionSucc (res) {
-        if(res.status !==200) return this.$message.error('获取级联数据失败');
-        this.options =  res.data.data;
-    },
-    handleGetOptionErr(err) {
-        console.log(err)
-    },
-    handleChange() {
-       this.schoolId = this.stu_cat[0];
-       this.classId = this.stu_cat[1];
-    },
-   }
+        }).then(this.handleDeleteClassSucc.bind(this))
+        .catch(this.handleDeleteClassErr.bind(this))
+        },
+        handleDeleteClassSucc(res) {
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 200) {
+             this.$message.success('删除班级成功');
+             this.classList = res.data.data;
+             const totalPage = Math.ceil(this.classList.length / this.pageSize) // 总页数
+             this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+             this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+          }
+        },
+        handleDeleteClassErr(err) {
+            console.log(err)
+        }
+    }
+
 }
 </script>
-<style  scoped style="less">
-.el-cascader{
-  width: 100%;
-}
-.center {
-  text-align: center;
-}
+<style lang="less" scoped>
+
 </style>

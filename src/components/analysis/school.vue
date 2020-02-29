@@ -1,11 +1,5 @@
 <template>
     <div>
-       <!-- 面包屑导航区域 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-            <el-breadcrumb-item>学校设置</el-breadcrumb-item>
-        </el-breadcrumb>
         <!-- 卡片视图 -->
         <el-card>
              <el-row :gutter="20">
@@ -14,9 +8,7 @@
                         <el-button slot="append" icon="el-icon-search" @click="querySchool"></el-button>
                      </el-input>
                  </el-col>
-                <!-- <el-col :span="6">
-                        <el-button type="primary" @click="addDialogVisible = true">添加学校</el-button>
-                 </el-col> -->
+
              </el-row>
             <!-- 学校列表 -->
             <el-table :data="this.schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchSchoolList.length" >
@@ -28,12 +20,7 @@
                         <el-button type="primary" size="middle" icon="el-icon-edit"  @click="getSchoolSurvey(scope.row)" >查看视力概况</el-button>
                     </template>
                 </el-table-column>
-               <!-- <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
-                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSchoolById(scope.row.id)"></el-button>
-                    </template>
-                </el-table-column> -->
+
             </el-table>
             <!-- 搜索 -->
            <el-row v-show="this.searchSchoolList.length">
@@ -48,12 +35,6 @@
                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="getSchoolSurvey(scope.row)" >查看视力概况</el-button>
                    </template>
                </el-table-column>
-                <!-- <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
-                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSchoolById(scope.row.id)"></el-button>
-                    </template>
-                </el-table-column> -->
             </el-table>
             <!-- 分页功能 -->
             <el-pagination
@@ -67,37 +48,6 @@
                 :total="schoolList.length">
             </el-pagination>
         </el-card>
-        <!-- 添加学校对话框 -->
-        <el-dialog title="添加学校" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
-           <!-- 添加学校 -->
-           <el-form :model="addSchoolForm" :rules="addSchoolRules" ref="schoolFormRef" label-width="100px">
-                <el-form-item label="学校名称" prop="name">
-                    <el-input v-model="addSchoolForm.name" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="学校地址" prop="address">
-                    <el-input v-model="addSchoolForm.address" clearable></el-input>
-                </el-form-item>
-           </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="handleClose">取 消</el-button>
-                <el-button type="primary" @click="submitSchool" >确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 修改用户对话框 -->
-        <el-dialog title="修改学校" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
-            <el-form :model="editSchoolForm" :rules="editSchoolRules" ref="editSchoolRef" label-width="100px">
-                <el-form-item label="学校名称" prop="name">
-                    <el-input v-model="editSchoolForm.name"></el-input>
-                </el-form-item>
-                <el-form-item label="学校地址" prop="address">
-                    <el-input v-model="editSchoolForm.address"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="editSchoolInfo">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 <script>
@@ -116,24 +66,8 @@ export default {
            schoolList: [],
            editDialogVisible: false,
            addDialogVisible: false, //控制对话框的显示隐藏
-           addSchoolForm: {
-               num: '',
-               name: '',
-               address: ''
-           },
-           addSchoolRules: {
-               name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
-               address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
-           },
-           editSchoolForm: {
-               name: '',
-               address:'',
-               id: ''
-           },
-           editSchoolRules: {
-                name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
-                address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
-           },
+         
+          
            searchSchoolList:[]
        }
     },

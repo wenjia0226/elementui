@@ -3,7 +3,7 @@
       <el-card>
         <el-row>
           <el-col :span="6" style="height: 50px">
-            <img src="../assets/image/logo2.png" alt="" style="width:200px;height: auto;overflow:hidden">
+            <img src="../../assets/image/logo2.png" alt="" style="width:200px;height: auto;overflow:hidden">
           </el-col>
         </el-row>
         <el-row >
