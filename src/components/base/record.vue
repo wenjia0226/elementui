@@ -523,7 +523,6 @@ export default {
             this.schoolId = this.addRecordForm.record_cat[0];
             this.classId = this.addRecordForm.record_cat[1];
             this.studentId = this.addRecordForm.record_cat[2];
-            console.log(this.schoolId, this.classId);
         },
         handleEditChange() {
           this.schoolId = this.editRecordForm.record_cat[0];

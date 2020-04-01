@@ -81,7 +81,7 @@ import axios from 'axios'
             handleGetMenuListSucc (res){ 
               if(res.data.status === 10204) {
                   this.$message.error(res.data.msg);
-                  this.$router.push('/lightspace/login');
+                  // this.$router.push('/login');
               } else if(res.data.status == 200) {
                  this.menuList = res.data.data;
               }
