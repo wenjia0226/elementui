@@ -7,6 +7,8 @@ import School from '@/components/base/school'
 import Class from '@/components/base/class'
 import Student from '@/components/base/student'
 import Record from '@/components/base/record'
+import Teacher from '@/components/base/teacher'
+import Cooparation from '@/components/base/cooparation'
 import Right from '@/components/power/right'
 import Role from '@/components/power/role'
 import Account from '@/components/power/account'
@@ -39,6 +41,8 @@ const router = new Router({
         {path: '/classsetting', component: Class},
         {path: '/studentList', component: Student},
         {path: '/testrecord', component: Record},
+        {path: '/teachersetting', component: Teacher},
+        {path: '/partnershipsetting', component: Cooparation},
         {path: '/permission', component: Right},
         {path: '/role', component: Role},
         {path: '/account', component: Account},

@@ -1,21 +1,44 @@
 <template>
     <div class="login_container">
-        <div class="login_box">
-            <div class="avatar_box">
-                <img src="../assets/logo.png" alt="">
-            </div>
-            <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
-                <el-form-item prop="username">
-                    <el-input  v-model="loginForm.loginname" prefix-icon="el-icon-user-solid"></el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" @keyup.enter.native="submitForm"></el-input>
-                </el-form-item>
-                <el-form-item class="btns">
-                    <el-button type="primary" @click="submitForm">登录</el-button>
-                    <el-button type="info" @click="resetForm">重置</el-button>
-                </el-form-item>
-            </el-form>
+       <el-row class="headerWrap">
+         <el-col :span="18" >
+           <img src="../assets/image/logo2.png" class="leftLogo" alt="">
+             <!-- <el-image src="../assets/image/logo2.png" fit="cover"></el-image> -->
+         </el-col>
+         <el-col :span="6" style="text-align: center;">
+           <img src="../assets/image/logo.png" class="rightLogo"/>
+            <!-- <el-image :src="../assets/image/logo.png" fit="fill" ></el-image> -->
+         </el-col>
+       </el-row>
+       <el-row >
+         <el-col :span="16" :offset="4" style="text-align: center;">
+           <img src="../assets/image/zhineng.png" style="height: 100px;margin: 0 auto" alt="">
+         </el-col>
+       </el-row>
+       <el-row style="flex: 1">
+         <el-col :span="10" :offset="7">
+          <div class="login_box">
+              <!-- <div class="avatar_box">
+                  <img src="../assets/logo.png" alt="">
+              </div> -->
+              <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
+                   <el-form-item class="userLogin"> 用户登录</el-form-item>
+                  <el-form-item prop="username">
+                      <el-input  v-model="loginForm.loginname" prefix-icon="el-icon-user-solid"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="password">
+                      <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" @keyup.enter.native="submitForm"></el-input>
+                  </el-form-item>
+                  <el-form-item class="btns"  >
+                      <el-button type="primary" @click="submitForm" >登录</el-button>
+                      <!-- <el-button type="info" @click="resetForm">重置</el-button> -->
+                  </el-form-item>
+              </el-form>
+          </div>
+        </el-col>
+        </el-row>
+        <div style="background: #0652A1; height: 50px;width: 100%;">
+
         </div>
     </div>
 </template>
@@ -76,7 +99,7 @@ export default {
               this.$message.error('账号过期，请重新登录');
               this.$router.push('/login')
             }
-          
+
         },
         handleLoginErr(err) {
           this.$message.error('账号密码不存在')
@@ -94,45 +117,74 @@ export default {
      bottom: 0;
      left: 0;
      right: 0;
-     background-color: #2b4b6b;
+     display: flex;
+     flex-direction: column;
+     padding:10px;
+}
+.headerWrap {
+  height: 150px;
+  line-height: 150px;
+}
+.leftLogo {
+  height: 50px;
+  width: auto;
+}
+.rightLogo {
+  height: 150px;
+  width: auto;
+}
+.zhineng {
+ height: 100px;
+ width: auto;
+}
+.userLogin {
+  padding: 10rpx;
+  color: #0851A3;
+  font-size: 30rpx !important;
+  font-weight: bold;
+  text-align: center;
 }
 .login_box {
     width: 450px;
-    height: 350px;
-    background-color: #fff;
+    // height: 350px;
+    // background-color: #eee;
+    border: 3px solid #0851A3;
     border-radius: 3px;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    .avatar_box {
-        height: 130px;
-        width: 130px;
-        border: 1px solid #333;
-        border-radius: 50%;
-        padding: 10px;
-        box-shadow: 0 0 10px #ddd;
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #fff;
-        img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background-color: #eee;
-        }
-    }
+    // .avatar_box {
+    //     height: 130px;
+    //     width: 130px;
+    //     border: 1px solid #333;
+    //     border-radius: 50%;
+    //     padding: 10px;
+    //     box-shadow: 0 0 10px #ddd;
+    //     position: absolute;
+    //     left: 50%;
+    //     transform: translate(-50%, -50%);
+    //     background-color: #fff;
+    //     img {
+    //         width: 100%;
+    //         height: 100%;
+    //         border-radius: 50%;
+    //         background-color: #eee;
+    //     }
+    // }
 }
 .btns {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
 }
 .login_form{
-    position: absolute;
-    bottom: 0;
+    // position: absolute;
+    // bottom: 0;
     width: 100%;
-    padding: 0 10px;
+    padding: 20px;
     box-sizing: border-box;
+}
+.el-button--primary {
+  background: rgb(6, 82, 161);
 }
 </style>

@@ -66,7 +66,7 @@
            <td>主导眼</td>
          </tr>
          <tr>
-           <td>左眼</td>
+           <td>右眼</td>
            <td></td>
            <td></td>
            <td></td>
@@ -77,7 +77,7 @@
            <td></td>
          </tr>
          <tr>
-           <td>右眼</td>
+           <td>左眼</td>
            <td></td>
            <td></td>
            <td></td>
@@ -102,12 +102,12 @@
            <td colspan="3">右眼:</td>
          </tr>
          <tr>
-           <td colspan="5" >色觉检查:</td>
+           <td colspan="5" rowspan="2">色觉检查:</td>
            <!-- <td >调节灵敏度</td> -->
             <td colspan="3">左眼:</td>
          </tr>
          <tr>
-           <td colspan="5">色觉检查</td>
+          <!-- <td colspan="5">色觉检查</td> -->
           <!-- <td >调节灵敏度</td> -->
            <td colspan="3">双眼:</td>
          </tr>
@@ -475,7 +475,7 @@ export default {
         }
     },
     handleGetStudentRecordSucc(res) {
-      console.log(res)
+      // console.log(res)
       if(res.data.status === 10204) {
           this.$message.error(res.data.msg);
           this.$router.push('/login');

@@ -20,7 +20,7 @@
                        placeholder="请输入学生姓名"
                        clearable
                        @select="handleSelect">
-
+  
                        </el-autocomplete> -->
 
                  </el-col>
@@ -233,8 +233,6 @@ export default {
               this.$refs.schoolFormRef.resetFields();
               this.getSchoolList();
             }
-
-
         },
         handleAddSchoolErr(err) {
             console.log(err)
