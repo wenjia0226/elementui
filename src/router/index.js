@@ -12,6 +12,7 @@ import Cooparation from '@/components/base/cooparation'
 import Right from '@/components/power/right'
 import Role from '@/components/power/role'
 import Account from '@/components/power/account'
+import parentsrtting from '@/components/power/parentsrtting'
 import Seat from '@/components/seat/seatinquiry'
 import Online from '@/components/seat/online'
 import detailSeat from '@/components/seat/detailSeat'
@@ -31,6 +32,7 @@ const router = new Router({
     {path: '/login',component: Login},
 	{path: '/schoolSurvey/:id',component: schoolSurvey},
 	{path: '/classSurvey/:id',component: classSurvey},
+  {path: '/detailSeat/:id',component: detailSeat},
     {
       path: '/home',
       component: Home,
@@ -46,9 +48,10 @@ const router = new Router({
         {path: '/permission', component: Right},
         {path: '/role', component: Role},
         {path: '/account', component: Account},
+        {path: '/parentsrtting', component: parentsrtting},
         {path: '/seatinquiry', component: Seat, },
         {path: '/online', component: Online },
-        {path: '/detailSeat/:id',component: detailSeat},
+        // {path: '/detailSeat/:id',component: detailSeat},
         {path: '/schoolStatistics', component: SchoolAnalysis},
         {path: '/classStatistics', component: ClassAnalysis},
         {path: '/personal', component: PersonAnalysis},

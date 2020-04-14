@@ -4,7 +4,7 @@
      <el-breadcrumb separator-class="el-icon-arrow-right">
          <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
          <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-         <el-breadcrumb-item>学校设置</el-breadcrumb-item>
+         <el-breadcrumb-item>合作机构</el-breadcrumb-item>
      </el-breadcrumb>
      <el-card>
       <el-row :gutter="20">
@@ -112,7 +112,6 @@
              param.append('address', this.addForm.address);
              param.append('name', this.addForm.name);
              param.append('file', this.addForm.file);
-            console.log(this.addForm,9)
              axios({
                  method: 'post',
                  url: '/lightspace/addPartnership',

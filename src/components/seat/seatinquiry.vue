@@ -232,9 +232,14 @@ export default {
         },
         showSeat(id ,type) {
             window.sessionStorage.setItem('tabletype', type)
-            this.$router.push('/detailSeat/'+id)
-        }
-        }
+            // this.$router.push('/detailSeat/'+id)
+            let routeUrl = this.$router.resolve({
+			          path: "/detailSeat/"+ id,
+			          // query: {id:id}
+});
+		window.open(routeUrl .href, '_blank');
+    }
+  }
 
 
 
