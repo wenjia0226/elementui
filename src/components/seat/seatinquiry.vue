@@ -236,9 +236,9 @@ export default {
             let routeUrl = this.$router.resolve({
 			          path: "/detailSeat/"+ id,
 			          // query: {id:id}
-});
-		window.open(routeUrl .href, '_blank');
-    }
+            });
+            window.open(routeUrl .href, '_blank');
+        }
   }
 
 

@@ -16,6 +16,7 @@ import parentsrtting from '@/components/power/parentsrtting'
 import Seat from '@/components/seat/seatinquiry'
 import Online from '@/components/seat/online'
 import detailSeat from '@/components/seat/detailSeat'
+import detailSeatTwo from '@/components/seat/detailSeatTwo'
 import SchoolAnalysis  from '@/components/analysis/school.vue'
 import ClassAnalysis  from '@/components/analysis/class.vue'
 import PersonAnalysis  from '@/components/analysis/person.vue'
@@ -33,6 +34,7 @@ const router = new Router({
 	{path: '/schoolSurvey/:id',component: schoolSurvey},
 	{path: '/classSurvey/:id',component: classSurvey},
   {path: '/detailSeat/:id',component: detailSeat},
+  {path: '/detailSeatTwo/',component: detailSeatTwo},
     {
       path: '/home',
       component: Home,

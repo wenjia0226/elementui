@@ -23,7 +23,8 @@
                     </tr>
                 </thead> -->
                 <tbody v-for="(item, index) in studentList" :key="index">
-                    <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                  <transition name ="goon">
+                    <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -33,6 +34,7 @@
                               {{item2.studentName}}
                         </a>
                     </td>
+                  </transition>
                      <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
@@ -119,7 +121,7 @@
                               {{item2.studentName}}
                         </a>
                     </td>
-                     <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                    <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -129,7 +131,7 @@
                               {{item2.studentName}}
                         </a>
                     </td>
-                   <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -249,10 +251,13 @@
                         </a>
                     </td>
                      <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
-                       <a href="#" @click="showRecordEditDialog(item2.studentId)">
-                           <img src="../../assets/image/e12.png"  width="64px" alt="">
+                       <a href="#">
+                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
                            <br>
-                           {{item2.studentName}}
+                              {{item2.studentName}}
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
@@ -398,77 +403,76 @@ export default {
        this.getSeatTable();
    },
     data() {
-        return {
-            id: '',
-            token: '',
-            studentList: [],
-			editRecordDialogVisible: false,
-			    editRecordForm: {
-			    curvatureLeft: '',
-			    curvatureRight: '',
-			    cvaLeft: '',
-			    cvaRight: '',
-			    diopterLeft: '',
-			    diopterRight: '',
-			    eyeAxisLengthLeft: '',
-			    eyeAxisLengthRight: '',
-			    visionLeft: '',
-			    visionLeft: '',
-			    record_cat: '',
-			    studentName: '',
-			    schoolName:'',
-			    classesName:''
+      return {
+        id: '',
+        token: '',
+        studentList: [],
+        editRecordDialogVisible: false,
+        editRecordForm: {
+        curvatureLeft: '',
+        curvatureRight: '',
+        cvaLeft: '',
+        cvaRight: '',
+        diopterLeft: '',
+        diopterRight: '',
+        eyeAxisLengthLeft: '',
+        eyeAxisLengthRight: '',
+        visionLeft: '',
+        visionLeft: '',
+        record_cat: '',
+        studentName: '',
+        schoolName:'',
+        classesName:''
 			},
         }
     },
     methods:{
 		//编辑出现编辑页面
-		showRecordEditDialog(id) {
-		    let param = new URLSearchParams();
-		    param.append('id', id);
-		    param.append('token',this.token)
-		    axios({
-		        method: 'post',
-		        url: '/lightspace/studentRecord',
-		        data: param
-		    }).then(this.handleEditRecordSucc.bind(this))
-		    .catch(this.handleEditRecordErr.bind(this))
-		    },
-		handleEditRecordSucc(res) {
-		    if(res.status !== 200) return;
-		    res ? res = res.data: '';
-		    this.editRecordForm = res.data;
-		    this.editRecordDialogVisible = true;
-		},
-		handleEditRecordErr(err) {
-		    console.log(err)
-		},
-        getSeatTable() {
-            let param = new URLSearchParams();
-            param.append('token', this.token);
-            param.append('sortId', this.id);
-            axios({
-                method: 'post',
-                url: "/lightspace/showSort",
-                data: param
-            }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
-        },
-        handleGetSeatTableSucc(res) {
-           if(res.data.status === 10204) {
-               this.$message.error(res.data.msg);
-               this.$router.push('/login');
-           } else if(res.data.status == 200) {
-             console.log(res.data.data)
-             this.studentList = res.data.data;
-             this.type = window.sessionStorage.getItem('tabletype');
-           }
-        },
-        hanadleGetSeatTableErr(err) {
-            console.log(err)
-        },
-        back() {
-            this.$router.push('/seatinquiry');
-        }
+		// showRecordEditDialog(id) {
+		//     let param = new URLSearchParams();
+		//     param.append('id', id);
+		//     param.append('token',this.token)
+		//     axios({
+		//         method: 'post',
+		//         url: '/lightspace/studentRecord',
+		//         data: param
+		//     }).then(this.handleEditRecordSucc.bind(this))
+		//     .catch(this.handleEditRecordErr.bind(this))
+		//     },
+		// handleEditRecordSucc(res) {
+		//     if(res.status !== 200) return;
+		//     res ? res = res.data: '';
+		//     this.editRecordForm = res.data;
+		//     this.editRecordDialogVisible = true;
+		// },
+		// handleEditRecordErr(err) {
+		//     console.log(err)
+		// },
+    getSeatTable() {
+        let param = new URLSearchParams();
+        param.append('token', this.token);
+        param.append('sortId', this.id);
+        axios({
+            method: 'post',
+            url: "/lightspace/showSort",
+            data: param
+        }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
+    },
+    handleGetSeatTableSucc(res) {
+       if(res.data.status === 10204) {
+           this.$message.error(res.data.msg);
+           this.$router.push('/login');
+       } else if(res.data.status == 200) {
+         this.studentList = res.data.data;
+         this.type = window.sessionStorage.getItem('tabletype');
+       }
+    },
+    hanadleGetSeatTableErr(err) {
+        console.log(err)
+    },
+    back() {
+        this.$router.push('/seatinquiry');
+    }
     }
 }
 </script>
@@ -503,4 +507,11 @@ export default {
 .gd {
   width: 100px;
 }
+td:hover  a img{
+  transform: scale(1.2);
+}
+td:hover a img{
+  transition: all 0.3s;
+}
+
 </style>
