@@ -11,7 +11,7 @@
            <div class="schoolSet">学校班级选择：</div>
       </el-col>
 	      <el-col :span="4">
-	           <el-cascader  :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+	           <el-cascader  :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange"></el-cascader>
 	      </el-col>
         <el-col :span="2">
              <div class="schoolSet">学生姓名选择：</div>
@@ -21,15 +21,16 @@
             class="inline-input"
             v-model="state1"
             :fetch-suggestions="querySearch"
-            placeholder="请输入学生姓名"
             clearable
+            placeholder="请输入学生姓名"
+            @change="handleAutoChange"
             @select="handleSelect"></el-autocomplete>
         </el-col>
         <el-col :span="2">
              <div class="schoolSet">查看范围：</div>
         </el-col>
         <el-col :span="3">
-            <el-select v-model="time" @change="changeTime"  clearable>
+            <el-select v-model="time" clearable>
             <el-option v-for="item in timeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
             </el-option>
         </el-select>
@@ -47,11 +48,11 @@
      <el-col :span="16" :offset="4">
        <table cellpadding="0" cellspacing="0" class="report">
          <tr>
-           <th colspan="2">姓名:</th>
-           <th colspan="1">性别:</th>
-           <th colspan="2">生日:</th>
-           <th colspan="3">学校:</th>
-           <th colspan="2">电话:</th>
+           <th colspan="2">姓名: {{studentWord.name}}</th>
+           <th colspan="1">性别: {{studentWord.gender}}</th>
+           <th colspan="2">生日:{{studentWord.birthday}}</th>
+           <th colspan="3">学校: {{studentWord.school}}</th>
+           <th colspan="2">电话:{{studentWord.phone}}</th>
          </tr>
          <tr>
            <td rowspan="3">屈光度</td>
@@ -67,49 +68,49 @@
          </tr>
          <tr>
            <td>右眼</td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
+           <td>{{studentWord.farRight}}</td>
+           <td>{{studentWord.nearRight}}</td>
+           <td>{{studentWord.sphRight}}</td>
+           <td>{{studentWord.cytRight}}</td>
+           <td>{{studentWord.axisRight}}</td>
+           <td>{{studentWord.correctRight}}</td>
+           <td>{{studentWord.ipdRight}}</td>
+           <td>{{studentWord.leadingRight}}</td>
          </tr>
          <tr>
            <td>左眼</td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td></td>
+           <td>{{studentWord.farLeft}}</td>
+           <td>{{studentWord.nearLeft}}</td>
+           <td>{{studentWord.sphLeft}}</td>
+           <td>{{studentWord.cytLeft}}</td>
+           <td>{{studentWord.axisLeft}}</td>
+           <td>{{studentWord.correctLeft}}</td>
+           <td>{{studentWord.ipdLeft}}</td>
+           <td>{{studentWord.leadingLeft}}</td>
          </tr>
          <tr>
            <td rowspan="5">视功能检查</td>
-           <td colspan="5">眼球运动:</td>
-           <td colspan="4">立体检查:</td>
+           <td colspan="5">眼球运动:{{studentWord.motion}}</td>
+           <td colspan="4">立体检查:{{studentWord.stereopsis}}</td>
          </tr>
          <tr>
-           <td colspan="5">遮盖眼位:</td>
-           <td colspan="4">Worth-4点:</td>
+           <td colspan="5">遮盖眼位:{{studentWord.cover}}</td>
+           <td colspan="4">Worth-4点:{{studentWord.worth}}</td>
          </tr>
          <tr>
-           <td colspan="5">集合近点:</td>
+           <td colspan="5">集合近点:{{studentWord.assembly}}</td>
            <td rowspan="3" >调节灵敏度</td>
-           <td colspan="3">右眼:</td>
+           <td colspan="3">右眼:{{studentWord.splRight}}</td>
          </tr>
          <tr>
-           <td colspan="5" rowspan="2">色觉检查:</td>
+           <td colspan="5" rowspan="2">色觉检查:{{studentWord.colourVision}}</td>
            <!-- <td >调节灵敏度</td> -->
-            <td colspan="3">左眼:</td>
+            <td colspan="3">左眼:{{studentWord.splLeft}}</td>
          </tr>
          <tr>
           <!-- <td colspan="5">色觉检查</td> -->
           <!-- <td >调节灵敏度</td> -->
-           <td colspan="3">双眼:</td>
+           <td colspan="3">双眼:{{studentWord.splBinoculus}}</td>
          </tr>
          <!-- 生物测量检查 -->
          <tr>
@@ -123,40 +124,40 @@
          </tr>
          <tr>
            <td>右眼</td>
-           <td colspan="2"></td>
-           <td colspan="2"></td>
-           <td colspan="2"></td>
-           <td ></td>
-           <td ></td>
+           <td colspan="2">{{studentWord.levelRight}}</td>
+           <td colspan="2">{{studentWord.verticalRight}}</td>
+           <td colspan="2">{{studentWord.axialLengthRight}}</td>
+           <td >{{studentWord.acdRight}}</td>
+           <td >{{studentWord.ltRight}}</td>
          </tr>
          <tr>
            <td>左眼</td>
-           <td colspan="2"></td>
-           <td colspan="2"></td>
-           <td colspan="2"></td>
-           <td ></td>
-           <td ></td>
+           <td colspan="2">{{studentWord.levelLeft}}</td>
+           <td colspan="2">{{studentWord.verticalLeft}}</td>
+           <td colspan="2">{{studentWord.axialLengthLeft}}</td>
+           <td >{{studentWord.acdLeft}}</td>
+           <td >{{studentWord.ltLeft}}</td>
          </tr>
          <!-- 眼部健康检查 -->
          <tr  style="text-align: left;">
            <td rowspan="2">眼部健康检查</td>
-           <td colspan="9">裂隙灯检查:</td>
+           <td colspan="9">裂隙灯检查:{{studentWord.slitLamp}}</td>
          </tr>
          <tr>
-           <td colspan="9">眼底照相检查:</td>
+           <td colspan="9">眼底照相检查:{{studentWord.retCam}}</td>
          </tr>
          <!-- 身体情况 -->
          <tr align="left">
            <td rowspan="2">身体情况</td>
-           <td colspan="9">身高(cm):</td>
+           <td colspan="9">身高(cm): {{studentWord.height}}</td>
          </tr>
          <tr>
-           <td colspan="9">体重(kg):</td>
+           <td colspan="9">体重(kg):{{studentWord.weight}}</td>
          </tr>
         <!-- 处理建议 -->
         <tr>
           <td >处理建议</td>
-          <td colspan="9"></td>
+          <td colspan="9">{{studentWord.suggest}}</td>
         </tr>
 
        </table>
@@ -216,7 +217,8 @@ export default {
       leftQuY:[],
       rightQuX: [],
       rightQuY: [],
-      time: 30,
+      studentWord: [],
+      time: 365,
       timeoptions:[{
         value: 30 ,
         label: '一个月'
@@ -233,6 +235,9 @@ export default {
 		}
 	},
 	methods: {
+    handleAutoChange(value) {
+      console.log(value)
+    },
 	  drawLine() {
       let myChart = echarts.init(this.$refs.left);
 	     this.option = {
@@ -398,11 +403,13 @@ export default {
       }).then(this.getStudentListSucc.bind(this)).catch(this.getStudnentListErr.bind(this))
     },
     getStudentListSucc(res) {
+
       if(res.data.status === 10204) {
-          this.$message.error(res.data.msg);
-          this.$router.push('/login');
+        this.$message.error(res.data.msg);
+        this.$router.push('/login');
       } else if(res.data.status == 200) {
         res ? res = res.data.data: '';
+
         for(let i  =0; i <res.length; i++) {
           this.studentList.push({
             value: res[i].name,
@@ -451,8 +458,11 @@ export default {
 		    console.log(err)
 		},
 		handleChange() {
+      this.state1 = ''; //如果改变学校班级，学生姓名自动清空
 		   this.schoolId = this.stu_cat[0];
 		   this.classId = this.stu_cat[1];
+       this.studentList = [];
+       this.studentId = '';
        this.getStudentName();
 		},
     showPerson() {
@@ -475,33 +485,49 @@ export default {
         }
     },
     handleGetStudentRecordSucc(res) {
-      // console.log(res)
       if(res.data.status === 10204) {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
       } else if(res.data.status == 200) {
-      res? res= res.data.data: '';
-      for(let i = 0; i < res.length; i++) {
-        if(res[i].name=="左眼裸眼视力") {
-          this.leftLuoX = res[0].xDataList;
-          this.leftLuoY = res[0].yDataList;
-        }else if(res[i].name == '右眼裸眼视力') {
-           this.rightLuoX = res[1].xDataList;
-           this.rightLuoY = res[1].yDataList;
-         }else if(res[i].name=="左眼眼轴长度") {
-           this.leftZhouX = res[2].xDataList;
-           this.leftZhouY = res[2].yDataList;
-         }else if(res[i].name == '右眼眼轴长度') {
-            this.rightZhouX = res[3].xDataList;
-            this.rightZhouY = res[3].yDataList
-          }else if(res[i].name == '左眼曲率') {
-            this.leftQuX = res[4].xDataList;
-            this.leftQuY = res[4].yDataList;
-          }else {
-            this.rightQuX = res[5].xDataList;
-            this.rightQuY = res[5].yDataList;
-          }
-         }
+        res? res= res.data.data: '';
+        if(res.studnetWord !== null) {
+          this.studentWord = res.studnetWord;
+        }
+        this.leftLuoX = res.visionLeft.xDataList;
+        this.leftLuoY = res.visionLeft.yDataList;
+        this.rightLuoX = res.visionRight.xDataList;
+        this.rightLuoY = res.visionRight.yDataList;
+        this.leftZhouX = res.eyeAxisLengthLeft.xDataList;
+        this.leftZhouY = res.eyeAxisLengthLeft.yDataList;
+        this.rightZhouX = res.eyeAxisLengthRight.xDataList;
+        this.rightZhouY = res.eyeAxisLengthRight.yDataList;
+        this.leftQuX = res.curvatureLeft.xDataList;
+        this.leftQuY = res.curvatureLeft.yDataList;
+        this.rightQuX = res.curvatureRight.xDataList;
+        this.rightQuY = res.curvatureRight.yDataList;
+      //      this.rightLuoY = res[1].yDataList;
+      // for(let i = 0; i < res.length; i++) {
+      //   console.log(res, 999)
+      //   if(res[i].name=="左眼裸眼视力") {
+      //     this.leftLuoX = res[0].xDataList;
+      //     this.leftLuoY = res[0].yDataList;
+      //   }else if(res[i].name == '右眼裸眼视力') {
+      //      this.rightLuoX = res[1].xDataList;
+      //      this.rightLuoY = res[1].yDataList;
+      //    }else if(res[i].name=="左眼眼轴长度") {
+      //      this.leftZhouX = res[2].xDataList;
+      //      this.leftZhouY = res[2].yDataList;
+      //    }else if(res[i].name == '右眼眼轴长度') {
+      //       this.rightZhouX = res[3].xDataList;
+      //       this.rightZhouY = res[3].yDataList
+      //     }else if(res[i].name == '左眼曲率') {
+      //       this.leftQuX = res[4].xDataList;
+      //       this.leftQuY = res[4].yDataList;
+      //     }else {
+      //       this.rightQuX = res[5].xDataList;
+      //       this.rightQuY = res[5].yDataList;
+      //     }
+      //    }
         this.drawLine();
         this.drawLine2();
         this.drawLine3();
@@ -509,19 +535,15 @@ export default {
     },
     handleGetStudentRecordErr(err) {
       console.log(err)
-    },
-    //排座周期
-    changeTime(time) {
-
     }
 	}
 }
 </script>
 <style lang="less" scoped>
-.el-cascader {
-  width: 100%;
-}
-.report{margin: 20px 0;}
-.report th, td {padding: 30px;text-align:center;border:1px solid #ccc; text-align: left;}
-.report tr:nth-child(2n+1) td{text-align: left;}
+  .el-cascader {
+    width: 100%;
+  }
+  .report{margin: 20px 0;}
+  .report th, td {padding: 30px;text-align:center;border:1px solid #ccc; text-align: left;}
+  .report tr:nth-child(2n+1) td{text-align: left;}
 </style>

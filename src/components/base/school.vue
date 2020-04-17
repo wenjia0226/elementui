@@ -57,7 +57,6 @@
             </el-table>
             <!-- 分页功能 -->
             <el-pagination
-
                 v-show="!this.searchSchoolList.length"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"

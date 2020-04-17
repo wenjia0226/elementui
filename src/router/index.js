@@ -8,6 +8,7 @@ import Class from '@/components/base/class'
 import Student from '@/components/base/student'
 import Record from '@/components/base/record'
 import Teacher from '@/components/base/teacher'
+import Report from '@/components/base/report'
 import Cooparation from '@/components/base/cooparation'
 import Right from '@/components/power/right'
 import Role from '@/components/power/role'
@@ -22,6 +23,8 @@ import ClassAnalysis  from '@/components/analysis/class.vue'
 import PersonAnalysis  from '@/components/analysis/person.vue'
 import schoolSurvey  from '@/components/survey/schoolSurvey'
 import classSurvey  from '@/components/survey/classSurvey'
+import screeningtemp from '@/components/template/screen.vue'
+import wordtemp from '@/components/template/wordtemp.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -46,6 +49,7 @@ const router = new Router({
         {path: '/studentList', component: Student},
         {path: '/testrecord', component: Record},
         {path: '/teachersetting', component: Teacher},
+        {path: '/report', component: Report},
         {path: '/partnershipsetting', component: Cooparation},
         {path: '/permission', component: Right},
         {path: '/role', component: Role},
@@ -57,6 +61,8 @@ const router = new Router({
         {path: '/schoolStatistics', component: SchoolAnalysis},
         {path: '/classStatistics', component: ClassAnalysis},
         {path: '/personal', component: PersonAnalysis},
+        {path: '/screeningtemp', component: screeningtemp},
+         {path: '/wordtemp', component: wordtemp}
         // meta:{keepAlive: true}
       ]
     },

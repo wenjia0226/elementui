@@ -184,7 +184,7 @@
         <el-dialog :visible.sync="showDialog"  width="30%" center :before-close="handleFileClose">
           <el-row>
             <el-col :span="12">
-              <a class="download" href="http://47.104.222.22:80/download/学生导入模板.xlsx">下载模板</a>
+              <a class="download" href="http://www.guangliangkongjian.com/download/学生导入模板.xlsx">下载模板</a>
               <!-- <el-button @click="DownLoadTemplate" type="primary" size="small">下载模板</el-button> -->
             </el-col>
             <el-col :span="12">
@@ -560,7 +560,6 @@ export default {
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.editStudentForm = res.data.data;
-              console.log(this.editStudentForm)
               this.editStudentVisible = true;
               this.getStudentList();
             }

@@ -18,7 +18,7 @@
                     <el-button type="primary" @click="addRecordDialogVisible = true">添加检测记录</el-button>
                 </el-col>
                 <el-col :span="3" >
-                       <el-button type="primary" @click="handdlePi" >批量导入</el-button>
+                       <el-button type="primary" @click="handdlePi">批量导入</el-button>
                 </el-col>
             </el-row>
 
@@ -38,7 +38,7 @@
                 <el-table-column label="左眼矫正视力" prop="cvaLeft"></el-table-column>
                 <el-table-column label="右眼屈光度" prop="diopterRight"></el-table-column>
                 <el-table-column label="左眼屈光度" prop="diopterLeft"></el-table-column>
-               
+
 
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -56,13 +56,13 @@
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="所属学校" prop="schoolName"></el-table-column>
                 <el-table-column label="所属班级" prop="classesName"></el-table-column>
-                <el-table-column label="姓名" prop="studentName"></el-table-column> 
+                <el-table-column label="姓名" prop="studentName"></el-table-column>
                 <el-table-column label="右眼裸眼视力" prop="visionRight"></el-table-column>
                 <el-table-column label="左眼裸眼视力" prop="visionLeft"></el-table-column>
                 <el-table-column label="右眼眼轴长度" prop="eyeAxisLengthRight"></el-table-column>
-                <el-table-column label="左眼眼轴长度" prop="eyeAxisLengthLeft"></el-table-column>        
+                <el-table-column label="左眼眼轴长度" prop="eyeAxisLengthLeft"></el-table-column>
                 <el-table-column label="右眼曲率" prop="curvatureRight"></el-table-column>
-                <el-table-column label="左眼曲率" prop="curvatureLeft"></el-table-column>     
+                <el-table-column label="左眼曲率" prop="curvatureLeft"></el-table-column>
                 <el-table-column label="右眼矫正视力" prop="cvaRight"></el-table-column>
                 <el-table-column label="左眼矫正视力" prop="cvaLeft"></el-table-column>
                 <el-table-column label="右眼屈光度" prop="diopterRight"></el-table-column>
@@ -101,7 +101,7 @@
                     </el-form-item>
                     <el-form-item label="左眼裸眼视力" prop="visionLeft">
                         <el-input v-model="addRecordForm.visionLeft" clearable></el-input>
-                    </el-form-item>  
+                    </el-form-item>
                     <el-form-item label="右眼眼轴长度" prop="eyeAxisLengthRight">
                         <el-input v-model="addRecordForm.eyeAxisLengthRight" clearable></el-input>
                     </el-form-item>
@@ -121,7 +121,7 @@
                     <el-form-item label="左眼矫正视力" >
                         <el-input v-model="addRecordForm.cvaLeft" clearable></el-input>
                     </el-form-item>
-                   <!-- 屈光度是非必填项 -->                   
+                   <!-- 屈光度是非必填项 -->
                      <el-form-item label="右眼屈光度">
                         <el-input v-model="addRecordForm.diopterRight" clearable></el-input>
                     </el-form-item>
@@ -154,7 +154,7 @@
                     </el-form-item>
                     <el-form-item label="左眼眼轴长度" prop="eyeAxisLengthLeft">
                         <el-input v-model="editRecordForm.eyeAxisLengthLeft" clearable></el-input>
-                    </el-form-item>  
+                    </el-form-item>
                      <el-form-item label="右眼曲率" prop="curvatureRight">
                         <el-input  v-model="editRecordForm.curvatureRight" clearable></el-input>
                     </el-form-item>
@@ -182,7 +182,7 @@
             <el-dialog :visible.sync="showDialog"  width="30%" center >
               <el-row>
                 <el-col :span="12">
-                  <a class="download" href="http://47.104.222.22:80/download/检查数据导入模板.xlsx">下载模板</a>
+                  <a class="download" href="http://www.guangliangkongjian.com/download/检查数据导入模板.xlsx">下载模板</a>
                   <!-- <el-button @click="DownLoadTemplate" type="primary" size="small">下载模板</el-button> -->
                 </el-col>
                 <el-col :span="12">

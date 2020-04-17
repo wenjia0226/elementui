@@ -23,7 +23,6 @@
                     </tr>
                 </thead> -->
                 <tbody v-for="(item, index) in studentList" :key="index">
-                  <transition name ="goon">
                     <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
@@ -34,7 +33,6 @@
                               {{item2.studentName}}
                         </a>
                     </td>
-                  </transition>
                      <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
@@ -208,7 +206,7 @@
            <!--第三种排序方法 -->
             <table class="seat" v-else-if="this.type == '方式三'">
                 <tbody v-for="(item, index) in studentList" :key="index">
-                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)" >
                         <a href="#">
                             <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                             <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -219,7 +217,7 @@
                          </a>
                     </td>
                     <td class="gd">&nbsp;</td>
-                    <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" >
+                    <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -229,28 +227,7 @@
                               {{item2.studentName}}
                         </a>
                     </td>
-                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId">
-                       <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
-                              {{item2.studentName}}
-                        </a>
-                    </td>
-                    <td class="gd">&nbsp;</td>
-                    <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId">
-                       <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
-                              {{item2.studentName}}
-                        </a>
-                    </td>
-                     <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId">
+                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -261,7 +238,28 @@
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
-                     <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId">
+                    <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
+                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <br>
+                              {{item2.studentName}}
+                        </a>
+                    </td>
+                     <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
+                       <a href="#">
+                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <br>
+                              {{item2.studentName}}
+                        </a>
+                    </td>
+                    <td class="gd">&nbsp;</td>
+                     <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -276,7 +274,7 @@
             <!-- 第四种排序方法-->
             <table class="seat" v-else>
                 <tbody v-for="(item, index) in studentList" :key="index">
-                   <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" >
+                   <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                       <a href="#">
                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -286,7 +284,7 @@
                              {{item2.studentName}}
                        </a>
                     </td>
-                    <td v-for="item2 in item.slice(1,2)" :key="item2.studentId">
+                    <td v-for="item2 in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -297,7 +295,7 @@
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
-                    <td v-for="item2 in item.slice(2,3)" :key="item2.studentId">
+                    <td v-for="item2 in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -308,7 +306,7 @@
                         </a>
                     </td>
                      <td class="gd">&nbsp;</td>
-                    <td v-for="item2 in item.slice(3,4)" :key="item2.studentId">
+                    <td v-for="item2 in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -319,7 +317,7 @@
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
-                    <td v-for="item2 in item.slice(4,5)" :key="item2.studentId">
+                    <td v-for="item2 in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -329,7 +327,7 @@
                               {{item2.studentName}}
                         </a>
                     </td>
-                      <td v-for="item2 in item.slice(5,6)" :key="item2.studentId">
+                      <td v-for="item2 in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
@@ -428,26 +426,26 @@ export default {
     },
     methods:{
 		//编辑出现编辑页面
-		// showRecordEditDialog(id) {
-		//     let param = new URLSearchParams();
-		//     param.append('id', id);
-		//     param.append('token',this.token)
-		//     axios({
-		//         method: 'post',
-		//         url: '/lightspace/studentRecord',
-		//         data: param
-		//     }).then(this.handleEditRecordSucc.bind(this))
-		//     .catch(this.handleEditRecordErr.bind(this))
-		//     },
-		// handleEditRecordSucc(res) {
-		//     if(res.status !== 200) return;
-		//     res ? res = res.data: '';
-		//     this.editRecordForm = res.data;
-		//     this.editRecordDialogVisible = true;
-		// },
-		// handleEditRecordErr(err) {
-		//     console.log(err)
-		// },
+		showRecordEditDialog(id) {
+		    let param = new URLSearchParams();
+		    param.append('id', id);
+		    param.append('token',this.token)
+		    axios({
+		        method: 'post',
+		        url: '/lightspace/studentRecord',
+		        data: param
+		    }).then(this.handleEditRecordSucc.bind(this))
+		    .catch(this.handleEditRecordErr.bind(this))
+		    },
+		handleEditRecordSucc(res) {
+		    if(res.status !== 200) return;
+		    res ? res = res.data: '';
+		    this.editRecordForm = res.data;
+		    this.editRecordDialogVisible = true;
+		},
+		handleEditRecordErr(err) {
+		    console.log(err)
+		},
     getSeatTable() {
         let param = new URLSearchParams();
         param.append('token', this.token);
@@ -509,8 +507,6 @@ export default {
 }
 td:hover  a img{
   transform: scale(1.2);
-}
-td:hover a img{
   transition: all 0.3s;
 }
 
