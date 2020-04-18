@@ -6,19 +6,19 @@
             <img src="../../assets/image/logo2.png" alt="" style="width:200px;height: auto;overflow:hidden">
           </el-col>
         </el-row>
-        <el-row >
+        <el-row>
           <el-col :span="24" >
             <div style="padding: 10px  0 50px ;font-size: 30px; text-align: center;">{{schoolName}}视力概况</div>
           </el-col>
         </el-row>
         <el-row style="margin: 30px 0"  >
            <el-col :span="24">
-             <div ref="totalleft" style="width: 600px;height:420px; margin: 0 auto"></div>
+             <div ref="totalright" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
         </el-row>
         <el-row style="margin: 30px 0"  >
            <el-col :span="24">
-             <div ref="totalright" style="width: 600px;height:420px; margin: 0 auto"></div>
+             <div ref="totalleft" style="width: 600px;height:420px; margin: 0 auto"></div>
            </el-col>
         </el-row>
         <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee" >
@@ -133,7 +133,6 @@
         } else if(res.data.status == 200) {
            let total = res.data.data;
           //总共
-          console.log()
             this.totalleftOption = total[0];
             this.totalrightOption = total[1];
             this.totaldoubleOption = total[2];
@@ -146,8 +145,8 @@
           this.totaldoubleOption.forEach((item, index) => {
               this.totaldoubleLegend.push(item.name);
             })
-          this.drawLine('totalleft', this.totalleftLegend, this.totalleftOption, '左眼概况');
           this.drawLine('totalright', this.totalrightLegend, this.totalrightOption,'右眼概况');
+          this.drawLine('totalleft', this.totalleftLegend, this.totalleftOption, '左眼概况');
           this.drawLine('totaldouble', this.totaldoubleLegend,this.totaldoubleOption, '双眼概况');
         }
       },

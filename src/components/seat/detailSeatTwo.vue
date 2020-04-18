@@ -9,84 +9,92 @@
             <table class="seat" v-if="this.type == 1">
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
-                              {{item2.studentName}}
-                        </a>
+                      <a href="#">
+                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                          <div class="name">
+                             {{item2.studentName}}
+                          </div>
+                       </a>
                     </td>
                      <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                    <td  v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
                     <td  v-for="(item2) in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     <td  v-for="(item2) in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
                     <td  v-for="(item2) in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                      <td  v-for="(item2) in item.slice(6,7)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                    <td  v-for="(item2) in item.slice(7,8)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                 </tbody>
@@ -96,94 +104,103 @@
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                      <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                    <td class="gd">&nbsp;</td>
                     <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                       <a href="#">
-                          <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <br>
+                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                          <div class="name">
                              {{item2.studentName}}
+                          </div>
                        </a>
                     </td>
                      <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                    <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                       <a href="#">
-                          <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <br>
+                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                          <div class="name">
                              {{item2.studentName}}
+                          </div>
                        </a>
                     </td>
                    <td class="gd">&nbsp;</td>
                     <td v-for="(item2) in item.slice(6,7)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                      <td v-for="(item2) in item.slice(7,8)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                    <td v-for="(item2) in item.slice(8,9)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                 </tbody>
@@ -193,65 +210,71 @@
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                         <a href="#">
-                            <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                            <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                            <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                             <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                            <br>
+                            <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                            <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                             <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                            <div class="name">
                                {{item2.studentName}}
+                            </div>
                          </a>
                     </td>
                     <td class="gd">&nbsp;</td>
                     <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)" >
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                     <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
                     <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                      <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
                      <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                 </tbody>
@@ -261,71 +284,77 @@
                 <tbody v-for="(item, index) in studentList" :key="index">
                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId"   @click="showRecordEditDialog(item2.studentId)">
                       <a href="#">
-                          <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <br>
+                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                          <div class="name">
                              {{item2.studentName}}
+                          </div>
                        </a>
                     </td>
                     <td v-for="item2 in item.slice(1,2)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
-                              {{item2.studentName}}
-                        </a>
+                      <a href="#">
+                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                          <div class="name">
+                             {{item2.studentName}}
+                          </div>
+                       </a>
                     </td>
                     <td class="gd">&nbsp;</td>
                     <td v-for="item2 in item.slice(2,3)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                      <td class="gd">&nbsp;</td>
                     <td v-for="item2 in item.slice(3,4)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                     <td class="gd">&nbsp;</td>
                     <td v-for="item2 in item.slice(4,5)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                       <td v-for="item2 in item.slice(5,6)" :key="item2.studentId"  @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
-                           <img src="../../assets/image/girl.png"  width="100px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img src="../../assets/image/weargirl.png"  width="100px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img src="../../assets/image/boy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img src="../../assets/image/wearboy.png"  width="100px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <br>
+                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                           <div class="name">
                               {{item2.studentName}}
+                           </div>
                         </a>
                     </td>
                 </tbody>
             </table>
         </el-card>
-        <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible"  width="30%">
+        <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible"  width="30%" :lock-scroll="false" :append-to-body="true"	>
             <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px">
             <!-- <el-form-item label="所属学校班级" prop="">
                 <el-cascader :options="options" v-model="editRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
@@ -494,12 +523,25 @@ export default {
   text-decoration: none;
   font-size: 16px;
   text-align: center;
+  position: relative;
 }
 .gd {
   width: 100px;
 }
-td:hover  a img{
+td:hover  a{
   transform: scale(1.2);
   transition: all 0.3s;
+}
+.img {
+  position: relative;
+}
+.name {
+  position: absolute;
+  bottom: 24%;
+  left: 0;
+  right: 0;
+  font-size: 16px;
+  color:#000000;
+  font-weight: bold;
 }
 </style>

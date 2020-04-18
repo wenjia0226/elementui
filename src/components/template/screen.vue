@@ -21,8 +21,8 @@
           </el-table-column>
           <el-table-column label="状态">
             <template slot-scope="scope">
-               <el-button type="success" size="mini" round icon="el-icon-circle-check" v-if="scope.row.selected == 1">使用中</el-button>
-               <el-button type="primary" size="mini" round icon="el-icon-circle-close" v-if="scope.row.selected == 0">未使用</el-button>
+               <el-button type="success" size="middle"  v-if="scope.row.selected == 1">使用中</el-button>
+               <el-button type="primary" size="middle"  v-if="scope.row.selected == 0">未使用</el-button>
             </template>
           </el-table-column>
           <!-- <el-table-column label="选择模板">

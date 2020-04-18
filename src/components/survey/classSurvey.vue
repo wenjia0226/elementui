@@ -13,14 +13,15 @@
         </el-row>
         <el-row style="margin: 40px 0">
            <el-col :span="24">
-             <div ref="left" style="width: 700px;height:500px;margin: 0 auto;"></div>
-           </el-col>
-        </el-row>
-         <el-row style="margin: 40px 0">
-           <el-col :span="24">
              <div ref="right" style="width: 700px;height:500px;margin: 0 auto;"></div>
            </el-col>
         </el-row>
+        <el-row style="margin: 40px 0">
+           <el-col :span="24">
+             <div ref="left" style="width: 700px;height:500px;margin: 0 auto;"></div>
+           </el-col>
+        </el-row>
+
         <el-row style="margin: 40px 0">
           <el-col :span = "12" :offset="6" >
              <div ref="double" style="width: 700px;height:500px;margin: 0 auto;"></div>
@@ -98,7 +99,7 @@ export default {
                   name: '访问来源',
                   type: 'pie',
                   radius: '80%',
-                  center: ['50%', '60%'],
+                  center: ['50%', '50%'],
                   label: {formatter: '{b}:{c}: ({d}%)'},
                   data: option,
                   emphasis: {
