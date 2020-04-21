@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main" ref="box">
        <!-- <el-button type="primary" @click="back" class="mb">返回</el-button> -->
         <el-card style="background:#8D8779">
           <div class="header demo-image__lazy">
@@ -23,17 +23,44 @@
                     </tr>
                 </thead> -->
                 <tbody v-for="(item, index) in studentList" :key="index">
-                    <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
+                     <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId">
+                        <el-popover
+                             placement="right"
+                             width="400"
+                             @show="handleStatus(item2.studentId)"
+                              trigger="hover">
+                            <el-form :model="studentForm">
+                                <el-form-item label="姓名">
+                                  <el-input v-model="studentForm.studentName" disabled></el-input>
+                                </el-form-item>
+                                <el-form-item label="身高" >
+                                  <el-input v-model="studentForm.visionRight" disabled></el-input>
+                                </el-form-item>
+                                <el-form-item label="右裸眼" >
+                                  <el-input v-model="studentForm.height" disabled></el-input>
+                                </el-form-item>
+                                <el-form-item label="左裸眼" >
+                                  <el-input v-model="studentForm.visionLeft" disabled></el-input>
+                                </el-form-item>
+                                <el-form-item label="右校正" >
+                                  <el-input v-model="studentForm.cvaRight" disabled></el-input>
+                                </el-form-item>
+                                <el-form-item label="左矫正" >
+                                  <el-input v-model="studentForm.cvaLeft" disabled></el-input>
+                                </el-form-item>
+                              </el-form>
+                             <a href="#" slot="reference">
+                                 <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
+                                 <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
+                                 <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
+                                  <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
+                                 <div class="name">
+                                    {{item2.studentName}}
+                                 </div>
+                              </a>
+                           </el-popover>
+                     </td>
+
                      <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                       <a href="#">
                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
@@ -370,12 +397,12 @@
                 </tbody>
             </table>
         </el-card>
-		    <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible"  width="30%" :lock-scroll="false" :append-to-body="true">
-          <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px">
+		    <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible" >
+          <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px" >
           <!-- <el-form-item label="所属学校班级" prop="">
               <el-cascader :options="options" v-model="editRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
           </el-form-item> -->
-          <el-form-item label="姓名" >
+          <el-form-item label="姓名">
               <el-input v-model="editRecordForm.studentName" disabled></el-input>
           </el-form-item>
           <el-form-item label="所属学校" >
@@ -422,6 +449,8 @@
     </div>
 </template>
 <script>
+
+
 import axios from 'axios'
 export default {
    created() {
@@ -452,11 +481,50 @@ export default {
         schoolName:'',
         classesName:''
 			},
-        }
+      studentForm: {
+        studentName: '',
+        height: '',
+        visionLeft: '',
+        visionRight: '',
+        cvaLeft: '',
+        cvaRight: ''
+      }
+     }
+    },
+    mounted () {//给window添加一个滚动滚动监听事件
+      window.addEventListener('scroll', this.handleScroll)
     },
     methods:{
+      handleStatus(id) {
+        let param = new URLSearchParams();
+        param.append('id', id);
+        param.append('token',this.token)
+        axios({
+            method: 'post',
+            url: '/lightspace/studentRecord',
+            data: param
+        }).then(this.handleGetInfoSucc.bind(this))
+        .catch(this.handleGetInfoErr.bind(this))
+      },
+      handleGetInfoSucc(res) {
+        if(res.data.status == 200) {
+          this.studentForm = res.data.data;
+        }
+      },
+      handleGetInfoErr(err) {
+        console.log(err)
+      },
+      handleScroll () { //改变元素#searchBar的top值
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        this.scrollTop = scrollTop;
+        console.log(this.scrollTop)
+        },
+      destroyed () {//离开该页面需要移除这个监听的事件
+        window.removeEventListener('scroll', this.handleScroll)
+      },
 		//编辑出现编辑页面
 		showRecordEditDialog(id) {
+       this.$refs.box.scrollTop = this.scrollTop;
 		    let param = new URLSearchParams();
 		    param.append('id', id);
 		    param.append('token',this.token)
@@ -468,6 +536,7 @@ export default {
 		    .catch(this.handleEditRecordErr.bind(this))
 		    },
 		handleEditRecordSucc(res) {
+
 		    if(res.status !== 200) return;
 		    res ? res = res.data: '';
 		    this.editRecordForm = res.data;
@@ -487,6 +556,7 @@ export default {
         }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
     },
     handleGetSeatTableSucc(res) {
+      console.log(res)
        if(res.data.status === 10204) {
            this.$message.error(res.data.msg);
            this.$router.push('/login');
@@ -500,7 +570,13 @@ export default {
     },
     back() {
         this.$router.push('/seatinquiry');
-    }
+    },
+
+    // Vue.directive('alterELDialogMarginTop'/*修改elementUI中el-dialog顶部的距离,传入值eg:{marginTop:'5vh'} */, {
+    //   inserted(el, binding, vnode) {
+    //             el.firstElementChild.style.marginTop = binding.value.marginTop
+    //   }
+    // })
     }
 }
 </script>
@@ -514,6 +590,7 @@ export default {
   padding: 0 5%;
   justify-content: center;
   align-items: center;
+  overflow: auto;
 }
 .header {
   width: 100%;

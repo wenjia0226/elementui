@@ -12,6 +12,7 @@
          <el-table-column type="index"></el-table-column>
          <el-table-column label="生成时间" prop="genTime"></el-table-column>
          <el-table-column label="电话" prop="phone"></el-table-column>
+         <el-table-column label="用户标识" prop="openId"></el-table-column>
      </el-table>
      <!-- 分页功能 -->
      <el-pagination
@@ -63,7 +64,7 @@
              .catch(this.handleGetUserErr.bind(this))
       },
       handleGetUserSucc(res) {
-        console.log(res)
+        // console.log(res)
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');

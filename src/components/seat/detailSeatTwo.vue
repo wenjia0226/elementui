@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main" ref="box">
        <!-- <el-button type="primary" @click="back" class="mb">返回</el-button> -->
         <el-card style="background:#8D8779">
           <div class="header demo-image__lazy">
@@ -354,7 +354,7 @@
                 </tbody>
             </table>
         </el-card>
-        <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible"  width="30%" :lock-scroll="false" :append-to-body="true"	>
+        <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible"  width="30%" lock-scroll	 :append-to-body="true"	:style="{marginTop: scrollTop + 'px'}">
             <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px">
             <!-- <el-form-item label="所属学校班级" prop="">
                 <el-cascader :options="options" v-model="editRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
@@ -439,11 +439,23 @@ export default {
         studentName: '',
         schoolName:'',
         classesName:'',
-        studentList: []
+        studentList: [],
+        scrollTop: 0
 			},
         }
     },
+    mounted () {//给window添加一个滚动滚动监听事件
+      window.addEventListener('scroll', this.handleScroll)
+    },
     methods:{
+      handleScroll () { //改变元素#searchBar的top值
+          var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+          this.scrollTop = scrollTop;
+         
+        },
+      destroyed () {//离开该页面需要移除这个监听的事件
+        window.removeEventListener('scroll', this.handleScroll)
+      },
       //编辑出现编辑页面
       showRecordEditDialog(id) {
           let param = new URLSearchParams();

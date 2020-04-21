@@ -18,6 +18,8 @@
 	  <el-table :data="this.reportList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" >
 	      <el-table-column type="index"></el-table-column>
 	      <el-table-column label="报告名称" prop="name"></el-table-column>
+        <el-table-column label="学校名称" prop="schoolName"></el-table-column>
+        <el-table-column label="班级名称" prop="className"></el-table-column>
 	      <el-table-column label="时间" prop="time"></el-table-column>
 	      <!-- <el-table-column label="操作">
 	          <template slot-scope="scope">
@@ -124,12 +126,10 @@
 		  .catch(this.handleGetReportErr.bind(this))
 	   },
 	   handleGetReportSucc(res) {
-       console.log(res)
 		 if(res.data.status === 10204) {
 			 this.$message.error(res.data.msg);
 			 this.$router.push('/login');
 			} else if(res.data.status == 200) {
-        console.log(res.data.data)
 			  this.reportList = res.data.data;
 		   }
 	   },
