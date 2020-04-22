@@ -1,5 +1,5 @@
 <template>
-    <div>
+  <div>
 	<el-breadcrumb separator-class="el-icon-arrow-right">
 	    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
 	    <el-breadcrumb-item>数据分析</el-breadcrumb-item>
@@ -24,7 +24,8 @@
             clearable
             placeholder="请输入学生姓名"
             @change="handleAutoChange"
-            @select="handleSelect"></el-autocomplete>
+            @select="handleSelect">
+          </el-autocomplete>
         </el-col>
         <el-col :span="2">
              <div class="schoolSet">查看范围：</div>
@@ -505,29 +506,6 @@ export default {
         this.leftQuY = res.curvatureLeft.yDataList;
         this.rightQuX = res.curvatureRight.xDataList;
         this.rightQuY = res.curvatureRight.yDataList;
-      //      this.rightLuoY = res[1].yDataList;
-      // for(let i = 0; i < res.length; i++) {
-      //   console.log(res, 999)
-      //   if(res[i].name=="左眼裸眼视力") {
-      //     this.leftLuoX = res[0].xDataList;
-      //     this.leftLuoY = res[0].yDataList;
-      //   }else if(res[i].name == '右眼裸眼视力') {
-      //      this.rightLuoX = res[1].xDataList;
-      //      this.rightLuoY = res[1].yDataList;
-      //    }else if(res[i].name=="左眼眼轴长度") {
-      //      this.leftZhouX = res[2].xDataList;
-      //      this.leftZhouY = res[2].yDataList;
-      //    }else if(res[i].name == '右眼眼轴长度') {
-      //       this.rightZhouX = res[3].xDataList;
-      //       this.rightZhouY = res[3].yDataList
-      //     }else if(res[i].name == '左眼曲率') {
-      //       this.leftQuX = res[4].xDataList;
-      //       this.leftQuY = res[4].yDataList;
-      //     }else {
-      //       this.rightQuX = res[5].xDataList;
-      //       this.rightQuY = res[5].yDataList;
-      //     }
-      //    }
         this.drawLine();
         this.drawLine2();
         this.drawLine3();

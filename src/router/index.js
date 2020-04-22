@@ -25,6 +25,9 @@ import schoolSurvey  from '@/components/survey/schoolSurvey'
 import classSurvey  from '@/components/survey/classSurvey'
 import screeningtemp from '@/components/template/screen.vue'
 import wordtemp from '@/components/template/wordtemp.vue'
+import studentCode from '@/components/code/studentCode.vue'
+import classCode from '@/components/code/classCode.vue'
+import schoolCode from '@/components/code/schoolCode.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -62,7 +65,10 @@ const router = new Router({
         {path: '/classStatistics', component: ClassAnalysis},
         {path: '/personal', component: PersonAnalysis},
         {path: '/screeningtemp', component: screeningtemp},
-         {path: '/wordtemp', component: wordtemp}
+        {path: '/wordtemp', component: wordtemp},
+        {path: '/schoolCode', component: schoolCode},
+        {path: '/classCode', component: classCode},
+        {path: '/studentcode', component: studentCode}
         // meta:{keepAlive: true}
       ]
     },
