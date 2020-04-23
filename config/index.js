@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/lightspace': {
-         target: 'http://192.168.2.201:8080/',
-         // target: 'http://47.104.222.22:8080/',
+         //target: 'http://192.168.2.201:8080/',
+          target: 'http://47.104.222.22:8080/',
         changeOrigin: true,  //允许跨域
       }
     },
