@@ -13,17 +13,17 @@
         </el-row>
         <el-row style="margin: 30px 0"  >
            <el-col :span="24">
-             <div ref="totalright" style="width: 600px;height:420px; margin: 0 auto"></div>
+             <div ref="totalright" style="width: 700px;height:420px; margin: 0 auto"></div>
            </el-col>
         </el-row>
         <el-row style="margin: 30px 0"  >
            <el-col :span="24">
-             <div ref="totalleft" style="width: 600px;height:420px; margin: 0 auto"></div>
+             <div ref="totalleft" style="width: 700px;height:420px; margin: 0 auto"></div>
            </el-col>
         </el-row>
         <el-row type="flex" style="margin: 40px 0;border-bottom: 2px solid #eee" >
           <el-col :span = "12" :offset="6" >
-             <div ref="totaldouble" style="width: 600px;height:420px;margin: 0 auto"></div>
+             <div ref="totaldouble" style="width: 700px;height:420px;margin: 0 auto"></div>
         </el-col>
         </el-row>
       </el-card>
