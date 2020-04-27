@@ -30,6 +30,7 @@
                 <el-table-column label="姓名" prop="name"></el-table-column>
                 <el-table-column label="性别" prop="gender"></el-table-column>
                 <el-table-column label="年龄" prop="age"></el-table-column>
+                <el-table-column label="出生日期" prop="birthday"></el-table-column>
                 <el-table-column label="身高" prop="height"></el-table-column>
                 <el-table-column label="体重" prop="weight"></el-table-column>
                 <el-table-column label="性格" prop="nature"></el-table-column>
@@ -57,6 +58,7 @@
                 <el-table-column label="姓名" prop="name"></el-table-column>
                 <el-table-column label="性别" prop="gender"></el-table-column>
                 <el-table-column label="年龄" prop="age"></el-table-column>
+                <el-table-column label="出生日期" prop="birthday"></el-table-column>
                 <el-table-column label="身高" prop="height"></el-table-column>
                 <el-table-column label="体重" prop="weight"></el-table-column>
                 <el-table-column label="性格" prop="nature"></el-table-column>
@@ -99,6 +101,14 @@
                    <el-form-item label="性别" prop="gender">
                         <el-radio v-model="addStudentForm.gender" size="medium" border :label="0">男</el-radio>
                         <el-radio v-model="addStudentForm.gender" size="medium" border :label="1">女</el-radio>
+                   </el-form-item>
+                   <el-form-item label ="出生日期" prop="birthday">
+                      <el-date-picker
+                       v-model="addStudentForm.birthday"
+                       type="date"
+                       @change="dateChange"
+                       placeholder="选择日期">
+                      </el-date-picker>
                    </el-form-item>
                    <el-form-item label="年龄" prop="age">
                         <el-input v-model.number="addStudentForm.age" clearable></el-input>
@@ -146,6 +156,14 @@
                  <el-form-item label="性别" prop="gender">
                       <el-radio v-model="editStudentForm.gender" size="medium" border :label="0">男</el-radio>
                       <el-radio v-model="editStudentForm.gender" size="medium" border :label="1">女</el-radio>
+                 </el-form-item>
+                 <el-form-item label ="出生日期" prop="birthday">
+                    <el-date-picker
+                     v-model="editStudentForm.birthday"
+                     type="date"
+                     @change="dateChange"
+                     placeholder="选择日期">
+                    </el-date-picker>
                  </el-form-item>
                  <el-form-item label="年龄" prop="age">
                       <el-input v-model.number="editStudentForm.age" clearable></el-input>
@@ -232,7 +250,7 @@ export default {
         }
        }
         var validPhone=(rule, value,callback)=>{
-           let reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+           let reg = /^1[3|4|5|7|8|9][0-9]\d{8}$/
               if (!value){
                   callback(new Error('请输入电话号码'))
               }else  if (!reg.test(value)){
@@ -251,6 +269,7 @@ export default {
             addStudentVisible: false,
             schoolId: '',
             classId: '',
+            birthday: '',
             studentList: [],
             currentPage: 1,
             pageSize: 5,
@@ -262,6 +281,7 @@ export default {
                 file: '',
                 token: ''
             },
+            value1: '',
             searchStudentList: [],
             addStudentForm: {
                 "age":'' ,
@@ -274,7 +294,8 @@ export default {
                 "weight": '',
                 "name":"",
                 "nature":"",
-                "parentPhone": ''
+                "parentPhone": '',
+                "birthday": ''
             },
             addStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -287,7 +308,8 @@ export default {
                 weight:  { required: true,validator: valiNumberPass1, message: '请输入体重(kg)', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
                 stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'},
-                parentPhone: {required: true, message: '请输入手机号', validator:validPhone, trigger: 'blur' }
+                parentPhone: {required: true, message: '请输入手机号', validator:validPhone, trigger: 'blur' },
+                birthday: {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
             },
             cateProps: {
                label: 'name', //看到的是哪个属性
@@ -307,7 +329,8 @@ export default {
                 "name":"",
                 "nature":"",
                 "stu_cat":[],
-                 "parentPhone": ''
+                 "parentPhone": '',
+                 "birthday": ''
             },
             editStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -320,11 +343,20 @@ export default {
                 weight:  { required: true,validator: valiNumberPass1, message: '请输入体重', trigger: 'blur' },
                 nature:  { required: true, message: '请输入性格', trigger: 'blur' },
                 stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'},
-                parentPhone: {required: true, message: '请输入手机号', validator:validPhone, trigger: 'blur' }
+                parentPhone: {required: true, message: '请输入手机号', validator:validPhone, trigger: 'blur'},
+                birthday: {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
             }
         }
     },
      methods: {
+       dateChange(val) {
+        if(val) {
+          this.startTime = val.toString().split(",")[0]
+          this.endTime = val.toString().split(",")[1]
+          this.birthday = val.toLocaleString().split(' ') [0];
+          console.log(this.birthday, typeof this.birthday)
+        }
+      },
        changeUpload(file, fileList) {
         if(fileList.length == 2)  {
           this.fileList = fileList.slice(1,2);
@@ -366,69 +398,69 @@ export default {
          responseType: "blob"
        }).then(this.handleGetDownLoadSuccss.bind(this)).catch(this.hanadleGetDownLoadErr.bind(this))
      },
-       handleGetDownLoadSuccss(res) {
-         this.download(res.data)
-       },
-       // 下载文件
-      download (data) {
-         if (!data) return;
-         let url = window.URL.createObjectURL(new Blob([data]))
-         let link = document.createElement('a')
-         link.style.display = 'none'
-         link.href = url
-         link.setAttribute('download', '数据检查导入模板.xlsx')
-         document.body.appendChild(link);
-         link.click()
-        },
-       hanadleGetDownLoadErr(err) {
-         console.log(err)
-       },
-       handleFileClose() {
-         this.showDialog = false;
-          this.$refs.upload.clearFiles();
-       },
-
-     //关闭按钮
-      handleClose() {
-        this.addStudentVisible = false;
-        this.$refs.studentFormRef.resetFields();
-        this.addStudentForm.nature = '';
-        this.addStudentForm.description = ''
-       },
-      //搜索学生
-      queryStudent() {
-          let param = new URLSearchParams();
-          if(this.query == "") {
-            this.getStudentList();
-            this.searchStudentList = [];
-            return;
-          }
-          param.append('token', this.token);
-          param.append('name', this.query);
-          axios({
-              method: "post",
-              url: '/lightspace/queryStudent',
-              data: param,
-
-          }).then(this.handleQuerySucc.bind(this))
-          .catch(this.handleQueryErr.bind(this))
+     handleGetDownLoadSuccss(res) {
+       this.download(res.data)
+     },
+     // 下载文件
+    download (data) {
+       if (!data) return;
+       let url = window.URL.createObjectURL(new Blob([data]))
+       let link = document.createElement('a')
+       link.style.display = 'none'
+       link.href = url
+       link.setAttribute('download', '数据检查导入模板.xlsx')
+       document.body.appendChild(link);
+       link.click()
       },
-      handleQuerySucc(res) {
-        if(res.data.status === 10204) {
-            this.$message.error(res.data.msg);
-            this.$router.push('/login');
-        } else if(res.data.status == 10211) {
-            this.$message.error(res.data.msg);
-            this.getStudentList();
-            this.searchStudentList = [];
-         }else if(res.data.status == 200) {
-            this.$message.success('搜索成功');
-            this.searchStudentList = res.data.data;
-          }
-        },
-        handleQueryErr(err) {
-            console.log(err)
-        },
+     hanadleGetDownLoadErr(err) {
+       console.log(err)
+     },
+     handleFileClose() {
+       this.showDialog = false;
+        this.$refs.upload.clearFiles();
+     },
+
+   //关闭按钮
+    handleClose() {
+      this.addStudentVisible = false;
+      this.$refs.studentFormRef.resetFields();
+      this.addStudentForm.nature = '';
+      this.addStudentForm.description = ''
+     },
+    //搜索学生
+    queryStudent() {
+        let param = new URLSearchParams();
+        if(this.query == "") {
+          this.getStudentList();
+          this.searchStudentList = [];
+          return;
+        }
+        param.append('token', this.token);
+        param.append('name', this.query);
+        axios({
+            method: "post",
+            url: '/lightspace/queryStudent',
+            data: param,
+
+        }).then(this.handleQuerySucc.bind(this))
+        .catch(this.handleQueryErr.bind(this))
+    },
+    handleQuerySucc(res) {
+      if(res.data.status === 10204) {
+          this.$message.error(res.data.msg);
+          this.$router.push('/login');
+      } else if(res.data.status == 10211) {
+          this.$message.error(res.data.msg);
+          this.getStudentList();
+          this.searchStudentList = [];
+       }else if(res.data.status == 200) {
+          this.$message.success('搜索成功');
+          this.searchStudentList = res.data.data;
+        }
+      },
+      handleQueryErr(err) {
+          console.log(err)
+      },
          //点击出现添加学生框
         addStudent() {
             this.addStudentVisible = true
@@ -452,6 +484,8 @@ export default {
             param.append('nature', this.addStudentForm.nature)
             param.append('age', this.addStudentForm.age)
             param.append('parentPhone', this.addStudentForm.parentPhone)
+            param.append('birthday', this.birthday);
+            console.log(this.birthday);
             axios({
                 method: 'post',
                 url: '/lightspace/addStudent',
@@ -520,6 +554,7 @@ export default {
            this.currentPage = val;
         },
         handleGetStudentList(res) {
+          console.log(res)
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
@@ -590,7 +625,8 @@ export default {
             param.append('weight', this.editStudentForm.weight)
             param.append('name', this.editStudentForm.name)
             param.append('nature', this.editStudentForm.nature)
-            param.append('parentPhone', this.editStudentForm.parentPhone )
+            param.append('parentPhone', this.editStudentForm.parentPhone),
+            param.append('birthday', this.birthday)
             param.append('id', this.id)
             axios({
                 method: 'post',
