@@ -6,7 +6,6 @@ import Welcome from '@/components/welcome'
 import School from '@/components/base/school'
 import Class from '@/components/base/class'
 import Student from '@/components/base/student'
-import Record from '@/components/base/record'
 import Teacher from '@/components/base/teacher'
 import Report from '@/components/base/report'
 import Cooparation from '@/components/base/cooparation'
@@ -28,6 +27,10 @@ import wordtemp from '@/components/template/wordtemp.vue'
 import studentCode from '@/components/code/studentCode.vue'
 import classCode from '@/components/code/classCode.vue'
 import schoolCode from '@/components/code/schoolCode.vue'
+import Record from'@/components/record/record'
+import Screeningsetting from '@/components/record/screeningsetting'
+import screeningwearsetting from '@/components/record/screeningwearsetting'
+
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -50,7 +53,6 @@ const router = new Router({
         {path: '/schoolsetting', component: School},
         {path: '/classsetting', component: Class},
         {path: '/studentList', component: Student},
-        {path: '/testrecord', component: Record},
         {path: '/teachersetting', component: Teacher},
         {path: '/report', component: Report},
         {path: '/partnershipsetting', component: Cooparation},
@@ -68,7 +70,11 @@ const router = new Router({
         {path: '/wordtemp', component: wordtemp},
         {path: '/schoolCode', component: schoolCode},
         {path: '/classCode', component: classCode},
-        {path: '/studentcode', component: studentCode}
+        {path: '/studentcode', component: studentCode},
+        {path: '/recordsetting', component: Record},
+        {path: '/Screeningsetting', component: Screeningsetting},
+        {path: '/screeningwearsetting', component: screeningwearsetting}
+        
         // meta:{keepAlive: true}
       ]
     },

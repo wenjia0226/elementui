@@ -554,7 +554,7 @@ export default {
            this.currentPage = val;
         },
         handleGetStudentList(res) {
-          console.log(res)
+          
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');

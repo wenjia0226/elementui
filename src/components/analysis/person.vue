@@ -8,7 +8,7 @@
 	<el-card>
 	  <el-row :gutter="10">
       <el-col :span="2">
-           <div class="schoolSet">学校班级选择：</div>
+          <div class="schoolSet">学校班级选择：</div>
       </el-col>
 	      <el-col :span="4">
 	           <el-cascader  :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange"></el-cascader>
