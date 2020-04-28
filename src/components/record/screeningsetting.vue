@@ -119,12 +119,13 @@
         }).then(this.handleGetRecordDirSucc.bind(this)).catch(this.handlgGetRecordDirErr.bind(this))
       },
       handleGetRecordDirSucc(res) {
-        console.log(res)
+        // console.log(res)
         if(res.data.status == 200) {
           this.screeningList = res.data.data;
         }else if(res.data.status == 10211) {
           this.$notify({
             title: '警告',
+            duration: 1000,
             message: res.data.msg,
             type: 'warning'
           });

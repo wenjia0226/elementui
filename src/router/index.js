@@ -74,8 +74,6 @@ const router = new Router({
         {path: '/recordsetting', component: Record},
         {path: '/Screeningsetting', component: Screeningsetting},
         {path: '/screeningwearsetting', component: screeningwearsetting}
-        
-        // meta:{keepAlive: true}
       ]
     },
 
