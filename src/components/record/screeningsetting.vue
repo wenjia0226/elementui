@@ -21,7 +21,7 @@
           @select="handleSelectSchool"
           ></el-autocomplete>
          </el-col>
-         <el-col :span="2">
+         <el-col :span="2" >
             <div class="schoolSet">班级选择：</div>
          </el-col>
          <el-col :span="4">

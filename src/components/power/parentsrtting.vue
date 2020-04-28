@@ -8,12 +8,24 @@
      </el-breadcrumb>
      <el-card>
      <!-- 学校列表 -->
-     <el-table :data="this.userList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
-         <el-table-column type="index"></el-table-column>
-         <el-table-column label="生成时间" prop="genTime"></el-table-column>
-         <el-table-column label="电话" prop="phone"></el-table-column>
-         <el-table-column label="用户标识" prop="openId"></el-table-column>
+     <el-table ref="table" :data="this.userList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
+        <el-table-column type="index"></el-table-column>
+        <el-table-column  type="expand" label="查看孩子信息" width="100">
+           <template slot-scope="scope" >
+             <el-table :data="scope.row.student" border>
+               <el-table-column label="学校" prop="schoolName"></el-table-column>
+               <el-table-column label="班级" prop="classesName"></el-table-column>
+               <el-table-column label="姓名" prop="name"></el-table-column>
+               <el-table-column label="最近一次检测时间" prop="lastTime"></el-table-column>
+             </el-table>
+           </template>
+        </el-table-column>
+        <el-table-column label="用户标识" prop="openId"></el-table-column>
+        <el-table-column label="电话" prop="phone"></el-table-column>
+        <el-table-column label="生成时间" prop="genTime"></el-table-column>
+
      </el-table>
+     <!-- 表格 -->
      <!-- 分页功能 -->
      <el-pagination
          @size-change="handleSizeChange"
@@ -37,14 +49,16 @@
         currentPage: 1,
         pageSize: 5,
         total: 0,
-        userList: []
-      }
+        userList: [],
+        studentInfo: []
+       }
     },
     created() {
         this.token = window.sessionStorage.getItem('token');
         this.getUserlList();
     },
     methods: {
+
       handleSizeChange(newSize) {
           this.pageSize = newSize
           this.getUserlList();
@@ -64,12 +78,13 @@
              .catch(this.handleGetUserErr.bind(this))
       },
       handleGetUserSucc(res) {
-        // console.log(res)
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
            } else if(res.data.status == 200) {
              this.userList = res.data.data;
+             console.log(this.userList)
+             // this.studentInfo = res.data.data.
           }
       },
       handleGetUserErr(error) {
