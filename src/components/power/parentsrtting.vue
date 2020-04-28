@@ -83,7 +83,7 @@
             this.$router.push('/login');
            } else if(res.data.status == 200) {
              this.userList = res.data.data;
-             console.log(this.userList)
+             
              // this.studentInfo = res.data.data.
           }
       },
