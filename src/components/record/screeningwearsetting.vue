@@ -135,32 +135,62 @@
         console.log(err)
       },
      // 删除记录
-      removeRecord(id) {
-        let param = new FormData();
-        param.append('token', this.token);
-        param.append('id', id);
-        axios({
-          method: 'post',
-          url: '/lightspace/deleteScreeningWear',
-          data: param
-        }).then(this.handleDelSucc.bind(this)).catch(this.handletDelErr.bind(this))
-      },
+  // async removeRecord(id) {
+  //      const confirmResult = await this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+  //        confirmButtonText: '确定',
+  //        cancelButtonText: '取消',
+  //        type: 'warning'
+  //      }).catch(err => err)
+  //      if(confirmResult !== 'confirm') {
+  //          return this.$message.info('已经取消删除')
+  //      }
+  //      let param = new FormData();
+  //      param.append('token', this.token);
+  //      param.append('id', id);
+  //       axios({
+  //         method: 'post',
+  //         url: '/lightspace/deleteScreeningWear',
+  //         data: param
+  //       }).then(this.handleDelSucc.bind(this)).catch(this.handletDelErr.bind(this))
+  //     },
+  async removeRecord(id) {
+       const confirmResult = await this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+       confirmButtonText: '确定',
+       cancelButtonText: '取消',
+       type: 'warning'
+       }).catch(err => err)
+       if(confirmResult !== 'confirm') {
+           return this.$message.info('已经取消删除')
+       }
+       let param = new FormData();
+       param.append('token', this.token);
+       param.append('id', id);
+       axios({
+         method: 'post',
+         url: '/lightspace/deleteScreeningWear',
+         data: param
+       }).then(this.handleDelSucc.bind(this)).catch(this.handletDelErr.bind(this))
+     },
       handleDelSucc(res) {
-        // console.log(res)
+         console.log(res)
         if(res.data.status == 200) {
           this.$notify({
               title: '成功',
               message: res.data.msg,
               type: 'success'
             });
-        }else if(res.data.status == 10218) {
+
+        }else if(res.data.status == 10211) {
           this.$notify({
-              title: '失败',
+              title: '成功',
               message: res.data.msg,
-              type: 'fail'
+              type: 'success'
             });
         }
-        this.getScreeningList();
+        this.screeningList = res.data.data;
+        this.screeningList.forEach((item) => {
+          item.lastTime = item.date + '\xa0\xa0' + item.time
+        })
       },
       handletDelErr(err) {
         console.log(err)
@@ -178,7 +208,8 @@
         }).then(this.getScreenListSucc.bind(this)).catch(this.getScreenListErr.bind(this).bind(this))
       },
       getScreenListSucc(res) {
-        if(res.data.status == 200) {
+        console.log(res)
+        if(res.data.status == 200 && res.data.data !== '') {
           this.screeningList = res.data.data;
           this.screeningList.forEach((item) => {
             item.lastTime = item.date + '\xa0\xa0' + item.time

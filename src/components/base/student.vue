@@ -645,7 +645,7 @@ export default {
              this.editStudentVisible = false;
              //提示修改成功
              this.$message.success('更新学生信息成功');
-             this.getStudentList();
+             //this.getStudentList();
            }
         },
         handleEditStuErr(err) {

@@ -30,7 +30,7 @@
                     <!-- 二级菜单 -->
                     <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
                         <template slot="title">
-                            <i class="el-icon-location"></i>
+                            <i class="el-icon-menu"></i>
                             <span>{{subItem.authName}}</span>
                         </template>
                     </el-menu-item>
@@ -52,7 +52,10 @@ import axios from 'axios'
             return {
                 menuList: [] ,//左侧菜单的获取,
                 activePath: '', //被激活的链接地址
-                token: ''
+                token: '',
+                iconObj: {
+                  '125': ''
+                }
             }
         },
         created() {
@@ -78,7 +81,7 @@ import axios from 'axios'
                     }).then(this.handleGetMenuListSucc.bind(this)).catch(this.handleGetMenuListErr.bind(this))
                }
             },
-            handleGetMenuListSucc (res){ 
+            handleGetMenuListSucc (res){
               if(res.data.status === 10204) {
                   this.$message.error(res.data.msg);
                   // this.$router.push('/login');
