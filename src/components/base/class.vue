@@ -366,7 +366,7 @@ export default {
               this.addClassVisible = false;
               this.$refs.addClassRef.resetFields();
               this.addClassForm.description = '';
-              this.getClassList();
+              this.classList = res.data.data;
             }
         },
         handleAddClassErr(err) {

@@ -115,7 +115,7 @@
         axios({
           method: 'post',
           data: param,
-          url: 'lightspace/screeningList'
+          url: '/lightspace/screeningList'
         }).then(this.handleGetRecordDirSucc.bind(this)).catch(this.handlgGetRecordDirErr.bind(this))
       },
       handleGetRecordDirSucc(res) {

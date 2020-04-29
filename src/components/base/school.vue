@@ -20,7 +20,7 @@
                        placeholder="请输入学生姓名"
                        clearable
                        @select="handleSelect">
-  
+
                        </el-autocomplete> -->
 
                  </el-col>
@@ -219,7 +219,6 @@ export default {
            })
         },
         handleAddSchoolSucc(res) {
-          console.log(res);
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
               this.$router.push('/login');
@@ -230,7 +229,8 @@ export default {
               this.addDialogVisible = false;
               this.$message.success('添加学校成功');
               this.$refs.schoolFormRef.resetFields();
-              this.getSchoolList();
+              console.log(res)
+              this.schoolList = res.data.data;
             }
         },
         handleAddSchoolErr(err) {
@@ -340,7 +340,7 @@ export default {
                   this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
                   this.currentPage = this.currentPage < 1 ? 1 : this.currentPage;
                 }
-               
+
             },
             handleDeleteSchoolErr(err) {
                 console.log(err)
