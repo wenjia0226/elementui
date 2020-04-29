@@ -24,18 +24,19 @@
                 <el-submenu :index="'/' +item.id"  v-for="item in menuList" :key="item.id" >
                     <!-- 一级菜单模板 -->
                     <template slot="title">
-                    <i class="el-icon-location"></i>
+                    <i :class="iconObj[item.id]"></i>
+                   <!-- <i :class="el-icon-my-export"></i> -->
                     <span>{{item.authName}}</span>
                     </template>
                     <!-- 二级菜单 -->
                     <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
                         <template slot="title">
-                            <i class="el-icon-menu"></i>
+                            <!-- <i class="el-icon-menu"></i> -->
+                            <image src="/image/icon/base.png"></image>
                             <span>{{subItem.authName}}</span>
                         </template>
                     </el-menu-item>
                 </el-submenu>
-
                 </el-menu>
             </el-aside>
             <!-- 右侧主体区 -->
@@ -54,7 +55,41 @@ import axios from 'axios'
                 activePath: '', //被激活的链接地址
                 token: '',
                 iconObj: {
-                  '125': ''
+                  '1': 'common base',
+                  '5':'common report',
+                  '6': 'common seat',
+                  '9':'common user',
+                  '12': 'common analysis',
+                  '22': 'common template',
+                  '26': 'common code',
+                  '30': 'common shop'
+                },
+                secondIconObj: {
+                  '2': '',
+                  '3': '',
+                  '4': '',
+                  '19':'',
+                  '21': '',
+                  '25': '', //基础数据
+                  '33': '',
+                  '34': '',
+                  '35': '', //检测记录
+                  '7': '',
+                  '8': '',
+                  '10': '',
+                  '11': '',
+                  '16': '',
+                  '20': '', //用户管理
+                  '14': '',
+                  '17': '',
+                  '18': '',//数据分析
+                  '23': '',
+                  '24': '', // 模板管理
+                  '27': '',
+                  '28': '',
+                  '29': '', //生成二维码
+                  '31': '',
+                  '32': ''//兑换商城
                 }
             }
         },
@@ -87,6 +122,7 @@ import axios from 'axios'
                   // this.$router.push('/login');
               } else if(res.data.status == 200) {
                  this.menuList = res.data.data;
+                 console.log(this.menuList)
               }
 
             },
@@ -103,6 +139,7 @@ import axios from 'axios'
     }
 </script>
 <style lang="less" scoped>
+
 .home-container {
     height: 100%;
 }
@@ -131,5 +168,55 @@ import axios from 'axios'
 }
 .el-main {
     background-color: #eaedf1;
+}
+.base{
+    background: url('../assets/image/icon/base.png') center no-repeat;
+    background-size: contain;
+}
+.report {
+  background: url('../assets/image/icon/report.png') center no-repeat;
+  background-size: contain;
+}
+.seat {
+  background: url('../assets/image/icon/seat.png') center no-repeat;
+  background-size: contain;
+}
+.user {
+  background: url('../assets/image/icon/user.png') center no-repeat;
+  background-size: contain;
+}
+.analysis {
+  background: url('../assets/image/icon/analysis.png') center no-repeat;
+  background-size: contain;
+}
+.template {
+  background: url('../assets/image/icon/template.png') center no-repeat;
+  background-size: contain;
+  }
+  .code {
+    background: url('../assets/image/icon/code.png') center no-repeat;
+    background-size: contain;
+  }
+  .shop {
+    background: url('../assets/image/icon/shop.png') center no-repeat;
+    background-size: contain;
+  }
+
+.common:before{
+    content: "替";
+    font-size: 16px;
+    visibility: hidden;
+    width: 20px;
+    height: 20rpx;
+}
+
+//如果直接使用字体图片
+//直接在before属性设置对应的content就行
+.common{
+    font-size: 16px;
+
+}
+.common:before{
+    content: "\e611";
 }
 </style>

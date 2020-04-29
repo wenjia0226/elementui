@@ -438,7 +438,6 @@ export default {
                 this.$message.success('更新班级信息成功');
                 this.getClassList();
              }
-
         },
         handleEditSaveClassErr(err) {
             console.log(err)

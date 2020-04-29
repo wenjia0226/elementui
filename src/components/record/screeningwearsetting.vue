@@ -115,13 +115,16 @@
         axios({
           method: 'post',
           data: param,
-          url: 'lightspace/screeningWearList'
+          url: '/lightspace/screeningWearList'
         }).then(this.handleGetRecordDirSucc.bind(this)).catch(this.handlgGetRecordDirErr.bind(this))
       },
       handleGetRecordDirSucc(res) {
         // console.log(res)
         if(res.data.status == 200) {
           this.screeningList = res.data.data;
+          this.screeningList.forEach((item) => {
+            item.lastTime = item.date + '\xa0\xa0' + item.time
+          })
         }else if(res.data.status == 10211) {
           this.$notify({
             title: '警告',
@@ -134,25 +137,6 @@
       handlgGetRecordDirErr(err) {
         console.log(err)
       },
-     // 删除记录
-  // async removeRecord(id) {
-  //      const confirmResult = await this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
-  //        confirmButtonText: '确定',
-  //        cancelButtonText: '取消',
-  //        type: 'warning'
-  //      }).catch(err => err)
-  //      if(confirmResult !== 'confirm') {
-  //          return this.$message.info('已经取消删除')
-  //      }
-  //      let param = new FormData();
-  //      param.append('token', this.token);
-  //      param.append('id', id);
-  //       axios({
-  //         method: 'post',
-  //         url: '/lightspace/deleteScreeningWear',
-  //         data: param
-  //       }).then(this.handleDelSucc.bind(this)).catch(this.handletDelErr.bind(this))
-  //     },
   async removeRecord(id) {
        const confirmResult = await this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
        confirmButtonText: '确定',
@@ -172,7 +156,7 @@
        }).then(this.handleDelSucc.bind(this)).catch(this.handletDelErr.bind(this))
      },
       handleDelSucc(res) {
-         console.log(res)
+         // console.log(res)
         if(res.data.status == 200) {
           this.$notify({
               title: '成功',

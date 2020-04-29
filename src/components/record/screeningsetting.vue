@@ -19,6 +19,7 @@
           :fetch-suggestions="querySearchSchool"
           placeholder="请输入学校名称"
           @select="handleSelectSchool"
+          @change="handleSchoolChange"
           ></el-autocomplete>
          </el-col>
          <el-col :span="2" >
@@ -92,6 +93,10 @@
         this.getScreeningList();
     },
     methods: {
+      handleSchoolChange(val) {
+        console.log(val)
+        this.schoolId =  val.id;
+      },
       getRecodRight() {
         if(this.schoolId && this.classId == '' && this.studentId == '') {
           this.getRecordDirect('school', this.schoolId);
@@ -100,12 +105,12 @@
         }else if(this.studentId && this.classId && this.schoolId) {
           this.getRecordDirect('student', this.studentId)
         }
-        this.schoolId ='';
-        this.classId = '';
-        this.studentId = '';
-        this.school = '';
-        this.className = '';
-        this.student = '';
+        // this.schoolId ='';
+        // this.classId = '';
+        // this.studentId = '';
+        // this.school = '';
+        // this.className = '';
+        // this.student = '';
       },
       getRecordDirect(type,id) {
         let param = new FormData();
@@ -119,9 +124,12 @@
         }).then(this.handleGetRecordDirSucc.bind(this)).catch(this.handlgGetRecordDirErr.bind(this))
       },
       handleGetRecordDirSucc(res) {
-        console.log(res)
+        // console.log(res)
         if(res.data.status == 200) {
           this.screeningList = res.data.data;
+          this.screeningList.forEach((item) => {
+            item.lastTime = item.date + '\xa0\xa0' + item.time
+          })
         }else if(res.data.status == 10211) {
           this.$notify({
             title: '警告',
@@ -190,7 +198,6 @@
         }).then(this.getScreenListSucc.bind(this)).catch(this.getScreenListErr.bind(this).bind(this))
       },
       getScreenListSucc(res) {
-        console.log(res)
         if(res.data.status == 200 && res.data.data !== '') {
           this.screeningList = res.data.data;
           if(this.screeningList.length) {
