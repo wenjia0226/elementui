@@ -15,8 +15,11 @@
                         <el-button slot="append" icon="el-icon-search" @click="searchClass"></el-button>
                     </el-input>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="4">
                    <el-button type="primary" @click="addClass">添加班级</el-button>
+                </el-col>
+                <el-col :span="4">
+                   <el-button type="primary" @click="upperClass">一键升级</el-button>
                 </el-col>
             </el-row>
              <!-- 班级列表 -->
@@ -244,6 +247,29 @@ export default {
         }
     },
     methods: {
+      //一键升级
+      upperClass() {
+        let param = new FormData();
+        param.append('token', this.token)
+        axios({
+          method: 'post',
+          data: param,
+          url: '/lightspace/elevateClass'
+        }).then(this.handleUpperSucc.bind(this)).catch(this.handleUpperErr.bind(this))
+      },
+      handleUpperSucc(res) {
+        //  console.log(res);
+         if(res.data.status == 200) {
+           this.classList = res.data.data;
+           this.$message({
+             message: '恭喜你，升级成功',
+             type: 'success'
+           });
+         }
+      },
+      handleUpperErr(err) {
+        console.log(err)
+      },
       //搜索
       searchClass() {
         if(this.query == "") {

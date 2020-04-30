@@ -51,6 +51,9 @@
          <el-col :span="2">
           <el-button type="primary" @click="getRecodRight">查询</el-button>
          </el-col>
+         <el-col :span="2">
+          <el-button type="primary" @click="exportExcel">excel导出</el-button>
+         </el-col>
         </el-row>
         <el-table :data="this.content" border  stripe style="width: 100%">
             <el-table-column type="index"></el-table-column>
@@ -126,6 +129,48 @@
        }
     },
     methods: {
+      exportExcel() {
+        if(this.school && this.className == '' && this.student == ''){
+          this.getExcel('school',this.schoolId)
+        }else if(this.school && this.className && this.student == '') {
+           this.getExcel('class',this.classId)
+        }else if(this.school && this.className && this.student) {
+          this.getExcel('student',this.studentId)
+        }else {
+            this.$message.error('请先选择要查询的信息');
+        }
+      },
+      getExcel(type, id) {
+        
+        this.loading = this.$loading({
+           lock: true,
+           text: '生成中,请耐心等候...',
+           spinner: 'el-icon-loading',
+           background: 'rgba(0, 0, 0, 0.7)'
+         });
+        let param = new FormData();
+        param.append('type', type);
+        param.append('id', id);
+        param.append('token', this.token);
+        axios({
+          method: 'post',
+          data: param,
+          url: 'lightspace/screeningWearExcel'
+        }).then(this.handleGetExcelSucc.bind(this)).catch(this.handleGetExcelErr.bind(this))
+      },
+      handleGetExcelSucc(res) {
+        if(res.data.status == 200) {
+          const downloadElement = document.createElement('a'); // 创建a标签
+          downloadElement.href = 'https://www.guangliangkongjian.com/file/Members.xls';
+          document.body.appendChild(downloadElement);
+          downloadElement.click();
+          document.body.removeChild(downloadElement);
+          this.loading.close();
+        }
+      },
+      handleGetExcelErr(err) {
+        console.log(err)
+      },
       //分页
       //监听页码值改变事件
       handleCurrentChange(val) {
@@ -174,6 +219,8 @@
             this.getRecordDirect('class', this.classId); //校长查询班级
           }else if(this.school && this.className == '' && this.student == '') {
             this.getRecordDirect('school',this.schoolId);
+          }else {
+             this.getScreeningList('','')
           }
         }
       },
@@ -373,12 +420,18 @@
       },
       handleSelectSchool(item) {
         this.schoolId = item.id;
+        this.classId = '';
+        this.className = '';
+        this.student = '';
+        this.studentId = '';
         this.fontId = this.schoolId;
         this.getClassList();
 
       },
       handleSelectClass(item) {
         this.classId = item.id;
+        this.student = '';
+        this.studentId = '';
         this.getStudentList();
       },
       handleSelect(item) {
