@@ -215,7 +215,7 @@
         console.log(err)
       },
       getRecordDirect(type,id) {
-        console.log(type,id)
+        // console.log(type,id)
         let param = new FormData();
         param.append('type', type.toString());
         param.append('id',id);
@@ -305,7 +305,7 @@
       },
       //获取列表
       getScreeningList(type, page) {
-        console.log(type, page)
+        // console.log(type, page)
         let param = new FormData();
         param.append('token', this.token);
         param.append('type', type);
@@ -318,7 +318,7 @@
         }).then(this.getScreenListSucc.bind(this)).catch(this.getScreenListErr.bind(this).bind(this))
       },
       getScreenListSucc(res) {
-         console.log(res)
+         // console.log(res)
         if(res.data.status == 200 && res.data.data !== '') {
          res ? res= res.data.data: '';
          this.content = res.content;
