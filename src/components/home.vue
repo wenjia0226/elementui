@@ -122,7 +122,7 @@ import axios from 'axios'
                   // this.$router.push('/login');
               } else if(res.data.status == 200) {
                  this.menuList = res.data.data;
-                 console.log(this.menuList)
+                // console.log(this.menuList)
               }
 
             },
