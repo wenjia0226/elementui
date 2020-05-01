@@ -190,7 +190,7 @@
         axios({
           method: 'post',
           data: param,
-          url: 'lightspace/screeningWearExcel'
+          url: '/lightspace/screeningWearExcel'
         }).then(this.handleGetExcelSucc.bind(this)).catch(this.handleGetExcelErr.bind(this))
       },
       handleGetExcelSucc(res) {
