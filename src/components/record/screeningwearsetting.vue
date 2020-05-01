@@ -130,14 +130,35 @@
     },
     methods: {
       exportExcel() {
-        if(this.school && this.className == '' && this.student == ''){
-          this.getExcel('school',this.schoolId)
-        }else if(this.school && this.className && this.student == '') {
-           this.getExcel('class',this.classId)
-        }else if(this.school && this.className && this.student) {
-          this.getExcel('student',this.studentId)
-        }else {
-            this.$message.error('请先选择要查询的信息');
+        // 如果是admin
+        if(this.identity == 1) {
+          if(this.school && this.className == '' && this.student == ''){
+            this.getExcel('school',this.schoolId)
+          }else if(this.school && this.className && this.student == '') {
+             this.getExcel('class',this.classId)
+          }else if(this.school && this.className && this.student) {
+            this.getExcel('student',this.studentId)
+          }else {
+              this.$message.error('请先选择要查询的信息');
+          }
+        }
+        if(this.identity == 2) {
+            // 如果是校长
+          if(this.className !== '' && this.student !== '') {
+            this.getExcel('student',this.studentId)
+          }else if(this.className !== '' && this.student == '') {
+             this.getExcel('class',this.classId)
+          }else if(this.className == '' && this.student == '') {
+             this.getExcel('school',this.schoolId)
+          }
+        }
+         //如果是老师
+        if(this.identity == 3) {
+          if(this.student) {
+            this.getExcel('student',this.studentId)
+          }else {
+             this.getExcel('class',this.classId)
+          }
         }
       },
       getExcel(type, id) {

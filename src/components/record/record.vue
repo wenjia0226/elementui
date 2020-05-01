@@ -10,7 +10,7 @@
         <el-card>
             <el-row :gutter="20">
                 <el-col :span="6">
-                    <el-input placeholder="输入学生姓名"  clearable v-model="query"  @clear="queryStudent">
+                    <el-input placeholder="输入学生姓名"  clearable v-model="query" >
                     <el-button slot="append" icon="el-icon-search" @click="queryStudent"></el-button>
                     </el-input>
                 </el-col>
@@ -79,9 +79,9 @@
                     </template>
                 </el-table-column>
             </el-table>
-             <!-- 分页功能 -->
+           <!--  分页功能
             <el-pagination
-                v-show="!this.searchRecordList.length"
+
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -89,6 +89,24 @@
                 :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="recordList.length">
+            </el-pagination> -->
+            <el-pagination
+             v-show="!this.searchRecordList.length"
+              background
+              :current-page="this.number"
+              @current-change="handleCurrentChange"
+              layout="prev, pager, next"
+              :page-size ="this.size"
+              :total="this.totalElements">
+            </el-pagination>
+            <el-pagination
+              v-show="this.searchRecordList.length"
+              background
+              :current-page="this.searchNumber"
+              @current-change="handleSearchCurrentChange"
+              layout="prev, pager, next"
+              :page-size ="this.searchSize"
+              :total="this.searchTotalElements">
             </el-pagination>
             <!-- 添加记录 -->
             <el-dialog title="添加记录" :visible.sync="addRecordDialogVisible" width="50%" :before-close="handleClose">
@@ -217,7 +235,7 @@ export default {
         this.token = window.sessionStorage.getItem('token');
         this.getOPtions();
         this.getSecondClass();
-        this.getRecordList();
+        this.getRecordList(1);
     },
     data() {
         var valiNumberPass1 = (rule, value, callback) => {//包含小数的数字
@@ -315,7 +333,15 @@ export default {
             currentPage: 1,
             pageSize: 5,
             total: 0,
-            recordList: []
+            recordList: [],
+            totalElements: 0,
+            number: 1,
+            size: 10,
+            page: 1,
+            searchNumber: 1,
+            searchSize: 10,
+            searchPage: 1,
+            searchTotalElements: 0,
         }
     },
     methods: {
@@ -384,12 +410,13 @@ export default {
         queryStudent() {
             let param = new URLSearchParams();
             if(this.query == "") {
-              this.getRecordList();
+              this.getRecordList(1);
               this.searchRecordList = [];
               return;
             }
             param.append('token', this.token);
             param.append('name', this.query);
+            param.append('page', this.page);
             axios({
                 method: "post",
                 url: '/lightspace/queryRecord',
@@ -403,11 +430,17 @@ export default {
               this.$router.push('/login');
           }else if(res.data.status == 10209) {
               this.$message.error(res.data.msg);
-              this.getRecordList();
+              this.getRecordList(1);
               this.searchRecordList = [];
            }else if(res.status == 200) {
               this.$message.success('搜索成功');
-              this.searchRecordList = res.data.data;
+              // this.searchRecordList = res.data.data;
+              res? res = res.data.data: '';
+                this.searchRecordList = res.content;
+                this.searchTotalElements = res.totalElements;
+                this.searchSize = res.size;
+                this.searchNumber = res.number + 1;
+              // console.log(res)
             }
         },
         handleQueryErr(err) {
@@ -424,9 +457,11 @@ export default {
             }).then(this.handleGetStudentList.bind(this)).catch(this.handleGetStudentErr.bind(this))
         },
         //获取列表
-        getRecordList() {
+        getRecordList(page) {
+
             let param = new URLSearchParams();
             param.append('token' ,this.token);
+            param.append('page', page);
             axios({
                 method: 'post',
                 data: param,
@@ -436,12 +471,16 @@ export default {
             )
         },
         handleGetRecordSucc(res) {
-          console.log(res)
            if(res.data.status === 10204) {
                this.$message.error(res.data.msg);
                this.$router.push('/login');
            } else if(res.data.status == 200) {
-               this.recordList = res.data.data;
+             res? res = res.data.data: '';
+               this.recordList = res.content;
+               this.totalElements = res.totalElements;
+               this.size = res.size;
+               this.number = res.number + 1;
+
            }
             this.recordList.forEach((item ,index) => {
               if(item.cvaLeft == 0) {
@@ -461,18 +500,20 @@ export default {
         handleGetRecordErr(err) {
             console.log(err)
         },
-        //分页
-        //监听pageSize改变事件
-        handleSizeChange(newSize) {
-            this.pageSize = newSize
-            this.getRecordList();
-        },
         //监听页码值改变事件
         handleCurrentChange(val) {
-           this.currentPage = val;
+
+           this.page = val;
+           this.getRecordList(val)
         },
-        //添加记录
-        submitRecord() {
+        //监听页码值改变事件
+        handleSearchCurrentChange(val) {
+
+           this.page = val;
+           this.queryStudent(val)
+        },
+      //添加记录
+      submitRecord() {
         this.$refs.recordFormRef.validate((valid) => {
             if(!valid) return this.$message.error('验证失败');
             let param = new URLSearchParams();
@@ -509,7 +550,7 @@ export default {
               this.addRecordForm.cvaRight = "";
               this.addRecordForm.diopterLeft = '';
               this.addRecordForm.diopterRight = '';
-              this.getRecordList();
+              this.getRecordList(1);
             }
         },
         handleAddRecordErr(err) {
@@ -547,41 +588,39 @@ export default {
             this.editRecordForm = res.data.data;
             this.editRecordDialogVisible = true;
          }
-
-
           },
         handleEditRecordErr(err) {
           this.$message.error('修改记录失败');
           console.log(err)
         },
 
-        //修改后保存
-        saveEditInfo() {
-            this.$refs.recordEditFormRef.validate((valid) => {
-            if(!valid) return this.$message.error('验证失败');
-            let param = new URLSearchParams();
-            param.append('token', this.token);
-            param.append('schoolId', this.schoolId);
-            param.append('classId', this.classId);
-            param.append('studentId', this.studentId);
-            param.append('curvatureLeft', this.editRecordForm.curvatureLeft)
-            param.append('curvatureRight',this.editRecordForm.curvatureRight)
-            param.append('cvaLeft', this.editRecordForm.cvaLeft)
-            param.append('cvaRight', this.editRecordForm.cvaRight)
-            param.append('diopterLeft', this.editRecordForm.diopterLeft)
-            param.append('diopterRight', this.editRecordForm.diopterRight)
-            param.append('eyeAxisLengthLeft', this.editRecordForm.eyeAxisLengthLeft)
-            param.append('eyeAxisLengthRight', this.editRecordForm.eyeAxisLengthRight)
-            param.append('visionLeft', this.editRecordForm.visionLeft)
-            param.append('visionRight', this.editRecordForm.visionRight)
-            param.append('id', this.id);
-            axios({
-                method: 'post',
-                url: '/lightspace/saveRecord',
-                data: param
-            }).then(this.handleSaveEditSucc.bind(this)).catch(this.handleSaveEditErr.bind(this))
-            })
-        },
+    //修改后保存
+    saveEditInfo() {
+      this.$refs.recordEditFormRef.validate((valid) => {
+      if(!valid) return this.$message.error('验证失败');
+      let param = new URLSearchParams();
+      param.append('token', this.token);
+      param.append('schoolId', this.schoolId);
+      param.append('classId', this.classId);
+      param.append('studentId', this.studentId);
+      param.append('curvatureLeft', this.editRecordForm.curvatureLeft)
+      param.append('curvatureRight',this.editRecordForm.curvatureRight)
+      param.append('cvaLeft', this.editRecordForm.cvaLeft)
+      param.append('cvaRight', this.editRecordForm.cvaRight)
+      param.append('diopterLeft', this.editRecordForm.diopterLeft)
+      param.append('diopterRight', this.editRecordForm.diopterRight)
+      param.append('eyeAxisLengthLeft', this.editRecordForm.eyeAxisLengthLeft)
+      param.append('eyeAxisLengthRight', this.editRecordForm.eyeAxisLengthRight)
+      param.append('visionLeft', this.editRecordForm.visionLeft)
+      param.append('visionRight', this.editRecordForm.visionRight)
+      param.append('id', this.id);
+      axios({
+          method: 'post',
+          url: '/lightspace/saveRecord',
+          data: param
+      }).then(this.handleSaveEditSucc.bind(this)).catch(this.handleSaveEditErr.bind(this))
+      })
+    },
     handleSaveEditSucc(res) {
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
@@ -590,7 +629,7 @@ export default {
            this.editRecordDialogVisible = false;
            this.$refs.recordEditFormRef.resetFields();
            this.$message.success('修改记录成功');
-           this.getRecordList();
+           this.getRecordList(1);
         }
 
 
@@ -624,10 +663,11 @@ export default {
             this.$router.push('/login');
         } else if(res.data.status == 200) {
            this.$message.success('删除记录成功');
-           this.recordList = res.data.data;
-           const totalPage = Math.ceil(this.recordList.length / this.pageSize) // 总页数
-           this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-           this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+           this.getRecordList(1);
+           // this.recordList = res.data.data;
+           // const totalPage = Math.ceil(this.recordList.length / this.pageSize) // 总页数
+           // this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
+           // this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
         }
     },
     handleDeleteRecordErr(err) {

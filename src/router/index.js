@@ -30,6 +30,7 @@ import schoolCode from '@/components/code/schoolCode.vue'
 import Record from'@/components/record/record'
 import Screeningsetting from '@/components/record/screeningsetting'
 import screeningwearsetting from '@/components/record/screeningwearsetting'
+import productsetting from '@/components/product/productsetting'
 
 Vue.use(Router)
 const routerPush = Router.prototype.push
@@ -73,7 +74,8 @@ const router = new Router({
         {path: '/studentcode', component: studentCode},
         {path: '/recordsetting', component: Record},
         {path: '/Screeningsetting', component: Screeningsetting},
-        {path: '/screeningwearsetting', component: screeningwearsetting}
+        {path: '/screeningwearsetting', component: screeningwearsetting},
+        {path: '/productsetting', component: productsetting}
       ]
     },
 

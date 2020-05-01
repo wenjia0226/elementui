@@ -15,10 +15,10 @@
                         <el-button slot="append" icon="el-icon-search" @click="searchClass"></el-button>
                     </el-input>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="2">
                    <el-button type="primary" @click="addClass">添加班级</el-button>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="2">
                    <el-button type="primary" @click="upperClass">一键升级</el-button>
                 </el-col>
             </el-row>
@@ -248,7 +248,15 @@ export default {
     },
     methods: {
       //一键升级
-      upperClass() {
+      async  upperClass(){
+      const confirmResult = await this.$confirm('此操作将升级所有班级, 是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+      }).catch(err => err)
+      if(confirmResult !== 'confirm') {
+          return this.$message.info('已经取消删除')
+      }
         let param = new FormData();
         param.append('token', this.token)
         axios({
