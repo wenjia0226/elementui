@@ -63,9 +63,14 @@
             <el-table-column label="右眼裸眼视力" prop="visionRight"></el-table-column>
             <el-table-column label="左眼裸眼视力" prop="visionLeft"></el-table-column>
             <el-table-column label="最近一次检测时间" prop="lastTime"></el-table-column>
-            <el-table-column label="操作" v-if="this.identity == 1">
+            <!-- <el-table-column label="操作" v-if="this.identity == 1">
                 <template slot-scope="scope">
                     <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeRecord(scope.row.id)"></el-button>
+                </template>
+            </el-table-column> -->
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary"  size="middle"  @click="record(scope.row)">历史记录</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -129,6 +134,15 @@
        }
     },
     methods: {
+      record(row) {
+        let id = row.id;
+        window.sessionStorage.setItem('studentNameWear', row.studentName);
+       let routeUrl = this.$router.resolve({
+                path: "/personRecordWear/"+ row.studentId,
+                // query: {id:id}
+           });
+           window.open(routeUrl .href, '_blank');
+      },
       exportExcel() {
         // 如果是admin
         if(this.identity == 1) {
@@ -162,7 +176,7 @@
         }
       },
       getExcel(type, id) {
-        
+
         this.loading = this.$loading({
            lock: true,
            text: '生成中,请耐心等候...',

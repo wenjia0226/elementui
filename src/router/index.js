@@ -31,7 +31,8 @@ import Record from'@/components/record/record'
 import Screeningsetting from '@/components/record/screeningsetting'
 import screeningwearsetting from '@/components/record/screeningwearsetting'
 import productsetting from '@/components/product/productsetting'
-
+import personRecord  from '@/components/personRecord/personRecord'
+import personRecordWear from '@/components/personRecord/personRecordWear'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -45,6 +46,8 @@ const router = new Router({
 	{path: '/classSurvey/:id',component: classSurvey},
   {path: '/detailSeat/:id',component: detailSeat},
   {path: '/detailSeatTwo/',component: detailSeatTwo},
+  {path: '/personRecord/:id', component: personRecord},
+  {path: '/personRecordWear/:id', component: personRecordWear},
     {
       path: '/home',
       component: Home,
@@ -75,7 +78,8 @@ const router = new Router({
         {path: '/recordsetting', component: Record},
         {path: '/Screeningsetting', component: Screeningsetting},
         {path: '/screeningwearsetting', component: screeningwearsetting},
-        {path: '/productsetting', component: productsetting}
+        {path: '/productsetting', component: productsetting},
+
       ]
     },
 
