@@ -23,7 +23,7 @@
             </el-row>
 
             <!-- 记录列表 -->
-            <el-table :data="recordList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%" v-show="!this.searchRecordList.length">
+            <el-table :data="recordList" border stripe style="width: 100%" v-show="!this.searchRecordList.length">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="所属学校" prop="schoolName"></el-table-column>
                 <el-table-column label="所属班级" prop="classesName"></el-table-column>
@@ -50,7 +50,18 @@
                         <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeRecordById(scope.row.id)"></el-button>
                     </template>
                 </el-table-column>
+
             </el-table>
+            <el-pagination
+             v-show="!this.searchRecordList.length"
+              background
+
+              :current-page="this.number"
+              @current-change="handleCurrentChange"
+              layout="prev, pager, next"
+              :page-size ="10"
+              :total="this.totalElements">
+            </el-pagination>
             <!-- 搜索记录 -->
             <el-table :data="searchRecordList" border stripe style="width: 100%" v-show="this.searchRecordList.length">
                 <el-table-column type="index"></el-table-column>
@@ -79,26 +90,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-           <!--  分页功能
-            <el-pagination
-
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[5, 10, 20]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="recordList.length">
-            </el-pagination> -->
-            <el-pagination
-             v-show="!this.searchRecordList.length"
-              background
-              :current-page="this.number"
-              @current-change="handleCurrentChange"
-              layout="prev, pager, next"
-              :page-size ="this.size"
-              :total="this.totalElements">
-            </el-pagination>
             <el-pagination
               v-show="this.searchRecordList.length"
               background
