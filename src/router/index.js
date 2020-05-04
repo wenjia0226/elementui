@@ -33,6 +33,7 @@ import screeningwearsetting from '@/components/record/screeningwearsetting'
 import productsetting from '@/components/product/productsetting'
 import personRecord  from '@/components/personRecord/personRecord'
 import personRecordWear from '@/components/personRecord/personRecordWear'
+import specificationssetting from '@/components/specification/specificationssetting'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -79,6 +80,7 @@ const router = new Router({
         {path: '/Screeningsetting', component: Screeningsetting},
         {path: '/screeningwearsetting', component: screeningwearsetting},
         {path: '/productsetting', component: productsetting},
+        {path: '/specificationssetting', component: specificationssetting}
 
       ]
     },

@@ -144,7 +144,7 @@
                 </span>
             </el-dialog>
             <!-- 修改记录 -->
-             <el-dialog title="修改记录" :visible.sync="editRecordDialogVisible" width="50%">
+            <el-dialog title="修改记录" :visible.sync="editRecordDialogVisible" width="50%">
                 <el-form :model="editRecordForm" :rules="editRecordRules" ref="recordEditFormRef" label-width="120px">
                    <el-form-item label="所属学校班级"  prop="record_cat">
                         <el-cascader :options="secondClass" v-model="editRecordForm.record_cat"    :props="cateProps" @change="handleEditChange" clearable></el-cascader>
@@ -240,7 +240,6 @@ export default {
         };
         return {
           fileList: [],//此数组中存入所有提交的文档信息
-
           pdfData: {
               file: '',
               token: ''

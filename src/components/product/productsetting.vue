@@ -26,6 +26,12 @@
            <img  :src="scope.row.details" class="swiperImg" />
          </template>
         </el-table-column>
+        <el-table-column label="生成时间" prop="genTime"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+              <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
+          </template>
+        </el-table-column>
         <el-table-column  width= '200' label="操作">
           <template slot-scope="scope">
              <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeShopById(scope.row.id)" ></el-button>
@@ -48,16 +54,75 @@
            <el-form-item label="活动名称" label-width="120px">
            　　<el-input v-model="form2.name" name="names" style="width:360px;"></el-input>
        　　</el-form-item>
-     　　　<el-form-item label-width="120px" label="上传详情图">
+           <el-form-item label-width="120px" label="上传详情图">
+             　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
+             　　<el-upload
+                   ref="detailUpload"
+              　　 class="upload-demo"
+               　　action="/as"
+               　　:limit= "1"
+                   multiple
+                   :http-request="handleDetailUpload"
+               　　:auto-upload="false"
+               　　
+               　　list-type="picture">
+               　　<el-button size="small" type="primary">点击上传</el-button>
+               　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+             　</el-upload>
+           　　</el-form-item>
+     　　　<el-form-item label-width="120px" label="上传轮播图(最多6张)">
        　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
        　　<el-upload
-
              ref="upload"
         　　 class="upload-demo"
          　　action="/as"
          　　:limit= "6"
              multiple
-             :before-upload="beforeUpload"
+             :http-request="handleUpload"
+         　　:auto-upload="false"
+         　　:on-remove="handleRemove"
+         　　list-type="picture">
+         　　<el-button size="small" type="primary">点击上传</el-button>
+         　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+       　</el-upload>
+     　　</el-form-item>
+     　　<el-form-item style="padding-top:20px;" label-width="120px" >
+          <el-button type="primary" @click="onSubmit">立即创建</el-button>
+     　 </el-form-item>
+    </el-form>
+    </el-dialog>
+    <!-- 添加商品对话框 -->
+    <el-dialog title="修改商品" :visible.sync="editDialogVisible" width="50%">
+       <!-- 修改商品 -->
+         <el-form ref="form2" :model="editForm" label-width="80px">
+           <el-form-item label="活动名称" label-width="120px">
+           　　<el-input v-model="editForm.name" name="names" style="width:360px;"></el-input>
+       　　</el-form-item>
+           <el-form-item label-width="120px" label="上传详情图">
+             　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
+             　　<el-upload
+                   ref="detailUpload"
+              　　 class="upload-demo"
+               　　action="/as"
+               　　:limit= "1"
+                   multiple
+                   :http-request="handleDetailUpload"
+               　　:auto-upload="false"
+               　　
+               　　list-type="picture">
+               　　<el-button size="small" type="primary">点击上传</el-button>
+               　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+             　</el-upload>
+           　　</el-form-item>
+     　　　<el-form-item label-width="120px" label="上传轮播图(最多6张)">
+       　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
+       　　<el-upload
+             ref="upload"
+        　　 class="upload-demo"
+         　　action="/as"
+         　　:limit= "6"
+             multiple
+             :http-request="handleUpload"
          　　:auto-upload="false"
          　　:on-remove="handleRemove"
          　　list-type="picture">
@@ -84,7 +149,7 @@
       return {
          token: '',
          addDialogVisible: false, //控制对话框的显示隐藏
-         addDialogVisible: false, //控制对话框的显示隐藏
+         editDialogVisible: false, //控制对话框的显示隐藏
          picture: [],
          details: [],
          fileList: [],
@@ -96,6 +161,11 @@
  　　　　},
          form2: {
            name: ''
+         },
+         editForm: {
+           name: '',
+           picture: [],
+           details: ''
          },
  　　　　params2:{},
         productList: [],
@@ -125,7 +195,7 @@
           data: param,
           url: '/lightspace/productList'
         }).then((res) => {
-          // console.log(res)
+          console.log(res)
           res? res = res.data.data: '';
           this.content = res.content;
           this.totalElements = res.totalElements;
@@ -139,43 +209,54 @@
         console.log(err)
       },
  　　handleRemove(file,filesList){
-   　　this.param.delete('file')
+   　　this.fileList.delete(file);
+   console.log(this.fileList)
  　　},
      beforeUpload(file){
-       console.log(file)
       this.fileList.push(file);
-
-
-
  　　},
+   handleUpload(raw){
+      this.fileList.push(raw.file);
+    },
+    handleDetailUpload(raw) {
+      this.details = raw.file;
+    },
  　　handleRemove(file,filesList){
    　　this.param2.delete('file')
  　　},
- 　　onSubmit(){//表单提交的事件
-       this.$refs.upload.submit();
-       let param = new FormData();
-       param.append('token', this.token);
-       param.append('name', this.form2.name);
-       console.log(this.fileList, 2)
-       this.fileList.forEach(function (file) {
-        param.append('picture', file); // 因为要上传多个文件，所以需要遍历一下才行
-             //不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
-        })
-       axios({
-         method: 'post',
-         data: param,
-         url: '/lightspace/addProduct',
-          // headers: {
-          //   'Content-Type': 'multipart/form-data'}
-       }).then((res) => {
-         console.log(res)
-       }).catch((err) => {
-         console.log(err)
-       })
-      },
+     //新增添加
+ 　　async onSubmit(){//表单提交的事件
+     this.$refs.upload.submit();
+     this.$refs.detailUpload.submit();
+     let param = new FormData();
+     param.append('token', this.token);
+     param.append('name', this.form2.name);
+     param.append('details', this.details);
+     this.fileList.forEach(function (file) {
+      param.append('picture', file); // 因为要上传多个文件，所以需要遍历一下才行
+           //不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
+      })
+     axios({
+       method: 'post',
+       data: param,
+       url: '/lightspace/addProduct'
+     }).then((res) => {
+       if(res.data.status == 200) {
+         this.addDialogVisible = false;
+         this.form2.name = '';
+         this.details = [];
+         this.fileList = [];
+       }
+     }).catch((err) => {
+       console.log(err)
+     })
+     },
     //关闭按钮
      handleClose() {
       this.addDialogVisible = false;
+      this.form2.name = '';
+      this.details = [];
+      this.fileList = [];
      },
      //删除班级
      async removeShopById(id) {
@@ -213,6 +294,23 @@
      handleDeleteProErr(err) {
          console.log(err)
      },
+     showEditDialog(id){
+       console.log(id)
+       let param = new FormData();
+       param.append('token', this.token);
+       param.append('id', id);
+       axios({
+         method: 'post',
+         data: param,
+         url: '/lightspace/editProduct'
+       }).then((res) => {
+         console.log(res)
+         this.editDialogVisible = true;
+         this.editForm = res.data.data;
+       }).catch((err) => {
+         console.log(err)
+       })
+     }
     }
     }
 </script>
