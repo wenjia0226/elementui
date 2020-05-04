@@ -59,7 +59,7 @@
               :current-page="this.number"
               @current-change="handleCurrentChange"
               layout="prev, pager, next"
-              :page-size ="10"
+              :page-size ="this.size"
               :total="this.totalElements">
             </el-pagination>
             <!-- 搜索记录 -->

@@ -246,6 +246,7 @@
          this.form2.name = '';
          this.details = [];
          this.fileList = [];
+         this.getShopList();
        }
      }).catch((err) => {
        console.log(err)
