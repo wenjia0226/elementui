@@ -45,7 +45,7 @@
               </el-form-item>
                <el-form-item label="图片">
               <el-upload
-                 action="https://jsonplaceholder.typicode.com/posts/"
+                action="#"
                 list-type="picture-card"
                 :before-upload="handlePreve"
                 >
@@ -98,11 +98,13 @@
       },
       methods: {
          handlePreve(file) {
+           console.log(file)
           this.addForm.file = file
           },
 
         //添加公司
         submitCoparation() {
+          // this.$refs.addFormRef.submit();
          this.$refs.addFormRef.validate((valid) => {
              if(!valid) return;
              let param = new FormData();

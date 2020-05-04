@@ -220,7 +220,6 @@
 </template>
 <script>
 import axios from 'axios'
-var valid
 export default {
     created() {
         this.token = window.sessionStorage.getItem('token');
@@ -344,6 +343,7 @@ export default {
         this.pdfData.token = this.token;
        },
        submitUpload() {
+         console.log(this.pdfData , 'pdf')
          this.$refs.upload.submit();
        },
        handleRemove(file, fileList) {
