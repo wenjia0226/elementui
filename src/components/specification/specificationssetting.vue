@@ -10,11 +10,25 @@
       <!-- 卡片视图 -->
       <el-card>
         <el-row>
-          <el-col :span="6">
+          <el-col :span="4">
+            <el-select v-model="searchquery" placeholder="请选择" @change="handleSearchChange">
+             <el-option
+               v-for="item in this.productList"
+               :key="item.value"
+               :label="item.label"
+               :value="item.value"
+              >
+             </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="2" >
+             <el-button  type="primary"  @click="searchProduct">搜索商品规格</el-button>
+          </el-col>
+          <el-col :span="6" :offset="1">
                  <el-button type="primary" @click="addDialogVisible = true">添加规格</el-button>
           </el-col>
         </el-row>
-       <el-table :data="this.content" border stripe style="width: 100%">
+       <el-table :data="this.content" border stripe style="width: 100%" v-show="!this.searchContent.length">
             <el-table-column type="index"></el-table-column>
             <el-table-column label="商品名称" prop="productId"></el-table-column>
             <el-table-column label="规格名称" prop="name"></el-table-column>
@@ -34,12 +48,43 @@
             </el-table-column>
         </el-table>
        <el-pagination
+        v-show="!this.searchContent.length"
          background
+         clearable
          :current-page="this.number"
          @current-change="handleCurrentChange"
          layout="prev, pager, next"
          :page-size ="this.size"
          :total="this.totalElements">
+       </el-pagination>
+       <!-- 搜索 -->
+       <el-table :data="this.searchContent" border stripe style="width: 100%" v-show="this.searchContent.length">
+            <el-table-column type="index"></el-table-column>
+            <el-table-column label="商品名称" prop="productId"></el-table-column>
+            <el-table-column label="规格名称" prop="name"></el-table-column>
+            <el-table-column label="价格" prop="price"></el-table-column>
+            <el-table-column label="爱眼币" prop="integral"></el-table-column>
+            <el-table-column label="运费" prop="freight"></el-table-column>
+            <el-table-column label="库存" prop="stock"></el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSpecById(scope.row.id)"></el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+       <el-pagination
+         v-show="this.searchContent.length"
+         background
+        :current-page="this.searchNumber"
+        @current-change="handleSearchCurrentChange"
+        layout="prev, pager, next"
+        :page-size ="this.searchSize"
+        :total="this.searchTotalElements">
        </el-pagination>
       </el-card>
       <el-dialog title="添加规格" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
@@ -131,6 +176,7 @@
     },
     data() {
       return {
+        searchquery: '',
         addDialogVisible: false,
         editDialogVisible: false,
         shopList: [],
@@ -152,7 +198,8 @@
           integral: '',
           freight: '',
           stock: '',
-          percentage: ''
+          percentage: '',
+
         },
         addShopRules: {
           name: {required: true, message: '请输入规格名称', trigger: 'blur' },
@@ -177,18 +224,53 @@
         number:1,
         size: 10,
         page: 1,
-        id: ''
+        id: '',
+        searchContent: [],
+        searchTotalElements: 0,
+        searchProductId: '',
+        searchNumber: 1,
+        searchSize: 10,
+        searchPage: 1,
       }
     },
     methods: {
+      searchProduct() {
+          let param = new FormData();
+          param.append('token', this.token);
+          param.append('productId', this.searchProductId);
+          param.append('page', this.searchPage)
+          axios({
+            data: param,
+            method: 'post',
+            url: '/lightspace/specificationsList'
+          }).then((res) => {
+            console.log(res)
+            res? res = res.data.data: '';
+            this.searchContent = res.content;
+            this.searchTotalElements = res.totalElements;
+            this.searchSize = res.size;
+            this.searchNumber = res.number + 1;
+          }).catch((err) => {
+            console.log(err)
+          })
+      },
       // 新增选择商品改变
       handleChange(val) {
         this.addShopForm.productId = val;
+      },
+      handleSearchChange(val) {
+        console.log(val)
+        this.searchProductId = val;
+
       },
      // 列表页修改
       handleCurrentChange(val) {
          this.page = val;
          this.getSpecList(val)
+      },
+      handleSearchCurrentChange(val) {
+        this.searchPage = val;
+        this.searchProduct();
       },
       // 获取规格列表
       getSpecList(page) {

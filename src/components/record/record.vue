@@ -498,7 +498,6 @@ export default {
         },
         //监听页码值改变事件
         handleSearchCurrentChange(val) {
-
            this.page = val;
            this.queryStudent(val)
         },
@@ -653,7 +652,11 @@ export default {
             this.$router.push('/login');
         } else if(res.data.status == 200) {
            this.$message.success('删除记录成功');
-           this.getRecordList(1);
+           if(this.query == '') {
+              this.getRecordList(1);
+           }else {
+              this.queryStudent();
+           }
            // this.recordList = res.data.data;
            // const totalPage = Math.ceil(this.recordList.length / this.pageSize) // 总页数
            // this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage

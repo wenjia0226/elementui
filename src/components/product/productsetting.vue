@@ -8,12 +8,15 @@
     <el-card>
       <el-row :gutter="20">
        <el-col :span="6">
+          <el-input placeholder="输入商品名称" v-model="query" clearable @clear="queryShop">
+              <el-button slot="append" icon="el-icon-search" @click="queryShop"></el-button>
+           </el-input>
        </el-col>
        <el-col :span="6">
               <el-button type="primary" @click="addDialogVisible = true">添加商品</el-button>
        </el-col>
       </el-row>
-      <el-table :data="this.content" border  stripe style="width: 100%">
+      <el-table :data="this.content" border  stripe style="width: 100%"  v-show="!this.searchContent.length">
         <el-table-column type="index"></el-table-column>
         <el-table-column label="商品名称" width= '150' prop="name"></el-table-column>
         <el-table-column label="轮播图" prop="pictures" style="width: 50%;">
@@ -39,6 +42,7 @@
       </el-table-column>
       </el-table>
       <el-pagination
+       v-show="!this.searchContent.length"
         background
         :current-page="this.number"
         @current-change="handleCurrentChange"
@@ -46,6 +50,41 @@
         :page-size ="10"
         :total="this.totalElements">
       </el-pagination>
+       <!-- 搜索列表 -->
+       <el-table :data="this.searchContent" border  stripe style="width: 100%"  v-show="this.searchContent.length">
+         <el-table-column type="index"></el-table-column>
+         <el-table-column label="商品名称" width= '150' prop="name"></el-table-column>
+         <el-table-column label="轮播图" prop="pictures" style="width: 50%;">
+           <template scope="scope">
+              <img v-for="item in scope.row.pictures" :src="item" class="swiperImg" />
+           </template>
+          </el-table-column>
+         <el-table-column label="详情图" width= '250' prop="details">
+          <template scope="scope">
+            <img  :src="scope.row.details" class="swiperImg" />
+          </template>
+         </el-table-column>
+         <el-table-column label="生成时间" prop="genTime"></el-table-column>
+         <el-table-column label="操作">
+           <template slot-scope="scope">
+               <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
+           </template>
+         </el-table-column>
+         <el-table-column  width= '200' label="操作">
+           <template slot-scope="scope">
+              <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeShopById(scope.row.id)" ></el-button>
+           </template>
+       </el-table-column>
+       </el-table>
+       <el-pagination
+         v-show="this.searchContent.length"
+         background
+         :current-page="this.searchNumber"
+         @current-change="handleSearchCurrentChange"
+         layout="prev, pager, next"
+         :page-size ="this.searchSize"
+         :total="this.searchTotalElements">
+       </el-pagination>
     </el-card>
     <!-- 添加学校对话框 -->
     <el-dialog title="添加商品" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
@@ -64,13 +103,12 @@
                    multiple
                    :http-request="handleDetailUpload"
                　　:auto-upload="false"
-               　　
                　　list-type="picture">
                　　<el-button size="small" type="primary">点击上传</el-button>
                　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
              　</el-upload>
            　　</el-form-item>
-     　　　<el-form-item label-width="120px" label="上传轮播图(最多6张)">
+     　　　<el-form-item label-width="120px" label="上传轮播图(最多6张)" >
        　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
        　　<el-upload
              ref="upload"
@@ -80,58 +118,53 @@
              multiple
              :http-request="handleUpload"
          　　:auto-upload="false"
-         　　:on-remove="handleRemove"
          　　list-type="picture">
          　　<el-button size="small" type="primary">点击上传</el-button>
          　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
        　</el-upload>
+
      　　</el-form-item>
      　　<el-form-item style="padding-top:20px;" label-width="120px" >
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
      　 </el-form-item>
     </el-form>
     </el-dialog>
-    <!-- 添加商品对话框 -->
-    <el-dialog title="修改商品" :visible.sync="editDialogVisible" width="50%">
+    <!-- 修改商品对话框 -->
+    <el-dialog title="修改商品" :visible.sync="editDialogVisible" width="50%" :before-close="handleEditClose">
        <!-- 修改商品 -->
          <el-form ref="form2" :model="editForm" label-width="80px">
            <el-form-item label="活动名称" label-width="120px">
            　　<el-input v-model="editForm.name" name="names" style="width:360px;"></el-input>
        　　</el-form-item>
+       <el-form-item label-width="120px" label="上传轮播图(最多6张)" wx:if="this.editForm.pictures.length">
+           <el-upload
+             ref="editPic"
+             action="/as"
+             :limit = '6'
+             :auto-upload = "true"
+             list-type="picture-card"
+             :file-list = "pictureFile"
+             :on-remove="handleRemove"
+             :http-request="reuploadPicture"
+              style="display: inline-block">
+             <i class="el-icon-plus"></i>
+           </el-upload>
+           </el-form-item>
            <el-form-item label-width="120px" label="上传详情图">
-             　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
-             　　<el-upload
-                   ref="detailUpload"
-              　　 class="upload-demo"
-               　　action="/as"
-               　　:limit= "1"
-                   multiple
-                   :http-request="handleDetailUpload"
-               　　:auto-upload="false"
-               　　
-               　　list-type="picture">
-               　　<el-button size="small" type="primary">点击上传</el-button>
-               　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-             　</el-upload>
-           　　</el-form-item>
-     　　　<el-form-item label-width="120px" label="上传轮播图(最多6张)">
-       　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
-       　　<el-upload
-             ref="upload"
-        　　 class="upload-demo"
-         　　action="/as"
-         　　:limit= "6"
-             multiple
-             :http-request="handleUpload"
-         　　:auto-upload="false"
-         　　:on-remove="handleRemove"
-         　　list-type="picture">
-         　　<el-button size="small" type="primary">点击上传</el-button>
-         　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-       　</el-upload>
-     　　</el-form-item>
+             <el-upload
+               ref="editUpload"
+               action="/as"
+               :limit = '1'
+               :auto-upload = "true"
+               :http-request="reupload"
+               list-type="picture-card"
+               :file-list = "detailFile"
+               　:on-remove="handleRemoveDetail">
+               <i class="el-icon-plus"></i>
+            </el-upload>
+         </el-form-item>  　　
      　　<el-form-item style="padding-top:20px;" label-width="120px" >
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
+          <el-button type="primary" @click="onresetSubmit">确定修改</el-button>
      　 </el-form-item>
     </el-form>
     </el-dialog>
@@ -148,6 +181,7 @@
     data() {
       return {
          token: '',
+         query: '',
          addDialogVisible: false, //控制对话框的显示隐藏
          editDialogVisible: false, //控制对话框的显示隐藏
          picture: [],
@@ -174,16 +208,74 @@
         size: 10,
         page: 1,
         content: [],
+        searchContent: [],
+        searchNumber: 1,
+        searchSize: 10,
+        searchPage: 1,
+        searchTotalElements: 0,
          picture: '',
-         details: ''
+         details: '',
+         detailFile: [],
+         pictureFile: [],
+         reuploadDetail: '', //重新上传图片
+         reuplodPicture: [],
+         goodsId: '' ,// 点击编辑按钮商品id,
+         delPic: []
       }
      },
     methods: {
+      handleRemove(file, fileList) {
+       this.delPic.push(file.url)
+      },
+      handleRemoveDetail(file, fileList) {
+        // console.log(file, fileList, 'details')
+      },
+      //搜索
+      queryShop() {
+        if(this.query == "") {
+            this.getShopList(1);
+           return;
+        }
+          let param = new URLSearchParams();
+          param.append('token', this.token);
+          param.append('name', this.query);
+          param.append('page', this.searchPage);
+          axios({
+              method: "post",
+              url: '/lightspace/findProductByName',
+              data: param
+          }).then(this.handleQuerySucc.bind(this))
+          .catch(this.handleQueryErr.bind(this))
+      },
+      handleQuerySucc(res) {
+        if(res.data.status === 10204) {
+            this.$message.error(res.data.msg);
+            this.$router.push('/login');
+           } else if(res.data.status == 10208) {
+            this.$message.error(res.data.msg);
 
+         }else if(res.status == 200) {
+            this.$message.success('搜索成功');
+            // console.log(res)
+            res? res = res.data.data: '';
+            this.searchContent = res.content;
+            this.searchTotalElements = res.totalElements;
+            this.searchSize = res.size;
+            this.searchNumber = res.number + 1;
+          }
+      },
+      handleQueryErr(err) {
+          console.log(err)
+      },
       //监听页码值改变事件
       handleCurrentChange(val) {
          this.page = val;
          this.getShopList(val)
+      },
+      //监听页码值改变事件
+      handleSearchCurrentChange(val) {
+         this.searchPage = val;
+         this.queryShop();
       },
       //获取列表
       getShopList(page) {
@@ -195,7 +287,7 @@
           data: param,
           url: '/lightspace/productList'
         }).then((res) => {
-          console.log(res)
+           // console.log(res)
           res? res = res.data.data: '';
           this.content = res.content;
           this.totalElements = res.totalElements;
@@ -208,22 +300,56 @@
       failResult(err){
         console.log(err)
       },
- 　　handleRemove(file,filesList){
-   　　this.fileList.delete(file);
-   console.log(this.fileList)
- 　　},
+ 　　
      beforeUpload(file){
       this.fileList.push(file);
  　　},
-   handleUpload(raw){
+    handleUpload(raw){
       this.fileList.push(raw.file);
     },
     handleDetailUpload(raw) {
       this.details = raw.file;
     },
- 　　handleRemove(file,filesList){
-   　　this.param2.delete('file')
- 　　},
+// 重新上传详情图
+    reupload(raw) {
+      this.reuploadDetail = raw.file;
+    },
+    // 重新上传轮播图
+    reuploadPicture(raw) {
+      this.reuplodPicture.push(raw.file)
+    },
+    async onresetSubmit() {
+      let param = new FormData();
+      param.append('token', this.token);
+      param.append('id', this.goodsId);
+      param.append('name', this.editForm.name);
+      param.append('details', this.reuploadDetail);
+      param.append('delPic', this.delPic);
+      this.reuplodPicture.forEach(function (file) {
+       param.append('picture', file); // 因为要上传多个文件，所以需要遍历一下才行
+            //不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
+       })
+
+      axios({
+        method: 'post',
+        data: param,
+        url: '/lightspace/saveProduct'
+      }).then((res) => {
+        // console.log(res)
+        if(res.data.status == 200) {
+          this.editDialogVisible = false;
+          this.editForm.name = '';
+          this.reuplodPicture = [];  //上传完成后清空
+          this.reuploadDetail = [];
+          this.pictureFile = [];
+          this.detailFile = [];
+
+          this.getShopList(1);
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
      //新增添加
  　　async onSubmit(){//表单提交的事件
      this.$refs.upload.submit();
@@ -246,7 +372,7 @@
          this.form2.name = '';
          this.details = [];
          this.fileList = [];
-         this.getShopList();
+         this.getShopList(1);
        }
      }).catch((err) => {
        console.log(err)
@@ -259,25 +385,31 @@
       this.details = [];
       this.fileList = [];
      },
+     handleEditClose() {
+       this.detailFile = [];
+       this.pictureFile = [];
+       this.editDialogVisible = false;
+       this.editForm.name= '';
+     },
      //删除班级
      async removeShopById(id) {
-         const confirmResult = await this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
-         confirmButtonText: '确定',
-         cancelButtonText: '取消',
-         type: 'warning'
-         }).catch(err => err)
-         if(confirmResult !== 'confirm') {
-             return this.$message.info('已经取消删除')
-         }
-         let param = new URLSearchParams();
-         param.append('token', this.token);
-         param.append('id', id)
-         axios({
-             method: 'post',
-             url: '/lightspace/deleteProduct',
-             data: param
-         }).then(this.handleDeleteProSucc.bind(this))
-         .catch(this.handleDeleteProErr.bind(this))
+       const confirmResult = await this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
+       confirmButtonText: '确定',
+       cancelButtonText: '取消',
+       type: 'warning'
+       }).catch(err => err)
+       if(confirmResult !== 'confirm') {
+           return this.$message.info('已经取消删除')
+       }
+       let param = new URLSearchParams();
+       param.append('token', this.token);
+       param.append('id', id)
+       axios({
+           method: 'post',
+           url: '/lightspace/deleteProduct',
+           data: param
+       }).then(this.handleDeleteProSucc.bind(this))
+       .catch(this.handleDeleteProErr.bind(this))
      },
      handleDeleteProSucc(res) {
          if(res.data.status === 10204) {
@@ -285,7 +417,12 @@
              this.$router.push('/login');
          } else if(res.data.status == 200) {
             this.$message.success('删除记录成功');
-            this.getShopList(1);
+
+            if(this.query == '') {
+                this.getShopList(1);
+            }else {
+              this.queryShop();
+            }
             // this.recordList = res.data.data;
             // const totalPage = Math.ceil(this.recordList.length / this.pageSize) // 总页数
             // this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
@@ -296,7 +433,7 @@
          console.log(err)
      },
      showEditDialog(id){
-       console.log(id)
+       this.goodsId = id;
        let param = new FormData();
        param.append('token', this.token);
        param.append('id', id);
@@ -305,9 +442,18 @@
          data: param,
          url: '/lightspace/editProduct'
        }).then((res) => {
-         console.log(res)
          this.editDialogVisible = true;
          this.editForm = res.data.data;
+         let detailFile = res.data.data.details;
+         let pictureFile = res.data.data.pictures;
+         this.pictureFile = pictureFile.map((t) => {
+           var obj = {};
+           obj.url = t;
+           return obj;
+         })
+         this.detailFile.push({
+           url: detailFile
+         });
        }).catch((err) => {
          console.log(err)
        })
@@ -320,7 +466,6 @@
   input[type="file"] {
           display: none;
       }
-
       .avatar-uploader .el-upload {
           border: 1px dashed #d9d9d9;
           border-radius: 6px;
