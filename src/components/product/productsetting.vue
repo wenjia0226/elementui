@@ -20,12 +20,12 @@
         <el-table-column type="index"></el-table-column>
         <el-table-column label="商品名称" width= '150' prop="name"></el-table-column>
         <el-table-column label="轮播图" prop="pictures" style="width: 50%;">
-          <template scope="scope">
+          <template slot-scope="scope">
              <img v-for="item in scope.row.pictures" :src="item" class="swiperImg" />
           </template>
          </el-table-column>
         <el-table-column label="详情图" width= '250' prop="details">
-         <template scope="scope">
+         <template slot-scope="scope">
            <img  :src="scope.row.details" class="swiperImg" />
          </template>
         </el-table-column>
@@ -55,12 +55,12 @@
          <el-table-column type="index"></el-table-column>
          <el-table-column label="商品名称" width= '150' prop="name"></el-table-column>
          <el-table-column label="轮播图" prop="pictures" style="width: 50%;">
-           <template scope="scope">
+           <template slot-scope="scope">
               <img v-for="item in scope.row.pictures" :src="item" class="swiperImg" />
            </template>
           </el-table-column>
          <el-table-column label="详情图" width= '250' prop="details">
-          <template scope="scope">
+          <template slot-scope="scope">
             <img  :src="scope.row.details" class="swiperImg" />
           </template>
          </el-table-column>
