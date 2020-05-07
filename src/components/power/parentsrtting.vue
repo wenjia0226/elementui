@@ -3,8 +3,8 @@
     <!-- 面包屑导航区域 -->
      <el-breadcrumb separator-class="el-icon-arrow-right">
          <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-         <el-breadcrumb-item>基础数据</el-breadcrumb-item>
-         <el-breadcrumb-item>合作机构</el-breadcrumb-item>
+         <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+         <el-breadcrumb-item>小程序用户管理</el-breadcrumb-item>
      </el-breadcrumb>
      <el-card>
      <!-- 学校列表 -->
@@ -83,7 +83,7 @@
             this.$router.push('/login');
            } else if(res.data.status == 200) {
              this.userList = res.data.data;
-             
+
              // this.studentInfo = res.data.data.
           }
       },

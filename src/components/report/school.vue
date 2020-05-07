@@ -2,20 +2,36 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>生成二维码</el-breadcrumb-item>
-        <el-breadcrumb-item>学校二维码</el-breadcrumb-item>
+        <el-breadcrumb-item>生成报表</el-breadcrumb-item>
+        <el-breadcrumb-item>学校报表</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
       <el-row :gutter="10">
         <el-col :span="2">
              <div class="schoolSet">学校选择：</div>
         </el-col>
-          <el-col :span="4">
-               <el-cascader  :options="schoolList" :props ="cateProps" @change="handleChange">
-               </el-cascader>
+        <el-col :span="4" v-if="this.identity == 1">
+         <el-select v-model="school" placeholder="请选择"  @change="handleChange">
+             <el-option
+               v-for="item in schoolList"
+               :key="item.value"
+               :label="item.value"
+               :value="item.id">
+             </el-option>
+           </el-select>
+        </el-col>
+          <el-col :span="4" v-if="this.identity == 2">
+           <el-select v-model="school" placeholder="请选择" disabled >
+               <el-option
+                 v-for="item in schoolList"
+                 :key="item.value"
+                 :label="item.label"
+                 :value="item.value">
+               </el-option>
+             </el-select>
           </el-col>
           <el-col :span="4">
-             <el-button type="primary" @click="getCode">下载报告</el-button>
+             <el-button type="primary" @click="getCode">下载学校报告</el-button>
           </el-col>
         </el-row>
      </el-card>
@@ -27,7 +43,12 @@
   export default {
     created() {
       this.token = window.sessionStorage.getItem('token');
+      let user = window.sessionStorage.getItem('token');
+      this.identity = user.split('-') [1];
+      this.fondId = user.split('-')[2];
       this.getSchoolList();
+
+
     },
     data() {
       return {
@@ -39,12 +60,14 @@
             value: 'id', // 选中的是谁的值
             children: 'children' //哪个属性实现父子节点嵌套
         },
-        loading: {}
+        identity: '',
+        fondId: '',
+        school: ''
       }
     },
     methods: {
       // 获取学校列表
-       getSchoolList() {
+      async getSchoolList() {
           let param = new URLSearchParams();
            param.append('token', this.token);
            axios({
@@ -60,16 +83,22 @@
             this.$router.push('/login');
         } else if(res.data.status == 200) {
             this.schoolList = res.data.data;
+            if(this.identity == 2) {
+              this.schoolId = this.fondId;
+              let schoolInfo = this.schoolList.filter((item) => {
+                if(item.id == this.fondId) return item;
+              })
+              this.school = schoolInfo[0].name;
+            }
         }
       },
       handleGetSchoolErr(err) {
           console.log(err)
       },
      handleChange(item) {
-        this.schoolId = item[0];
+       this.schoolId = item;
      },
      getCode() {
-        console.log(this.schoolId)
       this.loading = this.$loading({
          lock: true,
          text: '生成中,请耐心等候...',
@@ -79,6 +108,7 @@
        let param= new FormData();
        param.append('token', this.token);
        param.append('id',this.schoolId);
+       param.append('type', 'school');
        axios({
          method: 'post',
          url: '/lightspace/downReport',
@@ -86,16 +116,16 @@
        }).then(this.handleGetCodeSucc.bind(this)).catch(this.handleGetCodeErr.bind(this))
     },
     handleGetCodeSucc(res) {
-      console.log(res)
-      // if(res.data.status == 200) {
-      //   const downloadElement = document.createElement('a'); // 创建a标签
-      //   downloadElement.href = 'https://www.guangliangkongjian.com/code/code.zip';
-      //   document.body.appendChild(downloadElement);
-      //   downloadElement.click();
-
-      //   document.body.removeChild(downloadElement);
-      //   this.loading.close();
-      // }
+      // console.log(res)
+      if(res.data.status == 200) {
+        const downloadElement = document.createElement('a'); // 创建a标签
+        downloadElement.href = 'https://www.guangliangkongjian.com/download/报表文件.docx';
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement);
+        this.loading.close();
+        this.school = '';
+      }
     },
     handleGetCodeErr(err) {
       console.log(err)

@@ -1,5 +1,10 @@
 <template>
     <div>
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>数据分析</el-breadcrumb-item>
+        <el-breadcrumb-item>校园概况</el-breadcrumb-item>
+      </el-breadcrumb>
         <!-- 卡片视图 -->
         <el-card>
              <el-row :gutter="20">

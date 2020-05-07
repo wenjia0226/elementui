@@ -3,11 +3,11 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>生成二维码</el-breadcrumb-item>
-        <el-breadcrumb-item>班级二维码</el-breadcrumb-item>
+        <el-breadcrumb-item>生成班级二维码</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
       <el-row :gutter="10">
-        <el-col :span="2">
+        <el-col :span="3">
              <div class="schoolSet">学校班级选择：</div>
         </el-col>
           <el-col :span="4">
