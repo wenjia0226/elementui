@@ -56,6 +56,7 @@
    },
    methods: {
      drawLine(id,lengend, option, text) {
+		 
        console.log(id,lengend, option, text)
        if (id == 'totalleft') {
           var myChart = echarts.init(this.$refs.totalleft);

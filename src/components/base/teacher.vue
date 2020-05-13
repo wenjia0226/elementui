@@ -22,6 +22,7 @@
          <el-table-column label="学校名称" prop="schoolName"></el-table-column>
          <el-table-column label="班级" prop="className"></el-table-column>
          <el-table-column label="电话" prop="phone"></el-table-column>
+          <el-table-column label="密码" prop="password"></el-table-column>
          <el-table-column label="操作">
              <template slot-scope="scope">
                 <el-button type="primary" size="middle" icon="el-icon-edit" @click="showEditDialog(scope.row.id)"></el-button>
@@ -42,6 +43,7 @@
           <el-table-column label="学校名称" prop="schoolName"></el-table-column>
           <el-table-column label="班级" prop="className"></el-table-column>
           <el-table-column label="电话" prop="phone"></el-table-column>
+          <el-table-column label="密码" prop="password"></el-table-column>
           <el-table-column label="操作">
               <template slot-scope="scope">
                  <el-button type="primary" size="middle" icon="el-icon-edit" @click="showEditDialog(scope.row.id)"></el-button>
@@ -77,6 +79,9 @@
              <el-form-item label="电话" prop="phone">
                  <el-input v-model="addTeacherForm.phone"></el-input>
              </el-form-item>
+             <el-form-item label="密码" prop="password">
+                 <el-input v-model="addTeacherForm.password"></el-input>
+             </el-form-item>
          </el-form>
          <span slot="footer" class="dialog-footer">
              <el-button @click="addDialogVisible = false">取 消</el-button>
@@ -100,6 +105,9 @@
              </el-form-item> -->
              <el-form-item label="电话" prop="phone">
                  <el-input v-model="editTeacherForm.phone"></el-input>
+             </el-form-item>
+             <el-form-item label="密码" prop="password">
+                 <el-input v-model="editTeacherForm.password"></el-input>
              </el-form-item>
          </el-form>
          <span slot="footer" class="dialog-footer">
@@ -129,7 +137,8 @@
             schoolName: '',
             className: '',
             phone: '',
-            name: ''
+            name: '',
+            password: ''
         },
         addTeacherRules: {
             schoolName: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
@@ -137,6 +146,7 @@
             phone: [{required: true, message: '请输入手机号', trigger: 'blur' }],
             name: [{required: true, message: '请输入姓名', trigger: 'blur' }],
             stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'},
+            password: [{required: true, message: '请输入密码', trigger: 'blur' }]
         },
         cateProps: {
            label: 'name', //看到的是哪个属性
@@ -148,6 +158,7 @@
             className: '',
             phone: '',
             name: '',
+            password: '',
             tea_cat:[]
         },
         editTeacherRules: {
@@ -156,6 +167,7 @@
             phone: [{required: true, message: '请输入手机号', trigger: 'blur' }],
             name: [{required: true, message: '请输入姓名', trigger: 'blur' }],
             stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'},
+            password: [{required: true, message: '请输入密码', trigger: 'blur' }]
         },
         searchTeacherList:[]
       }
@@ -174,6 +186,7 @@
              param.append('schoolId', this.schoolId);
              param.append('classId', this.classId);
              param.append('phone', this.addTeacherForm.phone);
+             param.append('password', this.addTeacherForm.password);
              param.append('name', this.addTeacherForm.name);
              param.append('token', this.token);
              axios({
@@ -280,6 +293,7 @@
          .catch(this.handleEditTeacherErr.bind(this))
      },
      handleEditTeacherSucc(res) {
+       console.log(res)
        if(res.data.status === 10204) {
            this.$message.error(res.data.msg);
            this.$router.push('/login');
@@ -304,6 +318,7 @@
          param.append('schoolName', this.editTeacherForm.schoolName);
          param.append('className', this.editTeacherForm.className);
          param.append('phone', this.editTeacherForm.phone);
+         param.append('password', this.editTeacherForm.password);
          param.append('id', this.editTeacherForm.id)
          axios({
              method: 'post',
