@@ -456,6 +456,18 @@ export default {
        }else if(res.data.status == 200) {
           this.$message.success('搜索成功');
           this.searchStudentList = res.data.data;
+          this.searchStudentList.forEach((value, index) => {
+              if(value.gender == 1) {
+                  value.gender = '女'
+              }else{
+                  value.gender = '男'
+              }
+              if(value.correct ==1 ) {
+                  value.correct = '已矫正'
+              }else {
+                  value.correct = '未矫正'
+              }
+          })
         }
       },
       handleQueryErr(err) {

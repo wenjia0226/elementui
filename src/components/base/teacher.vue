@@ -228,15 +228,15 @@
              this.searchTeacherList = [];
              return;
           }
-            let param = new URLSearchParams();
-            param.append('token', this.token);
-            param.append('name', this.query);
-            axios({
-                method: "post",
-                url: '/lightspace/queryTeacher',
-                data: param
-            }).then(this.handleQuerySucc.bind(this))
-            .catch(this.handleQueryErr.bind(this))
+          let param = new URLSearchParams();
+          param.append('token', this.token);
+          param.append('name', this.query);
+          axios({
+              method: "post",
+              url: '/lightspace/queryTeacher',
+              data: param
+          }).then(this.handleQuerySucc.bind(this))
+          .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
           if(res.data.status === 10204) {
