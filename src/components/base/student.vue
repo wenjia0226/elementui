@@ -566,7 +566,7 @@ export default {
            this.currentPage = val;
         },
         handleGetStudentList(res) {
-          
+
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
@@ -607,6 +607,7 @@ export default {
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.editStudentForm = res.data.data;
+              console.log( this.editStudentForm,898)
               this.editStudentVisible = true;
               this.getStudentList();
             }

@@ -94,8 +94,8 @@
              <el-form-item label="姓名" prop="name">
                  <el-input v-model="editTeacherForm.name"></el-input>
              </el-form-item>
-             <el-form-item label="所属学校班级" prop='schoolName'>
-                 <el-cascader :options="options" v-model="editTeacherForm.tea_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+             <el-form-item label="所属学校班级" prop='tea_cat'>
+                 <el-cascader :options="options" v-model="editTeacherForm.tea_cat" :props="cateProps" @change="handleEditChange" clearable></el-cascader>
              </el-form-item>
             <!-- <el-form-item label="学校名称" prop="schoolName">
                  <el-input v-model="editTeacherForm.schoolName"></el-input>
@@ -133,6 +133,7 @@
         teacherList: [],
         editDialogVisible: false,
         addDialogVisible: false, //控制对话框的显示隐藏
+        tea_cat: [],
         addTeacherForm: {
             schoolName: '',
             className: '',
@@ -145,17 +146,17 @@
             className: [{required: true, message: '请输入班级名称', trigger: 'blur' }],
             phone: [{required: true, message: '请输入手机号', trigger: 'blur' }],
             name: [{required: true, message: '请输入姓名', trigger: 'blur' }],
-            stu_cat: {required: true, message: '请选择学校班级', trigger: 'blur'},
+            tea_cat: {required: true, message: '请选择学校班级', trigger: 'blur'},
             password: [{required: true, message: '请输入密码', trigger: 'blur' }]
         },
         cateProps: {
-           label: 'name', //看到的是哪个属性
-           value: 'id', // 选中的是谁的值
-           children: 'children' //哪个属性实现父子节点嵌套
+          label: 'name', //看到的是哪个属性
+          value: 'id', // 选中的是谁的值
+          children: 'children' //哪个属性实现父子节点嵌套
         },
         editTeacherForm: {
-            schoolName: '',
-            className: '',
+            schoolId: '',
+            classId: '',
             phone: '',
             name: '',
             password: '',
@@ -202,9 +203,12 @@
          this.schoolId = this.addTeacherForm.stu_cat[0];
          this.classId = this.addTeacherForm.stu_cat[1];
       },
-
+      handleEditChange(val) {
+        this.schoolId = val[0];
+        this.classId = val[1];
+      },
       handleAddTeacherSucc(res) {
-        console.log(res);
+        // console.log(res);
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
@@ -293,7 +297,7 @@
          .catch(this.handleEditTeacherErr.bind(this))
      },
      handleEditTeacherSucc(res) {
-       console.log(res)
+       // console.log(res)
        if(res.data.status === 10204) {
            this.$message.error(res.data.msg);
            this.$router.push('/login');
@@ -306,17 +310,17 @@
      },
      //监听修改用户对话框的关闭事件
      editDialogClosed() {
-         this.$refs.editTeacherRef.resetFields()
+        this.$refs.editTeacherRef.resetFields()
      },
      //修改保存
     editTeacherInfo() {
-       this.$refs.editTeacherRef.validate((valid) => {
+      this.$refs.editTeacherRef.validate((valid) => {
          if(!valid)  return;
          let param = new URLSearchParams();
          param.append('token', this.token);
          param.append('name', this.editTeacherForm.name);
-         param.append('schoolName', this.editTeacherForm.schoolName);
-         param.append('className', this.editTeacherForm.className);
+         param.append('schooId', this.schoolId);
+         param.append('classId', this.classId);
          param.append('phone', this.editTeacherForm.phone);
          param.append('password', this.editTeacherForm.password);
          param.append('id', this.editTeacherForm.id)

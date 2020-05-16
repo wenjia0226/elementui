@@ -37,6 +37,7 @@ import specificationssetting from '@/components/specification/specificationssett
 import schoolreport from '@/components/report/school'
 import classreport from '@/components/report/class'
 import gradereport from '@/components/report/grade'
+import rotationpic  from '@/components/rotationpic/rotationpic'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -86,7 +87,9 @@ const router = new Router({
         {path: '/specificationssetting', component: specificationssetting},
         {path: '/schoolreport', component: schoolreport},
         {path: '/classreport', component: classreport},
-        {path: '/gradereport', component: gradereport}
+        {path: '/gradereport', component: gradereport},
+         {path: '/rotationpic', component: rotationpic}
+        
       ]
     },
 

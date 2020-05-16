@@ -92,7 +92,7 @@
             details: [{required: false, message: '请输入班级名称', trigger: 'blur' }],
             phone: [{required: true, message: '请输入手机号', trigger: 'blur' }],
             name: [{required: true, message: '请输入姓名', trigger: 'blur' }],
-            file: {required: false, message: '请选择学校班级', trigger: 'blur'}
+            file: {required: false, message: '选择图片', trigger: 'blur'}
         },
         }
       },

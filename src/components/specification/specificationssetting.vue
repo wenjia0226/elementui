@@ -22,30 +22,30 @@
             </el-select>
           </el-col>
           <el-col :span="2" >
-             <el-button  type="primary"  @click="searchProduct">搜索商品规格</el-button>
+            <el-button  type="primary"  @click="searchProduct">搜索商品规格</el-button>
           </el-col>
           <el-col :span="6" :offset="1">
                  <el-button type="primary" @click="addDialogVisible = true">添加规格</el-button>
           </el-col>
         </el-row>
        <el-table :data="this.content" border stripe style="width: 100%" v-show="!this.searchContent.length">
-            <el-table-column type="index"></el-table-column>
-            <el-table-column label="商品名称" prop="productId"></el-table-column>
-            <el-table-column label="规格名称" prop="name"></el-table-column>
-            <el-table-column label="价格" prop="price"></el-table-column>
-            <el-table-column label="爱眼币" prop="integral"></el-table-column>
-            <el-table-column label="运费" prop="freight"></el-table-column>
-            <el-table-column label="库存" prop="stock"></el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSpecById(scope.row.id)"></el-button>
-                </template>
-            </el-table-column>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="商品名称" prop="productName"></el-table-column>
+        <el-table-column label="规格名称" prop="name"></el-table-column>
+        <el-table-column label="价格" prop="price"></el-table-column>
+        <el-table-column label="爱眼币" prop="integral"></el-table-column>
+        <el-table-column label="运费" prop="freight"></el-table-column>
+        <el-table-column label="库存" prop="stock"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+              <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showEditDialog(scope.row.id)" ></el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+            <template slot-scope="scope">
+                <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSpecById(scope.row.id)"></el-button>
+            </template>
+        </el-table-column>
         </el-table>
        <el-pagination
         v-show="!this.searchContent.length"
