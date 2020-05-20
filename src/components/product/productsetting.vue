@@ -88,14 +88,15 @@
     </el-card>
     <!-- 添加学校对话框 -->
     <el-dialog title="添加商品" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
-       <!-- 添加学校 -->
-         <el-form ref="form2" :model="form2" label-width="80px">
-           <el-form-item label="活动名称" label-width="120px">
+       <!-- 添加商品 -->
+         <el-form  :model="form2" label-width="80px" :rules="addShopRules" ref="addShopFormRef">
+           <el-form-item label="商品名称" label-width="120px" prop="name">
            　　<el-input v-model="form2.name" name="names" style="width:360px;"></el-input>
        　　</el-form-item>
-           <el-form-item label-width="120px" label="上传详情图">
+          <el-form-item label-width="120px" label="上传详情图" prop="addSwiper">
              　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
              　　<el-upload
+
                    ref="detailUpload"
               　　 class="upload-demo"
                　　action="/as"
@@ -108,11 +109,12 @@
                　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
              　</el-upload>
            　　</el-form-item>
-     　　　<el-form-item label-width="120px" label="上传轮播图(最多6张)" >
+     　　　<el-form-item label-width="120px" label="上传轮播图(最多6张)" prop="addDetail" >
        　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
        　　<el-upload
              ref="upload"
         　　 class="upload-demo"
+             v-model="form2.addDetail"
          　　action="/as"
          　　:limit= "6"
              multiple
@@ -137,6 +139,7 @@
            　　<el-input v-model="editForm.name" name="names" style="width:360px;"></el-input>
        　　</el-form-item>
        <el-form-item label-width="120px" label="上传轮播图(最多6张)" wx:if="this.editForm.pictures.length">
+           <!-- 轮播图 -->
            <el-upload
              ref="editPic"
              action="/as"
@@ -151,6 +154,7 @@
            </el-upload>
            </el-form-item>
            <el-form-item label-width="120px" label="上传详情图">
+             <!-- 详情图 -->
              <el-upload
                ref="editUpload"
                action="/as"
@@ -159,7 +163,8 @@
                :http-request="reupload"
                list-type="picture-card"
                :file-list = "detailFile"
-               　:on-remove="handleRemoveDetail">
+               :on-remove="handleRemoveDetail"
+               　>
                <i class="el-icon-plus"></i>
             </el-upload>
          </el-form-item>  　　
@@ -193,8 +198,13 @@
           picture: [],
           details: ''
  　　　　},
-         form2: {
-           name: ''
+        form2: {
+          name: '',
+          addSwiper: '',
+          addDetail: ''
+        },
+         addShopRules: {
+             name: [{required: true, message: '请输入商品名称', trigger: 'blur' }],
          },
          editForm: {
            name: '',
@@ -225,10 +235,26 @@
      },
     methods: {
       handleRemove(file, fileList) {
-       this.delPic.push(file.url)
+        if(this.reuplodPicture.length) {
+          let temp = this.reuplodPicture;
+          let arr = temp.filter((item) => {
+            if(item.uid !== file.uid) {
+              return item
+            }
+          })
+           this.reuplodPicture = arr;
+        }else {
+          this.delPic.push(file.url)
+        }
       },
       handleRemoveDetail(file, fileList) {
-        // console.log(file, fileList, 'details')
+        if(this.reuploadDetail.length == 0) {
+          this.$message({
+          message: '详情图不能为空',
+          type: 'warning'
+        });
+        return;
+        }
       },
       //搜索
       queryShop() {
@@ -253,7 +279,6 @@
             this.$router.push('/login');
            } else if(res.data.status == 10208) {
             this.$message.error(res.data.msg);
-
          }else if(res.status == 200) {
             this.$message.success('搜索成功');
             // console.log(res)
@@ -310,14 +335,14 @@
     handleDetailUpload(raw) {
       this.details = raw.file;
     },
-// 重新上传详情图
-    reupload(raw) {
-      this.reuploadDetail = raw.file;
-    },
-    // 重新上传轮播图
-    reuploadPicture(raw) {
-      this.reuplodPicture.push(raw.file)
-    },
+  // 重新上传详情图
+  reupload(raw) {
+    this.reuploadDetail = raw.file;
+  },
+  // 重新上传轮播图
+  reuploadPicture(raw) {
+    this.reuplodPicture.push(raw.file)
+  },
     async onresetSubmit() {
       let param = new FormData();
       param.append('token', this.token);
@@ -329,7 +354,6 @@
        param.append('picture', file); // 因为要上传多个文件，所以需要遍历一下才行
             //不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
        })
-
       axios({
         method: 'post',
         data: param,
@@ -343,7 +367,7 @@
           this.reuploadDetail = [];
           this.pictureFile = [];
           this.detailFile = [];
-
+          this.delPic = [];
           this.getShopList(1);
         }
       }).catch((err) => {
@@ -352,32 +376,35 @@
     },
      //新增添加
  　　async onSubmit(){//表单提交的事件
-     this.$refs.upload.submit();
-     this.$refs.detailUpload.submit();
-     let param = new FormData();
-     param.append('token', this.token);
-     param.append('name', this.form2.name);
-     param.append('details', this.details);
-     this.fileList.forEach(function (file) {
-      param.append('picture', file); // 因为要上传多个文件，所以需要遍历一下才行
-           //不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
+         this.$refs.addShopFormRef.validate((valid) => {
+         if(!valid) return;
+         this.$refs.upload.submit();
+         this.$refs.detailUpload.submit();
+         let param = new FormData();
+         param.append('token', this.token);
+         param.append('name', this.form2.name);
+         param.append('details', this.details);
+         this.fileList.forEach(function (file) {
+          param.append('picture', file); // 因为要上传多个文件，所以需要遍历一下才行
+               //不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
+          })
+         axios({
+           method: 'post',
+           data: param,
+           url: '/lightspace/addProduct'
+         }).then((res) => {
+           if(res.data.status == 200) {
+             this.addDialogVisible = false;
+             this.form2.name = '';
+             this.details = [];
+             this.fileList = [];
+             this.getShopList(1);
+           }
+         }).catch((err) => {
+           console.log(err)
+         })
       })
-     axios({
-       method: 'post',
-       data: param,
-       url: '/lightspace/addProduct'
-     }).then((res) => {
-       if(res.data.status == 200) {
-         this.addDialogVisible = false;
-         this.form2.name = '';
-         this.details = [];
-         this.fileList = [];
-         this.getShopList(1);
-       }
-     }).catch((err) => {
-       console.log(err)
-     })
-     },
+    },
     //关闭按钮
      handleClose() {
       this.addDialogVisible = false;
@@ -417,7 +444,6 @@
              this.$router.push('/login');
          } else if(res.data.status == 200) {
             this.$message.success('删除记录成功');
-
             if(this.query == '') {
                 this.getShopList(1);
             }else {
@@ -473,11 +499,9 @@
           position: relative;
           overflow: hidden;
       }
-
       .avatar-uploader .el-upload:hover {
           border-color: #409EFF;
       }
-
       .avatar-uploader-icon {
           font-size: 28px;
           color: #8c939d;
@@ -486,7 +510,6 @@
           line-height: 178px;
           text-align: center;
       }
-
       .avatar {
           width: 178px;
           height: 178px;
