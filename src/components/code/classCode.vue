@@ -94,7 +94,7 @@
       if(res.data.status == 200) {
 
         const downloadElement = document.createElement('a'); // 创建a标签
-        downloadElement.href = 'https://www.guangliangkongjian.com/code/code.zip';
+         downloadElement.href = res.data.data;
         document.body.appendChild(downloadElement);
         downloadElement.click();
 
