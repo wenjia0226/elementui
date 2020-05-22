@@ -38,6 +38,11 @@ import schoolreport from '@/components/report/school'
 import classreport from '@/components/report/class'
 import gradereport from '@/components/report/grade'
 import rotationpic  from '@/components/rotationpic/rotationpic'
+import neworder from '@/components/order/neworder'
+import successorder from '@/components/order/successorder'
+import waitorder from '@/components/order/waitorder'
+import finishorder from '@/components/order/finishorder'
+
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -88,8 +93,11 @@ const router = new Router({
         {path: '/schoolreport', component: schoolreport},
         {path: '/classreport', component: classreport},
         {path: '/gradereport', component: gradereport},
-         {path: '/rotationpic', component: rotationpic}
-        
+        {path: '/rotationpic', component: rotationpic},
+        {path: '/neworder', component: neworder},
+        {path: '/successorder', component: successorder},
+        {path: '/waitorder', component: waitorder},
+        {path: '/finishorder', component: finishorder}
       ]
     },
 
