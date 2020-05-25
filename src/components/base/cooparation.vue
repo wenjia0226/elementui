@@ -45,9 +45,12 @@
               </el-form-item>
                <el-form-item label="图片">
               <el-upload
-                action="#"
+                ref="upload"
+                action="/as"
+                :limit ="1"
                 list-type="picture-card"
-                :before-upload="handlePreve"
+                :http-request="handleUpload"
+                :auto-upload="false"
                 >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -92,41 +95,39 @@
             details: [{required: false, message: '请输入班级名称', trigger: 'blur' }],
             phone: [{required: true, message: '请输入手机号', trigger: 'blur' }],
             name: [{required: true, message: '请输入姓名', trigger: 'blur' }],
-            file: {required: false, message: '选择图片', trigger: 'blur'}
+            file: {required: true, message: '选择图片', trigger: 'blur'}
         },
         }
       },
       methods: {
-         handlePreve(file) {
-           console.log(file)
-          this.addForm.file = file
-          },
-
+        handleUpload(raw){
+          this.addForm.file = raw.file;
+        },
         //添加公司
         submitCoparation() {
-          // this.$refs.addFormRef.submit();
          this.$refs.addFormRef.validate((valid) => {
-             if(!valid) return;
-             let param = new FormData();
-             param.append('token', this.token);
-             param.append('details', this.addForm.details);
-             param.append('phone', this.addForm.phone);
-             param.append('address', this.addForm.address);
-             param.append('name', this.addForm.name);
-             param.append('file', this.addForm.file);
-             axios({
-                 method: 'post',
-                 url: '/lightspace/addPartnership',
-                 data: param,
-                 headers: {
-                   'Content-Type': 'multipart/form-data'
-                 }
-             }).then(this.handleAddSucc.bind(this))
-             .catch(this.handleAddErr.bind(this))
-           })
+           if(!valid) return;
+            this.$refs.upload.submit();
+           let param = new FormData();
+           param.append('token', this.token);
+           param.append('details', this.addForm.details);
+           param.append('phone', this.addForm.phone);
+           param.append('address', this.addForm.address);
+           param.append('name', this.addForm.name);
+           param.append('file', this.addForm.file);
+           axios({
+               method: 'post',
+               url: '/lightspace/addPartnership',
+               data: param,
+               headers: {
+                 'Content-Type': 'multipart/form-data'
+               }
+           }).then(this.handleAddSucc.bind(this))
+           .catch(this.handleAddErr.bind(this))
+         })
         },
         handleAddSucc(res) {
-           console.log(res);
+           // console.log(res);
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
               this.$router.push('/login');

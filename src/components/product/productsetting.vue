@@ -90,28 +90,12 @@
     <el-dialog title="添加商品" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
        <!-- 添加商品 -->
          <el-form  :model="form2" label-width="80px" :rules="addShopRules" ref="addShopFormRef">
-           <el-form-item label="商品名称" label-width="120px" prop="name">
+          <el-form-item label="商品名称" label-width="120px" prop="name">
            　　<el-input v-model="form2.name" name="names" style="width:360px;"></el-input>
        　　</el-form-item>
-          <el-form-item label-width="120px" label="上传详情图" prop="addSwiper">
-             　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
-             　　<el-upload
-
-                   ref="detailUpload"
-              　　 class="upload-demo"
-               　　action="/as"
-               　　:limit= "1"
-                   multiple
-                   :http-request="handleDetailUpload"
-               　　:auto-upload="false"
-               　　list-type="picture">
-               　　<el-button size="small" type="primary">点击上传</el-button>
-               　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-             　</el-upload>
-           　　</el-form-item>
      　　　<el-form-item label-width="120px" label="上传轮播图(最多6张)" prop="addDetail" >
        　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
-       　　<el-upload
+       　　  <el-upload
              ref="upload"
         　　 class="upload-demo"
              v-model="form2.addDetail"
@@ -123,8 +107,22 @@
          　　list-type="picture">
          　　<el-button size="small" type="primary">点击上传</el-button>
          　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+       　  </el-upload>
+     　　 </el-form-item>
+         <el-form-item label-width="120px" label="上传详情图" prop="addSwiper">
+       　　<!--elementui的上传图片的upload :before-upload="beforeUpload"> -->
+       　　<el-upload
+             ref="detailUpload"
+        　　 class="upload-demo"
+         　　action="/as"
+         　　:limit= "1"
+             multiple
+             :http-request="handleDetailUpload"
+         　　:auto-upload="false"
+         　　list-type="picture">
+         　　<el-button size="small" type="primary">点击上传</el-button>
+         　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
        　</el-upload>
-
      　　</el-form-item>
      　　<el-form-item style="padding-top:20px;" label-width="120px" >
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -394,10 +392,10 @@
            url: '/lightspace/addProduct'
          }).then((res) => {
            if(res.data.status == 200) {
-             this.addDialogVisible = false;
+             this.addDialogVisible = false; 
              this.form2.name = '';
-             this.details = [];
-             this.fileList = [];
+             this.$refs.upload.clearFiles(); // 清空上传的图片
+             this.$refs.detailUpload.clearFiles();
              this.getShopList(1);
            }
          }).catch((err) => {
@@ -409,8 +407,8 @@
      handleClose() {
       this.addDialogVisible = false;
       this.form2.name = '';
-      this.details = [];
-      this.fileList = [];
+      this.$refs.upload.clearFiles();
+      this.$refs.detailUpload.clearFiles();
      },
      handleEditClose() {
        this.detailFile = [];

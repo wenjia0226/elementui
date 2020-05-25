@@ -81,7 +81,7 @@
                     <!-- <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader> -->
                 </el-form-item>
                 <el-form-item label="所属学校" prop="schoolOptions" width="100%" v-else-if="addAccountForm.role == '校级管理员' ">
-                    <el-cascader ref="myCascader" :options="schoolOptions" v-model="addAccountForm.schoolOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                    <el-cascader ref="myCascader" :options="schoolOptions" v-model="addAccountForm.schoolOptions" :props="cateProps" @change="handleSchoolChange" clearable></el-cascader>
                 </el-form-item>
                 <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '班级管理员' ">
                     <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
@@ -286,6 +286,11 @@ import axios from 'axios'
           this.schoolId = item[0];
           this.classId = item[1];
          },
+         handleSchoolChange(item) {
+          this.addAccountForm.selectedOptions = item;
+          this.schoolId = item[0];
+          this.classId = '';
+         },
         //获取级联选择器中的数据
         getOPtions() {
             let param = new URLSearchParams();
@@ -359,7 +364,7 @@ import axios from 'axios'
                   this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
                   this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
                 }
-               
+
             },
             handleDeleteUserErr(err) {
                 console.log(err)
