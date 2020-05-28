@@ -19,7 +19,7 @@
       <el-table-column label="订单生成时间" prop="gentime"></el-table-column>
       <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary"  size="middle" icon="el-icon-edit" @click="addOrderNumber(scope.row.id)">添写订单编号</el-button>
+            <el-button type="primary"  size="mini" icon="el-icon-edit" @click="addOrderNumber(scope.row)">添写运单号</el-button>
           </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -69,11 +69,22 @@
          orderVisible: false,
          orderForm: {
            name: ''
-         }
+         },
+         diliveryType: ''
        }
       },
       methods: {
         sumitAddOrder() {
+          if(this.diliveryType == '邮寄') {
+            if(this.orderForm.name == '') {
+               this.$notify({
+                title: '警告',
+                message: '运单号不能为空',
+                type: 'warning'
+              });
+               return;
+            }
+          }
           let param = new FormData();
           param.append('token', this.token);
           param.append('id', this.id);
@@ -92,9 +103,17 @@
           })
         },
         //填写运单编号
-        addOrderNumber(id) {
-          this.id = id;
-          this.orderVisible = true
+        addOrderNumber(row) {
+          console.log(row)
+          this.id = row.id;
+          this.orderVisible = true;
+          if(row.delivrytype == '邮寄') {
+            this.diliveryType = '邮寄'
+            
+          }else {
+            this.diliveryType = '自取'
+          }
+
         },
         handleClose() {
           this.orderVisible = false;

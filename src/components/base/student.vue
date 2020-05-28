@@ -8,22 +8,59 @@
         </el-breadcrumb>
          <!-- 卡片视图 -->
         <el-card>
-            <el-row :gutter="20">
-                 <el-col :span="6">
-                     <el-input placeholder="输入学生姓名"  clearable v-model="query"  @clear="queryStudent">
-                        <el-button slot="append" icon="el-icon-search" @click="queryStudent"></el-button>
-                     </el-input>
-                 </el-col>
-                 <el-col :span="6">
-                        <el-button type="primary" @click="addStudent">添加学生</el-button>
-                 </el-col>
-                 <el-col :span="3" >
-                        <el-button type="primary" @click="handdlePi" >批量导入</el-button>
-                 </el-col>
-
-             </el-row>
+          <el-row :gutter="20">
+           <el-col :span="2" v-if="this.identity == 1">
+              <div class="schoolSet">学校选择：</div>
+           </el-col>
+           <el-col :span="4" v-if="this.identity == 1">
+             <el-autocomplete
+              class="inline-input"
+              v-model="school"
+              clearable
+              :fetch-suggestions="querySearchSchool"
+              placeholder="请输入学校名称"
+              @select="handleSelectSchool"
+              @change="handleSchoolChange"
+              ></el-autocomplete>
+             </el-col>
+             <el-col :span="2" v-if="this.identity ==  2 || this.identity ==  1 ">
+                <div class="schoolSet">班级选择：</div>
+             </el-col>
+             <el-col :span="4"  v-if="this.identity ==  2|| this.identity ==  1">
+               <el-autocomplete
+                class="inline-input"
+                v-model="className"
+                clearable
+                :fetch-suggestions="querySearchClass"
+                placeholder="请输入班级名称"
+                @select="handleSelectClass"
+                ></el-autocomplete>
+              </el-col>
+             <el-col :span="3" >
+                  <div class="schoolSet">学生姓名选择：</div>
+             </el-col>
+             <el-col :span="4">
+               <el-autocomplete
+                 class="inline-input"
+                 v-model="student"
+                 :fetch-suggestions="querySearch"
+                 clearable
+                 placeholder="请输入学生姓名"
+                 @select="handleSelect">
+               </el-autocomplete>
+             </el-col>
+             <el-col :span="2">
+              <el-button type="primary" @click="getRecodRight">查询</el-button>
+             </el-col>
+           <el-col :span="3">
+                  <el-button type="primary" @click="addStudent">添加学生</el-button>
+           </el-col>
+           <el-col :span="3" >
+                  <el-button type="primary" @click="handdlePi" >批量导入</el-button>
+           </el-col>
+          </el-row>
               <!-- 学生列表 -->
-            <el-table :data="studentList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border stripe style="width: 100%" v-show="!this.searchStudentList.length">
+            <el-table :data="this.content" border stripe style="width: 100%" v-show="!this.searchStudentList.length">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="所属学校" prop="schoolName"></el-table-column>
                 <el-table-column label="所属班级" prop="classesName"></el-table-column>
@@ -40,9 +77,9 @@
                 <el-table-column label="家长手机号" prop="parentPhone"></el-table-column>
                 <el-table-column label="备注" prop="description"></el-table-column>
                 <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showStudentEditDialog(scope.row.id)" ></el-button>
-                    </template>
+                  <template slot-scope="scope">
+                     <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showStudentEditDialog(scope.row.id)" ></el-button>
+                  </template>
                 </el-table-column>
                  <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -51,43 +88,42 @@
                 </el-table-column>
             </el-table>
             <!-- 搜索学生 -->
-            <el-table :data="this.searchStudentList" border stripe style="width: 100%" v-show="this.searchStudentList.length">
-                <el-table-column type="index"></el-table-column>
-                <el-table-column label="所属学校" prop="schoolName"></el-table-column>
-                <el-table-column label="所属班级" prop="classesName"></el-table-column>
-                <el-table-column label="姓名" prop="name"></el-table-column>
-                <el-table-column label="性别" prop="gender"></el-table-column>
-                <el-table-column label="年龄" prop="age"></el-table-column>
-                <el-table-column label="出生日期" prop="birthday"></el-table-column>
-                <el-table-column label="身高" prop="height"></el-table-column>
-                <el-table-column label="体重" prop="weight"></el-table-column>
-                <el-table-column label="性格" prop="nature"></el-table-column>
-                <el-table-column label="椅子高度" prop="chairHeight"></el-table-column>
-                <el-table-column label="坐姿高度" prop="sittingHeight"></el-table-column>
-                <el-table-column label="家长手机号" prop="parentPhone"></el-table-column>
-                <el-table-column label="是否矫正" prop="correct"></el-table-column>
-                <el-table-column label="备注" prop="description"></el-table-column>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showStudentEditDialog(scope.row.id)" ></el-button>
-                    </template>
-                </el-table-column>
-                 <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeStudentsById(scope.row.id)"></el-button>
-                    </template>
-                </el-table-column>
+            <el-table :data="this.content" border stripe style="width: 100%" v-show="this.searchStudentList.length">
+              <el-table-column type="index"></el-table-column>
+              <el-table-column label="所属学校" prop="schoolName"></el-table-column>
+              <el-table-column label="所属班级" prop="classesName"></el-table-column>
+              <el-table-column label="姓名" prop="name"></el-table-column>
+              <el-table-column label="性别" prop="gender"></el-table-column>
+              <el-table-column label="年龄" prop="age"></el-table-column>
+              <el-table-column label="出生日期" prop="birthday"></el-table-column>
+              <el-table-column label="身高" prop="height"></el-table-column>
+              <el-table-column label="体重" prop="weight"></el-table-column>
+              <el-table-column label="性格" prop="nature"></el-table-column>
+              <el-table-column label="椅子高度" prop="chairHeight"></el-table-column>
+              <el-table-column label="坐姿高度" prop="sittingHeight"></el-table-column>
+              <el-table-column label="家长手机号" prop="parentPhone"></el-table-column>
+              <el-table-column label="是否矫正" prop="correct"></el-table-column>
+              <el-table-column label="备注" prop="description"></el-table-column>
+              <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="primary" size="middle" icon="el-icon-edit"  @click="showStudentEditDialog(scope.row.id)" ></el-button>
+                  </template>
+              </el-table-column>
+               <el-table-column label="操作">
+                  <template slot-scope="scope">
+                      <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeStudentsById(scope.row.id)"></el-button>
+                  </template>
+              </el-table-column>
             </el-table>
             <!-- 分页功能 -->
-            <el-pagination
-                v-show="!this.searchStudentList.length"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[5, 10, 20]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="studentList.length">
+           <el-pagination
+             v-show="!this.searchStudentList.length"
+              background
+              :current-page="this.number"
+              @current-change="handleCurrentChange"
+              layout="prev, pager, next"
+              :page-size ="this.size"
+              :total="this.totalElements">
             </el-pagination>
               <!-- 添加学生 -->
             <el-dialog title="添加学生" :visible.sync="addStudentVisible" width="50%" :before-close="handleClose">
@@ -199,7 +235,7 @@
                   <el-button type="primary" @click="saveEditInfo" >确 定</el-button>
               </span>
             </el-dialog>
-        <el-dialog :visible.sync="showDialog"  width="30%" center :before-close="handleFileClose">
+          <el-dialog :visible.sync="showDialog"  width="30%" center :before-close="handleFileClose">
           <el-row>
             <el-col :span="12">
               <a class="download" href="http://www.guangliangkongjian.com/download/学生导入模板.xlsx">下载模板</a>
@@ -236,7 +272,24 @@ export default {
     created() {
         this.token = window.sessionStorage.getItem('token');
         this.getOPtions();
-        this.getStudentList();
+         let user = window.sessionStorage.getItem('token');
+        this.identity = user.split('-') [1];
+        this.fondId = user.split('-')[2];
+         if(this.identity == 1) {  // admin
+           this.getSchoolList();
+           this.getStudentList('',this.number);
+         }else if(this.identity == 2) {   //2 校长
+           this.type = 'school';
+           this.getStudentList(this.type, this.number);
+           this.schoolId = this.fondId;
+           this.getClassList(); // 获取对应学校下的所有班级
+        }else if(this.identity == 3) {   // 教师
+          this.type = "class";
+          this.classId = this.fondId;
+          this.getStudentList(this.type,this.number);
+           this.getStudentListBySelect();
+           // this.getScreeningList(this.type, this.number);
+        }
     },
     data() {
         var valiNumberPass1 = (rule, value, callback) => {//包含小数的数字
@@ -269,14 +322,24 @@ export default {
             addStudentVisible: false,
             schoolId: '',
             classId: '',
+            studentId: '',
+            school: '', // 搜索绑定
+            className: '',
+            student: '',
+            schoolList: [],
+            classList: [],
+            studentList: [],
+            content: [],
             birthday: '',
             studentList: [],
-            currentPage: 1,
             pageSize: 5,
+            size: 5,
             total:0,
+            totalElements: 0,
+            number: '',
             selectedOptions: [],
             query: '',
-             fileList: [],//此数组中存入所有提交的文档信息
+            fileList: [],//此数组中存入所有提交的文档信息
             pdfData: {
                 file: '',
                 token: ''
@@ -329,8 +392,8 @@ export default {
                 "name":"",
                 "nature":"",
                 "stu_cat":[],
-                 "parentPhone": '',
-                 "birthday": ''
+                "parentPhone": '',
+                "birthday": ''
             },
             editStudentRules: {
                 name:  { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -349,12 +412,238 @@ export default {
         }
     },
      methods: {
+       //搜索
+       getRecodRight() {
+         if(this.type == 'school') {   //如果校长搜索
+           if(this.className && this.student) {
+             this.getRecordDirect('student', this.studentId); //校长查询学生
+           }else if(this.className&& this.student == '') {
+             this.getRecordDirect('class', this.classId); //校长查询班级
+           }else if(this.className == '' && this.student == '') {
+            this.getStudentList(this.type,1)
+           }else {
+              this.getStudentList('','')
+           }
+         }else if(this.type == 'class') {  //如果老师搜索
+           if(this.student) {
+              this.getRecordDirect('student', this.studentId)
+           }else {
+             this.getStudentList(this.type, 1);
+           }
+         }else {        //如果管理员搜索
+           if(this.school && this.className && this.student) {
+             this.getRecordDirect('student', this.studentId); //校长查询学生
+           }else if(this.school && this.className && this.student == '') {
+             this.getRecordDirect('class', this.classId); //校长查询班级
+           }else if(this.school && this.className == '' && this.student == '') {
+             this.getRecordDirect('school',this.schoolId);
+           }else {
+              this.getStudentList('','')
+           }
+         }
+       },
+       getRecordDirect(type,id) {
+         let param = new FormData();
+         param.append('type', type.toString());
+         param.append('id',id);
+         param.append('token', this.token);
+         axios({
+           method: 'post',
+           data: param,
+           url: '/lightspace/studentList'
+         }).then(this.handleGetRecordDirSucc.bind(this)).catch(this.handlgGetRecordDirErr.bind(this))
+       },
+       handleGetRecordDirSucc(res) {
+         console.log(res, 'search')
+         if(res.data.status == 200) {
+           res ? res= res.data.data: '';
+           this.content = res.content;
+           this.totalElements = res.totalElements;
+           this.size = res.size;
+           this.number = res.number + 1;
+           if(this.content.length) {
+             this.content.forEach((item) => {
+               item.lastTime = item.date + '\xa0\xa0' + item.time
+             })
+           }
+         }else if(res.data.status == 10211) {
+           this.$notify({
+             title: '警告',
+             duration: 1000,
+             message: res.data.msg,
+             type: 'warning'
+           });
+
+         }
+       },
+       handlgGetRecordDirErr(err) {
+         console.log(err)
+       },
+       //获取学校列表
+       getSchoolList() {
+         let param = new URLSearchParams();
+          param.append('token', this.token);
+          axios({
+              method: 'post',
+              url: '/lightspace/schoolList',
+              data: param
+          }).then(this.handleGetSchoolSucc.bind(this))
+            .catch(this.handleGetSchoolErr.bind(this))
+       },
+       handleGetSchoolSucc(res) {
+         console.log(res)
+         if(res.data.status === 10204) {
+             this.$message.error(res.data.msg);
+             this.$router.push('/login');
+            } else if(res.data.status == 200) {
+              this.schoolList = res.data.data;
+           }
+       },
+       handleGetSchoolErr(error) {
+          console.log(error)
+       },
+       //获取班级列表
+       getClassList() {
+         let param = new FormData();
+         param.append('token', this.token);
+         param.append('schoolId', this.schoolId)
+         axios({
+           method: 'post',
+           url: '/lightspace/queryClassesBySchool',
+           data: param
+         }).then(this.handleGetClassSucc.bind(this)).catch(this.handleGetClassErr.bind(this))
+       },
+       handleGetClassSucc(res) {
+         if(res.data.status == 200) {
+           this.classList = res.data.data;
+           this.classList.forEach((item) => {
+            item.value = item.className
+           })
+         }
+       },
+       handleGetClassErr(err) {
+         console.log(err)
+       },
+       //获取学生列表
+       getStudentListBySelect() {
+         let param = new URLSearchParams();
+         param.append('token', this.token);
+         param.append('classId', this.classId);
+         axios({
+             method: 'post',
+             url: '/lightspace/queryStudentBySidCid',
+             data: param
+         }).then(this.handleGetStudentListSucc.bind(this)).catch(this.handleGetStudentErr.bind(this))
+       },
+       handleGetStudentListSucc(res) {
+         if(res.data.status === 10204) {
+             this.$message.error(res.data.msg);
+             this.$router.push('/login');
+         } else if(res.data.status == 200) {
+            this.studentList = res.data.data;
+            this.studentList.forEach((item) => {
+              item.value = item.name
+            })
+         }
+       },
+       handleGetStudentErr(err) {
+          console.log(err)
+       },
+       //获取列表
+       getStudentList(type, page) {
+         let param = new FormData();
+         param.append('token', this.token);
+         param.append('type', type);
+         param.append('id', this.fondId);
+         param.append('page', page)
+         axios({
+           method: 'post',
+           url: '/lightspace/studentList',
+           data: param
+         }).then(this.getStuListSucc.bind(this)).catch(this.getStuListErr.bind(this).bind(this))
+       },
+       getStuListSucc(res) {
+         // console.log(res)
+         if(res.data.status == 200 && res.data.data !== '') {
+          res ? res= res.data.data: '';
+          this.content = res.content;
+          this.totalElements = res.totalElements;
+          this.size = res.size;
+          this.number = res.number + 1;
+           if(this.content.length) {
+           this.content.forEach((item) => {
+             item.lastTime = item.date + '\xa0\xa0' + item.time
+           })
+           }
+         }
+       },
+       getStuListErr(err) {
+         console.log(err)
+       },
+
+       handleSchoolChange(val) {
+         this.schoolId =  val.id;
+       },
+       handleSelectSchool(item) {
+         this.schoolId = item.id;
+         this.classId = '';
+         this.className = '';
+         this.student = '';
+         this.studentId = '';
+         this.fontId = this.schoolId;
+         this.getClassList();
+
+       },
+       handleSelectClass(item) {
+         this.classId = item.id;
+         this.student = '';
+         this.studentId = '';
+         this.getStudentListBySelect();
+       },
+        handleSelect(item) {
+          this.studentId = item.id
+        },
+       // 学校选择
+       querySearchSchool(queryString, cb) {
+         var schoolList = this.schoolList;
+         var results = queryString ? schoolList.filter(this.createFilter(queryString)) : schoolList;
+         // 调用 callback 返回建议列表的数据
+         cb(results);
+       },
+       createFilter(queryString) {
+         return (schoolList) => {
+           return (schoolList.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+         }
+       },
+       // 班级选择
+       querySearchClass(queryString, cb) {
+         var classList = this.classList;
+         var results = queryString ? classList.filter(this.createFilter(queryString)) : classList;
+         // 调用 callback 返回建议列表的数据
+         cb(results);
+       },
+       createFilter(queryString) {
+         return (classList) => {
+           return (classList.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+         }
+       },
+       //学生选择
+       querySearch(queryString, cb) {
+         var studentList = this.studentList;
+         var results = queryString ? studentList.filter(this.createFilter(queryString)) : studentList;
+         // 调用 callback 返回建议列表的数据
+         cb(results);
+       },
+       createFilter(queryString) {
+         return (studentList) => {
+           return (studentList.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+         }
+       },
        dateChange(val) {
         if(val) {
           this.startTime = val.toString().split(",")[0]
           this.endTime = val.toString().split(",")[1]
           this.birthday = val.toLocaleString().split(' ') [0];
-          console.log(this.birthday, typeof this.birthday)
         }
       },
        changeUpload(file, fileList) {
@@ -431,7 +720,7 @@ export default {
     queryStudent() {
         let param = new URLSearchParams();
         if(this.query == "") {
-          this.getStudentList();
+          this.getStudentList(1);
           this.searchStudentList = [];
           return;
         }
@@ -451,7 +740,7 @@ export default {
           this.$router.push('/login');
       } else if(res.data.status == 10211) {
           this.$message.error(res.data.msg);
-          this.getStudentList();
+          this.getStudentList(1);
           this.searchStudentList = [];
        }else if(res.data.status == 200) {
           this.$message.success('搜索成功');
@@ -513,7 +802,7 @@ export default {
               this.addStudentVisible = false;
               this.$message.success('添加学生信息成功');
               this.$refs.studentFormRef.resetFields();
-              this.getStudentList();
+              this.getStudentList(1);
            }
         },
         handleAddStuErr(err) {
@@ -545,49 +834,67 @@ export default {
            this.schoolId = this.addStudentForm.stu_cat[0];
            this.classId = this.addStudentForm.stu_cat[1];
         },
-        //获取学生列表
-        getStudentList() {
-            let param = new URLSearchParams();
-            param.append('token', this.token);
-            axios({
-                method: 'post',
-                url: '/lightspace/studentList',
-                data: param
-            }).then(this.handleGetStudentList.bind(this)).catch(this.handleGetStudentErr.bind(this))
-        },
-        //分页
         //监听pageSize改变事件
         handleSizeChange(newSize) {
             this.pageSize = newSize;
-            this.getStudentList();
+            this.getStudentList(1);
         },
         //监听页码值改变事件
         handleCurrentChange(val) {
-           this.currentPage = val;
-        },
-        handleGetStudentList(res) {
+          this.page = val;
+          if(this.type == 'school') {
+            this.getStudentList(this.type, this.page);
+          }else if(this.type == 'class') {
+            this.getStudentList(this.type, this.page);
+          }else {
+            if(this.school && this.className && this.student) {
+              this.getStuInType('student', this.studentId, this.page); //校长查询学生
+            }else if(this.school && this.className && this.student == '') {
+              this.getStuInType('class', this.classId, this.page); //校长查询班级
+            }else if(this.school && this.className == '' && this.student == '') {
+              this.getStuInType('school',this.schoolId, this.page);
+            }else {
 
-            if(res.data.status === 10204) {
-                this.$message.error(res.data.msg);
-                this.$router.push('/login');
-            } else if(res.data.status == 200) {
-               this.studentList = res.data.data;
-               this.studentList.forEach((value, index) => {
-                   if(value.gender == 1) {
-                       value.gender = '女'
-                   }else{
-                       value.gender = '男'
-                   }
-                   if(value.correct ==1 ) {
-                       value.correct = '已矫正'
-                   }else {
-                       value.correct = '未矫正'
-                   }
-               })
+              this.getStudentList('', this.page);
             }
+          }
         },
-        handleGetStudentErr(err) {
-            console.log(err)
+        // 搜索条件下的分页
+        getStuInType(type, id, page) {
+          let param = new FormData();
+          param.append('type', type.toString());
+          param.append('id',id);
+          param.append('token', this.token);
+          param.append('page', page)
+          axios({
+            method: 'post',
+            data: param,
+            url: '/lightspace/studentList'
+          }).then(this.handleGetStuInTypeSucc.bind(this)).catch(this.handleGetStuInTypeErr.bind(this))
+        },
+        handleGetStuInTypeSucc(res) {
+          if(res.data.status == 200) {
+            res ? res= res.data.data: '';
+            this.content = res.content;
+            this.totalElements = res.totalElements;
+            this.size = res.size;
+            this.number = res.number + 1;
+            if(this.content.length) {
+              this.content.forEach((item) => {
+                item.lastTime = item.date + '\xa0\xa0' + item.time
+              })
+            }
+          }else if(res.data.status == 10211) {
+            this.$notify({
+              title: '警告',
+              duration: 1000,
+              message: res.data.msg,
+              type: 'warning'
+            });
+          }
+        },
+        handleGetStuInTypeErr(err) {
+          console.log(err)
         },
         // 修改学生
         showStudentEditDialog(id) {
@@ -602,14 +909,14 @@ export default {
             }).then(this.handleEditStuSucc.bind(this)).catch(this.handleEditStuErr.bind(this))
         },
         handleEditStuSucc(res) {
+          // console.log(res)
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.editStudentForm = res.data.data;
-              console.log( this.editStudentForm,898)
               this.editStudentVisible = true;
-              this.getStudentList();
+              // this.getStudentList(1);
             }
         },
         handleAddressFun(e, form, thsAreaCode) {
@@ -658,7 +965,7 @@ export default {
              this.editStudentVisible = false;
              //提示修改成功
              this.$message.success('更新学生信息成功');
-             //this.getStudentList();
+
            }
         },
         handleEditStuErr(err) {
@@ -688,10 +995,7 @@ export default {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
-              this.studentList = res.data.data;
-              const totalPage = Math.ceil(this.studentList.length / this.pageSize) // 总页数
-              this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-              this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
+              this.getStudentList(1)
             }
         },
         handleDeleteStuErr(err) {

@@ -55,7 +55,6 @@
             <el-pagination
              v-show="!this.searchRecordList.length"
               background
-
               :current-page="this.number"
               @current-change="handleCurrentChange"
               layout="prev, pager, next"
