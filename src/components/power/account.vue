@@ -19,7 +19,7 @@
                 </el-col>
             </el-row>
               <!-- 用户列表 -->
-            <el-table :data="userList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchAccountList.length">
+            <el-table :data="userList" border  stripe style="width: 100%" v-show="!this.searchAccountList.length">
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="创建用户者" prop="loginName"></el-table-column>
                 <el-table-column label="用户名" prop="name"></el-table-column>
@@ -44,17 +44,15 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- 分页功能 -->
-            <el-pagination
-                v-show="!this.searchAccountList.length"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[1, 2, 5, 10]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="userList.length">
-            </el-pagination>
+           <!-- 分页功能 -->
+           <el-pagination
+             background
+             :current-page="this.number"
+             @current-change="handleCurrentChange"
+             layout="prev, pager, next"
+             :page-size ="this.size"
+             :total="this.totalElements">
+           </el-pagination>
         </el-card>
          <!-- 添加角色对话框 -->
         <el-dialog title="添加角色"  :visible.sync="addAccountDialogVisible" width="50%"  :before-close="handleClose">
@@ -109,6 +107,14 @@ import axios from 'axios'
      data() {
          return {
             token: '',
+            page: 1,
+            totalElements: 0,
+            number: 1,
+           currentPage: 1,
+           pageSize: 10,
+           total: 0,
+
+           size: 10,
             addAccountDialogVisible: false,
             roleList: [],  //角色列表
             query: '',
@@ -149,6 +155,11 @@ import axios from 'axios'
          }
      },
      methods: {
+       //监听页码值改变事件
+       handleCurrentChange(val) {
+         this.page = val;
+         this.getUserList();
+       },
        searchAccount() {
           if(this.query == "") {
              this.getUserList();
@@ -201,6 +212,7 @@ import axios from 'axios'
          getUserList() {
              let param = new URLSearchParams();
              param.append('token', this.token);
+             param.append('page', this.page);
              axios({
                  method: 'post',
                  url: '/lightspace/userList',
@@ -213,10 +225,14 @@ import axios from 'axios'
          },
          handleGetUserListSucc(res) {
              if(res.data.status === 10204) {
-                 this.$message.error(res.data.msg);
-                 this.$router.push('/login');
+                this.$message.error(res.data.msg);
+                this.$router.push('/login');
              } else if(res.data.status == 200) {
-                 this.userList = res.data.data;
+                 res ? res= res.data.data: '';
+                 this.userList = res.content;
+                 this.totalElements = res.totalElements;
+                 this.size = res.size;
+                 this.number = res.number + 1;
              }
 
          },
@@ -329,10 +345,7 @@ import axios from 'axios'
             this.pageSize = newSize
             this.getUserList();
         },
-        //监听页码值改变事件
-        handleCurrentChange(val) {
-           this.currentPage = val;
-        },
+
         //删除用户
         async removeUserById(id) {
             const confirmResult = await this.$confirm('此操作将永久删除该学校, 是否继续?', '提示', {

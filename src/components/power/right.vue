@@ -67,7 +67,7 @@ export default {
         console.log(error)
     },
     handleSizeChange(newSize) {
-        this.pageSize = newSize
+        this.pageSize = newSize;
         this.getrightList();
     },
     //监听页码值改变事件

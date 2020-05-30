@@ -75,9 +75,19 @@
             </el-table-column>
         </el-table>
         <el-pagination
+          v-show="!this.searchResult"
           background
           :current-page="this.number"
           @current-change="handleCurrentChange"
+          layout="prev, pager, next"
+          :page-size ="this.size"
+          :total="this.totalElements">
+        </el-pagination>
+        <el-pagination
+          v-if="this.searchResult"
+          background
+          :current-page="this.number"
+          @current-change="handleSearchCurrentChange"
           layout="prev, pager, next"
           :page-size ="this.size"
           :total="this.totalElements">
@@ -90,6 +100,7 @@
   export default{
     data() {
       return {
+        searchResult: false,
         token: '',
         school: '',
         className: '',
@@ -106,6 +117,7 @@
         number: 1,
         size: 10,
         page: 1,
+        searchPage: 1,
         schoolInfo: {},
         fondId: '',
         type: '',
@@ -176,7 +188,6 @@
         }
       },
       getExcel(type, id) {
-
         this.loading = this.$loading({
            lock: true,
            text: '生成中,请耐心等候...',
@@ -206,6 +217,26 @@
       handleGetExcelErr(err) {
         console.log(err)
       },
+     //搜索改变页码
+     handleSearchCurrentChange(val) {
+       this.searchPage = val;
+       if(this.type == 'school') {
+         this.getRecodRight(this.type, this.searchPage);
+       }else if(this.type == 'class') {
+         this.getRecodRight(this.type, this.searchPage);
+       }else {
+         if(this.school && this.className && this.student) {
+           this.getRecordDirect('student', this.studentId); //校长查询学生
+         }else if(this.school && this.className && this.student == '') {
+           this.getRecordDirect('class', this.classId); //校长查询班级
+         }else if(this.school && this.className == '' && this.student == '') {
+           this.getRecordDirect('school',this.schoolId);
+         }else {
+            this.getScreeningList(this.type, 1)
+            this.searchResult = false;
+         }
+       }
+     },
       //分页
       //监听页码值改变事件
       handleCurrentChange(val) {
@@ -228,37 +259,43 @@
       },
       handleSchoolChange(val) {
         this.schoolId =  val.id;
-      }, //搜索
-      getRecodRight() {
-        if(this.type == 'school') {   //如果校长搜索
-          if(this.className && this.student) {
-            this.getRecordDirect('student', this.studentId); //校长查询学生
-          }else if(this.className&& this.student == '') {
-            this.getRecordDirect('class', this.classId); //校长查询班级
-          }else if(this.className == '' && this.student == '') {
-           this.getScreeningList(this.type,1)
-          }else {
-             this.getScreeningList('','')
-          }
-        }else if(this.type == 'class') {  //如果老师搜索
-          if(this.student) {
-             this.getRecordDirect('student', this.studentId)
-          }else {
-            this.getScreeningList(this.type, 1);
-          }
-        }else {        //如果管理员搜索
-          // this.getScreeningList('','')
-          if(this.school && this.className && this.student) {
-            this.getRecordDirect('student', this.studentId); //校长查询学生
-          }else if(this.school && this.className && this.student == '') {
-            this.getRecordDirect('class', this.classId); //校长查询班级
-          }else if(this.school && this.className == '' && this.student == '') {
-            this.getRecordDirect('school',this.schoolId);
-          }else {
-             this.getScreeningList('','')
-          }
-        }
       },
+      //搜索
+     getRecodRight() {
+       this.searchResult = true;
+       if(this.type == 'school') {   //如果校长搜索
+         if(this.className && this.student) {
+            this.searchPage = 1;
+           this.getRecordDirect('student', this.studentId); //校长查询学生
+         }else if(this.className&& this.student == '') {
+           this.getRecordDirect('class', this.classId); //校长查询班级
+         }else if(this.className == '' && this.student == '') {
+          this.getScreeningList(this.type,1)
+         }else {
+            this.getScreeningList('','')
+         }
+       }else if(this.type == 'class') {  //如果老师搜索
+         if(this.student) {
+            this.getRecordDirect('student', this.studentId)
+         }else {
+           this.getScreeningList(this.type, 1);
+         }
+       }else {        //如果管理员搜索
+         if(this.school && this.className && this.student) {
+           this.searchPage = 1;
+           this.getRecordDirect('student', this.studentId); //校长查询学生
+         }else if(this.school && this.className && this.student == '') {
+           this.searchPage = 1;
+           this.getRecordDirect('class', this.classId); //校长查询班级
+         }else if(this.school && this.className == '' && this.student == '') {
+           this.searchPage = 1;
+           this.getRecordDirect('school',this.schoolId);
+         }else {
+            this.getScreeningList(this.type, 1)
+            this.searchResult = false;
+         }
+       }
+     },
       // 搜索条件下的分页
       getRecordInType(type, id, page) {
         let param = new FormData();
@@ -297,11 +334,11 @@
         console.log(err)
       },
       getRecordDirect(type,id) {
-        // console.log(type,id)
         let param = new FormData();
         param.append('type', type.toString());
         param.append('id',id);
         param.append('token', this.token);
+        param.append('page', this.searchPage);
         axios({
           method: 'post',
           data: param,

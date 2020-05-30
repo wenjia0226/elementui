@@ -75,9 +75,19 @@
             </el-table-column>
         </el-table>
         <el-pagination
+          v-if="!this.searchResult"
           background
           :current-page="this.number"
           @current-change="handleCurrentChange"
+          layout="prev, pager, next"
+          :page-size ="this.size"
+          :total="this.totalElements">
+        </el-pagination>
+        <el-pagination
+          v-if="this.searchResult"
+          background
+          :current-page="this.number"
+          @current-change="handleSearchCurrentChange"
           layout="prev, pager, next"
           :page-size ="this.size"
           :total="this.totalElements">
@@ -106,10 +116,12 @@
         number: 1,
         size: 10,
         page: 1,
+        searchPage: 1,
         schoolInfo: {},
         fondId: '',
         type: '',
-        identity: '' //身份标识
+        identity: '' ,//身份标识
+        searchResult: false
       }
     },
     created() {
@@ -207,7 +219,25 @@
       handleGetExcelErr(err) {
         console.log(err)
       },
-      //分页
+      //搜索改变页码
+     handleSearchCurrentChange(val) {
+       this.searchPage = val;
+       if(this.type == 'school') {
+         this.getRecodRight(this.type, this.searchPage);
+       }else if(this.type == 'class') {
+         this.getRecodRight(this.type, this.searchPage);
+       }else {
+         if(this.school && this.className && this.student) {
+           this.getRecordDirect('student', this.studentId); //校长查询学生
+         }else if(this.school && this.className && this.student == '') {
+           this.getRecordDirect('class', this.classId); //校长查询班级
+         }else if(this.school && this.className == '' && this.student == '') {
+           this.getRecordDirect('school',this.schoolId);
+         }else {
+            this.getScreeningList('','')
+         }
+       }
+     },
       //监听页码值改变事件
       handleCurrentChange(val) {
         this.page = val;
@@ -223,44 +253,56 @@
           }else if(this.school && this.className == '' && this.student == '') {
             this.getRecordInType('school',this.schoolId, this.page);
           }else {
-
             this.getScreeningList('', this.page);
           }
         }
       },
       handleSchoolChange(val) {
         this.schoolId =  val.id;
-      }, //搜索
-      getRecodRight() {
-        if(this.type == 'school') {   //如果校长搜索
-          if(this.className && this.student) {
-            this.getRecordDirect('student', this.studentId); //校长查询学生
-          }else if(this.className&& this.student == '') {
-            this.getRecordDirect('class', this.classId); //校长查询班级
-          }else if(this.className == '' && this.student == '') {
-           this.getScreeningList(this.type,1)
-          }else {
-             this.getScreeningList('','')
-          }
-        }else if(this.type == 'class') {  //如果老师搜索
-          if(this.student) {
-             this.getRecordDirect('student', this.studentId)
-          }else {
-            this.getScreeningList(this.type, 1);
-          }
-        }else {        //如果管理员搜索
-          // this.getScreeningList('','')
-          if(this.school && this.className && this.student) {
-            this.getRecordDirect('student', this.studentId); //校长查询学生
-          }else if(this.school && this.className && this.student == '') {
-            this.getRecordDirect('class', this.classId); //校长查询班级
-          }else if(this.school && this.className == '' && this.student == '') {
-            this.getRecordDirect('school',this.schoolId);
-          }else {
-             this.getScreeningList('','')
-          }
-        }
       },
+      //搜索
+     getRecodRight() {
+       this.searchResult = true;
+       if(this.type == 'school') {   //如果校长搜索
+         if(this.className && this.student) {
+            this.searchPage = 1;
+           this.getRecordDirect('student', this.studentId); //校长查询学生
+         }else if(this.className&& this.student == '') {
+           this.getRecordDirect('class', this.classId); //校长查询班级
+         }else if(this.className == '' && this.student == '') {
+          this.getScreeningList(this.type,1)
+         }else {
+            this.getScreeningList(this.type,1)
+         }
+       }else if(this.type == 'class') {  //如果老师搜索
+         if(this.student) {
+            this.getRecordDirect('student', this.studentId)
+         }else {
+           this.searchResult = false;
+           this.getScreeningList(this.type, 1);
+         }
+       }else {        //如果管理员搜索
+         if(this.school && this.className && this.student) {
+           this.searchPage = 1;
+           this.getRecordDirect('student', this.studentId); //校长查询学生
+         }else if(this.school && this.className && this.student == '') {
+           this.searchPage = 1;
+           this.getRecordDirect('class', this.classId); //校长查询班级
+         }else if(this.school && this.className == '' && this.student == '') {
+           this.searchPage = 1;
+           this.getRecordDirect('school',this.schoolId);
+         }else {
+            // this.$notify({
+            //   title: '警告',
+            //   duration: 1000,
+            //   message: '请选择要查询的条件',
+            //   type: 'warning'
+            // });
+            this.getScreeningList(this.type, 1)
+            this.searchResult = false;
+         }
+       }
+     },
       // 搜索条件下的分页
       getRecordInType(type, id, page) {
         let param = new FormData();
@@ -299,11 +341,11 @@
         console.log(err)
       },
       getRecordDirect(type,id) {
-        console.log(type, id)
         let param = new FormData();
         param.append('type', type.toString());
         param.append('id',id);
         param.append('token', this.token);
+        param.append('page', this.searchPage)
         axios({
           method: 'post',
           data: param,
@@ -311,6 +353,7 @@
         }).then(this.handleGetRecordDirSucc.bind(this)).catch(this.handlgGetRecordDirErr.bind(this))
       },
       handleGetRecordDirSucc(res) {
+        // console.log(res)
         if(res.data.status == 200) {
           res ? res= res.data.data: '';
           this.content = res.content;
@@ -401,7 +444,6 @@
         }).then(this.getScreenListSucc.bind(this)).catch(this.getScreenListErr.bind(this).bind(this))
       },
       getScreenListSucc(res) {
-        // console.log(res)
         if(res.data.status == 200 && res.data.data !== '') {
          res ? res= res.data.data: '';
          this.content = res.content;

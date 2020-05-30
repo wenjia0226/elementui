@@ -319,7 +319,7 @@ export default {
                children: 'children' //哪个属性实现父子节点嵌套
             },
             currentPage: 1,
-            pageSize: 5,
+            pageSize: 10,
             total: 0,
             recordList: [],
             totalElements: 0,

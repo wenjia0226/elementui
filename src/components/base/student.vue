@@ -117,14 +117,23 @@
             </el-table>
             <!-- 分页功能 -->
            <el-pagination
-             v-show="!this.searchStudentList.length"
-              background
-              :current-page="this.number"
-              @current-change="handleCurrentChange"
-              layout="prev, pager, next"
-              :page-size ="this.size"
-              :total="this.totalElements">
-            </el-pagination>
+             v-show="!this.searchResult"
+             background
+             :current-page="this.number"
+             @current-change="handleCurrentChange"
+             layout="prev, pager, next"
+             :page-size ="this.size"
+             :total="this.totalElements">
+           </el-pagination>
+           <el-pagination
+             v-if="this.searchResult"
+             background
+             :current-page="this.number"
+             @current-change="handleSearchCurrentChange"
+             layout="prev, pager, next"
+             :page-size ="this.size"
+             :total="this.totalElements">
+           </el-pagination>
               <!-- 添加学生 -->
             <el-dialog title="添加学生" :visible.sync="addStudentVisible" width="50%" :before-close="handleClose">
                 <el-form :model="addStudentForm" :rules="addStudentRules" ref="studentFormRef" label-width="120px" >
@@ -313,6 +322,8 @@ export default {
               }
         };
         return {
+           searchResult: false,
+            searchPage: 1,
             loading: false,
             id: '', //学生id
             query:"",
@@ -336,7 +347,7 @@ export default {
             size: 5,
             total:0,
             totalElements: 0,
-            number: '',
+            number: 1,
             selectedOptions: [],
             query: '',
             fileList: [],//此数组中存入所有提交的文档信息
@@ -414,15 +425,20 @@ export default {
      methods: {
        //搜索
        getRecodRight() {
+         this.searchResult = true;
          if(this.type == 'school') {   //如果校长搜索
            if(this.className && this.student) {
+             this.searchPage = 1;
              this.getRecordDirect('student', this.studentId); //校长查询学生
            }else if(this.className&& this.student == '') {
              this.getRecordDirect('class', this.classId); //校长查询班级
            }else if(this.className == '' && this.student == '') {
             this.getStudentList(this.type,1)
            }else {
-              this.getStudentList('','')
+               this.$message({
+                  message: '请先选择班级',
+                  type: 'warning'
+                });
            }
          }else if(this.type == 'class') {  //如果老师搜索
            if(this.student) {
@@ -430,23 +446,49 @@ export default {
            }else {
              this.getStudentList(this.type, 1);
            }
-         }else {        //如果管理员搜索
+         }else {
+         //如果管理员搜索
            if(this.school && this.className && this.student) {
+             this.searchPage = 1;
              this.getRecordDirect('student', this.studentId); //校长查询学生
            }else if(this.school && this.className && this.student == '') {
+             this.searchPage = 1;
              this.getRecordDirect('class', this.classId); //校长查询班级
            }else if(this.school && this.className == '' && this.student == '') {
+             this.searchPage = 1;
              this.getRecordDirect('school',this.schoolId);
            }else {
-              this.getStudentList('','')
+              this.getStudentList(this.type, 1)
+              this.searchResult = false;
            }
          }
        },
+      //搜索改变页码
+      handleSearchCurrentChange(val) {
+        this.searchPage = val;
+        if(this.type == 'school') {
+          this.getRecodRight(this.type, this.searchPage);
+        }else if(this.type == 'class') {
+          this.getRecodRight(this.type, this.searchPage);
+        }else {
+          if(this.school && this.className && this.student) {
+            this.getRecordDirect('student', this.studentId); //校长查询学生
+          }else if(this.school && this.className && this.student == '') {
+            this.getRecordDirect('class', this.classId); //校长查询班级
+          }else if(this.school && this.className == '' && this.student == '') {
+            this.getRecordDirect('school',this.schoolId);
+          }else {
+             this.getStudentList(this.type, 1)
+             this.searchResult = false;
+          }
+        }
+      },
        getRecordDirect(type,id) {
          let param = new FormData();
          param.append('type', type.toString());
          param.append('id',id);
          param.append('token', this.token);
+         param.append('page', this.searchPage);
          axios({
            method: 'post',
            data: param,
@@ -454,7 +496,7 @@ export default {
          }).then(this.handleGetRecordDirSucc.bind(this)).catch(this.handlgGetRecordDirErr.bind(this))
        },
        handleGetRecordDirSucc(res) {
-         console.log(res, 'search')
+
          if(res.data.status == 200) {
            res ? res= res.data.data: '';
            this.content = res.content;
@@ -473,7 +515,6 @@ export default {
              message: res.data.msg,
              type: 'warning'
            });
-
          }
        },
        handlgGetRecordDirErr(err) {
@@ -491,7 +532,7 @@ export default {
             .catch(this.handleGetSchoolErr.bind(this))
        },
        handleGetSchoolSucc(res) {
-         console.log(res)
+         // console.log(res)
          if(res.data.status === 10204) {
              this.$message.error(res.data.msg);
              this.$router.push('/login');
@@ -592,7 +633,6 @@ export default {
          this.studentId = '';
          this.fontId = this.schoolId;
          this.getClassList();
-
        },
        handleSelectClass(item) {
          this.classId = item.id;

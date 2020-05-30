@@ -15,7 +15,7 @@
           </el-col>
       </el-row>
 	  <!-- 学校列表 -->
-	  <el-table :data="this.reportList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" >
+	  <el-table :data="this.content" border  stripe style="width: 100%" >
 	      <el-table-column type="index"></el-table-column>
 	      <el-table-column label="报告名称" prop="name"></el-table-column>
         <el-table-column label="学校名称" prop="schoolName"></el-table-column>
@@ -29,13 +29,13 @@
 	      </el-table-column> -->
 	  </el-table>
 	  <el-pagination
-	      @size-change="handleSizeChange"
-	      @current-change="handleCurrentChange"
-	      :current-page="currentPage"
-	      :page-sizes="[1, 2, 5, 10]"
-	      :page-size="pageSize"
-	      layout="total, sizes, prev, pager, next, jumper"
-	      :total="reportList.length">
+	    background
+	    :current-page="this.number"
+	    @current-change="handleCurrentChange"
+	    layout="prev, pager, next"
+	    :page-size ="this.size"
+	    :total="this.totalElements">
+	  </el-pagination>
 	  </el-pagination>
     </el-card>
 
@@ -76,10 +76,16 @@
     },
     data() {
       return {
-		reportList: [],
-		currentPage: 1,
-		pageSize: 5,
-		total: 0,
+        content: [],
+        size: 5,
+        total:0,
+        totalElements: 0,
+        number: 1,
+        reportList: [],
+        currentPage: 1,
+        pageSize: 5,
+        total: 0,
+        page:1,
         showDialog: false,
         fileList: [],//此数组中存入所有提交的文档信息
         pdfData: {
@@ -89,6 +95,11 @@
       }
     },
     methods: {
+      //监听页码值改变事件
+      handleCurrentChange(val) {
+        this.page = val;
+        this.getReportList();
+      },
       handdlePi() {
         this.showDialog = true;
       },
@@ -118,6 +129,7 @@
 	  getReportList() {
 		let param = new FormData();
 		param.append('token', this.token);
+    param.append('page', this.page);
 		axios({
 			method: 'post',
 			url: '/lightspace/studentWordList',
@@ -130,7 +142,11 @@
 			 this.$message.error(res.data.msg);
 			 this.$router.push('/login');
 			} else if(res.data.status == 200) {
-			  this.reportList = res.data.data;
+			 res ? res= res.data.data: '';
+			 this.content = res.content;
+			 this.totalElements = res.totalElements;
+			 this.size = res.size;
+			 this.number = res.number + 1;
 		   }
 	   },
 	   handleGetReportErr(error) {

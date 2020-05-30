@@ -243,6 +243,8 @@
           .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
+			
+			console.log(res)
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
               this.$router.push('/login');
