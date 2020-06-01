@@ -50,18 +50,18 @@ return routerPush.call(this, location).catch(error=> error)
 }
 const router = new Router({
   routes: [
-    {path: '/', redirect: '/login'},
-    {path: '/login',component: Login},
+  {path: '/', redirect: '/login'},
+  {path: '/login',component: Login},
 	{path: '/schoolSurvey/:id',component: schoolSurvey},
 	{path: '/classSurvey/:id',component: classSurvey},
   {path: '/detailSeat/:id',component: detailSeat},
   {path: '/detailSeatTwo/',component: detailSeatTwo},
   {path: '/personRecord/:id', component: personRecord},
   {path: '/personRecordWear/:id', component: personRecordWear},
-    {
+  {
       path: '/home',
       component: Home,
-      redirect: '/schoolsetting',
+      // redirect: '/schoolsetting',
       children: [
         {path: '/welcome', component: Welcome},
         {path: '/schoolsetting', component: School},

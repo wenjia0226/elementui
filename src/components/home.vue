@@ -9,48 +9,126 @@
             <el-button type="info" @click="logout">退出</el-button>
         </el-header>
         <!-- 页面主体区 -->
-        <el-container>
+        <el-container v-if="!showModal">
             <!-- 侧边栏 -->
-            <el-aside width="200px">
-                 <!-- 菜单区域 -->
-                <el-menu
-                background-color="#333744"
-                text-color="#fff"
-                active-text-color="#409eff"
-                :default-active = 'activePath'
-                router
-                :unique-opened= true>
-                <!-- 一级菜单 -->
-                <el-submenu :index="'/' +item.id"  v-for="item in menuList" :key="item.id" >
-                    <!-- 一级菜单模板 -->
-                    <template slot="title">
-                    <i :class="iconObj[item.id]"></i>
-                   <!-- <i :class="el-icon-my-export"></i> -->
-                    <span>{{item.authName}}</span>
-                    </template>
-                    <!-- 二级菜单 -->
-                    <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
-                        <template slot="title">
-                            <!-- <i class="el-icon-menu"></i> -->
-                            <image src="/image/icon/base.png"></image>
-                            <span>{{subItem.authName}}</span>
-                        </template>
-                    </el-menu-item>
-                </el-submenu>
-                </el-menu>
-            </el-aside>
-            <!-- 右侧主体区 -->
-            <el-main>
-                <router-view></router-view>
-            </el-main>
-        </el-container>
+			<el-aside width="200px">
+				 <!-- 菜单区域 -->
+				<el-menu
+				background-color="#333744"
+				text-color="#fff"
+				active-text-color="#409eff"
+				:default-active = 'activePath'
+				router
+				:unique-opened= true>
+				<!-- 一级菜单 -->
+				<el-submenu :index="'/' +item.id"  v-for="item in menuList" :key="item.id" >
+					<!-- 一级菜单模板 -->
+					<template slot="title">
+					<i :class="iconObj[item.id]"></i>
+				   <!-- <i :class="el-icon-my-export"></i> -->
+					<span>{{item.authName}}</span>
+					</template>
+					<!-- 二级菜单 -->
+					<el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
+						<template slot="title">
+							<!-- <i class="el-icon-menu"></i> -->
+							<image src="/image/icon/base.png"></image>
+							<span>{{subItem.authName}}</span>
+						</template>
+					</el-menu-item>
+				</el-submenu>
+				</el-menu>
+			</el-aside>
+		<!-- 右侧主体区 -->
+			<el-main>
+				<router-view></router-view>
+			</el-main>
+		</el-container>
+    <el-container v-if="showModal &&( this.identity == 1 || this.identity == 2 ) " >
+      <el-main class="mainBox">
+      <!-- <el-button @click="hideModal" type="primary"> 裸眼检测</el-button>
+        <el-button @click="gotoWear" type="primary"> 戴镜检测</el-button>
+        <el-button @click="gotoSeat" type="primary"> 座位查询</el-button> -->
+        <el-row>
+          <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
+        </el-row>
+        <el-row style="margin: 40rpx 0">
+         <el-col :span="24" class="titleWrap">儿童青少年近视“人工干预|智能防控”管理系统</el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin: 20px 0">
+          <el-col :span="8" style="text-align: center">
+            <img src="../assets/image/luoyan.png"  @click="gotoLuo" class="imgWrap" alt="">
+          </el-col>
+           <el-col :span="8" style="text-align: center">
+           <img src="../assets/image/school.png" @click="gotoScool" class="imgWrap" alt="">
+          </el-col>
+          <el-col :span="8" style="text-align: center">
+            <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin: 20px 0">
+          <el-col :span="8" style="text-align: center">
+             <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
+          </el-col>
+           <el-col :span="8" style="text-align: center">
+           <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
+          </el-col>
+
+           <el-col :span="8" style="text-align: center">
+          <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
+          </el-col>
+        </el-row>
+       <!-- <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
+        <img src="../assets/image/school.png" @click="gotoScool" class="imgWrap" alt="">
+        <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
+        <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
+        <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt=""> -->
+      </el-main>
+    </el-container>
+    <el-container v-if="showModal &&( this.identity == 3) " >
+      <el-main class="mainBox">
+      <!-- <el-button @click="hideModal" type="primary"> 裸眼检测</el-button>
+        <el-button @click="gotoWear" type="primary"> 戴镜检测</el-button>
+        <el-button @click="gotoSeat" type="primary"> 座位查询</el-button> -->
+        <el-row>
+          <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
+        </el-row>
+        <el-row style="margin: 40rpx 0">
+         <el-col :span="24" class="titleWrap">儿童青少年近视“人工干预|智能防控”管理系统</el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin: 20px 0">
+          <el-col :span="6" style="text-align: center">
+            <img src="../assets/image/luoyan.png"  @click="gotoLuo" class="imgWrap" alt="">
+          </el-col>
+          <el-col :span="6" style="text-align: center">
+             <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
+          </el-col>
+           <el-col :span="6" style="text-align: center">
+           <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
+          </el-col>
+
+           <el-col :span="6" style="text-align: center">
+          <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
+          </el-col>
+        </el-row>
+       <!-- <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
+        <img src="../assets/image/school.png" @click="gotoScool" class="imgWrap" alt="">
+        <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
+        <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
+        <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt=""> -->
+      </el-main>
+    </el-container>
     </el-container>
 </template>
 <script>
 import axios from 'axios'
+import router from '../router/index'
     export default {
         data() {
             return {
+              token: '',
+              loginName: '',
+                showModal: true,
                 menuList: [] ,//左侧菜单的获取,
                 activePath: '', //被激活的链接地址
                 token: '',
@@ -96,25 +174,53 @@ import axios from 'axios'
         created() {
             this.getMenuList();
             this.activePath = window.sessionStorage.getItem('activePath')
-
+            this.loginName = window.sessionStorage.getItem('loginName');
+            console.log(this.loginName)
+            let user = window.sessionStorage.getItem('token');
+            this.identity = user.split('-') [1];
+           console.log(this.identity)
         },
         methods: {
-            logout () {
-                window.sessionStorage.clear();
-                this.$router.push('/login')
-            },
-            getMenuList() {
-                //获取所都菜单
-                 this.token = window.sessionStorage.getItem('token');
-                if(this.token) {
-                    let listparam = new URLSearchParams();
-                    listparam.append('token', this.token);
-                    axios({
-                        method: 'post',
-                        url: '/lightspace/menuList',
-                        data: listparam
-                    }).then(this.handleGetMenuListSucc.bind(this)).catch(this.handleGetMenuListErr.bind(this))
-               }
+          gotoLuo() {
+            this.showModal = false;
+            router.push('/screeningsetting')
+          },
+          gotoWear(){
+            this.showModal = false;
+            router.push('/screeningwearsetting')
+          },
+          gotoScool() {
+            this.showModal = false;
+            router.push('/schoolStatistics')
+          },
+          gotoClass() {
+            this.showModal = false;
+            router.push('/classStatistics')
+          },
+          gotoSchoolReport() {
+            this.showModal = false;
+            router.push('/schoolreport')
+          },
+          gotoClassReport() {
+            this.showModal = false;
+            router.push('/classreport')
+          },
+          logout () {
+              window.sessionStorage.clear();
+              this.$router.push('/login')
+          },
+          getMenuList() {
+              //获取所都菜单
+               this.token = window.sessionStorage.getItem('token');
+              if(this.token) {
+                  let listparam = new URLSearchParams();
+                  listparam.append('token', this.token);
+                  axios({
+                      method: 'post',
+                      url: '/lightspace/menuList',
+                      data: listparam
+                  }).then(this.handleGetMenuListSucc.bind(this)).catch(this.handleGetMenuListErr.bind(this))
+             }
             },
             handleGetMenuListSucc (res){
               if(res.data.status === 10204) {
@@ -139,7 +245,6 @@ import axios from 'axios'
     }
 </script>
 <style lang="less" scoped>
-
 .home-container {
     height: 100%;
 }
@@ -219,4 +324,38 @@ import axios from 'axios'
 .common:before{
     content: "\e611";
 }
+.imgWrap {
+  width: 60%;
+  height: calc(50%);
+  margin: 0 auto;
+  position: relative;
+
+}
+.textWrap {
+  position: absolute;
+  color: red;
+  font-size: 40px;
+  font-weight: bold;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+}
+.welcome {
+  text-align: center;
+  font-size: 40px;
+  color: #fff;
+  margin: 20px 0;
+}
+.titleWrap {
+   text-align: center;
+  font-size: 34px;
+  color: #fff;
+  margin: 20px 0;
+}
+.mainBox {
+  background: url('../assets/image/bglogin.png') center no-repeat !important;
+  background-size: cover;
+  }
 </style>

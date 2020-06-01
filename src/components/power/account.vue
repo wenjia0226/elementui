@@ -21,8 +21,8 @@
               <!-- 用户列表 -->
             <el-table :data="userList" border  stripe style="width: 100%" v-show="!this.searchAccountList.length">
                 <el-table-column type="index"></el-table-column>
-                <el-table-column label="创建用户者" prop="loginName"></el-table-column>
-                <el-table-column label="用户名" prop="name"></el-table-column>
+                <el-table-column label="登录账号" prop="loginName"></el-table-column>
+                <el-table-column label="姓名" prop="name"></el-table-column>
                  <el-table-column label="角色" prop="roleName"></el-table-column>
                 <el-table-column label="创建时间" prop="genTime"></el-table-column>
                 <el-table-column label="操作">
@@ -34,8 +34,8 @@
             <!-- 搜索列表 -->
             <el-table :data="searchAccountList" border  stripe style="width: 100%" v-show="this.searchAccountList.length">
                 <el-table-column type="index"></el-table-column>
-                <el-table-column label="创建用户者" prop="loginName"></el-table-column>
-                <el-table-column label="用户名" prop="name"></el-table-column>
+                <el-table-column label="登录账号" prop="loginName"></el-table-column>
+                <el-table-column label="姓名" prop="name"></el-table-column>
                  <el-table-column label="角色" prop="roleName"></el-table-column>
                 <el-table-column label="创建时间" prop="genTime"></el-table-column>
                 <el-table-column label="操作">
@@ -57,13 +57,13 @@
          <!-- 添加角色对话框 -->
         <el-dialog title="添加角色"  :visible.sync="addAccountDialogVisible" width="50%"  :before-close="handleClose">
            <el-form :model="addAccountForm" :rules="addAccountRules" ref="accountFormRef" label-width="120px">
-                <el-form-item label="所属人" prop="name" >
+                <el-form-item label="姓名" prop="name" >
                     <el-input v-model="addAccountForm.name" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="账号" prop="loginName">
+                <el-form-item label="登录账号" prop="loginName">
                     <el-input v-model="addAccountForm.loginName" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="password">
+                <el-form-item label="登录密码" prop="password">
                     <el-input v-model="addAccountForm.password" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="微信昵称" prop="wechatName">

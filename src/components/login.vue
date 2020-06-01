@@ -92,7 +92,9 @@ export default {
             //将token 存到sessionStorage
             window.sessionStorage.setItem('token', res.data.data.token)
             this.$message.success('登录成功');
-            window.sessionStorage.setItem('loginName', this.loginForm.loginname)
+            console.log(res.data.data.name, 'login');
+            
+            window.sessionStorage.setItem('loginName', res.data.data.name)
             if(window.sessionStorage.getItem('token')) {
                 this.$router.push('/home')
             }else {
