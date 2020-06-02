@@ -175,10 +175,8 @@ import router from '../router/index'
             this.getMenuList();
             this.activePath = window.sessionStorage.getItem('activePath')
             this.loginName = window.sessionStorage.getItem('loginName');
-            console.log(this.loginName)
             let user = window.sessionStorage.getItem('token');
             this.identity = user.split('-') [1];
-           console.log(this.identity)
         },
         methods: {
           gotoLuo() {

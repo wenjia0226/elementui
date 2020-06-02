@@ -60,7 +60,7 @@
        <!-- 搜索 -->
        <el-table :data="this.searchContent" border stripe style="width: 100%" v-show="this.searchContent.length">
             <el-table-column type="index"></el-table-column>
-            <el-table-column label="商品名称" prop="productId"></el-table-column>
+            <el-table-column label="商品名称" prop="productName"></el-table-column>
             <el-table-column label="规格名称" prop="name"></el-table-column>
             <el-table-column label="价格" prop="price"></el-table-column>
             <el-table-column label="爱眼币" prop="integral"></el-table-column>
@@ -244,7 +244,6 @@
             method: 'post',
             url: '/lightspace/specificationsList'
           }).then((res) => {
-            console.log(res)
             res? res = res.data.data: '';
             this.searchContent = res.content;
             this.searchTotalElements = res.totalElements;
@@ -259,9 +258,7 @@
         this.addShopForm.productId = val;
       },
       handleSearchChange(val) {
-        console.log(val)
         this.searchProductId = val;
-
       },
      // 列表页修改
       handleCurrentChange(val) {

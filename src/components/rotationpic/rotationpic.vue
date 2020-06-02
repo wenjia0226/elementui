@@ -533,12 +533,14 @@ export default {
         data: param,
         url: '/lightspace/rotationList'
       }).then((res) => {
-         // console.log(res)
         res? res = res.data.data: '';
         this.content = res.content;
         this.totalElements = res.totalElements;
         this.size = res.size;
         this.number = res.number + 1;
+        this.content.forEach((item) => {
+          item.path = 'https://www.guangliangkongjian.com/images/' + item.path
+        })
       }).catch((err) => {
         console.log(err)
       })
@@ -650,5 +652,10 @@ export default {
   }
 }
 </script>
-<style></style>
+<style>
+  .swiperImg {
+    width: 40%;
+    height: auto;
+  }
+</style>
 </style>
