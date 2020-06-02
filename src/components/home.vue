@@ -55,7 +55,7 @@
         <el-row style="margin: 40rpx 0">
          <el-col :span="24" class="titleWrap">儿童青少年近视“人工干预|智能防控”管理系统</el-col>
         </el-row>
-        <el-row :gutter="20" style="margin: 20px 0">
+        <el-row :gutter="20" class="bottomWrap">
           <el-col :span="8" style="text-align: center">
             <img src="../assets/image/luoyan.png"  @click="gotoLuo" class="imgWrap" alt="">
           </el-col>
@@ -66,7 +66,7 @@
             <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
           </el-col>
         </el-row>
-        <el-row :gutter="20" style="margin: 20px 0">
+        <el-row :gutter="20" style="margin: 20px 0" >
           <el-col :span="8" style="text-align: center">
              <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
           </el-col>
@@ -96,7 +96,7 @@
         <el-row style="margin: 40rpx 0">
          <el-col :span="24" class="titleWrap">儿童青少年近视“人工干预|智能防控”管理系统</el-col>
         </el-row>
-        <el-row :gutter="20" style="margin: 20px 0">
+        <el-row :gutter="20" style="margin: 20px 0;" class="bottomWrap">
           <el-col :span="6" style="text-align: center">
             <img src="../assets/image/luoyan.png"  @click="gotoLuo" class="imgWrap" alt="">
           </el-col>
@@ -357,5 +357,13 @@ import router from '../router/index'
 .mainBox {
   background: url('../assets/image/bglogin.png') center no-repeat !important;
   background-size: cover;
+  display: flex;
+  flex-direction: column;
+  }
+  .bottomWrap {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
