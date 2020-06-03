@@ -604,10 +604,17 @@ export default {
          }).then(this.getStuListSucc.bind(this)).catch(this.getStuListErr.bind(this).bind(this))
        },
        getStuListSucc(res) {
-         // console.log(res)
+         console.log(res)
          if(res.data.status == 200 && res.data.data !== '') {
           res ? res= res.data.data: '';
           this.content = res.content;
+          this.content.forEach((item) => {
+            if(item.gender == 0) {
+              item.gender = '男'
+            }else {
+              item.gender = '女'
+            }
+          })
           this.totalElements = res.totalElements;
           this.size = res.size;
           this.number = res.number + 1;
@@ -760,7 +767,7 @@ export default {
     queryStudent() {
         let param = new URLSearchParams();
         if(this.query == "") {
-          this.getStudentList(1);
+          this.getStudentList( 1);
           this.searchStudentList = [];
           return;
         }
@@ -843,6 +850,20 @@ export default {
               this.$message.success('添加学生信息成功');
               this.$refs.studentFormRef.resetFields();
               this.getStudentList(1);
+              if(this.identity == 1) {  // admin
+                 this.getSchoolList();
+                 this.getStudentList('',1);
+               }else if(this.identity == 2) {   //2 校长
+                 this.type = 'school';
+                 this.getStudentList(this.type, 1);
+                 this.schoolId = this.fondId;
+                 this.getClassList(); // 获取对应学校下的所有班级
+              }else if(this.identity == 3) {   // 教师
+                this.type = "class";
+                this.classId = this.fondId;
+                this.getStudentList(this.type, 1);
+                 this.getStudentListBySelect();
+              }
            }
         },
         handleAddStuErr(err) {
@@ -949,14 +970,28 @@ export default {
             }).then(this.handleEditStuSucc.bind(this)).catch(this.handleEditStuErr.bind(this))
         },
         handleEditStuSucc(res) {
-          // console.log(res)
+          console.log(res)
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.editStudentForm = res.data.data;
               this.editStudentVisible = true;
-              // this.getStudentList(1);
+              // if(this.identity == 1) {  // admin
+              //    this.getSchoolList();
+              //    this.getStudentList('',1);
+              //  }else if(this.identity == 2) {   //2 校长
+              //    this.type = 'school';
+              //    this.getStudentList(this.type, 1);
+              //    this.schoolId = this.fondId;
+              //    this.getClassList(); // 获取对应学校下的所有班级
+              // }else if(this.identity == 3) {   // 教师
+              //   this.type = "class";
+              //   this.classId = this.fondId;
+              //   this.getStudentList(this.type,1);
+              //    this.getStudentListBySelect();
+              //    // this.getScreeningList(this.type, this.number);
+              // }
             }
         },
         handleAddressFun(e, form, thsAreaCode) {
@@ -969,9 +1004,10 @@ export default {
         },
         //保存修改的数据
         saveEditInfo() {
+          console.log(123)
             this.$refs.studentEditFormRef.validate((valid) => {
             if(!valid) return this.$message.error('验证失败');
-            let param = new URLSearchParams();
+            let param = new FormData();
             param.append('token', this.token);
             param.append('schoolId', this.schoolId);
             param.append('classId', this.classId);
@@ -996,6 +1032,7 @@ export default {
             })
         },
         handldEditStuSucc(res) {
+          console.log(res)
            if(res.data.status === 10204) {
                this.$message.error(res.data.msg);
                this.$router.push('/login');
@@ -1005,7 +1042,15 @@ export default {
              this.editStudentVisible = false;
              //提示修改成功
              this.$message.success('更新学生信息成功');
-
+            if(this.identity == 1) {  // admin
+               this.getStudentList('',1);
+             }else if(this.identity == 2) {   //2 校长
+               this.type = 'school';
+               this.getStudentList(this.type, 1);
+            }else if(this.identity == 3) {   // 教师
+              this.type = "class";
+              this.getStudentList(this.type,1);
+            }
            }
         },
         handleEditStuErr(err) {
@@ -1031,11 +1076,20 @@ export default {
             }).then(this.handleDeleteStuSucc.bind(this)).catch(this.handleDeleteStuErr.bind(this))
         },
         handleDeleteStuSucc(res) {
+          console.log(res)
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
-              this.getStudentList(1)
+              if(this.identity == 1) {  // admin
+                 this.getStudentList('', 1);
+               }else if(this.identity == 2) {   //2 校长
+                 this.type = 'school';
+                 this.getStudentList(this.type, 1);
+              }else if(this.identity == 3) {   // 教师
+                this.type = "class";
+                this.getStudentList(this.type,1);
+              }
             }
         },
         handleDeleteStuErr(err) {

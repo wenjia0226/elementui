@@ -9,7 +9,7 @@
 
       <!-- 卡片视图 -->
       <el-card>
-        <el-row>
+        <el-row :gutter = "20">
           <el-col :span="4">
             <el-select v-model="searchquery" placeholder="请选择" @change="handleSearchChange">
              <el-option
@@ -21,7 +21,7 @@
              </el-option>
             </el-select>
           </el-col>
-          <el-col :span="2" >
+          <el-col :span="3" >
             <el-button  type="primary"  @click="searchProduct">搜索商品规格</el-button>
           </el-col>
           <el-col :span="6" :offset="1">
@@ -34,6 +34,7 @@
         <el-table-column label="规格名称" prop="name"></el-table-column>
         <el-table-column label="价格" prop="price"></el-table-column>
         <el-table-column label="爱眼币" prop="integral"></el-table-column>
+        <el-table-column label="类型" prop="productType"></el-table-column>
         <el-table-column label="运费" prop="freight"></el-table-column>
         <el-table-column label="库存" prop="stock"></el-table-column>
         <el-table-column label="操作">
@@ -64,6 +65,7 @@
             <el-table-column label="规格名称" prop="name"></el-table-column>
             <el-table-column label="价格" prop="price"></el-table-column>
             <el-table-column label="爱眼币" prop="integral"></el-table-column>
+            <el-table-column label="类型" prop="productType"></el-table-column>
             <el-table-column label="运费" prop="freight"></el-table-column>
             <el-table-column label="库存" prop="stock"></el-table-column>
             <el-table-column label="操作">
@@ -110,6 +112,10 @@
         <el-form-item label="爱眼币" prop="integral">
             <el-input v-model="addShopForm.integral" clearable></el-input>
         </el-form-item>
+		<el-form-item label="服务类型" prop="productType">
+		     <el-radio v-model="addShopForm.productType" size="medium" border :label="1">服务类型</el-radio>
+		     <el-radio v-model="addShopForm.productType" size="medium" border :label="2">商品类型</el-radio>
+		</el-form-item>
         <el-form-item label="运费" prop="freight">
             <el-input v-model="addShopForm.freight" clearable></el-input>
         </el-form-item>
@@ -148,6 +154,10 @@
         <el-form-item label="爱眼币" prop="integral">
             <el-input v-model="editShopForm.integral" clearable></el-input>
         </el-form-item>
+		<el-form-item label="服务类型" prop="productType">
+		     <el-radio v-model="editShopForm.productType" size="medium" border :label="1">服务类型</el-radio>
+		     <el-radio v-model="editShopForm.productType" size="medium" border :label="2">商品类型</el-radio>
+		</el-form-item>
         <el-form-item label="运费" prop="freight">
             <el-input v-model="editShopForm.freight" clearable></el-input>
         </el-form-item>
@@ -188,7 +198,8 @@
           integral: '',
           freight: '',
           stock: '',
-          percentage: ''
+          percentage: '',
+		  productType: 2
         },
         editShopForm: {
           productId: '',
@@ -199,6 +210,7 @@
           freight: '',
           stock: '',
           percentage: '',
+		  productType: 0,
 
         },
         addShopRules: {
@@ -209,6 +221,7 @@
           stock: {required: true, message: '请输入库存', trigger: 'blur' },
           percentage: {required: true, message: '请输入百分比', trigger: 'blur' },
           productId: {required: true, message: '请选择商品名称', trigger: 'blur' },
+		  productType:  { required: true,type: 'number', message: '请选择类型', trigger: 'blur' },
         },
         editShopRules: {
           name: {required: true, message: '请输入规格名称', trigger: 'blur' },
@@ -218,6 +231,7 @@
           stock: {required: true, message: '请输入库存', trigger: 'blur' },
           percentage: {required: true, message: '请输入百分比', trigger: 'blur' },
           productId: {required: true, message: '请选择商品名称', trigger: 'blur' },
+		  productType:  { required: true,type: 'number', message: '请选择类型', trigger: 'blur' }
         },
         content: [],
         totalElements: 0,
@@ -246,6 +260,13 @@
           }).then((res) => {
             res? res = res.data.data: '';
             this.searchContent = res.content;
+            this.searchContent.forEach((item) => {
+              if(item.productType == 1) {
+                  item.productType = '服务类型'
+              }else {
+                item.productType = ' 商品类型'
+              }
+            })
             this.searchTotalElements = res.totalElements;
             this.searchSize = res.size;
             this.searchNumber = res.number + 1;
@@ -282,6 +303,13 @@
            // console.log(res)
           res? res = res.data.data: '';
           this.content = res.content;
+          this.content.forEach((item) => {
+            if(item.productType == 1) {
+                item.productType = '服务类型'
+            }else {
+              item.productType = ' 商品类型'
+            }
+          })
           this.totalElements = res.totalElements;
           this.size = res.size;
           this.number = res.number + 1;
@@ -296,6 +324,7 @@
         let param = new FormData();
         param.append('token', this.token);
         param.append('productId', this.addShopForm.productId);
+        param.append('productType', this.addShopForm.productType);
         param.append('name', this.addShopForm.name);
         param.append('price', this.addShopForm.price);
         param.append('integral', this.addShopForm.integral);
@@ -307,7 +336,7 @@
           data: param,
           url: '/lightspace/addSpecifications'
         }).then((res) => {
-          // console.log(res)
+          console.log(res)
           if(res.data.status == 200) {
             this.addDialogVisible = false;
             this.$message({
@@ -381,6 +410,7 @@
       //修改
       //编辑出现编辑页面
       showEditDialog(id) {
+        console.log(id)
         this.id = id;
         this.editDialogVisible = true;
         let param = new URLSearchParams();
@@ -391,6 +421,7 @@
             url: '/lightspace/editSpecifications',
             data: param
         }).then((res)=> {
+          console.log(res)
           this.editShopForm = res.data.data;
         }).catch((err) => {
           console.log(err)
@@ -405,6 +436,7 @@
         param.append('id', this.id);
         param.append('productId', this.editShopForm.productId);
         param.append('name', this.editShopForm.name);
+        param.append('productType', this.editShopForm.productType);
         param.append('price', this.editShopForm.price);
         param.append('integral', this.editShopForm.integral);
         param.append('freight', this.editShopForm.freight);
@@ -415,7 +447,7 @@
           data: param,
           url: '/lightspace/saveSpecifications'
         }).then((res) => {
-          // console.log(res)
+          console.log(res)
           if(res.data.status == 200) {
            this.editDialogVisible = false;
             this.$message({
