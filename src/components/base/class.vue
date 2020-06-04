@@ -470,7 +470,7 @@ export default {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
            } else if(res.data.status == 200) {
-             this.schoolList = res.data.data;
+             this.school = res.data.data;
           }
       },
       handleGetSchoolErr(error) {
@@ -507,7 +507,7 @@ export default {
         }).then(this.handleGetSearchSucc.bind(this)).catch(this.handleGetSearchErr.bind(this))
       },
       handleGetSearchSucc(res) {
-        // console.log(res, 123)
+        console.log(res, 123)
         if(res.data.status == 200) {
           this.classesList = res.data.data;
           this.classesList.forEach((item) => {

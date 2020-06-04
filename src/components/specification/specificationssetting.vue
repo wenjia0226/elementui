@@ -410,7 +410,6 @@
       //修改
       //编辑出现编辑页面
       showEditDialog(id) {
-        console.log(id)
         this.id = id;
         this.editDialogVisible = true;
         let param = new URLSearchParams();
@@ -421,7 +420,7 @@
             url: '/lightspace/editSpecifications',
             data: param
         }).then((res)=> {
-          console.log(res)
+          // console.log(res)
           this.editShopForm = res.data.data;
         }).catch((err) => {
           console.log(err)
@@ -447,7 +446,7 @@
           data: param,
           url: '/lightspace/saveSpecifications'
         }).then((res) => {
-          console.log(res)
+          // console.log(res)
           if(res.data.status == 200) {
            this.editDialogVisible = false;
             this.$message({

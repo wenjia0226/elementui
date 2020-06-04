@@ -1058,7 +1058,7 @@ export default {
         },
         //删除学生
        async removeStudentsById(id) {
-        const confirmResult = await this.$confirm('此操作将永久删除该班级, 是否继续?', '提示', {
+        const confirmResult = await this.$confirm('此操作将永久删除该学生, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
