@@ -26,7 +26,7 @@
          </el-table-column>
         <el-table-column label="详情图" width= '250' prop="details">
          <template slot-scope="scope">
-           <img  :src="scope.row.details" class="swiperImg" />
+           <img  :src="scope.row.details" class="swiperImg"  style="height: 100px; width: auto;"/>
          </template>
         </el-table-column>
         <el-table-column label="生成时间" prop="genTime"></el-table-column>
@@ -392,7 +392,7 @@
            url: '/lightspace/addProduct'
          }).then((res) => {
            if(res.data.status == 200) {
-             this.addDialogVisible = false; 
+             this.addDialogVisible = false;
              this.form2.name = '';
              this.$refs.upload.clearFiles(); // 清空上传的图片
              this.$refs.detailUpload.clearFiles();
@@ -447,10 +447,6 @@
             }else {
               this.queryShop();
             }
-            // this.recordList = res.data.data;
-            // const totalPage = Math.ceil(this.recordList.length / this.pageSize) // 总页数
-            // this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-            // this.currentPage = this.currentPage < 1 ? 1 : this.currentPage
          }
      },
      handleDeleteProErr(err) {
@@ -490,39 +486,39 @@
   input[type="file"] {
           display: none;
       }
-      .avatar-uploader .el-upload {
-          border: 1px dashed #d9d9d9;
-          border-radius: 6px;
-          cursor: pointer;
-          position: relative;
-          overflow: hidden;
-      }
-      .avatar-uploader .el-upload:hover {
-          border-color: #409EFF;
-      }
-      .avatar-uploader-icon {
-          font-size: 28px;
-          color: #8c939d;
-          width: 178px;
-          height: 178px;
-          line-height: 178px;
-          text-align: center;
-      }
-      .avatar {
-          width: 178px;
-          height: 178px;
-          display: block;
-      }
-      .avatar-uploader {
+    .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;
         border-radius: 6px;
         cursor: pointer;
-        width: 20rpx;
-        height: 20rpx;
-      }
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+    .avatar-uploader {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 20rpx;
+      height: 20rpx;
+    }
   .swiperImg {
-    width: 16%;
-    height: 50px;
+    width: auto;
+    height: 50px !important;
     margin: 5px;
     display: inline-block;
   }

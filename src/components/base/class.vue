@@ -116,7 +116,7 @@
         <el-dialog title="添加班级" ref="addClassRef" :visible.sync="addClassVisible" width="50%" :before-close="handleClose">
             <el-form :model="addClassForm" :rules="addClassRules" ref="addClassRef" label-width="120px" class="demo-ruleForm">
                 <el-form-item label="所属学校" prop="schoolName">
-                    <el-cascader v-model="addClassForm.schoolName"  :options="school" :props ="cateProps" @change="handleChange">
+                    <el-cascader v-model="addClassForm.schoolName"  :options="schoolList" :props ="cateProps" @change="handleChange">
                     </el-cascader>
                   <!--  <el-select v-model="addClassForm.schoolName" placeholder="请选择" >
                         <el-option
@@ -470,7 +470,7 @@ export default {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
            } else if(res.data.status == 200) {
-             this.school = res.data.data;
+             this.schoolList = res.data.data;
           }
       },
       handleGetSchoolErr(error) {
@@ -581,7 +581,7 @@ export default {
             param.append('token' ,this.token);
             param.append('type', type);
             param.append('page', page);
-            param.append('id',  this.fondId);
+            param.append('id', this.fondId);
             axios({
                 method: 'post',
                 data: param,
