@@ -42,6 +42,8 @@ import neworder from '@/components/order/neworder'
 import successorder from '@/components/order/successorder'
 import waitorder from '@/components/order/waitorder'
 import finishorder from '@/components/order/finishorder'
+import singlesetting from '@/components/answer/singlesetting'
+import multiplesetting from '@/components/answer/multiplesetting'
 
 Vue.use(Router)
 const routerPush = Router.prototype.push
@@ -97,7 +99,9 @@ const router = new Router({
         {path: '/neworder', component: neworder},
         {path: '/successorder', component: successorder},
         {path: '/waitorder', component: waitorder},
-        {path: '/finishorder', component: finishorder}
+        {path: '/finishorder', component: finishorder},
+        {path: '/singlesetting', component: singlesetting},
+        {path: '/multiplesetting', component: multiplesetting}
       ]
     },
 

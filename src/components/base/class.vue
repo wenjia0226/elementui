@@ -702,8 +702,6 @@ export default {
               this.selectedOptions = res.data.data.schoolId;
               this.editVisible = true;
             }
-
-
         },
         handleEditclassErr(err) {
             console.log(err)
