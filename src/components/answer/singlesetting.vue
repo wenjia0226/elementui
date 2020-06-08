@@ -19,7 +19,8 @@
      <el-table-column label="选项三" prop="optionThree"></el-table-column>
      <el-table-column label="选项四" prop="optionFour"></el-table-column>
      <el-table-column label="答案" prop="keyStr"></el-table-column>
-     <el-table-column label="类型" prop="freight"></el-table-column>
+      <el-table-column label="难度等级" prop="level"></el-table-column>
+     <el-table-column label="类型" prop="type"></el-table-column>
      <el-table-column label="操作">
          <template slot-scope="scope">
              <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSpecById(scope.row.id)"></el-button>
@@ -143,7 +144,7 @@
            data: param,
            url: '/lightspace/answerList'
          }).then((res) => {
-             console.log(res)
+             // console.log(res)
            res? res = res.data.data: '';
            this.content = res.content;
            this.totalElements = res.totalElements;
