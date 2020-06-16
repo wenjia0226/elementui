@@ -7,6 +7,7 @@ import School from '@/components/base/school'
 import Class from '@/components/base/class'
 import Student from '@/components/base/student'
 import Teacher from '@/components/base/teacher'
+import Clert from '@/components/base/clert'
 import Report from '@/components/base/report'
 import Cooparation from '@/components/base/cooparation'
 import Right from '@/components/power/right'
@@ -70,6 +71,7 @@ const router = new Router({
         {path: '/classsetting', component: Class},
         {path: '/studentList', component: Student},
         {path: '/teachersetting', component: Teacher},
+         {path: '/clertsetting', component: Clert},
         {path: '/report', component: Report},
         {path: '/partnershipsetting', component: Cooparation},
         {path: '/permission', component: Right},

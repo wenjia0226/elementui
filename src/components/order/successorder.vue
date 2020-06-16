@@ -96,6 +96,8 @@
           }).then((res) => {
             // console.log(res)
             if(res.data.status == 200) {
+            this.orderVisible = false;
+            this.orderForm.name = '';
               this.getOrderList(1)
             }
           }).catch((err) => {
@@ -104,12 +106,11 @@
         },
         //填写运单编号
         addOrderNumber(row) {
-          console.log(row)
           this.id = row.id;
           this.orderVisible = true;
           if(row.delivrytype == '邮寄') {
             this.diliveryType = '邮寄'
-            
+
           }else {
             this.diliveryType = '自取'
           }

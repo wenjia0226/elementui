@@ -17,7 +17,7 @@
                   <el-button type="primary" @click="addTeacher">添加老师</el-button>
            </el-col>
         </el-row>
-       <el-table :data="teacherList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%">
+       <el-table :data="this.content" border  stripe style="width: 100%">
           <el-table-column label="姓名" prop="name"></el-table-column>
          <el-table-column label="学校名称" prop="schoolName"></el-table-column>
          <el-table-column label="班级" prop="className"></el-table-column>
@@ -38,7 +38,7 @@
        <el-row v-show="this.searchTeacherList.length">
           <el-col>搜索结果</el-col>
         </el-row>
-        <el-table :data="this.searchTeacherList" border  stripe style="width: 100%" v-show="this.searchTeacherList.length">
+        <!-- <el-table :data="this.searchTeacherList" border  stripe style="width: 100%" v-show="this.searchTeacherList.length">
           <el-table-column label="姓名" prop="name"></el-table-column>
           <el-table-column label="学校名称" prop="schoolName"></el-table-column>
           <el-table-column label="班级" prop="className"></el-table-column>
@@ -54,18 +54,16 @@
                  <el-button type="danger"  size="middle" icon="el-icon-delete" @click ="removeTeacherById(scope.row.id)" ></el-button>
               </template>
           </el-table-column>
-        </el-table>
-       <!-- 分页功能 -->
-       <el-pagination
-           v-show="!this.searchTeacherList.length"
-           @size-change="handleSizeChange"
-           @current-change="handleCurrentChange"
-           :current-page="currentPage"
-           :page-sizes="[1, 2, 5, 10]"
-           :page-size="pageSize"
-           layout="total, sizes, prev, pager, next, jumper"
-           :total="teacherList.length">
-       </el-pagination>
+        </el-table> -->
+      <!-- 分页功能 -->
+      <el-pagination
+        background
+        :current-page="this.number"
+        @current-change="handleCurrentChange"
+        layout="prev, pager, next"
+        :page-size ="this.size"
+        :total="this.totalElements">
+      </el-pagination>
      </el-card>
      <!-- 添加对话框 -->
      <el-dialog title="添加教师" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
@@ -134,6 +132,12 @@
         editDialogVisible: false,
         addDialogVisible: false, //控制对话框的显示隐藏
         tea_cat: [],
+        page: 1,
+        size: 5,
+        total:0,
+        totalElements: 0,
+        number: 1,
+        content: [],
         addTeacherForm: {
             schoolName: '',
             className: '',
@@ -175,10 +179,14 @@
     },
     created() {
       this.token = window.sessionStorage.getItem('token');
-      this.getTeacherList();
+      this.getTeacherList(this.page);
       this.getOPtions();
     },
     methods: {
+      handleCurrentChange(val) {
+        this.page = val;
+        this.getTeacherList(val)
+      },
       //添加老师
       submitTeacher() {
          this.$refs.addTeacherRef.validate((valid) => {
@@ -208,7 +216,7 @@
         this.classId = val[1];
       },
       handleAddTeacherSucc(res) {
-        // console.log(res);
+         console.log(res);
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
@@ -219,7 +227,7 @@
             this.addDialogVisible = false;
             this.$message.success('添加教师成功');
             this.$refs.addTeacherRef.resetFields();
-            this.getTeacherList();
+            this.getTeacherList(1);
           }
       },
       handleAddTeacherErr(err) {
@@ -228,7 +236,7 @@
       // 搜索
       queryTeacher() {
         if(this.query == "") {
-             this.getTeacherList();
+             this.getTeacherList(1);
              this.searchTeacherList = [];
              return;
           }
@@ -243,18 +251,20 @@
           .catch(this.handleQueryErr.bind(this))
         },
         handleQuerySucc(res) {
-			
-			console.log(res)
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
               this.$router.push('/login');
              } else if(res.data.status == 10208) {
               this.$message.error(res.data.msg);
-              this.getTeacherList();
+              this.getTeacherList(1);
               this.searchTeacherList = [];
            }else if(res.status == 200) {
               this.$message.success('搜索成功');
-              this.searchTeacherList = res.data.data;
+              console.log(res)
+              this.content = res.data.data;
+              // this.totalElements = res.totalElements;
+              // this.size = res.size;
+              // this.number = res.number + 1;
             }
         },
         handleQueryErr(err) {
@@ -268,9 +278,10 @@
        this.addDialogVisible = false;
        this.$refs.addteacherRef.resetFields();
       },
-      getTeacherList() {
+      getTeacherList(page) {
         let param = new URLSearchParams();
         param.append('token', this.token);
+        param.append('page', page);
         axios({
           method: 'post',
           data: param,
@@ -278,10 +289,13 @@
         }).then(this.handleGetTeacherListSucc.bind(this)).catch(this.handleGetTeacherErr.bind(this))
       },
       handleGetTeacherListSucc(res) {
-        // console.log(res)
-        if(res.data.status == 200) {
-          this.teacherList = res.data.data
-        }
+        if(res.data.status == 200 && res.data.data !== '') {
+         res ? res= res.data.data: '';
+         this.content = res.content;
+         this.totalElements = res.totalElements;
+         this.size = res.size;
+         this.number = res.number + 1;
+         }
       },
       handleGetTeacherErr(err) {
         console.log(err)
@@ -299,12 +313,12 @@
          .catch(this.handleEditTeacherErr.bind(this))
      },
      handleEditTeacherSucc(res) {
-       // console.log(res)
        if(res.data.status === 10204) {
            this.$message.error(res.data.msg);
            this.$router.push('/login');
           } else if(res.data.status == 200) {
            this.editTeacherForm = res.data.data;
+           console.log(this.editTeacherForm)
          }
      },
      handleEditTeacherErr(err) {
@@ -321,11 +335,11 @@
          let param = new URLSearchParams();
          param.append('token', this.token);
          param.append('name', this.editTeacherForm.name);
-         param.append('schooId', this.schoolId);
-         param.append('classId', this.classId);
+         param.append('schooId', this.editTeacherForm.tea_cat[0]);
+         param.append('classId', this.editTeacherForm.tea_cat[1]);
          param.append('phone', this.editTeacherForm.phone);
          param.append('password', this.editTeacherForm.password);
-         param.append('id', this.editTeacherForm.id)
+         param.append('id', this.editTeacherForm.id);
          axios({
              method: 'post',
              url: '/lightspace/saveTeacher',
@@ -339,12 +353,11 @@
           this.$message.error(res.data.msg);
           this.$router.push('/login');
          }else if(res.data.status == 200) {
-           //发起修改用户信息的数据请求
-            this.teacherList = res.data.data;
            //隐藏编辑框
            this.editDialogVisible = false;
            //提示修改成功
-           this.$message.success('更新学校信息成功');
+           this.$message.success('更新教师信息成功');
+           this.getTeacherList(this.page)
          }
      },
      handleEditSaveTeacherErr(err) {
@@ -376,11 +389,8 @@
                  this.$router.push('/login');
              } else if(res.data.status == 200) {
                this.$message.success('删除老师成功');
-               this.teacherList = res.data.data;
-               const totalPage = Math.ceil(this.teacherList.length / this.pageSize) // 总页数
-               this.currentPage = this.currentPage > totalPage ? totalPage : this.currentPage
-               this.currentPage = this.currentPage < 1 ? 1 : this.currentPage;
-             }
+               this.getTeacherList(this.page)
+              }
          },
          handleDeleteTeacherErr(err) {
              console.log(err)
@@ -389,10 +399,6 @@
          handleSizeChange(newSize) {
              this.pageSize = newSize;
              this.getTeacherList();
-         },
-         //监听页码值改变事件
-         handleCurrentChange(val) {
-            this.currentPage = val;
          },
          //获取级联选择器中的数据
          getOPtions() {

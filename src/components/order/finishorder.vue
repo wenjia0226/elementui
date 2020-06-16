@@ -100,7 +100,7 @@
               data: param,
               url: '/lightspace/orderList'
           }).then((res) => {
-            // console.log(res)
+            console.log(res)
             if(res.data.status == 200) {
               this.orderList = res.data.data.content;
               this.size = res.data.data.size;
