@@ -15,7 +15,7 @@
        </el-col>
       </el-row>
       <el-table :data="this.cooparationList" border  stripe style="width: 100%">
-        <el-table-column label="姓名" prop="name"></el-table-column>
+        <el-table-column label="机构名称" prop="name"></el-table-column>
         <el-table-column label="电话" prop="phone"></el-table-column>
         <el-table-column label="地址" prop="address"></el-table-column>
         <el-table-column label="图片"  prop="imgurl" min-width="20%" >
@@ -34,7 +34,7 @@
       <!-- 添加对话框 -->
       <el-dialog title="添加机构" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
           <el-form :model="addForm" :rules="addRules" ref="addFormRef" label-width="120px">
-              <el-form-item label="姓名" prop="name" >
+              <el-form-item label="机构名称" prop="name" >
                   <el-input v-model="addForm.name"></el-input>
               </el-form-item>
               <el-form-item label="电话" prop="phone">

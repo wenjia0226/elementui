@@ -67,13 +67,13 @@
       },
      handleChange(item) {
         this.schoolId = item[0];
-        console.log(item[0])
 
      },
 
 
      getCode() {
-        console.log(this.schoolId)
+        
+        if(this.schoolId) {
       this.loading = this.$loading({
          lock: true,
          text: '生成中,请耐心等候...',
@@ -90,6 +90,12 @@
          url: '/lightspace/download',
          data: param
        }).then(this.handleGetCodeSucc.bind(this)).catch(this.handleGetCodeErr.bind(this))
+       }else {
+         this.$message({
+            message: '请先选择学校',
+            type: 'warning'
+          });
+       }
     },
     handleGetCodeSucc(res) {
       // console.log(res)

@@ -13,12 +13,12 @@
            </el-input>
        </el-col>
        <el-col :span="6">
-              <el-button type="primary" @click="addDialogVisible = true">添加商品</el-button>
+             <el-button type="primary" @click="addDialogVisible = true">添加商品</el-button>
        </el-col>
        <el-col :span="6">
          <el-button  type="primary" @click="switchShow">{{showFlag}}兑换人数</el-button>
        </el-col>
-      </el-row>
+      </el-row> 
       <el-table :data="this.content" border  stripe style="width: 100%"  v-show="!this.searchContent.length">
         <el-table-column type="index"></el-table-column>
         <el-table-column label="商品名称" width= '150' prop="name"></el-table-column>

@@ -49,7 +49,7 @@ export default {
      created() {
         this.token = window.sessionStorage.getItem('token');
         this.getOPtions();
-        this.getTableList();
+        // this.getTableList();
 
     },
     data() {
@@ -129,6 +129,7 @@ export default {
            window.sessionStorage.setItem('classId', item[1]);
         },
         seatQuery() {
+
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('classId', this.classId);
@@ -177,6 +178,7 @@ export default {
         },
         //获取座位列表
         getSeatList() {
+          if(this.classId) {
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('classId', this.classId);
@@ -186,6 +188,12 @@ export default {
                 data: param
             }).then(this.handleGetClassReorcdSucc.bind(this))
             .catch(this.handleGetClassRecordErr.bind(this))
+            }else {
+             this.$message({
+                message: '请先选择学校班级',
+                type: 'warning'
+              });
+            }
         },
         handleGetClassReorcdSucc(res) {
            if(res.data.status === 10204) {

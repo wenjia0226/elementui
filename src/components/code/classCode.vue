@@ -74,7 +74,8 @@
 
 
      getCode() {
-      this.loading = this.$loading({
+		if(this.classId) {
+		this.loading = this.$loading({
          lock: true,
          text: '生成中,请耐心等候...',
          spinner: 'el-icon-loading',
@@ -89,6 +90,12 @@
          url: '/lightspace/download',
          data: param
        }).then(this.handleGetCodeSucc.bind(this)).catch(this.handleGetCodeErr.bind(this))
+	   }else {
+	     this.$message({
+	        message: '请先选择学校班级',
+	        type: 'warning'
+	      });
+	   }
     },
     handleGetCodeSucc(res) {
       if(res.data.status == 200) {

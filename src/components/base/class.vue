@@ -154,16 +154,26 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button@click=" handleClose">重置</el-button>
+                <el-button@click=" handleClose">取消</el-button>
                 <el-button type="primary" @click=" sumitClass">确 定</el-button>
             </span>
         </el-dialog>
         <!-- 修改班级对话框 -->
         <el-dialog title="修改班级" :visible.sync="editVisible" width="50%" @close="editDialogClosed">
             <el-form :model="editClassForm" :rules="editClassRules" ref="editClassRef" label-width="120px">
-                <el-form-item label="所属学校" prop="schoolName" >
+                <!-- <el-form-item label="所属学校" prop="schoolName" >
                     <el-cascader v-model="selectedOptions"  :options="school" :props ="cateProps" @change="handleChange">
                     </el-cascader>
+                </el-form-item> -->
+               <el-form-item label="所属学校"  >
+                    <el-select v-model="editClassForm.schoolId" placeholder="请选择"   @change="handleEditChange">
+                      <el-option
+                        v-for="item in school"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="班级" prop="className">
                     <el-input v-model="editClassForm.className" clearable></el-input>
@@ -207,12 +217,12 @@ export default {
         this.fondId = user.split('-')[2];
          if(this.identity == 1) {  // admin
            this.getSchoolList();
-           this.getClassList('', 1);
+           this.type == '';
+           this.getClassList(this.type, 1);
          }else if(this.identity == 2) {   //2 校长
            this.type = 'school';
            this.getSchoolClasses(this.fondId);
            this.getClassList(this.type,1);
-
         }else if(this.identity == 3) {   // 教师
           this.type = "class";
           this.id= this.fondId;
@@ -274,13 +284,13 @@ export default {
               bbLength:  { required: true,  validator: valiNumberPass1,message: '请输入黑板长度', trigger: 'blur' },
               volume:  { required: true, type:'number', message: '请输入班级容量', trigger: 'blur' },
               experiment: {required: true, message: '请选择是否是实验班', trigger: 'blur'}
-
           },
           cateProps: {
               label: 'name', //看到的是哪个属性
               value: 'id', // 选中的是谁的值
               children: 'children' //哪个属性实现父子节点嵌套
           },
+          page: 1,
           classList: [],
           currentPage: 1,
           pageSize: 5,
@@ -294,7 +304,8 @@ export default {
               volume: '',
               description: '',
               experiment: '',
-              schoolName: ''
+              schoolName: '',
+              schoolId: ''
           },
           editClassRules: {
               schoolName:  { required: true, message: '请选择学校', trigger: 'blur' },
@@ -308,6 +319,9 @@ export default {
         }
     },
     methods: {
+      handleEditChange(val) {
+        this.editClassForm.schoolId = val;
+      },
       //搜索
       getRecodRight() {
         this.searchResult = true;
@@ -471,6 +485,13 @@ export default {
             this.$router.push('/login');
            } else if(res.data.status == 200) {
              this.schoolList = res.data.data;
+             let options = res.data.data;
+             options.forEach((item, index) => {
+               this.school.push({
+                 value: item.id,
+                 label: item.name
+               })
+             })
           }
       },
       handleGetSchoolErr(error) {
@@ -507,7 +528,6 @@ export default {
         }).then(this.handleGetSearchSucc.bind(this)).catch(this.handleGetSearchErr.bind(this))
       },
       handleGetSearchSucc(res) {
-        console.log(res, 123)
         if(res.data.status == 200) {
           this.classesList = res.data.data;
           this.classesList.forEach((item) => {
@@ -571,7 +591,6 @@ export default {
          this.$refs.addClassRef.resetFields();
          this.addClassForm.description = ''
         },
-
         addClass() {
             this.addClassVisible = true
         },
@@ -699,7 +718,8 @@ export default {
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.editClassForm = res.data.data;
-              this.selectedOptions = res.data.data.schoolId;
+              this.selectedOptions[0] = res.data.data.schoolId;
+             this.selectedOptions[1] = res.data.data.id;
               this.editVisible = true;
             }
         },
@@ -712,7 +732,7 @@ export default {
                 if(!valid)  return;
                 let param = new URLSearchParams();
                 param.append('token', this.token);
-                param.append('schoolId',this.schoolId);
+                param.append('schoolId',this.editClassForm.schoolId);
                 param.append('className',this.editClassForm.className);
                 param.append('roomLength',this.editClassForm.roomLength);
                 param.append('roomWidth',this.editClassForm.roomWidth);
@@ -730,6 +750,7 @@ export default {
                 })
         },
          handleEditSaveClassSucc(res) {
+
              if(res.data.status === 10204) {
                  this.$message.error(res.data.msg);
                  this.$router.push('/login');
@@ -740,7 +761,8 @@ export default {
                 this.editVisible = false;
                 //提示修改成功
                 this.$message.success('更新班级信息成功');
-                this.getClassList();
+
+                this.getClassList(this.type, this.page);
              }
         },
         handleEditSaveClassErr(err) {
@@ -786,9 +808,7 @@ export default {
             console.log(err)
         }
     }
-
 }
 </script>
 <style lang="less" scoped>
-
 </style>

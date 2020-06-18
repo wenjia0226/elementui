@@ -138,7 +138,7 @@
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click=" handleClose">重置</el-button>
+                    <el-button @click=" handleClose">取消</el-button>
                     <el-button type="primary" @click="submitRecord" >确 定</el-button>
                 </span>
             </el-dialog>

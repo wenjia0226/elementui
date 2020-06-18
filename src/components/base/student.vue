@@ -155,32 +155,32 @@
                        placeholder="选择日期">
                       </el-date-picker>
                    </el-form-item>
-                   <el-form-item label="年龄" prop="age">
+                   <el-form-item label="年龄">
                         <el-input v-model.number="addStudentForm.age" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="身高(米)" prop="height">
+                   <el-form-item label="身高(米)" >
                         <el-input v-model="addStudentForm.height" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="体重(KG)" prop="weight">
+                   <el-form-item label="体重(KG)" >
                         <el-input v-model="addStudentForm.weight" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="椅子高度(米)" prop="chairHeight">
+                   <el-form-item label="椅子高度(米)" >
                         <el-input v-model="addStudentForm.chairHeight" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="坐姿高度(米)" prop="sittingHeight">
+                   <el-form-item label="坐姿高度(米)" >
                         <el-input v-model="addStudentForm.sittingHeight" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="是否矫正" prop="correct">
+                   <el-form-item label="是否矫正" >
                             <el-radio v-model="addStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
                             <el-radio v-model="addStudentForm.correct" size="medium" border :label="0">未校正</el-radio>
                    </el-form-item>
-                   <el-form-item label="家长手机号" prop="parentPhone">
+                   <el-form-item label="家长手机号" >
                         <el-input v-model="addStudentForm.parentPhone" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="性格">
                         <el-input v-model="addStudentForm.nature" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="备注" prop="description">
+                   <el-form-item label="备注" >
                         <el-input v-model="addStudentForm.description" clearable></el-input>
                    </el-form-item>
                 </el-form>
@@ -210,32 +210,32 @@
                      placeholder="选择日期">
                     </el-date-picker>
                  </el-form-item>
-                 <el-form-item label="年龄" prop="age">
+                 <el-form-item label="年龄" >
                       <el-input v-model.number="editStudentForm.age" clearable></el-input>
                  </el-form-item>
-                 <el-form-item label="身高(米)" prop="height">
+                 <el-form-item label="身高(米)" >
                       <el-input v-model="editStudentForm.height" clearable></el-input>
                  </el-form-item>
-                 <el-form-item label="体重(KG)" prop="weight">
+                 <el-form-item label="体重(KG)" >
                       <el-input v-model="editStudentForm.weight" clearable></el-input>
                  </el-form-item>
-                 <el-form-item label="椅子高度(米)" prop="chairHeight">
+                 <el-form-item label="椅子高度(米)" >
                       <el-input v-model="editStudentForm.chairHeight" clearable></el-input>
                  </el-form-item>
-                 <el-form-item label="坐姿高度(米)" prop="sittingHeight">
+                 <el-form-item label="坐姿高度(米)" >
                       <el-input v-model="editStudentForm.sittingHeight" clearable></el-input>
                  </el-form-item>
-                 <el-form-item label="是否矫正" prop="correct">
+                 <el-form-item label="是否矫正" >
                           <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
                           <el-radio v-model="editStudentForm.correct" size="medium" border :label="0">未矫正</el-radio>
                  </el-form-item>
-                 <el-form-item label="家长手机号" prop="parentPhone">
+                 <el-form-item label="家长手机号" >
                       <el-input v-model="editStudentForm.parentPhone" clearable></el-input>
                  </el-form-item>
                  <el-form-item label="性格">
                       <el-input v-model="editStudentForm.nature" clearable></el-input>
                  </el-form-item>
-                 <el-form-item label="备注" prop="description">
+                 <el-form-item label="备注" >
                       <el-input v-model="editStudentForm.description" clearable></el-input>
                  </el-form-item>
               </el-form>
@@ -613,6 +613,11 @@ export default {
               item.gender = '男'
             }else {
               item.gender = '女'
+            }
+            if(item.correct == 0) {
+              item.correct = '未校正'
+            }else {
+              item.correct = '矫正'
             }
           })
           this.totalElements = res.totalElements;

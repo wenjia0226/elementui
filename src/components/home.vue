@@ -78,12 +78,7 @@
           <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
           </el-col>
         </el-row>
-       <!-- <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
-        <img src="../assets/image/school.png" @click="gotoScool" class="imgWrap" alt="">
-        <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
-        <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
-        <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt=""> -->
-      </el-main>
+       </el-main>
     </el-container>
     <el-container v-if="showModal &&( this.identity == 3) " >
       <el-main class="mainBox">
@@ -106,7 +101,6 @@
            <el-col :span="6" style="text-align: center">
            <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
           </el-col>
-
            <el-col :span="6" style="text-align: center">
           <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
           </el-col>
@@ -140,7 +134,11 @@ import router from '../router/index'
                   '12': 'common analysis',
                   '22': 'common template',
                   '26': 'common code',
-                  '30': 'common shop'
+                  '30': 'common shop',
+                  '36':'common  grenarationReport',
+                  '41': 'common orderManage',
+                  '46': 'common backManage' 
+                  
                 },
                 secondIconObj: {
                   '2': '',
@@ -166,8 +164,6 @@ import router from '../router/index'
                   '27': '',
                   '28': '',
                   '29': '', //生成二维码
-                  '31': '',
-                  '32': ''//兑换商城
                 }
             }
         },
@@ -221,6 +217,7 @@ import router from '../router/index'
              }
             },
             handleGetMenuListSucc (res){
+          
               if(res.data.status === 10204) {
                   this.$message.error(res.data.msg);
                   // this.$router.push('/login');
@@ -302,6 +299,18 @@ import router from '../router/index'
   }
   .shop {
     background: url('../assets/image/icon/shop.png') center no-repeat;
+    background-size: contain;
+  }
+  .grenarationReport {
+    background: url('../assets/image/icon/reportManage.png') center no-repeat;
+    background-size: contain;
+  }
+  .orderManage {
+    background: url('../assets/image/icon/orderManage.png') center no-repeat;
+    background-size: contain;
+  }
+  .backManage {
+    background: url('../assets/image/icon/backManage.png') center no-repeat;
     background-size: contain;
   }
 
