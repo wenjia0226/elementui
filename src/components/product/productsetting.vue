@@ -16,7 +16,7 @@
               <el-button type="primary" @click="addDialogVisible = true">添加商品</el-button>
        </el-col>
        <el-col :span="6">
-         <el-button  type="primary" @click="switchShow">{{showFlag}}</el-button>
+         <el-button  type="primary" @click="switchShow">{{showFlag}}兑换人数</el-button>
        </el-col>
       </el-row>
       <el-table :data="this.content" border  stripe style="width: 100%"  v-show="!this.searchContent.length">
@@ -273,7 +273,7 @@
             url: '/lightspace/disPlayBuyer',
             data: param
         }).then((res) => {
-         console.log(res)
+         // console.log(res)
           if(this.showFlag =='隐藏') {
             this.showFlag = '显示'
           }else {
