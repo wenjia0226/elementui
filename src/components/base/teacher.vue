@@ -262,9 +262,6 @@
               this.$message.success('搜索成功');
               console.log(res)
               this.content = res.data.data;
-              // this.totalElements = res.totalElements;
-              // this.size = res.size;
-              // this.number = res.number + 1;
             }
         },
         handleQueryErr(err) {

@@ -15,6 +15,9 @@
        <el-col :span="6">
               <el-button type="primary" @click="addDialogVisible = true">添加商品</el-button>
        </el-col>
+       <el-col :span="6">
+         <el-button  type="primary" @click="switchShow">{{showFlag}}</el-button>
+       </el-col>
       </el-row>
       <el-table :data="this.content" border  stripe style="width: 100%"  v-show="!this.searchContent.length">
         <el-table-column type="index"></el-table-column>
@@ -29,6 +32,7 @@
            <img  :src="scope.row.details" class="swiperImg"  style="height: 100px; width: auto;"/>
          </template>
         </el-table-column>
+        <el-table-column label="合作机构" prop="partnershipName"></el-table-column>
         <el-table-column label="生成时间" prop="genTime"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -64,6 +68,7 @@
             <img  :src="scope.row.details" class="swiperImg" />
           </template>
          </el-table-column>
+         <el-table-column label="合作机构" prop="partnershipName"></el-table-column>
          <el-table-column label="生成时间" prop="genTime"></el-table-column>
          <el-table-column label="操作">
            <template slot-scope="scope">
@@ -124,6 +129,16 @@
          　  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
        　</el-upload>
      　　</el-form-item>
+        <el-form-item label="合作机构" prop='coorparation'>
+           <el-select v-model="form2.coorparation" placeholder="请选择"   @change="handleChange">
+             <el-option
+               v-for="item in options"
+               :key="item.value"
+               :label="item.label"
+               :value="item.value">
+             </el-option>
+           </el-select>
+       </el-form-item>
      　　<el-form-item style="padding-top:20px;" label-width="120px" >
           <el-button type="primary" @click="onSubmit">立即创建</el-button>
      　 </el-form-item>
@@ -165,7 +180,18 @@
                　>
                <i class="el-icon-plus"></i>
             </el-upload>
-         </el-form-item>  　　
+         </el-form-item>
+         <el-form-item label="合作机构" prop='partnershipId'>
+                <el-select v-model="editForm.partnershipId" placeholder="请选择"   @change="handleChange">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+            </el-form-item>
+          　　
      　　<el-form-item style="padding-top:20px;" label-width="120px" >
           <el-button type="primary" @click="onresetSubmit">确定修改</el-button>
      　 </el-form-item>
@@ -180,16 +206,20 @@
     created() {
       this.token = window.sessionStorage.getItem('token');
       this.getShopList(1);
+       this.getOPtions();
     },
     data() {
       return {
          token: '',
          query: '',
+         showFlag: '隐藏',
+		 options: [],
          addDialogVisible: false, //控制对话框的显示隐藏
          editDialogVisible: false, //控制对话框的显示隐藏
          picture: [],
          details: [],
          fileList: [],
+         cooparationId: '',
  　　　　shopData: {
    　　　　name: '',
           token: '',
@@ -199,15 +229,18 @@
         form2: {
           name: '',
           addSwiper: '',
-          addDetail: ''
+          addDetail: '',
+		  coorparation: ''
         },
          addShopRules: {
              name: [{required: true, message: '请输入商品名称', trigger: 'blur' }],
+			 coorparation:  [{required: true, message: '请选择门店', trigger: 'blur' }]
          },
          editForm: {
            name: '',
            picture: [],
-           details: ''
+           details: '',
+           partnershipId: ''
          },
  　　　　params2:{},
         productList: [],
@@ -232,6 +265,33 @@
       }
      },
     methods: {
+      switchShow() {
+        let param = new URLSearchParams();
+        param.append('token', this.token);
+        axios({
+            method: "post",
+            url: '/lightspace/disPlayBuyer',
+            data: param
+        }).then((res) => {
+         console.log(res)
+          if(this.showFlag =='隐藏') {
+            this.showFlag = '显示'
+          }else {
+            this.showFlag ='隐藏'
+          }
+
+        }).catch((err) => {
+          console.log(err)
+        })
+      },
+      // 新增合作机构修改
+      handleChange(val) {
+        this.form2.coorparation = val;
+      },
+      // 修改合作机构
+      handleEditChange(val) {
+        this.editForm.partnershipId = val;
+      },
       handleRemove(file, fileList) {
         if(this.reuplodPicture.length) {
           let temp = this.reuplodPicture;
@@ -348,6 +408,7 @@
       param.append('name', this.editForm.name);
       param.append('details', this.reuploadDetail);
       param.append('delPic', this.delPic);
+      param.append('partnershipId', this.editForm.partnershipId)
       this.reuplodPicture.forEach(function (file) {
        param.append('picture', file); // 因为要上传多个文件，所以需要遍历一下才行
             //不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
@@ -357,7 +418,6 @@
         data: param,
         url: '/lightspace/saveProduct'
       }).then((res) => {
-        // console.log(res)
         if(res.data.status == 200) {
           this.editDialogVisible = false;
           this.editForm.name = '';
@@ -382,6 +442,7 @@
          param.append('token', this.token);
          param.append('name', this.form2.name);
          param.append('details', this.details);
+         param.append('partnership', this.form2.coorparation)
          this.fileList.forEach(function (file) {
           param.append('picture', file); // 因为要上传多个文件，所以需要遍历一下才行
                //不要直接使用我们的文件数组进行上传，你会发现传给后台的是两个Object
@@ -391,6 +452,7 @@
            data: param,
            url: '/lightspace/addProduct'
          }).then((res) => {
+           // console.log(res)
            if(res.data.status == 200) {
              this.addDialogVisible = false;
              this.form2.name = '';
@@ -477,7 +539,35 @@
        }).catch((err) => {
          console.log(err)
        })
-     }
+     },
+	 //获取级联选择器中的数据
+	 getOPtions() {
+	     let param = new URLSearchParams();
+	     param.append('token', this.token);
+	     axios({
+	         method: 'post',
+	         url: '/lightspace/partnershipList',
+	         data: param
+	     }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
+	 },
+	 handleGetOptionSucc (res) {
+     // console.log(res)
+	   if(res.data.status === 10204) {
+	       this.$message.error(res.data.msg);
+	       this.$router.push('/login');
+	   } else if(res.data.status == 200) {
+	      let options = res.data.data;
+	      options.forEach((item, index) => {
+	        this.options.push({
+	          value: item.id,
+	          label: item.name
+	        })
+	      })
+	   }
+	 },
+	 handleGetOptionErr(err) {
+	     console.log(err)
+	 }
     }
     }
 </script>
@@ -521,5 +611,8 @@
     height: 50px !important;
     margin: 5px;
     display: inline-block;
+  }
+  .bgGrey {
+    background: grey
   }
 </style>

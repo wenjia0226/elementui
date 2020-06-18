@@ -86,7 +86,7 @@
                <el-input v-model="editClertForm.password"></el-input>
            </el-form-item>
           <el-form-item label="所属门店" prop='partnershipId'>
-              <el-select v-model="editClertForm.partnershipId" placeholder="请选择"   @change="handleChange">
+              <el-select v-model="editClertForm.partnershipId" placeholder="请选择"   @change="handleEditChange">
                 <el-option
                   v-for="item in options"
                   :key="item.value"
