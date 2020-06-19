@@ -111,7 +111,6 @@
          this.showDialog = false;
          this.loading = true;
          this.getSpecList()
-
        },
        handleSuccess(res, file, fileList) {
           this.loading = false;

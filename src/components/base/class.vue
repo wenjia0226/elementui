@@ -334,11 +334,12 @@ export default {
             this.searchResult = false;
           }
         }else if(this.type == 'class') {  //如果老师搜索
-          if(this.student) {
-             this.getSearchRecordDirect('student', this.studentId)
-          }else {
-            this.getStudentList(this.type, 1);
-          }
+        console.log(this.fondId)
+          // if(this.student) {
+          //    this.getSearchRecordDirect('student', this.studentId)
+          // }else {
+          //   this.getStudentList(this.type, 1);
+          // }
         }else {
         //如果管理员搜索
           if(this.schoolSelected && this.className) {
@@ -575,7 +576,7 @@ export default {
            this.$router.push('/login');
        } else if(res.data.status == 10210) {
            this.$message.error(res.data.msg);
-           this.getClassList();
+           this.getClassList(this.type, this.page);
            this.searchClassList = [];
         }else if(res.data.status == 200) {
            this.$message.success('搜索成功');

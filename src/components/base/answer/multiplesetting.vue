@@ -19,7 +19,7 @@
      <el-table-column label="选项三" prop="optionThree"></el-table-column>
      <el-table-column label="选项四" prop="optionFour"></el-table-column>
      <el-table-column label="答案" prop="keyStr"></el-table-column>
-      <el-table-column label="难度等级" prop="level"></el-table-column>
+     <el-table-column label="难度等级" prop="level"></el-table-column>
      <el-table-column label="类型" prop="type"></el-table-column>
      <el-table-column label="操作">
          <template slot-scope="scope">
@@ -111,6 +111,7 @@
          this.showDialog = false;
          this.loading = true;
          this.getSpecList()
+
        },
        handleSuccess(res, file, fileList) {
           this.loading = false;
@@ -137,7 +138,7 @@
          let param = new FormData();
          param.append('token', this.token);
          param.append('page', this.page);
-         param.append('type', 1)
+         param.append('type', 2)
          axios({
            method: 'post',
            data: param,
