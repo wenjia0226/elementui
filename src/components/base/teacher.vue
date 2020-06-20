@@ -178,14 +178,31 @@
       }
     },
     created() {
+      // this.token = window.sessionStorage.getItem('token');
+      // this.getTeacherList(this.page);
+      // this.getOPtions();
       this.token = window.sessionStorage.getItem('token');
-      this.getTeacherList(this.page);
-      this.getOPtions();
+      let user = window.sessionStorage.getItem('token');
+      this.identity = user.split('-') [1];
+      this.fondId = user.split('-')[2];
+       if(this.identity == 1) {  // admin
+
+         this.type == '';
+         this.getTeacherList(this.type, this.page);
+       }else if(this.identity == 2) {   //2 校长
+          this.type = 'school';
+          this.getTeacherList(this.type, this.page);
+        }
+      // }else if(this.identity == 3) {   // 教师
+      //   this.type = "class";
+      //   this.id= this.fondId;
+      //  this.getTeacherList(this.type, this.page);
+      // }
     },
     methods: {
       handleCurrentChange(val) {
         this.page = val;
-        this.getTeacherList(val)
+        this.getTeacherList(this.type, val)
       },
       //添加老师
       submitTeacher() {
@@ -275,10 +292,12 @@
        this.addDialogVisible = false;
        this.$refs.addteacherRef.resetFields();
       },
-      getTeacherList(page) {
+      getTeacherList(type, page) {
         let param = new URLSearchParams();
         param.append('token', this.token);
         param.append('page', page);
+        param.append('type', type);
+        param.append('id', this.fondId)
         axios({
           method: 'post',
           data: param,

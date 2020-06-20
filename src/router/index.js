@@ -45,7 +45,8 @@ import waitorder from '@/components/order/waitorder'
 import finishorder from '@/components/order/finishorder'
 import singlesetting from '@/components/answer/singlesetting'
 import multiplesetting from '@/components/answer/multiplesetting'
-
+import examine from '@/components/examineBox/examine.vue'
+import unexamine from '@/components/examineBox/unexamine.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -103,7 +104,9 @@ const router = new Router({
         {path: '/waitorder', component: waitorder},
         {path: '/finishorder', component: finishorder},
         {path: '/singlesetting', component: singlesetting},
-        {path: '/multiplesetting', component: multiplesetting}
+        {path: '/multiplesetting', component: multiplesetting},
+        {path: '/examine', component: examine},
+        {path: '/unexamine', component: unexamine}
       ]
     },
 

@@ -13,17 +13,7 @@
                     <el-input placeholder="输入学校名称" v-model="query" clearable @clear="querySchool">
                         <el-button slot="append" icon="el-icon-search" @click="querySchool"></el-button>
                      </el-input>
-                    <!-- <el-autocomplete
-                       class="inline-input"
-                       v-model="state1"
-                       :fetch-suggestions="querySearch"
-                       placeholder="请输入学生姓名"
-                       clearable
-                       @select="handleSelect">
-
-                       </el-autocomplete> -->
-
-                 </el-col>
+                  </el-col>
                  <el-col :span="6">
                         <el-button type="primary" @click="addDialogVisible = true">添加学校</el-button>
                  </el-col>

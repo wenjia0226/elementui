@@ -604,7 +604,6 @@ export default {
          }).then(this.getStuListSucc.bind(this)).catch(this.getStuListErr.bind(this).bind(this))
        },
        getStuListSucc(res) {
-         console.log(res)
          if(res.data.status == 200 && res.data.data !== '') {
           res ? res= res.data.data: '';
           this.content = res.content;
