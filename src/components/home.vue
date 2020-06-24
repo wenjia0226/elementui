@@ -44,7 +44,7 @@
 				<router-view></router-view>
 			</el-main>
 		</el-container>
-    <el-container v-if="showModal &&( this.identity == 1 || this.identity == 2 ) " >
+    <el-container v-show="showModal &&(this.identity == 1 || this.identity == 2 ) " >
       <el-main class="mainBox">
       <!-- <el-button @click="hideModal" type="primary"> 裸眼检测</el-button>
         <el-button @click="gotoWear" type="primary"> 戴镜检测</el-button>
@@ -60,7 +60,7 @@
             <img src="../assets/image/luoyan.png"  @click="gotoLuo" class="imgWrap" alt="">
           </el-col>
            <el-col :span="8" style="text-align: center">
-           <img src="../assets/image/school.png" @click="gotoScool" class="imgWrap" alt="">
+           <img src="../assets/image/school.png" @click="gotoShcool" class="imgWrap" alt="">
           </el-col>
           <el-col :span="8" style="text-align: center">
             <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
@@ -80,7 +80,7 @@
         </el-row>
        </el-main>
     </el-container>
-    <el-container v-if="showModal &&( this.identity == 3) " >
+    <el-container v-show="showModal &&( this.identity == 3) " >
       <el-main class="mainBox">
       <!-- <el-button @click="hideModal" type="primary"> 裸眼检测</el-button>
         <el-button @click="gotoWear" type="primary"> 戴镜检测</el-button>
@@ -105,11 +105,6 @@
           <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
           </el-col>
         </el-row>
-       <!-- <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
-        <img src="../assets/image/school.png" @click="gotoScool" class="imgWrap" alt="">
-        <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
-        <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
-        <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt=""> -->
       </el-main>
     </el-container>
     </el-container>
@@ -122,7 +117,7 @@ import router from '../router/index'
             return {
               token: '',
               loginName: '',
-                showModal: true,
+                showModal: '',
                 menuList: [] ,//左侧菜单的获取,
                 activePath: '', //被激活的链接地址
                 token: '',
@@ -137,8 +132,8 @@ import router from '../router/index'
                   '30': 'common shop',
                   '36':'common  grenarationReport',
                   '41': 'common orderManage',
-                  '46': 'common backManage' 
-                  
+                  '46': 'common backManage'
+
                 },
                 secondIconObj: {
                   '2': '',
@@ -169,6 +164,8 @@ import router from '../router/index'
         },
         created() {
             this.getMenuList();
+            this.showModal = window.sessionStorage.getItem('showModal');
+      
             this.activePath = window.sessionStorage.getItem('activePath')
             this.loginName = window.sessionStorage.getItem('loginName');
             let user = window.sessionStorage.getItem('token');
@@ -177,26 +174,38 @@ import router from '../router/index'
         methods: {
           gotoLuo() {
             this.showModal = false;
+            window.sessionStorage.setItem('showModal', this.showModal);
+            this.activePath = '/screeningsetting';
             router.push('/screeningsetting')
           },
           gotoWear(){
             this.showModal = false;
+            window.sessionStorage.setItem('showModal', this.showModal);
+            this.activePath = '/screeningwearsetting';
             router.push('/screeningwearsetting')
           },
-          gotoScool() {
+          gotoShcool() {
             this.showModal = false;
+            window.sessionStorage.setItem('showModal', this.showModal);
+            this.activePath = '/schoolStatistics';
             router.push('/schoolStatistics')
           },
           gotoClass() {
-            this.showModal = false;
+           this.showModal = false;
+            window.sessionStorage.setItem('showModal', this.showModal);
+            this.activePath = '/classStatistics';
             router.push('/classStatistics')
           },
           gotoSchoolReport() {
             this.showModal = false;
+            window.sessionStorage.setItem('showModal', this.showModal);
+            this.activePath = '/schoolreport';
             router.push('/schoolreport')
           },
           gotoClassReport() {
-            this.showModal = false;
+              this.showModal = true;
+            window.sessionStorage.setItem('showModal', this.showModal);
+            this.activePath = '/classreport';
             router.push('/classreport')
           },
           logout () {
@@ -217,10 +226,9 @@ import router from '../router/index'
              }
             },
             handleGetMenuListSucc (res){
-          
               if(res.data.status === 10204) {
                   this.$message.error(res.data.msg);
-                  // this.$router.push('/login');
+                  this.$router.push('/login');
               } else if(res.data.status == 200) {
                  this.menuList = res.data.data;
                 // console.log(this.menuList)

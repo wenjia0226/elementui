@@ -31,21 +31,33 @@
    <!-- 修改用户对话框 -->
     <el-dialog
       title="提示"
+      loop = "false"
       :visible.sync="editDialogVisible"
       width="30%"
       ref="editPic"
       :before-close="handleClose">
       <div class="block">
-       <el-carousel trigger="click" height="150px">
-         <el-carousel-item v-for="item in picList" :key="item">
-            <el-image :src="item" fit="fit"></el-image>
-          
+       <el-carousel trigger="click" height="300px">
+         <el-carousel-item  class="itemWrap"v-for="(item, index) in picList" :key="item">
+               <img :src="item" style="height: 260px;margin-bottom: 20px"></img>
          </el-carousel-item>
        </el-carousel>
+        <!-- <el-checkbox-group  v-model="checkList"  @change="handlecheckedChange">
+           <el-checkbox label="1个爱眼币"></el-checkbox>
+           <el-checkbox label="2个爱眼币"></el-checkbox>
+           <el-checkbox label="3个爱眼币"></el-checkbox>
+           <el-checkbox label="4个爱眼币"></el-checkbox>
+        </el-checkbox-group> -->
+         <el-radio-group v-model="radio" @change="handlecheckedChange">
+            <el-radio :label="1">1个爱眼币</el-radio>
+            <el-radio :label="2">2个爱眼币</el-radio>
+            <el-radio :label="3">3个爱眼币</el-radio>
+            <el-radio :label="4">4个爱眼币</el-radio>
+          </el-radio-group>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="submitConfirm">确 定</el-button>
       </span>
     </el-dialog>
    </div>
@@ -66,14 +78,20 @@
       number: 1,
       content: [],
       editDialogVisible: false,
-      picList: []
+      picList: [],
+      radio: 0,
+      itemId: '',
+      integral: 0
     }
   },
   methods:  {
+    handlecheckedChange(val) {
+       this.integral = val;
+    },
     getTaskExamineList() {
         let param = new URLSearchParams();
         param.append('token', this.token);
-        param.append('type', 'unexamine');
+        param.append('type', 'NULL');
         param.append('page', this.page);
         axios({
             method: 'post',
@@ -84,7 +102,6 @@
         })
     },
     handleGetTaskListSucc(res) {
-        console.log(res)
       if(res.data.status == 200 && res.data.data !== '') {
        res ? res= res.data.data: '';
        this.content = res.content;
@@ -99,15 +116,69 @@
       this.getTaskExamineList()
     },
     showEditDialog (row) {
-      let picList = row.path;
+      this.itemId = row.id;
+     let picList = row.path;
       this.picList = row.path;
       this.editDialogVisible = true;
+    },
+    submitConfirm() {
+      let that= this;
+      let param = new URLSearchParams();
+      param.append('id', this.itemId);
+      param.append('integral', this.integral);
+      param.append('token', this.token);
+      axios({
+          method: 'post',
+          url: '/lightspace/examineTask',
+          data: param
+      }).then((res) => {
+        if(res.data.status == 200) {
+          that.editDialogVisible = false;
+          that.getTaskExamineList();
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
     },
     //关闭按钮
     handleClose() {
      this.editDialogVisible = false;
      // this.$refs.editPic.resetFields();
     },
+    //根据id删除
+    async deleteItem(row) {
+      console.log(row)
+      let id = row.id;
+        const confirmResult = await this.$confirm('此操作将永久删除该审核记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+        }).catch(err => err)
+        if(confirmResult !== 'confirm') {
+            return this.$message.info('已经取消删除')
+        }
+        let param = new URLSearchParams();
+        param.append('token', this.token);
+        param.append('id', id)
+        axios({
+            method: 'post',
+            url: '/lightspace/deleteTaskExamine',
+            data: param
+        }).then(this.handleDeleteShoolSucc.bind(this))
+        .catch(this.handleDeleteSchoolErr.bind(this))
+        },
+        handleDeleteShoolSucc(res) {
+          if(res.data.status === 10204) {
+              this.$message.error(res.data.msg);
+              this.$router.push('/login');
+          } else if(res.data.status == 200) {
+            this.$message.success('删除记录成功');
+            this.getTaskExamineList();
+           }
+        },
+        handleDeleteSchoolErr(err) {
+            console.log(err)
+        },
   }
   }
 </script>

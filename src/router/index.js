@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login'
 import Home from '@/components/home'
-import Welcome from '@/components/welcome'
 import School from '@/components/base/school'
 import Class from '@/components/base/class'
 import Student from '@/components/base/student'
@@ -65,9 +64,8 @@ const router = new Router({
   {
       path: '/home',
       component: Home,
-      // redirect: '/schoolsetting',
+       // redirect: '/schoolsetting',
       children: [
-        {path: '/welcome', component: Welcome},
         {path: '/schoolsetting', component: School},
         {path: '/classsetting', component: Class},
         {path: '/studentList', component: Student},
@@ -114,6 +112,7 @@ const router = new Router({
 })
 //挂载路由守卫
 router.beforeEach((to, from, next) => {
+  // if(from.path == '/') return next(to.path)
   // to 将要访问的路径 from 代表从哪个路径而来 next表示放行
   if(to.path ==='/login')  return next();
   const tokenStr = sessionStorage.getItem('token');

@@ -90,22 +90,26 @@ export default {
         handleLoginSucc(res) {
          if(res.status !== 200) return this.$message.error('登录失败');
             //将token 存到sessionStorage
-            window.sessionStorage.setItem('token', res.data.data.token)
+            window.sessionStorage.setItem('token', res.data.data.token);
+            window.sessionStorage.setItem('showModal', true);
             this.$message.success('登录成功');
-            console.log(res.data.data.name, 'login');
-            
+
             window.sessionStorage.setItem('loginName', res.data.data.name)
             if(window.sessionStorage.getItem('token')) {
-                this.$router.push('/home')
-            }else {
+                this.$router.push('/home');
+
+            }else{
               this.$message.error('账号过期，请重新登录');
-              this.$router.push('/login')
+
             }
 
         },
         handleLoginErr(err) {
           this.$message.error('账号密码不存在')
             console.log(err, err.msg)
+        },
+        home() {
+           this.$router.push('/home');
         }
     }
 
