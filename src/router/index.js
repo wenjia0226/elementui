@@ -46,6 +46,8 @@ import singlesetting from '@/components/answer/singlesetting'
 import multiplesetting from '@/components/answer/multiplesetting'
 import examine from '@/components/examineBox/examine.vue'
 import unexamine from '@/components/examineBox/unexamine.vue'
+import answerconfig from '@/components/config/answerconfig.vue'
+import momentsconfig from '@/components/config/momentsconfig.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -104,7 +106,9 @@ const router = new Router({
         {path: '/singlesetting', component: singlesetting},
         {path: '/multiplesetting', component: multiplesetting},
         {path: '/examine', component: examine},
-        {path: '/unexamine', component: unexamine}
+        {path: '/unexamine', component: unexamine},
+        {path: '/answerconfig', component: answerconfig},
+        {path: '/momentsconfig', component: momentsconfig}  
       ]
     },
 
