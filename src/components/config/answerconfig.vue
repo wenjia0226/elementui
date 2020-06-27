@@ -7,12 +7,12 @@
          <el-breadcrumb-item>爱眼答题配置</el-breadcrumb-item>
      </el-breadcrumb>
      <el-card>
-       <el-col :span="6">
+       <el-col :span="6" style="margin-bottom: 20px">
               <el-button type="primary" @click="editDati">修改答题</el-button>
        </el-col>
 
      <!-- 修改用户对话框 -->
-      <el-dialog title="修改教师信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+      <el-dialog title="修改答题信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
          <el-form :model="editForm" ref="editRef"label-width="100px">
              <el-form-item label="一级标题" >
                 <el-input v-model="editForm.title"></el-input>
@@ -71,7 +71,6 @@
     methods: {
       // 重新上传详情图
       reupload(raw) {
-        console.log(raw)
         this.reuploadDetail = raw.file;
       },
       handleRemoveDetail(file, fileList) {
@@ -95,10 +94,11 @@
           // console.log(res)
           if(res.data.status == 200) {
             this.editForm = res.data.data;
-            let  detailFile = res.data.data.path
+            let  detailFile = res.data.data.pic
             this.detailFile.push({
               url: detailFile
             });
+			// console.log(this.detailFile)
           }else if(res.data.status == 10204) {
             this.$notify({
               title: '警告',
@@ -113,15 +113,14 @@
           console.log(err)
         })
       },
-   editInfo() {
+      editInfo() {
         let param = new FormData();
         param.append('token', this.token);
-        param.append('id', this.goodsId);
         param.append('title', this.editForm.title);
         param.append('subtitle', this.editForm.subtitle);
         param.append('introduction', this.editForm.introduction);
         param.append('details', this.editForm.details);
-        param.append('file', this.reuploadDetail.file)
+        param.append('file', this.reuploadDetail)
         axios({
           method: 'post',
           data: param,
@@ -131,7 +130,8 @@
           if(res.data.status == 200) {
             this.editDialogVisible = false;
             this.$refs.editRef.resetFields();
-            this.detailFile = [];
+            this.$refs.editUpload.clearFiles();
+            this.detailFile = [];  //清空回显
             this.reuploadDetail = [];
 
           }
@@ -140,7 +140,9 @@
         })
       },
       editDialogClosed() {
-         this.$refs.editRef.resetFields()
+         this.$refs.editUpload.clearFiles();
+         this.$refs.editRef.resetFields();
+
       },
     }
   }
