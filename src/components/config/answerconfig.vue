@@ -140,9 +140,10 @@
         })
       },
       editDialogClosed() {
+          this.detailFile = [];  //清空回显
          this.$refs.editUpload.clearFiles();
          this.$refs.editRef.resetFields();
-
+        
       },
     }
   }
