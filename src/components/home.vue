@@ -73,7 +73,6 @@
            <el-col :span="8" style="text-align: center">
            <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
           </el-col>
-
            <el-col :span="8" style="text-align: center">
           <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
           </el-col>
@@ -132,7 +131,9 @@ import router from '../router/index'
                   '30': 'common shop',
                   '36':'common  grenarationReport',
                   '41': 'common orderManage',
-                  '46': 'common backManage'
+                  '46': 'common backManage',
+                  '50': 'common record',
+                  '53': 'common config'
 
                 },
                 secondIconObj: {
@@ -165,7 +166,6 @@ import router from '../router/index'
         created() {
             this.getMenuList();
             this.showModal = window.sessionStorage.getItem('showModal');
-      
             this.activePath = window.sessionStorage.getItem('activePath')
             this.loginName = window.sessionStorage.getItem('loginName');
             let user = window.sessionStorage.getItem('token');
@@ -231,7 +231,6 @@ import router from '../router/index'
                   this.$router.push('/login');
               } else if(res.data.status == 200) {
                  this.menuList = res.data.data;
-                // console.log(this.menuList)
               }
 
             },
@@ -319,6 +318,14 @@ import router from '../router/index'
   }
   .backManage {
     background: url('../assets/image/icon/backManage.png') center no-repeat;
+    background-size: contain;
+  }
+  .record {
+    background: url('../assets/image/icon/record.png') center no-repeat;
+    background-size: contain;
+  }
+  .config {
+    background: url('../assets/image/icon/config.png') center no-repeat;
     background-size: contain;
   }
 
