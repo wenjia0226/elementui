@@ -122,8 +122,6 @@
         param.append('introduction', this.editForm.introduction);
         param.append('details', this.editForm.details);
         param.append('file', this.reuploadDetail.file)
-         console.log(this.reuploadDetail)
-
         axios({
           method: 'post',
           data: param,

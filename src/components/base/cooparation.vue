@@ -138,6 +138,7 @@
               this.addDialogVisible = false;
               this.$message.success('添加成功');
               this.$refs.addFormRef.resetFields();
+              this.$refs.upload.clearFiles(); 
               this.getCooparationList();
             }
         },
