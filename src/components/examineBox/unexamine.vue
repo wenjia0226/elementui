@@ -11,6 +11,7 @@
           <el-table-column label="学校名称" prop="schoolName"></el-table-column>
           <el-table-column label="班级名称" prop="className"></el-table-column>
           <el-table-column label="学生名称" prop="studentName"></el-table-column>
+          <el-table-column label="发布内容" prop="contents"></el-table-column>
           <el-table-column label="审核时间" prop="date"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -39,26 +40,23 @@
       <div class="block">
        <el-carousel trigger="click" height="300px">
          <el-carousel-item  class="itemWrap"v-for="(item, index) in picList" :key="item">
-               <img :src="item" style="height: 260px;margin-bottom: 20px"></img>
+            <img :src="item" style="height: 260px;margin-bottom: 20px"></img>
          </el-carousel-item>
        </el-carousel>
-        <!-- <el-checkbox-group  v-model="checkList"  @change="handlecheckedChange">
-           <el-checkbox label="1个爱眼币"></el-checkbox>
-           <el-checkbox label="2个爱眼币"></el-checkbox>
-           <el-checkbox label="3个爱眼币"></el-checkbox>
-           <el-checkbox label="4个爱眼币"></el-checkbox>
-        </el-checkbox-group> -->
-         <el-radio-group v-model="radio" @change="handlecheckedChange">
+        <el-input type="textarea" style="margin: 10px 0" v-model="textInput"></el-input>
+        <el-radio-group v-model="radio" @change="handlecheckedChange">
+          <el-radio :label="0">0个爱眼币</el-radio>
             <el-radio :label="1">1个爱眼币</el-radio>
             <el-radio :label="2">2个爱眼币</el-radio>
             <el-radio :label="3">3个爱眼币</el-radio>
             <el-radio :label="4">4个爱眼币</el-radio>
+            <el-radio :label="5">5个爱眼币</el-radio>
           </el-radio-group>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitConfirm">确 定</el-button>
-      </span>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="editDialogVisible = false">取 消</el-button>
+          <el-button type="primary" disabled @click="submitConfirm">确 定</el-button>
+        </span>
     </el-dialog>
    </div>
 </template>
@@ -108,6 +106,7 @@
        this.totalElements = res.totalElements;
        this.size = res.size;
        this.number = res.number + 1;
+       console.log(this.content)
       }
     },
     //监听页码值改变事件
@@ -117,8 +116,9 @@
     },
     showEditDialog (row) {
       this.itemId = row.id;
-     let picList = row.path;
+      let picList = row.path;
       this.picList = row.path;
+      this.textInput = row.contents
       this.editDialogVisible = true;
     },
     submitConfirm() {

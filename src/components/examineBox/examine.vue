@@ -14,11 +14,6 @@
           <el-table-column label="审核时间" prop="date"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" size="middle" @click="showEditDialog(scope.row)" >审批</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
               <el-button type="danger" size="middle" @click="deleteItem(scope.row)" >删除</el-button>
             </template>
           </el-table-column>
