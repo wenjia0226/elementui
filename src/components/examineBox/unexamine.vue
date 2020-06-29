@@ -43,8 +43,8 @@
             <img :src="item" style="height: 260px;margin-bottom: 20px"></img>
          </el-carousel-item>
        </el-carousel>
-        <el-input type="textarea" style="margin: 10px 0" v-model="textInput"></el-input>
-        <el-radio-group v-model="radio" @change="handlecheckedChange">
+        <el-input  disabled style="margin: 10px 0" v-model="textInput"></el-input>
+        <el-radio-group v-model="radio"  @change="handlecheckedChange">
           <el-radio :label="0">0个爱眼币</el-radio>
             <el-radio :label="1">1个爱眼币</el-radio>
             <el-radio :label="2">2个爱眼币</el-radio>
@@ -55,7 +55,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="editDialogVisible = false">取 消</el-button>
-          <el-button type="primary" disabled @click="submitConfirm">确 定</el-button>
+          <el-button type="primary"  @click="submitConfirm">确 定</el-button>
         </span>
     </el-dialog>
    </div>
@@ -79,7 +79,8 @@
       picList: [],
       radio: 0,
       itemId: '',
-      integral: 0
+      integral: 0,
+      textInput: ''
     }
   },
   methods:  {
@@ -106,7 +107,7 @@
        this.totalElements = res.totalElements;
        this.size = res.size;
        this.number = res.number + 1;
-       console.log(this.content)
+       // console.log(this.content)
       }
     },
     //监听页码值改变事件
