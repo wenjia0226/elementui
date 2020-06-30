@@ -11,6 +11,7 @@
           <el-table-column label="学校名称" prop="schoolName"></el-table-column>
           <el-table-column label="班级名称" prop="className"></el-table-column>
           <el-table-column label="学生名称" prop="studentName"></el-table-column>
+          <el-table-column label="审核状态" prop="examineStatus"></el-table-column>
           <el-table-column label="审核时间" prop="date"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
