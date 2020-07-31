@@ -2,11 +2,12 @@
     <div class="main" ref="box">
        <!-- <el-button type="primary" @click="back" class="mb">返回</el-button> -->
         <el-card style="background:#8D8779">
-          <div class="header demo-image__lazy">
+
+         <!-- <div class="header demo-image__lazy">
             <el-image src="https://www.guangliangkongjian.com/images/title.jpg" fit="cover"></el-image>
-          </div>
+          </div> -->
               <!-- 第一种排序方法 -->
-            <table class="seat" v-if="this.type == 1">
+           <!-- <table class="seat" v-if="this.type == 1">
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                       <a href="#">
@@ -98,9 +99,9 @@
                         </a>
                     </td>
                 </tbody>
-            </table>
+            </table> -->
               <!-- 第二种排序方法 -->
-            <table class="seat" v-else-if="this.type == 2">
+           <!-- <table class="seat" v-else-if="this.type == 2">
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                        <a href="#">
@@ -204,9 +205,9 @@
                         </a>
                     </td>
                 </tbody>
-            </table>
+            </table> -->
            <!--第三种排序方法 -->
-            <table class="seat" v-else-if="this.type == 3">
+            <!-- <table class="seat" v-else-if="this.type == 3">
                 <tbody v-for="(item, index) in studentList" :key="index">
                     <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
                         <a href="#">
@@ -279,7 +280,7 @@
                     </td>
                 </tbody>
             </table>
-            <!-- 第四种排序方法-->
+             第四种排序方法
             <table class="seat" v-else>
                 <tbody v-for="(item, index) in studentList" :key="index">
                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId"   @click="showRecordEditDialog(item2.studentId)">
@@ -352,7 +353,7 @@
                         </a>
                     </td>
                 </tbody>
-            </table>
+            </table> -->
         </el-card>
         <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible"  width="30%" lock-scroll	 :append-to-body="true"	:style="{marginTop: scrollTop + 'px'}">
             <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px">
@@ -425,37 +426,29 @@ export default {
         studentList: [],
         editRecordDialogVisible: false,
         editRecordForm: {
-        curvatureLeft: '',
-        curvatureRight: '',
-        cvaLeft: '',
-        cvaRight: '',
-        diopterLeft: '',
-        diopterRight: '',
-        eyeAxisLengthLeft: '',
-        eyeAxisLengthRight: '',
-        visionLeft: '',
-        visionLeft: '',
-        record_cat: '',
-        studentName: '',
-        schoolName:'',
-        classesName:'',
-        studentList: [],
-        scrollTop: 0
-			},
+          curvatureLeft: '',
+          curvatureRight: '',
+          cvaLeft: '',
+          cvaRight: '',
+          diopterLeft: '',
+          diopterRight: '',
+          eyeAxisLengthLeft: '',
+          eyeAxisLengthRight: '',
+          visionLeft: '',
+          visionLeft: '',
+          record_cat: '',
+          studentName: '',
+          schoolName:'',
+          classesName:'',
+          studentList: [],
+          scrollTop: 0
+        },
         }
     },
     mounted () {//给window添加一个滚动滚动监听事件
       window.addEventListener('scroll', this.handleScroll)
     },
     methods:{
-      handleScroll () { //改变元素#searchBar的top值
-          var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-          this.scrollTop = scrollTop;
-         
-        },
-      destroyed () {//离开该页面需要移除这个监听的事件
-        window.removeEventListener('scroll', this.handleScroll)
-      },
       //编辑出现编辑页面
       showRecordEditDialog(id) {
           let param = new URLSearchParams();
@@ -491,7 +484,8 @@ export default {
        }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
      },
        handleGetSeatQuerySucc(res) {
-         // console.log(res)
+          console.log(res)
+          // this.cardList = res
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
               this.$router.push('/login');

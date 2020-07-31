@@ -39,7 +39,7 @@ export default {
     this.schoolName = window.sessionStorage.getItem('cschoolName');
     this.className = window.sessionStorage.getItem('className');
     this.classId =this.$router.history.current.params.id;
-     this.showClass();
+    this.showClass();
   },
     data() {
         return {
@@ -66,12 +66,15 @@ export default {
             },
             options: [],
             classId: '',
-            schoolId: ''
+            schoolId: '',
+            type: '',
+            state: ''
         }
     },
 
   methods: {
     drawLine(id,lengend, option, text) {
+      let that = this;
       if(id == 'left') {
          var myChart = echarts.init(this.$refs.left);
       }else if(id == 'right') {
@@ -119,8 +122,69 @@ export default {
           ]
       };
       myChart.setOption(this.option)
-     },
+      myChart.on('click', function(param) {
+         let  url = param.data.url;
+         if(url == "leftGood") { // 左眼良好
+           this.type = 1;
+           this.state = 1;
+           window.sessionStorage.setItem('eyeType', '左眼良好')
+         }else if(url == "leftMild") { //左眼轻度不良
+           this.type = 1;
+           this.state = 2;
+           window.sessionStorage.setItem('eyeType', '左眼轻度不良')
+         }else if(url == "leftModerate") {//左眼中度不良
+           this.type = 1;
+           this.state = 3;
+           window.sessionStorage.setItem('eyeType', '左眼中度不良')
+         }else if(url == "leftSerious") { //左眼重度不良
+           this.type = 1;
+           this.state = 4;
+           window.sessionStorage.setItem('eyeType', '左眼重度不良')
+         }else if(url == "rightGood") { // 右眼良好
+           this.type = 2;
+           this.state = 1;
+          window.sessionStorage.setItem('eyeType', '右眼良好')
+         }else if(url == "rightMild") { //右眼轻度不良
+           this.type = 2;
+           this.state = 2;
+          window.sessionStorage.setItem('eyeType', '右眼轻度不良')
+         }else if(url == "rightModerate") {//右眼中度不良
+           this.type = 2;
+           this.state = 3;
+          window.sessionStorage.setItem('eyeType', '右眼中度不良')
+         }else if(url =="rightSerious") { //右眼重度不良
+           this.type = 1;
+           this.state = 4;
+           window.sessionStorage.setItem('eyeType', '右眼重度不良');
+         }else if(url =="avgGood") { // 双眼良好
+           this.type = 3;
+           this.state = 1;
+           window.sessionStorage.setItem('eyeType', '双眼良好')
+         }else if(url == "avgMild") { //双眼轻度不良
+           this.type = 3;
+           this.state = 2;
+          window.sessionStorage.setItem('eyeType', '双眼轻度不良')
+         }else if(url == "avgModerate") {//双眼中度不良
+           this.type = 3;
+           this.state = 3;
+           window.sessionStorage.setItem('eyeType', '双眼中度不良')
+         }else if(url =="avgSerious") { //双眼重度不良
+           this.type = 3;
+           this.state = 4;
+           window.sessionStorage.setItem('eyeType', '双眼重度不良')
+         }
+         let routeUrl = that.$router.resolve({
+             path: "/detailClassSurvey/",
+             query: {
+                     classId: that.classId,
+                     type: this.type,
+                     state: this.state
 
+             }
+         });
+         window.open(routeUrl.href, '_blank');
+      })
+     },
     //获取学校近视眼概况
     showClass() {
       this.leftLegend = [];
@@ -138,7 +202,6 @@ export default {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
       } else if(res.data.status == 200) {
-
       this.leftOption = res.data.data[0];
       this.rightOption = res.data.data[1];
       this.doubleOption = res.data.data[2];
@@ -170,6 +233,7 @@ export default {
         }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
     },
     handleGetOptionSucc (res) {
+      console.log(res.data.data)
         if(res.status !==200) return this.$message.error('获取级联数据失败');
         this.options =  res.data.data;
     },

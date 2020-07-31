@@ -429,6 +429,7 @@ export default {
         let routeUrl = this.$router.resolve({
                 path: "/classSurvey/"+ id,
         });
+        console.log(this.$router)
          window.open(routeUrl .href, '_blank');
       },
      //  //搜索

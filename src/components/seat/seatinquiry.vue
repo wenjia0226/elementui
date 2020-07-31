@@ -6,8 +6,9 @@
             <el-breadcrumb-item>排座系统</el-breadcrumb-item>
             <el-breadcrumb-item>座位查询</el-breadcrumb-item>
         </el-breadcrumb>
+
          <!-- 卡片视图 -->
-        <el-card>
+       <el-card>
              <el-row :gutter="10">
                 <el-col :span="4">
                      <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
@@ -22,7 +23,7 @@
                <el-table-column label="排列次数" prop="name"></el-table-column>
 
                 <el-table-column  label="排列方式" prop="type"  class="red"></el-table-column>
-                <el-table-column label="是否过期" prop="endTime"></el-table-column>
+               <el-table-column label="排座时间" prop="date"></el-table-column>
                  <el-table-column label="查看">
                     <template slot-scope="scope">
                         <el-button type="primary" size="middle"   @click="showSeat(scope.row.id, scope.row.type)">排座表</el-button>
@@ -40,8 +41,8 @@
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="classRecordList.length">
             </el-pagination>
-        </el-card>
-           </div>
+       </el-card>
+    </div>
 </template>
 <script>
 import axios from 'axios'
@@ -201,7 +202,9 @@ export default {
                this.$router.push('/login');
            } else if(res.data.status == 200) {
               if(res.data.data.length) {
+
                   this.classRecordList = res.data.data;
+                  console.log(this.classRecordList)
                   this.classRecordList.forEach((item, index) => {
                    if(item.type == 1) {
                           item.type = '方式一'
@@ -214,16 +217,16 @@ export default {
                       }
                   })
            }
-              this.classRecordList.forEach((item, index) => {
-                  let end = item.endTime;
-                  let myDate = new Date(end).getTime();
-                  let now = new Date().getTime();
-                  if(myDate > now ) {
-                      item.endTime = '未过期'
-                  }else {
-                        item.endTime = '过期'
-                  }
-              })
+              // this.classRecordList.forEach((item, index) => {
+              //     let end = item.endTime;
+              //     let myDate = new Date(end).getTime();
+              //     let now = new Date().getTime();
+              //     if(myDate > now ) {
+              //         item.endTime = '未过期'
+              //     }else {
+              //           item.endTime = '过期'
+              //     }
+              // })
             }
         },
         handleGetClassRecordErr(err) {

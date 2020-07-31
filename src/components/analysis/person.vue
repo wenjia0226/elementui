@@ -40,6 +40,21 @@
 	         <el-button type="primary" @click="showPerson">查看个人分析</el-button>
 	      </el-col>
 	  </el-row>
+    <el-row style="margin: 10px auto">
+      <el-col :span="24">
+         <div ref="left" style="width: 100%;height: 400px;margin: 0 auto"></div>
+       </el-col>
+     </el-row>
+    <el-row style="margin: 10px auto">
+       <el-col :span="24">
+         <div ref="right" style="width: 100%;height: 400px"></div>
+       </el-col>
+     </el-row>
+     <el-row style="margin: 10px auto">
+       <el-col :span="24">
+         <div ref="both" style="width: 100%;height: 400px"></div>
+       </el-col>
+    </el-row>
     <el-row>
       <el-col :span="24" style="font-size: 40px;padding: 20px;margin: 20rpx;text-align: center;">
         学生视觉检查报告单
@@ -164,21 +179,8 @@
        </table>
      </el-col>
    </el-row>
-    <el-row style="margin: 10px 0">
-       <el-col :span="24">
-         <div ref="left" style="width: 100%;height: 400px"></div>
-       </el-col>
-     </el-row>
-     <el-row style="margin: 10px 0">
-       <el-col :span="24">
-         <div ref="right" style="width: 100%;height: 400px"></div>
-       </el-col>
-     </el-row>
-     <el-row style="margin: 10px 0">
-       <el-col :span="24">
-         <div ref="both" style="width: 100%;height: 400px"></div>
-       </el-col>
-    </el-row>
+
+
 	</el-card>
 	</div>
 </template>
@@ -248,12 +250,13 @@ export default {
              left: 'center'
          },
         legend: {
-                  orient: 'vertical',
-                   data: ['左眼裸眼视力', '右眼裸眼视力'],
-                   left: 'left',
-                   y: 'top',
-                   top:'5%',
-                 },
+              orient: 'vertical',
+               data: ['左眼裸眼视力', '右眼裸眼视力'],
+               left: 'left',
+               y: 'top',
+               top:'5%',
+               right: '15%'
+             },
        grid: {                   // 折线位置
                top:'8%',
                right: '10%',
@@ -490,22 +493,24 @@ export default {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
       } else if(res.data.status == 200) {
-        res? res= res.data.data: '';
+
+        res? res = res.data.data: '';
         if(res.studnetWord !== null) {
           this.studentWord = res.studnetWord;
         }
+       // console.log(res)
         this.leftLuoX = res.visionLeft.xDataList;
         this.leftLuoY = res.visionLeft.yDataList;
         this.rightLuoX = res.visionRight.xDataList;
         this.rightLuoY = res.visionRight.yDataList;
-        this.leftZhouX = res.eyeAxisLengthLeft.xDataList;
-        this.leftZhouY = res.eyeAxisLengthLeft.yDataList;
-        this.rightZhouX = res.eyeAxisLengthRight.xDataList;
-        this.rightZhouY = res.eyeAxisLengthRight.yDataList;
-        this.leftQuX = res.curvatureLeft.xDataList;
-        this.leftQuY = res.curvatureLeft.yDataList;
-        this.rightQuX = res.curvatureRight.xDataList;
-        this.rightQuY = res.curvatureRight.yDataList;
+        // this.leftZhouX = res.eyeAxisLengthLeft.xDataList;
+        // this.leftZhouY = res.eyeAxisLengthLeft.yDataList;
+        // this.rightZhouX = res.eyeAxisLengthRight.xDataList;
+        // this.rightZhouY = res.eyeAxisLengthRight.yDataList;
+        // this.leftQuX = res.curvatureLeft.xDataList;
+        // this.leftQuY = res.curvatureLeft.yDataList;
+        // this.rightQuX = res.curvatureRight.xDataList;
+        // this.rightQuY = res.curvatureRight.yDataList;
         this.drawLine();
         this.drawLine2();
         this.drawLine3();

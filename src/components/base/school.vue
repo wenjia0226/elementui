@@ -22,6 +22,7 @@
             <el-table :data="this.schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchSchoolList.length" >
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="学校名称" prop="name"></el-table-column>
+                <el-table-column label="区" prop="regionName"></el-table-column>
                 <el-table-column label="学校地址" prop="address"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -61,7 +62,25 @@
         <el-dialog title="添加学校" :visible.sync="addDialogVisible" width="50%" :before-close="handleClose">
            <!-- 添加学校 -->
            <el-form :model="addSchoolForm" :rules="addSchoolRules" ref="schoolFormRef" label-width="100px">
-                <el-form-item label="学校名称" prop="name">
+            <el-form-item label="选择省" :label-width="'100px'" prop="province">
+               <el-select v-model="addSchoolForm.province" placeholder="请选择省" @change="getShengId">
+                 <el-option v-for="item in sheng" :key="item.value" :label="item.label" :value="item.value">
+                 </el-option>
+               </el-select>
+             </el-form-item>
+             <el-form-item label="选择市" :label-width="'100px'" prop="city">
+                <el-select v-model="addSchoolForm.city" placeholder="请选择省" @change="getCityId">
+                  <el-option v-for="item in city" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="选择区" :label-width="'100px'" prop="area">
+                 <el-select v-model="addSchoolForm.area" placeholder="请选择区" @change="getAreaId">
+                   <el-option v-for="item in area" :key="item.value" :label="item.label" :value="item.value">
+                   </el-option>
+                 </el-select>
+               </el-form-item>
+             <el-form-item label="学校名称" prop="name">
                     <el-input v-model="addSchoolForm.name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="学校地址" prop="address">
@@ -108,10 +127,16 @@ export default {
            addSchoolForm: {
                num: '',
                name: '',
-               address: ''
+               address: '',
+               province: '',
+               city: '',
+               area: ''
            },
            addSchoolRules: {
-               name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
+               province: [{required: true, message:'请选择省', trigger: 'blur'}],
+               city: [{required: true, message:'请选择市', trigger:'blur'}],
+               area: [{required: true, message:'请选择区', trigger: 'blur'}],
+               name: [{required: true, message:'请输入学校名称', trigger: 'blur' }],
                address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
            },
            editSchoolForm: {
@@ -123,15 +148,98 @@ export default {
                 name: [{required: true, message: '请输入学校名称', trigger: 'blur' }],
                 address: [{required: true, message: '请输入具体地址', trigger: 'blur' }],
            },
-           searchSchoolList:[]
+           searchSchoolList:[],
+            sheng: [],
+            city: [],
+            area: [],
+            shengId: '',
+            cityId: '',
+            areaId: ''
        }
     },
     created() {
         this.token = window.sessionStorage.getItem('token');
         this.getSchoolList();
+        this.getSheng();
     },
 
     methods:{
+		getSheng() {
+			let param = new URLSearchParams();
+			 param.append('token', this.token);
+			 param.append('type', 1);
+			 axios({
+			     method: 'post',
+			     url: '/lightspace/findRegion',
+			     data: param
+			 }).then((res) => {
+         let sheng = res.data.data;
+         sheng.forEach((item) => {
+           this.sheng.push({
+             value: item.id,
+             label: item.name
+           })
+         })
+			 })
+			 .catch((err) => {console.log(err)})
+		},
+    getShengId(val) {
+       this.shengId = val;
+       this.addSchoolForm.province = val;
+       this.addSchoolForm.city = '';
+       this.addSchoolForm.area = '';
+       this.city = [];
+       this.getCity();
+    },
+    getCity() {
+      let param = new URLSearchParams();
+       param.append('pId', this.shengId);
+       param.append('type', 2);
+       axios({
+           method: 'post',
+           url: '/lightspace/findRegion',
+           data: param
+       }).then((res) => {
+         let city = res.data.data;
+         city.forEach((item) => {
+           this.city.push({
+             value: item.id,
+             label: item.name
+           })
+         })
+       })
+       .catch((err) => {console.log(err)})
+    },
+    getCityId(val) {
+       this.cityId = val;
+       this.addSchoolForm.city = val;
+       this.area = [];
+       this.addSchoolForm.area =  '';
+       this.getArea();
+    },
+    getArea() {
+      let param = new URLSearchParams();
+       param.append('pId', this.cityId);
+       param.append('type', 2);
+       axios({
+           method: 'post',
+           url: '/lightspace/findRegion',
+           data: param
+       }).then((res) => {
+         let area = res.data.data;
+         area.forEach((item) => {
+           this.area.push({
+             value: item.id,
+             label: item.name
+           })
+         })
+       })
+       .catch((err) => {console.log(err)})
+    },
+    getAreaId(val) {
+      this.areaId = val;
+      this.addSchoolForm.area = val;
+    },
       //关闭按钮
         handleClose() {
          this.addDialogVisible = false;
@@ -199,6 +307,7 @@ export default {
                param.append('name', this.addSchoolForm.name);
                param.append('address', this.addSchoolForm.address);
                param.append('token', this.token);
+               param.append('regionId', this.areaId);
                axios({
                    method: 'post',
                    url: '/lightspace/addSchool',
@@ -249,6 +358,7 @@ export default {
             .catch(this.handleEditSchoolErr.bind(this))
         },
         handleEditSchoolSucc(res) {
+          // console.log(res.data.data)
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');

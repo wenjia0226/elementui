@@ -56,8 +56,7 @@
    },
    methods: {
      drawLine(id,lengend, option, text) {
-		 
-       console.log(id,lengend, option, text)
+       // console.log(id,lengend, option, text)
        if (id == 'totalleft') {
           var myChart = echarts.init(this.$refs.totalleft);
        }else if(id == 'totalright') {
@@ -127,7 +126,7 @@
         }).then(this.getSchoolAnalysisSucc.bind(this)).catch(this.handleGetSchoolAnalysisErr.bind(this))
       },
       getSchoolAnalysisSucc(res) {
-        console.log(res)
+       // console.log(res)
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');

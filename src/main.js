@@ -10,8 +10,10 @@ import './assets/fonts/iconfont.css'
 // import './assets/fonts/iconfont.css'
 import store from './store/index.js'
 import echarts from 'echarts'
+import {installCardDragger} from 'carddragger'
+Vue.use(installCardDragger)
 Vue.prototype.$echarts = echarts
-Vue.use(ElementUI);
+Vue.use(ElementUI)
 // //挂载原型属性
 // Vue.prototype.$http = axios
 // //配置请求的根路径
