@@ -1,5 +1,15 @@
 <template>
+  <div>
+    <div class="titleWrap">
+       <div class="title">
+        您可以拖拽调整学生位置,拖拽完成后请按保存按钮,保存此次调整结果，否则将按系统默认排座方式展示
+      </div>
+      <div class="btnWrap">
+        <el-button type="primary" @click="saveResult">保存</el-button>
+      </div>
+    </div>
   <div class="mianWrap">
+
     <div class="innerWrap">
      <!-- 方式一 -->
     <div class="outerBox" v-for="item1 in reversePai" v-if="type == 1">
@@ -129,6 +139,7 @@
     </div>
    </div>
   </div>
+ </div>
 </template>
 <script>
 import axios from 'axios'
@@ -150,6 +161,28 @@ export default {
       }
     },
     methods:{
+      saveResult() {
+        //console.log(this.divList, 999)
+        let  sortStu = this.divList;
+        let sortArr = [];
+        sortStu.forEach((item, index) => {
+          sortArr.push(item.studentId.toString())
+        })
+        console.log(sortArr)
+        let param = new FormData();
+        param.append('token', this.token);
+        param.append('id', this.id);
+        param.append('sort',sortArr)
+        axios({
+              method: 'post',
+              data: param,
+              url: '/lightspace/saveSort'
+          }).then((res) => {
+            console.log(res)
+          }).catch((err) => {
+            console.log(err)
+          })
+        },
         handleDragStart(e, item) {
             this.dragging = item
           },
@@ -195,13 +228,14 @@ export default {
              }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
            },
           handleGetSeatQuerySucc(res) {
-
+           console.log(res)
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
                if(res.data.data.length == 0) return this.$message.error('请先添加学生');
-               this.divList =res.data.data;
+               this.divList =res.data.data.data;
+               this.id = res.data.data.id;
               this.changeBelongs()
             } else if(res.data.status =10216) {
                this.$message.error(res.data.msg);
@@ -221,7 +255,7 @@ export default {
             })
            if(this.type == 1) { // 方式一
               this.totalPai = Math.ceil(this.divList.length / 8);
-          for(let t = 0; t< this.totalPai; t++) {
+              for(let t = 0; t< this.totalPai; t++) {
                 let num = this.totalPai - t;
                 this.reversePai.push(num)
               }
@@ -270,9 +304,9 @@ export default {
                }
              }
            }
-           this.divList = temDivList;
+          this.divList = temDivList;
          }
-    }
+      }
     }
 </script>
 <style lang="less">
@@ -295,9 +329,6 @@ export default {
 	margin-left: 20px;
 	margin-bottom: 20px;
   position: relative;
-	// width: 200px;
-	// height: 200px;
-
 	border-radius: 4px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
 }
@@ -313,5 +344,19 @@ export default {
 }
 .mr20 {
   margin-right: 60px;
+}
+.titleWrap {
+  margin: 20px ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 40px;
+  margin: 0 50px;
+
+
 }
 </style>
