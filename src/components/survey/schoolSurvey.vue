@@ -56,7 +56,7 @@
    },
    methods: {
      drawLine(id,lengend, option, text) {
-       // console.log(id,lengend, option, text)
+       let that = this;
        if (id == 'totalleft') {
           var myChart = echarts.init(this.$refs.totalleft);
        }else if(id == 'totalright') {
@@ -112,7 +112,69 @@
            ]
        };
        myChart.setOption(this.option)
-      },
+       myChart.on('click', function(param) {
+           let  url = param.data.url;
+           if(url == "leftGood") { // 左眼良好
+             this.type = 1;
+             this.state = 1;
+             window.sessionStorage.setItem('schoolEyeType', '左眼良好')
+           }else if(url == "leftMild") { //左眼轻度不良
+             this.type = 1;
+             this.state = 2;
+             window.sessionStorage.setItem('schoolEyeType', '左眼轻度不良')
+           }else if(url == "leftModerate") {//左眼中度不良
+             this.type = 1;
+             this.state = 3;
+             window.sessionStorage.setItem('schoolEyeType', '左眼中度不良')
+           }else if(url == "leftSerious") { //左眼重度不良
+             this.type = 1;
+             this.state = 4;
+             window.sessionStorage.setItem('schoolEyeType', '左眼重度不良')
+           }else if(url == "rightGood") { // 右眼良好
+             this.type = 2;
+             this.state = 1;
+            window.sessionStorage.setItem('schoolEyeType', '右眼良好')
+           }else if(url == "rightMild") { //右眼轻度不良
+             this.type = 2;
+             this.state = 2;
+            window.sessionStorage.setItem('schoolEyeType', '右眼轻度不良')
+           }else if(url == "rightModerate") {//右眼中度不良
+             this.type = 2;
+             this.state = 3;
+            window.sessionStorage.setItem('schoolEyeType', '右眼中度不良')
+           }else if(url =="rightSerious") { //右眼重度不良
+             this.type = 1;
+             this.state = 4;
+             window.sessionStorage.setItem('schoolEyeType', '右眼重度不良');
+           }else if(url =="avgGood") { // 双眼良好
+             this.type = 3;
+             this.state = 1;
+             window.sessionStorage.setItem('schoolEyeType', '双眼良好')
+           }else if(url == "avgMild") { //双眼轻度不良
+             this.type = 3;
+             this.state = 2;
+            window.sessionStorage.setItem('schoolEyeType', '双眼轻度不良')
+           }else if(url == "avgModerate") {//双眼中度不良
+             this.type = 3;
+             this.state = 3;
+             window.sessionStorage.setItem('schoolEyeType', '双眼中度不良')
+           }else if(url =="avgSerious") { //双眼重度不良
+             this.type = 3;
+             this.state = 4;
+             window.sessionStorage.setItem('schoolEyeType', '双眼重度不良')
+           }
+           let routeUrl = that.$router.resolve({
+               path: "/detailSchoolSurvey/",
+               query: {
+                       schoolId: that.schoolId,
+                       type: this.type,
+                       state: this.state
+
+               }
+           });
+           window.open(routeUrl.href, '_blank');
+        })
+       },
       //获取学校近视眼概况
       showSchool() {
         this.leftLegend = [];
@@ -126,7 +188,7 @@
         }).then(this.getSchoolAnalysisSucc.bind(this)).catch(this.handleGetSchoolAnalysisErr.bind(this))
       },
       getSchoolAnalysisSucc(res) {
-       // console.log(res)
+          console.log(res)
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');

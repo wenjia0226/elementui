@@ -3,7 +3,9 @@
      <el-card>
         <el-row >
           <el-col :span="24" >
-            <div style="padding: 10px  0 50px ;font-size: 30px; text-align: center;">{{schoolName}}{{eyeType}}学生名单</div>
+            <div style="padding: 10px  0 50px ;font-size: 30px; text-align: center;">{{schoolName}}{{className}}
+            <span style="color:red"> {{schoolEyeType}}</span>
+           学生名单</div>
           </el-col>
         </el-row>
        <el-table border :data="childrenInfoList"  stripe style="width: 100%" >
@@ -25,7 +27,7 @@
       this.token = window.sessionStorage.getItem('token');
       this.schoolName = window.sessionStorage.getItem('cschoolName');
       this.className = window.sessionStorage.getItem('className');
-      this.eyeType = window.sessionStorage.getItem('eyeType');
+      this.schoolEyeType = window.sessionStorage.getItem('schoolEyeType');
       this.classId =this.$router.history.current.query.classId;
       this.type = this.$router.history.current.query.type;
       this.state = this.$router.history.current.query.state;

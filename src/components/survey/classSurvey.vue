@@ -127,51 +127,51 @@ export default {
          if(url == "leftGood") { // 左眼良好
            this.type = 1;
            this.state = 1;
-           window.sessionStorage.setItem('eyeType', '左眼良好')
+           window.sessionStorage.setItem('schoolEyeType', '左眼良好')
          }else if(url == "leftMild") { //左眼轻度不良
            this.type = 1;
            this.state = 2;
-           window.sessionStorage.setItem('eyeType', '左眼轻度不良')
+           window.sessionStorage.setItem('schoolEyeType', '左眼轻度不良')
          }else if(url == "leftModerate") {//左眼中度不良
            this.type = 1;
            this.state = 3;
-           window.sessionStorage.setItem('eyeType', '左眼中度不良')
+           window.sessionStorage.setItem('schoolEyeType', '左眼中度不良')
          }else if(url == "leftSerious") { //左眼重度不良
            this.type = 1;
            this.state = 4;
-           window.sessionStorage.setItem('eyeType', '左眼重度不良')
+           window.sessionStorage.setItem('schoolEyeType', '左眼重度不良')
          }else if(url == "rightGood") { // 右眼良好
            this.type = 2;
            this.state = 1;
-          window.sessionStorage.setItem('eyeType', '右眼良好')
+          window.sessionStorage.setItem('schoolEyeType', '右眼良好')
          }else if(url == "rightMild") { //右眼轻度不良
            this.type = 2;
            this.state = 2;
-          window.sessionStorage.setItem('eyeType', '右眼轻度不良')
+          window.sessionStorage.setItem('schoolEyeType', '右眼轻度不良')
          }else if(url == "rightModerate") {//右眼中度不良
            this.type = 2;
            this.state = 3;
-          window.sessionStorage.setItem('eyeType', '右眼中度不良')
+          window.sessionStorage.setItem('schoolEyeType', '右眼中度不良')
          }else if(url =="rightSerious") { //右眼重度不良
            this.type = 1;
            this.state = 4;
-           window.sessionStorage.setItem('eyeType', '右眼重度不良');
+           window.sessionStorage.setItem('schoolEyeType', '右眼重度不良');
          }else if(url =="avgGood") { // 双眼良好
            this.type = 3;
            this.state = 1;
-           window.sessionStorage.setItem('eyeType', '双眼良好')
+           window.sessionStorage.setItem('schoolEyeType', '双眼良好')
          }else if(url == "avgMild") { //双眼轻度不良
            this.type = 3;
            this.state = 2;
-          window.sessionStorage.setItem('eyeType', '双眼轻度不良')
+          window.sessionStorage.setItem('schoolEyeType', '双眼轻度不良')
          }else if(url == "avgModerate") {//双眼中度不良
            this.type = 3;
            this.state = 3;
-           window.sessionStorage.setItem('eyeType', '双眼中度不良')
+           window.sessionStorage.setItem('schoolEyeType', '双眼中度不良')
          }else if(url =="avgSerious") { //双眼重度不良
            this.type = 3;
            this.state = 4;
-           window.sessionStorage.setItem('eyeType', '双眼重度不良')
+           window.sessionStorage.setItem('schoolEyeType', '双眼重度不良')
          }
          let routeUrl = that.$router.resolve({
              path: "/detailClassSurvey/",

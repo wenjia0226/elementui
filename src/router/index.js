@@ -49,6 +49,8 @@ import unexamine from '@/components/examineBox/unexamine.vue'
 import answerconfig from '@/components/config/answerconfig.vue'
 import momentsconfig from '@/components/config/momentsconfig.vue'
 import detailClassSurvey from '@/components/survey/detailClassSurvey.vue'
+import detailSchoolSurvey from '@/components/survey/detailSchoolSurvey.vue'
+import detailGradeSurvey from '@/components/survey/detailGradeSurvey'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -65,6 +67,8 @@ const router = new Router({
   {path: '/personRecord/:id', component: personRecord},
   {path: '/personRecordWear/:id', component: personRecordWear},
   {path: '/detailClassSurvey/', component: detailClassSurvey},
+  {path: '/detailSchoolSurvey/', component: detailSchoolSurvey},
+  {path: '/detailGradeSurvey/', component: detailGradeSurvey},
   {
       path: '/home',
       component: Home,
