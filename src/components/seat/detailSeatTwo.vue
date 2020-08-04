@@ -8,8 +8,10 @@
         <el-button type="primary" @click="saveResult">保存</el-button>
       </div>
     </div>
-  <div class="mianWrap">
-
+    <div class="mianWrap">
+      <div class="imgWrap">
+        <img src="../../assets/image/bg3.png">
+      </div>
     <div class="innerWrap">
      <!-- 方式一 -->
     <div class="outerBox" v-for="item1 in reversePai" v-if="type == 1">
@@ -138,6 +140,9 @@
       </div>
     </div>
    </div>
+   <div class="jtWrap">
+     <img src="../../assets/image/jiangtai.png">
+   </div>
   </div>
  </div>
 </template>
@@ -168,7 +173,6 @@ export default {
         sortStu.forEach((item, index) => {
           sortArr.push(item.studentId.toString())
         })
-        console.log(sortArr)
         let param = new FormData();
         param.append('token', this.token);
         param.append('id', this.id);
@@ -178,7 +182,13 @@ export default {
               data: param,
               url: '/lightspace/saveSort'
           }).then((res) => {
-            console.log(res)
+            //console.log(res)
+            if(res.data.status == 200) {
+                this.$message({
+                  message: '恭喜你,修改座位保存成功',
+                  type: 'success'
+                });
+            }
           }).catch((err) => {
             console.log(err)
           })
@@ -228,7 +238,7 @@ export default {
              }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
            },
           handleGetSeatQuerySucc(res) {
-           console.log(res)
+           //console.log(res)
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
@@ -314,7 +324,9 @@ export default {
       background: #8f8879;
       padding: 100px;
       display: flex;
+      flex-direction: column;
       justify-content: center;
+      align-items: center;
    }
    .innerWrap {
      padding: 50rpx;
@@ -356,7 +368,22 @@ export default {
   font-weight: bold;
   line-height: 40px;
   margin: 0 50px;
+}
+.imgWrap {
+  width: 80%;
+  margin: 20px;
+}
+.imgWrap > img {
 
-
+  width: 100%;
+  height: 100%;
+}
+.jtWrap {
+  width: 60%;
+  margin: 30px;
+}
+.jtWrap > img {
+  width: 100%;
+  height: 100%;
 }
 </style>
