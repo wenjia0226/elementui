@@ -1,633 +1,280 @@
 <template>
-    <div class="main" ref="box">
-       <!-- <el-button type="primary" @click="back" class="mb">返回</el-button> -->
-        <el-card style="background:#8D8779">
-          <div class="header demo-image__lazy">
-            <el-image src="https://www.guangliangkongjian.com/images/title.jpg" fit="cover"></el-image>
-          </div>
-              <!-- 第一种排序方法 -->
-            <table class="seat" v-if="this.type == '方式一'">
-                <!-- <thead v-show="this.studentList.length">
-                    <tr align="center">
-                        <th></th>
-                        <th>第1列</th>
-                        <th>第2列</th>
-                        <th>第3列</th>
-                        <th style="width: 64px">&nbsp;</th>
-                        <th>第4列</th>
-                        <th>第5列</th>
-                        <th style="width: 64px">&nbsp;</th>
-                        <th>第6列</th>
-                        <th>第7列</th>
-                        <th>第8列</th>
-                    </tr>
-                </thead> -->
-                <tbody v-for="(item, index) in studentList" :key="index">
-                     <td  v-for="(item2) in item.slice(0,1)" :key="item2.studentId">
-                        <el-popover
-                             placement="right"
-                             width="400"
-                             @show="handleStatus(item2.studentId)"
-                              trigger="hover">
-                            <el-form :model="studentForm">
-                                <el-form-item label="姓名">
-                                  <el-input v-model="studentForm.studentName" disabled></el-input>
-                                </el-form-item>
-                                <el-form-item label="身高" >
-                                  <el-input v-model="studentForm.visionRight" disabled></el-input>
-                                </el-form-item>
-                                <el-form-item label="右裸眼" >
-                                  <el-input v-model="studentForm.height" disabled></el-input>
-                                </el-form-item>
-                                <el-form-item label="左裸眼" >
-                                  <el-input v-model="studentForm.visionLeft" disabled></el-input>
-                                </el-form-item>
-                                <el-form-item label="右校正" >
-                                  <el-input v-model="studentForm.cvaRight" disabled></el-input>
-                                </el-form-item>
-                                <el-form-item label="左矫正" >
-                                  <el-input v-model="studentForm.cvaLeft" disabled></el-input>
-                                </el-form-item>
-                              </el-form>
-                             <a href="#" slot="reference">
-                                 <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                                 <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                                 <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                                  <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                                 <div class="name">
-                                    {{item2.studentName}}
-                                 </div>
-                              </a>
-                           </el-popover>
-                     </td>
-
-                     <td  v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                   <td  v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                    <td class="gd">&nbsp;</td>
-                    <td  v-for="(item2) in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    <td  v-for="(item2) in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                    <td class="gd">&nbsp;</td>
-                    <td  v-for="(item2) in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                     <td  v-for="(item2) in item.slice(6,7)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                   <td  v-for="(item2) in item.slice(7,8)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                </tbody>
-            </table>
-              <!-- 第二种排序方法 -->
-            <table class="seat" v-else-if="this.type == '方式二'">
-                <tbody v-for="(item, index) in studentList" :key="index">
-                    <td v-for="(item2) in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                    <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                   <td class="gd">&nbsp;</td>
-                    <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                     <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                   <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                   <td class="gd">&nbsp;</td>
-                    <td v-for="(item2) in item.slice(6,7)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                     <td v-for="(item2) in item.slice(7,8)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                   <td v-for="(item2) in item.slice(8,9)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                </tbody>
-            </table>
-           <!--第三种排序方法 -->
-            <table class="seat" v-else-if="this.type == '方式三'">
-                <tbody v-for="(item, index) in studentList" :key="index">
-                    <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)" >
-                        <a href="#">
-                            <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                            <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                             <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                            <div class="name">
-                               {{item2.studentName}}
-                            </div>
-                         </a>
-                    </td>
-                    <td class="gd">&nbsp;</td>
-                    <td v-for="(item2) in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                    <td v-for="(item2) in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                    <td class="gd">&nbsp;</td>
-                    <td v-for="(item2) in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                     <td v-for="(item2) in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                    <td class="gd">&nbsp;</td>
-                     <td v-for="(item2) in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                </tbody>
-            </table>
-            <!-- 第四种排序方法-->
-            <table class="seat" v-else>
-                <tbody v-for="(item, index) in studentList" :key="index">
-                   <td v-for="item2 in item.slice(0,1)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                      <a href="#">
-                          <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                          <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                          <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                          <div class="name">
-                             {{item2.studentName}}
-                          </div>
-                       </a>
-                    </td>
-                    <td v-for="item2 in item.slice(1,2)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                    <td class="gd">&nbsp;</td>
-                    <td v-for="item2 in item.slice(2,3)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                     <td class="gd">&nbsp;</td>
-                    <td v-for="item2 in item.slice(3,4)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                    <td class="gd">&nbsp;</td>
-                    <td v-for="item2 in item.slice(4,5)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                       <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>{item2.studentName}}
-                        </a>
-                    </td>
-                      <td v-for="item2 in item.slice(5,6)" :key="item2.studentId" @click="showRecordEditDialog(item2.studentId)">
-                         <a href="#">
-                           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item2.gender == 1 && item2.correct == 0">
-                           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item2.gender == 1 && item2.correct == 1">
-                           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 0">
-                            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item2.gender == 0 && item2.correct == 1">
-                           <div class="name">
-                              {{item2.studentName}}
-                           </div>
-                        </a>
-                    </td>
-                </tbody>
-            </table>
-        </el-card>
-		    <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible" >
-          <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px" >
-          <!-- <el-form-item label="所属学校班级" prop="">
-              <el-cascader :options="options" v-model="editRecordForm.record_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
-          </el-form-item> -->
-          <el-form-item label="姓名">
-              <el-input v-model="editRecordForm.studentName" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="所属学校" >
-              <el-input v-model="editRecordForm.schoolName"  disabled></el-input>
-          </el-form-item>
-          <el-form-item label="所属班级" >
-              <el-input v-model="editRecordForm.classesName" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="左眼曲率">
-              <el-input  v-model="editRecordForm.curvatureLeft" disabled></el-input>
-          </el-form-item>
-           <el-form-item label="右眼曲率">
-              <el-input  v-model="editRecordForm.curvatureRight" disabled></el-input>
-          </el-form-item>
-           <el-form-item label="左眼矫正视力">
-              <el-input v-model="editRecordForm.cvaLeft" disabled></el-input>
-          </el-form-item>
-           <el-form-item label="右眼矫正视力">
-              <el-input  v-model="editRecordForm.cvaRight" disabled></el-input>
-          </el-form-item>
-           <el-form-item label="左眼屈光度">
-              <el-input v-model="editRecordForm.diopterLeft" disabled></el-input>
-          </el-form-item>
-           <el-form-item label="右眼屈光度">
-              <el-input v-model="editRecordForm.diopterRight" disabled></el-input>
-          </el-form-item>
-           <el-form-item label="左眼眼轴长度">
-              <el-input v-model="editRecordForm.eyeAxisLengthLeft" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="右眼眼轴长度">
-              <el-input v-model.number="editRecordForm.eyeAxisLengthRight	" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="左眼裸眼视力">
-              <el-input v-model="editRecordForm.visionLeft" disabled></el-input>
-          </el-form-item>
-           <el-form-item label="右眼裸眼视力">
-              <el-input v-model="editRecordForm.visionRight" disabled></el-input>
-          </el-form-item>
-      </el-form>
-          <span slot="footer" class="dialog-footer">
-              <el-button  type="primary" @click="editRecordDialogVisible = false">确 定</el-button>
-          </span>
-		    </el-dialog>
+  <div>
+    <div class="mianWrap">
+      <div class="imgWrap">
+        <img src="../../assets/image/bg3.png">
+      </div>
+    <div class="innerWrap">
+     <!-- 方式一 -->
+    <div class="outerBox" v-for="item1 in reversePai" v-if="type == 1">
+       <!-- 最后一排 -->
+      <div class="item" :class="{mr20: item.mr}" v-if="item1 == totalPai" v-for="(item) in divList.slice((item1 -1) *8)" :key="item.id">
+         <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+         <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+         <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+          <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+         <div class="name">
+            {{item.studentName}}
+         </div>
+      </div>
+     <div class="item" :class="{mr20: item.mr}"  v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 8, item1 *8)" :key="item.id">
+           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <div class="name">
+              {{item.studentName}}
+           </div>
+      </div>
     </div>
+      <!-- 方式二 -->
+   <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 2">
+      <div class="item" :class="{mr20: item.mr}" v-if="item1 == totalPai" v-for="(item) in divList.slice((item1 -1) * 9)" :key="item.id">
+         <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+         <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+         <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+          <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+         <div class="name">
+            {{item.studentName}}
+         </div>
+       </div>
+      <div class="item" :class="{mr20: item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 9, item1 *9)" :key="item.id">
+           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <div class="name">
+              {{item.studentName}}
+           </div>
+      </div>
+    </div>
+    <!-- 方式三-->
+   <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 3">
+      <div class="item" :class="{mr20: item.mr}"  v-if="item1 == totalPai" v-for="(item) in divList.slice((item1- 1) * 6)" :key="item.id">
+           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <div class="name">
+              {{item.studentName}}
+           </div>
+      </div>
+      <div class="item" :class="{mr20: item.mr}"  v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1- 1) * 6, item1 *6)" :key="item.id">
+           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <div class="name">
+              {{item.studentName}}
+           </div>
+      </div>
+    </div>
+    <!-- 方式四 -->
+   <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 4">
+      <div class="item" :class="{mr20: item.mr}" v-if="item1 == totalPai" v-for="(item) in divList.slice((item1 -1) * 6)" :key="item.id">
+           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <div class="name">
+              {{item.studentName}}
+           </div>
+      </div>
+      <div class="item" :class="{mr20: item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 6, item1 *6)" :key="item.id">
+           <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <div class="name">
+              {{item.studentName}}
+           </div>
+      </div>
+    </div>
+   </div>
+   <div class="jtWrap">
+     <img src="../../assets/image/jiangtai.png">
+   </div>
+  </div>
+ </div>
 </template>
 <script>
-
-
 import axios from 'axios'
 export default {
    created() {
        this.token = window.sessionStorage.getItem('token');
-       this.type = window.sessionStorage.getItem('tabletype');
-       this.id = this.$router.history.current.params.id;
+       this.id = this.$router.history.current.query.id;
+       this.type = this.$router.history.current.query.type;
        this.getSeatTable();
-   },
+       console.log(this.type)
+     },
     data() {
       return {
-        id: '',
-        token: '',
-        studentList: [],
-        editRecordDialogVisible: false,
-        editRecordForm: {
-        curvatureLeft: '',
-        curvatureRight: '',
-        cvaLeft: '',
-        cvaRight: '',
-        diopterLeft: '',
-        diopterRight: '',
-        eyeAxisLengthLeft: '',
-        eyeAxisLengthRight: '',
-        visionLeft: '',
-        visionLeft: '',
-        record_cat: '',
-        studentName: '',
-        schoolName:'',
-        classesName:''
-			},
-      studentForm: {
-        studentName: '',
-        height: '',
-        visionLeft: '',
-        visionRight: '',
-        cvaLeft: '',
-        cvaRight: ''
+        	  divList: [],
+        		dragging: null,
+            hasDistance: false,
+            totalPai: 0,
+            reversePai: [],
       }
-     }
-    },
-    mounted () {//给window添加一个滚动滚动监听事件
-      window.addEventListener('scroll', this.handleScroll)
     },
     methods:{
-      handleStatus(id) {
+      getSeatTable() {
         let param = new URLSearchParams();
-        param.append('id', id);
-        param.append('token',this.token)
-        axios({
-            method: 'post',
-            url: '/lightspace/studentRecord',
-            data: param
-        }).then(this.handleGetInfoSucc.bind(this))
-        .catch(this.handleGetInfoErr.bind(this))
-      },
-      handleGetInfoSucc(res) {
-        if(res.data.status == 200) {
-          this.studentForm = res.data.data;
-        }
-      },
-      handleGetInfoErr(err) {
-        console.log(err)
-      },
-      handleScroll () { //改变元素#searchBar的top值
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        this.scrollTop = scrollTop;
-        console.log(this.scrollTop)
-        },
-      destroyed () {//离开该页面需要移除这个监听的事件
-        window.removeEventListener('scroll', this.handleScroll)
-      },
-		//编辑出现编辑页面
-		showRecordEditDialog(id) {
-       this.$refs.box.scrollTop = this.scrollTop;
-		    let param = new URLSearchParams();
-		    param.append('id', id);
-		    param.append('token',this.token)
-		    axios({
-		        method: 'post',
-		        url: '/lightspace/studentRecord',
-		        data: param
-		    }).then(this.handleEditRecordSucc.bind(this))
-		    .catch(this.handleEditRecordErr.bind(this))
-		    },
-		handleEditRecordSucc(res) {
-
-		    if(res.status !== 200) return;
-		    res ? res = res.data: '';
-		    this.editRecordForm = res.data;
-		    this.editRecordDialogVisible = true;
-		},
-		handleEditRecordErr(err) {
-		    console.log(err)
-		},
-    getSeatTable() {
-        let param = new URLSearchParams();
-        param.append('token', this.token);
-        param.append('sortId', this.id);
-        axios({
-            method: 'post',
-            url: "/lightspace/showSort",
-            data: param
-        }).then(this.handleGetSeatTableSucc.bind(this)).catch(this.hanadleGetSeatTableErr.bind(this))
-    },
-    handleGetSeatTableSucc(res) {
-      console.log(res)
-       if(res.data.status === 10204) {
+         param.append('token', this.token);
+         param.append('sortId', this.id);
+         axios({
+             method: 'post',
+             data: param,
+             url: '/lightspace/showSort'
+         }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
+       },
+      handleGetSeatQuerySucc(res) {
+       console.log(res)
+        if(res.data.status === 10204) {
+            this.$message.error(res.data.msg);
+            this.$router.push('/login');
+        } else if(res.data.status == 200) {
+           if(res.data.data.length == 0) return this.$message.error('请先添加学生');
+           this.divList =res.data.data;
+           this.changeBelongs()
+        } else if(res.data.status =10216) {
            this.$message.error(res.data.msg);
-           this.$router.push('/login');
-       } else if(res.data.status == 200) {
-         this.studentList = res.data.data;
-         this.type = window.sessionStorage.getItem('tabletype');
-       }
-    },
-    hanadleGetSeatTableErr(err) {
-        console.log(err)
-    },
-    back() {
-        this.$router.push('/seatinquiry');
-    },
+        }
 
-    // Vue.directive('alterELDialogMarginTop'/*修改elementUI中el-dialog顶部的距离,传入值eg:{marginTop:'5vh'} */, {
-    //   inserted(el, binding, vnode) {
-    //             el.firstElementChild.style.marginTop = binding.value.marginTop
-    //   }
-    // })
+     },
+      handleGetSeatQueryErr(err) {
+         console.log(err)
+      },
+      // 移动完位置后修改修改属性
+      changeBelongs() {
+        this.reversePai = []; //先清空循环
+        let temDivList = this.divList;
+         temDivList.forEach((item, index) => {
+           item.mr = false
+         })
+        if(this.type == 1) { // 方式一
+           this.totalPai = Math.ceil(this.divList.length / 8);
+           for(let t = 0; t< this.totalPai; t++) {
+             let num = this.totalPai - t;
+             this.reversePai.push(num)
+           }
+          for(let i = 0; i< temDivList.length; i++) {
+            if(i % 8 == 0) {
+             temDivList[i + 2].mr = true;
+             temDivList[i + 4].mr = true;
+            }
+          }
+        }else if(this.type == 2) {    //方式二
+           this.totalPai = Math.ceil(this.divList.length / 9);
+          for(let t = 0; t< this.totalPai; t++) {
+                let num = this.totalPai - t;
+                this.reversePai.push(num)
+              }
+          for(let i = 0; i< temDivList.length; i++) {
+            if(i % 9 == 0) {
+             temDivList[i + 2].mr = true;
+             temDivList[i + 5].mr = true;
+            }
+          }
+        }else if(this.type == 3) {  //方式三
+           this.totalPai = Math.ceil(this.divList.length / 6);
+          for(let t = 0; t< this.totalPai; t++) {
+                let num = this.totalPai - t;
+                this.reversePai.push(num)
+              }
+          for(let i = 0; i< temDivList.length; i++) {
+            if(i % 6 == 0) {
+             temDivList[i].mr = true;
+             temDivList[i + 2].mr = true;
+             temDivList[i + 4].mr = true;
+            }
+          }
+        }else if(this.type == 4) {  //方式四
+           this.totalPai = Math.ceil(this.divList.length / 6);
+           for(let t = 0; t< this.totalPai; t++) {
+                 let num = this.totalPai - t;
+                 this.reversePai.push(num)
+               }
+          for(let i = 0; i< temDivList.length; i++) {
+            if(i % 6 == 0) {
+             temDivList[i + 1].mr = true;
+             temDivList[i + 2].mr = true;
+             temDivList[i + 3].mr = true;
+            }
+          }
+        }
+       this.divList = temDivList;
+      }
     }
-}
+  }
 </script>
 <style lang="less">
-.mb {
-  margin: 10px 0 20px 0;
-}
-.main {
-  display: flex;
-  flex-direction: column;
-  padding: 0 5%;
-  justify-content: center;
-  align-items: center;
-  overflow: auto;
-}
-.header {
-  width: 100%;
-  text-align: center;
-  padding: 50px;
-  box-sizing: border-box;
-}
-.center {
-  flex: 1;
-  width: 100%;
-}
-.seat td   a {
-  display: block;
-  color: #000;
-  text-decoration: none;
-  font-size: 16px;
-  text-align: center;
+  .mianWrap {
+      background: #8f8879;
+      padding: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+   }
+   .innerWrap {
+     padding: 50rpx;
+     margin: 0 auto;
+   }
+  .outerBox {
+    display: flex;
+    flex-wrap: wrap;
+  }
+.item {
+	display: inline-block;
+	margin-left: 20px;
+	margin-bottom: 20px;
   position: relative;
-}
-.gd {
-  width: 100px;
-}
-td:hover  a{
-  transform: scale(1.2);
-  transition: all 0.3s;
-}
-.img {
-  position: relative;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
 }
 .name {
   position: absolute;
   bottom: 24%;
   left: 0;
   right: 0;
+  text-align: center;
   font-size: 16px;
   color:#000000;
   font-weight: bold;
 }
+.mr20 {
+  margin-right: 60px;
+}
+.titleWrap {
+  margin: 20px ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 40px;
+  margin: 0 50px;
+}
+.img {
+  pointer-events: none;
+}
+.imgWrap {
+  width: 80%;
+  margin: 20px;
+}
+.imgWrap > img {
 
+  width: 100%;
+  height: 100%;
+}
+.jtWrap {
+  width: 60%;
+  margin: 30px;
+}
+.jtWrap > img {
+  width: 100%;
+  height: 100%;
+}
 </style>

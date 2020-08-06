@@ -62,7 +62,7 @@ const router = new Router({
   {path: '/login',component: Login},
 	{path: '/schoolSurvey/:id',component: schoolSurvey},
 	{path: '/classSurvey/:id',component: classSurvey},
-  {path: '/detailSeat/:id',component: detailSeat},
+  {path: '/detailSeat/',component: detailSeat},
   {path: '/detailSeatTwo/',component: detailSeatTwo},
   {path: '/personRecord/:id', component: personRecord},
   {path: '/personRecordWear/:id', component: personRecordWear},

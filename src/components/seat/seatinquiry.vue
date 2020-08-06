@@ -26,7 +26,7 @@
                <el-table-column label="排座时间" prop="date"></el-table-column>
                  <el-table-column label="查看">
                     <template slot-scope="scope">
-                        <el-button type="primary" size="middle"   @click="showSeat(scope.row.id, scope.row.type)">排座表</el-button>
+                        <el-button type="primary" size="middle" @click="showSeat(scope.row.id,scope.row.type)">排座表</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -126,8 +126,7 @@ export default {
         handleChange(item) {
            this.schoolId = this.stu_cat[0];
            this.classId = this.stu_cat[1];
-           window.sessionStorage.setItem('schoolId', item[0]);
-           window.sessionStorage.setItem('classId', item[1]);
+
         },
         seatQuery() {
 
@@ -202,9 +201,8 @@ export default {
                this.$router.push('/login');
            } else if(res.data.status == 200) {
               if(res.data.data.length) {
-
+                console.log(res)
                   this.classRecordList = res.data.data;
-                  console.log(this.classRecordList)
                   this.classRecordList.forEach((item, index) => {
                    if(item.type == 1) {
                           item.type = '方式一'
@@ -216,17 +214,7 @@ export default {
                           item.type = '方式四'
                       }
                   })
-           }
-              // this.classRecordList.forEach((item, index) => {
-              //     let end = item.endTime;
-              //     let myDate = new Date(end).getTime();
-              //     let now = new Date().getTime();
-              //     if(myDate > now ) {
-              //         item.endTime = '未过期'
-              //     }else {
-              //           item.endTime = '过期'
-              //     }
-              // })
+              }
             }
         },
         handleGetClassRecordErr(err) {
@@ -241,19 +229,27 @@ export default {
         handleCurrentChange(val) {
            this.currentPage = val;
         },
-        showSeat(id ,type) {
-            window.sessionStorage.setItem('tabletype', type)
-            // this.$router.push('/detailSeat/'+id)
+        showSeat(id, type) {
+          let typeNew = type;
+          if(typeNew == '方式一') {
+                  typeNew = 1
+              }else if(typeNew == '方式二') {
+                  typeNew = 2
+              }else if(typeNew == '方式三') {
+                  typeNew = 3
+              }else {
+                  typeNew = 4
+              }
             let routeUrl = this.$router.resolve({
-			          path: "/detailSeat/"+ id,
-			          // query: {id:id}
-            });
+              path: '/detailSeat',
+              query: {
+                id:  id,
+                type: typeNew
+              }
+             });
             window.open(routeUrl .href, '_blank');
         }
   }
-
-
-
 }
 </script>
 <style lang="less" scope>

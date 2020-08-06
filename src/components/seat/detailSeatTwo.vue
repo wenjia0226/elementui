@@ -369,6 +369,9 @@ export default {
   line-height: 40px;
   margin: 0 50px;
 }
+.img {
+  pointer-events: none;
+}
 .imgWrap {
   width: 80%;
   margin: 20px;
