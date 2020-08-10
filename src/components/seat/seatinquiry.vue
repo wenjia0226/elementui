@@ -129,7 +129,6 @@ export default {
 
         },
         seatQuery() {
-
             let param = new URLSearchParams();
             param.append('token', this.token);
             param.append('classId', this.classId);
@@ -201,20 +200,20 @@ export default {
                this.$router.push('/login');
            } else if(res.data.status == 200) {
               if(res.data.data.length) {
-                console.log(res)
                   this.classRecordList = res.data.data;
-                  this.classRecordList.forEach((item, index) => {
-                   if(item.type == 1) {
-                          item.type = '方式一'
-                      }else if(item.type == 2) {
-                          item.type = '方式二'
-                      }else if(item.type == 3) {
-                          item.type = '方式三'
-                      }else {
-                          item.type = '方式四'
-                      }
-                  })
-              }
+
+              //     this.classRecordList.forEach((item, index) => {
+              //      if(item.type == 1) {
+              //             item.type = '方式一'
+              //         }else if(item.type == 2) {
+              //             item.type = '方式二'
+              //         }else if(item.type == 3) {
+              //             item.type = '方式三'
+              //         }else {
+              //             item.type = '方式四'
+              //         }
+              //     })
+               }
             }
         },
         handleGetClassRecordErr(err) {
@@ -230,21 +229,11 @@ export default {
            this.currentPage = val;
         },
         showSeat(id, type) {
-          let typeNew = type;
-          if(typeNew == '方式一') {
-                  typeNew = 1
-              }else if(typeNew == '方式二') {
-                  typeNew = 2
-              }else if(typeNew == '方式三') {
-                  typeNew = 3
-              }else {
-                  typeNew = 4
-              }
             let routeUrl = this.$router.resolve({
               path: '/detailSeat',
               query: {
                 id:  id,
-                type: typeNew
+                type: type
               }
              });
             window.open(routeUrl .href, '_blank');

@@ -179,8 +179,6 @@
        </table>
      </el-col>
    </el-row>
-
-
 	</el-card>
 	</div>
 </template>
@@ -270,7 +268,7 @@ export default {
         yAxis: {
             type: 'value',
             min:0,
-            max:1,
+            max:2,
             splitNumber:10
         },
         series: [{
@@ -373,7 +371,7 @@ export default {
          yAxis: {
              name: '单位为(mm)',
              type: 'value',
-             min:15,
+             min:20,
              max:35,
              splitNumber:20
          },

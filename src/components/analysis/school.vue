@@ -13,7 +13,6 @@
                         <el-button slot="append" icon="el-icon-search" @click="querySchool"></el-button>
                      </el-input>
                  </el-col>
-
              </el-row>
             <!-- 学校列表 -->
             <el-table :data="this.schoolList.slice((currentPage-1) * pageSize, currentPage * pageSize)" border  stripe style="width: 100%" v-show="!this.searchSchoolList.length" >
@@ -71,24 +70,25 @@ export default {
            schoolList: [],
            editDialogVisible: false,
            addDialogVisible: false, //控制对话框的显示隐藏
-         
-          
-           searchSchoolList:[]
+           searchSchoolList:[],
+           schoolId: 0
        }
     },
     created() {
-        this.token = window.sessionStorage.getItem('token');
-        this.getSchoolList();
-    },
+      this.token = window.sessionStorage.getItem('token');
+      let user = window.sessionStorage.getItem('token');
+      this.identity = user.split('-') [1];
+      this.schoolId = user.split('-')[2];
+       this.getSchoolList();
 
+    },
     methods:{
       //查看学校视力概况
       getSchoolSurvey(row) {
         window.sessionStorage.setItem('schoolName', row.name);
         let id = row.id;
          let routeUrl = this.$router.resolve({
-                  path: "/schoolSurvey/"+ id,
-                  // query: {id:id}
+                  path: "/schoolSurvey/"+ id
              });
              window.open(routeUrl .href, '_blank');
       },
@@ -108,12 +108,24 @@ export default {
                .catch(this.handleGetSchoolErr.bind(this))
         },
         handleGetSchoolSucc(res) {
+          let that= this;
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
               this.$router.push('/login');
              } else if(res.data.status == 200) {
                this.schoolList = res.data.data;
-            }
+               if(this.identity == 1) {  // admin
+                   }else if(this.identity == 2) {   //2 校长
+
+                  let filterSchool = this.schoolList.filter((item,index) => {
+                    if(item.id == Number(that.schoolId)) {
+                      return item
+                    }
+                  })
+                  this.schoolList = filterSchool;
+               }
+
+          }
         },
         handleGetSchoolErr(error) {
            console.log(error)
@@ -243,7 +255,7 @@ export default {
                 .catch(this.handleEditSaveSchoolErr.bind(this))
                 })
         },
-         handleEditSaveSchoolSucc(res) {
+        handleEditSaveSchoolSucc(res) {
              if(res.data.status === 10204) {
                  this.$message.error(res.data.msg);
                  this.$router.push('/login');

@@ -44,12 +44,9 @@
 				<router-view></router-view>
 			</el-main>
 		</el-container>
-    <el-container v-show="showModal &&(this.identity == 1 || this.identity == 2 ) " >
+    <el-container v-show="showModal &&(this.identity == 1) " >
       <el-main class="mainBox">
-      <!-- <el-button @click="hideModal" type="primary"> 裸眼检测</el-button>
-        <el-button @click="gotoWear" type="primary"> 戴镜检测</el-button>
-        <el-button @click="gotoSeat" type="primary"> 座位查询</el-button> -->
-        <el-row>
+         <el-row>
           <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
         </el-row>
         <el-row style="margin: 40rpx 0">
@@ -71,6 +68,35 @@
              <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
           </el-col>
            <el-col :span="8" style="text-align: center">
+           <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
+          </el-col>
+           <el-col :span="8" style="text-align: center">
+          <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
+          </el-col>
+        </el-row>
+       </el-main>
+    </el-container>
+    <el-container v-show="showModal &&(this.identity == 2) " >
+      <el-main class="mainBox">
+        <el-row>
+          <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
+        </el-row>
+        <el-row style="margin: 40rpx 0">
+         <el-col :span="24" class="titleWrap">儿童青少年近视“人工干预|智能防控”管理系统</el-col>
+        </el-row>
+        <el-row :gutter="20" class="bottomWrap">
+          <el-col :span="8" style="text-align: center">
+           <img src="../assets/image/school.png" @click="gotoShcool" class="imgWrap" alt="">
+          </el-col>
+          <el-col :span="8" style="text-align: center">
+            <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
+          </el-col>
+          <el-col :span="8" style="text-align: center">
+            <img src="../assets/image/schoolReport.png" @click="gotoZhineng" class="imgWrap" alt="">
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin: 20px 0" >
+          <el-col :span="8" style="text-align: center">
            <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
           </el-col>
            <el-col :span="8" style="text-align: center">
@@ -134,7 +160,6 @@ import router from '../router/index'
                   '46': 'common backManage',
                   '50': 'common record',
                   '53': 'common config'
-
                 },
                 secondIconObj: {
                   '2': '',
@@ -196,6 +221,12 @@ import router from '../router/index'
             this.activePath = '/classStatistics';
             router.push('/classStatistics')
           },
+          gotoZhineng() {
+            this.showModal = false;
+             window.sessionStorage.setItem('showModal', this.showModal);
+             this.activePath = '/online';
+             router.push('/online')
+          },
           gotoSchoolReport() {
             this.showModal = false;
             window.sessionStorage.setItem('showModal', this.showModal);
@@ -232,11 +263,9 @@ import router from '../router/index'
               } else if(res.data.status == 200) {
                  this.menuList = res.data.data;
               }
-
             },
             handleGetMenuListErr(err) {
                 console.log(err)
-
             },
             //保存链接的激活状态
             saveNavState(activePath) {
@@ -265,7 +294,6 @@ import router from '../router/index'
             margin-left: 15px;
         }
     }
-
 }
 .el-aside {
     background-color: #333744;
@@ -328,7 +356,6 @@ import router from '../router/index'
     background: url('../assets/image/icon/config.png') center no-repeat;
     background-size: contain;
   }
-
 .common:before{
     content: "替";
     font-size: 16px;
@@ -336,12 +363,10 @@ import router from '../router/index'
     width: 20px;
     height: 20rpx;
 }
-
 //如果直接使用字体图片
 //直接在before属性设置对应的content就行
 .common{
     font-size: 16px;
-
 }
 .common:before{
     content: "\e611";
@@ -351,7 +376,6 @@ import router from '../router/index'
   height: calc(50%);
   margin: 0 auto;
   position: relative;
-
 }
 .textWrap {
   position: absolute;
@@ -362,7 +386,6 @@ import router from '../router/index'
   right: 0;
   top: 0;
   bottom: 0;
-
 }
 .welcome {
   text-align: center;

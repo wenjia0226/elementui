@@ -281,7 +281,7 @@ export default {
     created() {
         this.token = window.sessionStorage.getItem('token');
         this.getOPtions();
-         let user = window.sessionStorage.getItem('token');
+        let user = window.sessionStorage.getItem('token');
         this.identity = user.split('-') [1];
         this.fondId = user.split('-')[2];
          if(this.identity == 1) {  // admin
