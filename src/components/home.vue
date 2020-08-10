@@ -44,7 +44,7 @@
 				<router-view></router-view>
 			</el-main>
 		</el-container>
-    <el-container v-show="showModal &&(this.identity == 1) " >
+    <el-container v-show="showModal &&(this.identity == 1  || this.identity == 2) " >
       <el-main class="mainBox">
          <el-row>
           <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
@@ -54,31 +54,28 @@
         </el-row>
         <el-row :gutter="20" class="bottomWrap">
           <el-col :span="8" style="text-align: center">
-            <img src="../assets/image/luoyan.png"  @click="gotoLuo" class="imgWrap" alt="">
-          </el-col>
-           <el-col :span="8" style="text-align: center">
-           <img src="../assets/image/school.png" @click="gotoShcool" class="imgWrap" alt="">
+            <img src="../assets/image/zhineng.jpg" @click="gotoZhi" class="imgWrap" alt="">
           </el-col>
           <el-col :span="8" style="text-align: center">
-            <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
+            <img src="../assets/image/base.jpg"  @click="gotoBase" class="imgWrap" alt="">
+          </el-col>
+           <el-col :span="8" style="text-align: center">
+           <img src="../assets/image/jiance.jpg" @click="gotojiance" class="imgWrap" alt="">
           </el-col>
         </el-row>
         <el-row :gutter="20" style="margin: 20px 0" >
           <el-col :span="8" style="text-align: center">
-             <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
+             <img src="../assets/image/shili.jpg"   @click="gotoShili" class="imgWrap" alt="">
           </el-col>
            <el-col :span="8" style="text-align: center">
-           <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
-          </el-col>
-           <el-col :span="8" style="text-align: center">
-          <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
+          <img src="../assets/image/baobiao.jpg" @click="gotoSchoolreport" class="imgWrap" alt="">
           </el-col>
         </el-row>
        </el-main>
     </el-container>
-    <el-container v-show="showModal &&(this.identity == 2) " >
+    <el-container v-show="showModal &&(this.identity == 3) " >
       <el-main class="mainBox">
-        <el-row>
+         <el-row>
           <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
         </el-row>
         <el-row style="margin: 40rpx 0">
@@ -86,53 +83,23 @@
         </el-row>
         <el-row :gutter="20" class="bottomWrap">
           <el-col :span="8" style="text-align: center">
-           <img src="../assets/image/school.png" @click="gotoShcool" class="imgWrap" alt="">
-          </el-col>
-          <el-col :span="8" style="text-align: center">
-            <img src="../assets/image/schoolReport.png" @click="gotoSchoolReport" class="imgWrap" alt="">
-          </el-col>
-          <el-col :span="8" style="text-align: center">
-            <img src="../assets/image/schoolReport.png" @click="gotoZhineng" class="imgWrap" alt="">
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin: 20px 0" >
-          <el-col :span="8" style="text-align: center">
-           <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
+            <img src="../assets/image/zhineng.jpg" @click="gotoZhi" class="imgWrap" alt="">
           </el-col>
            <el-col :span="8" style="text-align: center">
-          <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
+           <img src="../assets/image/jiance.jpg" @click="gotojiance" class="imgWrap" alt="">
+          </el-col>
+          <el-col :span="8" style="text-align: center">
+             <img src="../assets/image/shili.jpg"   @click="gotoClassShili" class="imgWrap" alt="">
           </el-col>
         </el-row>
+      <!--  <el-row :gutter="20" style="margin: 20px 0" >
+           <el-col :span="8" style="text-align: center">
+          <img src="../assets/image/baobiao.jpg" @click="gotoClassReport" class="imgWrap" alt="">
+          </el-col>
+        </el-row> -->
        </el-main>
     </el-container>
-    <el-container v-show="showModal &&( this.identity == 3) " >
-      <el-main class="mainBox">
-      <!-- <el-button @click="hideModal" type="primary"> 裸眼检测</el-button>
-        <el-button @click="gotoWear" type="primary"> 戴镜检测</el-button>
-        <el-button @click="gotoSeat" type="primary"> 座位查询</el-button> -->
-        <el-row>
-          <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
-        </el-row>
-        <el-row style="margin: 40rpx 0">
-         <el-col :span="24" class="titleWrap">儿童青少年近视“人工干预|智能防控”管理系统</el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin: 20px 0;" class="bottomWrap">
-          <el-col :span="6" style="text-align: center">
-            <img src="../assets/image/luoyan.png"  @click="gotoLuo" class="imgWrap" alt="">
-          </el-col>
-          <el-col :span="6" style="text-align: center">
-             <img src="../assets/image/daijing.png"   @click="gotoWear" class="imgWrap" alt="">
-          </el-col>
-           <el-col :span="6" style="text-align: center">
-           <img src="../assets/image/class.png" @click="gotoClass" class="imgWrap" alt="">
-          </el-col>
-           <el-col :span="6" style="text-align: center">
-          <img src="../assets/image/classReport.png" @click="gotoClassReport" class="imgWrap" alt="">
-          </el-col>
-        </el-row>
-      </el-main>
-    </el-container>
-    </el-container>
+   </el-container>
 </template>
 <script>
 import axios from 'axios'
@@ -197,29 +164,35 @@ import router from '../router/index'
             this.identity = user.split('-') [1];
         },
         methods: {
-          gotoLuo() {
+          gotoBase() {
+            this.showModal = false;
+            window.sessionStorage.setItem('showModal', this.showModal);
+            this.activePath = '/schoolsetting';
+            router.push('/schoolsetting')
+          },
+          gotojiance(){
             this.showModal = false;
             window.sessionStorage.setItem('showModal', this.showModal);
             this.activePath = '/screeningsetting';
             router.push('/screeningsetting')
           },
-          gotoWear(){
+          gotoZhi() {
             this.showModal = false;
             window.sessionStorage.setItem('showModal', this.showModal);
-            this.activePath = '/screeningwearsetting';
-            router.push('/screeningwearsetting')
+            this.activePath = '/online';
+            router.push('/online')
           },
-          gotoShcool() {
-            this.showModal = false;
+          gotoShili() {
+           this.showModal = false;
             window.sessionStorage.setItem('showModal', this.showModal);
             this.activePath = '/schoolStatistics';
             router.push('/schoolStatistics')
           },
-          gotoClass() {
-           this.showModal = false;
-            window.sessionStorage.setItem('showModal', this.showModal);
-            this.activePath = '/classStatistics';
-            router.push('/classStatistics')
+          gotoClassShili() {
+            this.showModal = false;
+              window.sessionStorage.setItem('showModal', this.showModal);
+              this.activePath = '/classStatistics';
+              router.push('/classStatistics')
           },
           gotoZhineng() {
             this.showModal = false;
@@ -227,14 +200,14 @@ import router from '../router/index'
              this.activePath = '/online';
              router.push('/online')
           },
-          gotoSchoolReport() {
+          gotoSchoolreport() {
             this.showModal = false;
             window.sessionStorage.setItem('showModal', this.showModal);
             this.activePath = '/schoolreport';
             router.push('/schoolreport')
           },
           gotoClassReport() {
-              this.showModal = true;
+            this.showModal = true;
             window.sessionStorage.setItem('showModal', this.showModal);
             this.activePath = '/classreport';
             router.push('/classreport')
