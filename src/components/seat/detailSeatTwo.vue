@@ -20,9 +20,10 @@
       </div>
     <div class="innerWrap">
      <!-- 方式一 -->
-    <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 6">
+    <div class="outerBox" :class="{'bor': item1 == (topNum || floorNum)}" v-for="(item1, index) in reversePai"  v-if="type == 6" >
        <div>第{{item1}} 排</div>
-       <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 6)" draggable="true"
+       <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 6)"  draggable="true"
+           @click="showRecordEditDialog(item.studentId)"
            @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
            @dragover.prevent="handleDragover($event, item)"
@@ -42,6 +43,7 @@
               </div>
          </div>
        <div class="item" :class="{'mr20':item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 6, item1 * 6)" :key="item.id" draggable="true"
+         @click="showRecordEditDialog(item.studentId)"
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
          @dragover.prevent="handleDragover($event, item)"
@@ -61,6 +63,7 @@
     <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 7">
       <div>第{{item1}} 排</div>
       <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 7)" draggable="true"
+          @click="showRecordEditDialog(item.studentId)"
           @dragstart="handleDragStart($event, item)"
           @dragenter="handleDragEnter($event, item)"
           @dragover.prevent="handleDragover($event, item)"
@@ -79,6 +82,7 @@
              </div>
         </div>
       <div class="item" :class="{'mr20':item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 7, item1 *7)" :key="item.id" draggable="true"
+        @click="showRecordEditDialog(item.studentId)"
         @dragstart="handleDragStart($event, item)"
         @dragenter="handleDragEnter($event, item)"
         @dragover.prevent="handleDragover($event, item)"
@@ -98,6 +102,7 @@
     <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 8">
        <div>第{{item1}} 排</div>
        <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 8)" draggable="true"
+           @click="showRecordEditDialog(item.studentId)"
            @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
            @dragover.prevent="handleDragover($event, item)"
@@ -116,6 +121,7 @@
               </div>
          </div>
        <div class="item" :class="{'mr20':item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 8, item1 *8)" :key="item.id" draggable="true"
+         @click="showRecordEditDialog(item.studentId)"
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
          @dragover.prevent="handleDragover($event, item)"
@@ -135,7 +141,8 @@
     <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 9">
       <div>第{{item1}} 排</div>
       <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 9)" draggable="true"
-            @dragstart="handleDragStart($event, item)"
+           @click="showRecordEditDialog(item.studentId)"
+           @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
            @dragover.prevent="handleDragover($event, item)"
            @drop="handleDrop($event, item)"
@@ -153,6 +160,7 @@
               </div>
          </div>
        <div class="item" :class="{'mr20':item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 9, item1 *9)" :key="item.id" draggable="true"
+         @click="showRecordEditDialog(item.studentId)"
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
          @dragover.prevent="handleDragover($event, item)"
@@ -173,6 +181,57 @@
      <img src="../../assets/image/jiangtai.png">
    </div>
   </div>
+
+      <el-dialog title="学生信息" :visible.sync="editRecordDialogVisible" >
+        <el-form :model="editRecordForm" ref="recordEditFormRef" label-width="120px" >
+          <el-form-item label="姓名">
+              <el-input v-model="editRecordForm.studentName" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="所属学校" >
+              <el-input v-model="editRecordForm.schoolName"  disabled></el-input>
+          </el-form-item>
+          <el-form-item label="所属班级" >
+              <el-input v-model="editRecordForm.classesName" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="左眼裸眼视力">
+              <el-input v-model="editRecordForm.visionLeft" disabled></el-input>
+          </el-form-item>
+           <el-form-item label="右眼裸眼视力">
+              <el-input v-model="editRecordForm.visionRight" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="左眼矫正视力">
+              <el-input v-model="editRecordForm.cvaLeft" disabled></el-input>
+          </el-form-item>
+           <el-form-item label="右眼矫正视力">
+              <el-input  v-model="editRecordForm.cvaRight" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="坐高">
+              <el-input v-model="editRecordForm.sittingHeight" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="左眼曲率">
+              <el-input  v-model="editRecordForm.curvatureLeft" disabled></el-input>
+          </el-form-item>
+           <el-form-item label="右眼曲率">
+              <el-input  v-model="editRecordForm.curvatureRight" disabled></el-input>
+          </el-form-item>
+
+           <el-form-item label="左眼屈光度">
+              <el-input v-model="editRecordForm.diopterLeft" disabled></el-input>
+          </el-form-item>
+           <el-form-item label="右眼屈光度">
+              <el-input v-model="editRecordForm.diopterRight" disabled></el-input>
+          </el-form-item>
+           <el-form-item label="左眼眼轴长度">
+              <el-input v-model="editRecordForm.eyeAxisLengthLeft" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="右眼眼轴长度">
+              <el-input v-model.number="editRecordForm.eyeAxisLengthRight	" disabled></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button  type="primary" @click="editRecordDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
  </div>
 </template>
 <script>
@@ -194,10 +253,51 @@ export default {
             reversePai: [],
             remind: true,
             t: 0,
-            mrShow: false
+            mrShow: false,
+            editRecordDialogVisible: false,
+            editRecordForm: {
+              curvatureLeft: '',
+              curvatureRight: '',
+              cvaLeft: '',
+              cvaRight: '',
+              diopterLeft: '',
+              diopterRight: '',
+              eyeAxisLengthLeft: '',
+              eyeAxisLengthRight: '',
+              visionLeft: '',
+              visionLeft: '',
+              record_cat: '',
+              studentName: '',
+              schoolName:'',
+              classesName:''
+          },
+          floorNum: 0,
+          topNum: 0
       }
     },
     methods:{
+      //编辑出现编辑页面
+      showRecordEditDialog(id) {
+         // this.$refs.box.scrollTop = this.scrollTop;
+          let param = new URLSearchParams();
+          param.append('id', id);
+          param.append('token',this.token)
+          axios({
+              method: 'post',
+              url: '/lightspace/studentRecord',
+              data: param
+          }).then(this.handleEditRecordSucc.bind(this))
+          .catch(this.handleEditRecordErr.bind(this))
+          },
+      handleEditRecordSucc(res) {
+          if(res.status !== 200) return;
+          res ? res = res.data: '';
+          this.editRecordForm = res.data;
+          this.editRecordDialogVisible = true;
+      },
+      handleEditRecordErr(err) {
+          console.log(err)
+      },
       reduceMargin(e) {
         this.mrShow = false;
         let t = Number(e.target.dataset.index);
@@ -234,7 +334,6 @@ export default {
           }
         }
         this.divList = temDivList;
-
       },
       addMargin(e) {
            this.mrShow = true;
@@ -296,7 +395,6 @@ export default {
           }
 
         })
-        console.log(mrArr)
         let param = new FormData();
         param.append('token', this.token);
         param.append('id', this.id);
@@ -320,7 +418,8 @@ export default {
           })
     },
       handleDragStart(e, item) {
-        this.dragging = item
+        this.dragging = item;
+        this.selectedSeat();
       },
       // 当被鼠标拖动的对象进入其容器范围内时触发此事件
       handleDragEnter(e) {
@@ -352,7 +451,8 @@ export default {
         item.mr = toMr;
         newItems[to] = this.dragging;
         this.divList = newItems;
-       // this.changeBelongs();
+        this.topNum = 0;
+        this.floorNum = 0;
       },
       // 完成元素拖动后触发
       handleDragEnd() {
@@ -371,6 +471,7 @@ export default {
          }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
        },
      handleGetSeatQuerySucc(res) {
+       console.log(res)
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
@@ -378,6 +479,7 @@ export default {
            if(res.data.data.length == 0) return this.$message.error('请先添加学生');
            this.divList =res.data.data.data;
            this.id = res.data.data.id;
+           this.sort_group = res.data.data.sort_group;
            this.divList.forEach((item, index) => {
              item.mr = false
            })
@@ -386,11 +488,33 @@ export default {
         } else if(res.data.status =10216) {
            this.$message.error(res.data.msg);
         }
-
-
      },
     handleGetSeatQueryErr(err) {
          console.log(err)
+    },
+    selectedSeat() {
+      let chooseStu = this.dragging;
+      let group = this.sort_group;
+      let selectGroup = 0;
+      let reduce = 0;
+      let sum = 0;
+      for(let i = 0; i < group.length; i++) {
+        for(let j = 0; j < group[i].length; j++) {
+          if(group[i][j].studentId == chooseStu.studentId) {
+            selectGroup = i;
+          }
+        }
+      }
+      for(let k = 0; k <= selectGroup; k++) {
+        sum += group[k].length
+      }
+      for(let z = 0; z < selectGroup;z++) {
+         reduce += group[z].length;
+      }
+      console.log(Math.ceil(sum / this.type), Math.floor(reduce / this.type))
+      this.topNum = Math.ceil(sum / this.type);
+      this.floorNum = Math.floor(reduce / this.type);
+
     },
     changeBelongs() {
       this.reversePai = []; //先清空循环
@@ -459,6 +583,9 @@ export default {
 }
 </script>
 <style lang="less">
+  .bor {
+    border: 1px solid red;
+  }
   .addBtn {
     position: absolute;
     right: -20px;

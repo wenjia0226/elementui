@@ -9,17 +9,17 @@
          <!-- 卡片视图 -->
         <el-card>
             <el-row :gutter="10">
-                <el-col :span="2">
+                <el-col :span="3">
                      <div class="schoolSet">学校班级选择：</div>
                 </el-col>
                 <el-col :span="4">
                      <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                 </el-col>
-                 <el-col :span="2">
-                     <div class="schoolSet">排座方式选择：</div>
+                 <el-col :span="3">
+                     <div class="schoolSet">排座列数选择：</div>
                 </el-col>
-                <el-col :span="3">
-                    <el-select v-model="value" placeholder="请选择排座方式" @focus="handleTypeChange(value)" clearable>
+                <el-col :span="4">
+                    <el-select v-model="value" placeholder="请选择排座列数" @focus="handleTypeChange(value)" clearable>
                     <el-option v-for="item in typeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
                     </el-option>
                 </el-select>
@@ -44,12 +44,12 @@
               <el-col :span="6">方式四:</el-col>
             </el-row>
             <el-row class="row" style="font-size: 20px"  v-if="!this.studentList.length">
+              <el-col :span="6">6列排布</el-col>
+              <el-col :span="6">7列排布</el-col>
               <el-col :span="6">8列排布</el-col>
               <el-col :span="6">9列排布</el-col>
-              <el-col :span="6">6列排布</el-col>
-              <el-col :span="6">6列排布</el-col>
             </el-row>
-            <el-row style="margin: 20px 0px" v-if="!this.studentList.length">
+            <!-- <el-row style="margin: 20px 0px" v-if="!this.studentList.length">
               <el-col :span="6">
                     <el-image  style="min-height: 200px":src="style1.url" :title="style1.title" fit="fit"></el-image>
               </el-col>
@@ -62,7 +62,7 @@
               <el-col :span="6">
                     <el-image  style="min-height: 200px":src="style4.url" :title="style4.title" fit="fit"></el-image>
               </el-col>
-            </el-row>   
+            </el-row> -->
         </el-card>
     </div>
 </template>
