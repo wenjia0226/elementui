@@ -20,7 +20,7 @@
       </div>
     <div class="innerWrap">
      <!-- 方式一 -->
-    <div class="outerBox" :class="{'bor': item1 == (topNum || floorNum)}" v-for="(item1, index) in reversePai"  v-if="type == 6" >
+    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 6" >
        <div>第{{item1}} 排</div>
        <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 6)"  draggable="true"
            @click="showRecordEditDialog(item.studentId)"
@@ -32,7 +32,7 @@
               <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
               <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
               <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-              <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+              <img class="img" src="../../assets/image/wearboy.png" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
               <img class="img" src="../../assets/image/kong.png"  width="120px" alt="" v-else-if="item.gender == 2">
               <div class="name">
                  {{item.studentName}}
@@ -49,18 +49,18 @@
          @dragover.prevent="handleDragover($event, item)"
          @drop="handleDrop($event, item)"
          @dragend="handleDragEnd($event, item)">
-            <img  class="img" src="../../assets/image/girl.png"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-            <img class="img" src="../../assets/image/weargirl.png"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-            <img class="img" src="../../assets/image/boy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-            <img class="img" src="../../assets/image/kong.png"  width="120px" alt="" v-else-if="item.gender == 2">
+            <img  class="img" src="../../assets/image/girl.png"    width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+            <img class="img" src="../../assets/image/weargirl.png" width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+            <img class="img" src="../../assets/image/boy.png" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="img" src="../../assets/image/wearboy.png" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+            <img class="img" src="../../assets/image/kong.png" width="120px" alt="" v-else-if="item.gender == 2">
             <div class="name">
                {{item.studentName}}
             </div>
        </div>
      </div>
       <!-- 方式二 -->
-    <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 7">
+    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 7">
       <div>第{{item1}} 排</div>
       <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 7)" draggable="true"
           @click="showRecordEditDialog(item.studentId)"
@@ -99,7 +99,7 @@
       </div>
     </div>
     <!-- 方式三-->
-    <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 8">
+    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 8">
        <div>第{{item1}} 排</div>
        <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 8)" draggable="true"
            @click="showRecordEditDialog(item.studentId)"
@@ -138,7 +138,8 @@
        </div>
      </div>
     <!-- 方式四 -->
-    <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 9">
+    <!-- 方式四 -->
+    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 9">
       <div>第{{item1}} 排</div>
       <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 9)" draggable="true"
            @click="showRecordEditDialog(item.studentId)"
@@ -205,8 +206,8 @@
            <el-form-item label="右眼矫正视力">
               <el-input  v-model="editRecordForm.cvaRight" disabled></el-input>
           </el-form-item>
-          <el-form-item label="坐高">
-              <el-input v-model="editRecordForm.sittingHeight" disabled></el-input>
+          <el-form-item label="身高">
+              <el-input v-model="editRecordForm.height" disabled></el-input>
           </el-form-item>
           <el-form-item label="左眼曲率">
               <el-input  v-model="editRecordForm.curvatureLeft" disabled></el-input>
@@ -251,6 +252,7 @@ export default {
             hasDistance: false,
             totalPai: 0,
             reversePai: [],
+            visonArr: [0.5,0.6,0.7,0.8,0.9,1.0],
             remind: true,
             t: 0,
             mrShow: false,
@@ -272,7 +274,9 @@ export default {
               classesName:''
           },
           floorNum: 0,
-          topNum: 0
+          topNum: 0,
+          chooseStr: '',
+
       }
     },
     methods:{
@@ -436,6 +440,10 @@ export default {
       // 当放置被拖元素时
 
       handleDrop(e, item) {
+        this.topNum = 0;
+        this.floorNum = 0;
+        this.chooseStr = '';
+        // 拖拽完成去除边框
         e.dataTransfer.dropEffect = 'move'
         if(item === this.dragging){
           return
@@ -451,14 +459,13 @@ export default {
         item.mr = toMr;
         newItems[to] = this.dragging;
         this.divList = newItems;
-        this.topNum = 0;
-        this.floorNum = 0;
+
       },
       // 完成元素拖动后触发
       handleDragEnd() {
         this.dragging = null
       },
-      getSeatTable() {
+     getSeatTable() {
         let param = new URLSearchParams();
          param.append('token', this.token);
          param.append('classId', this.classId);
@@ -471,7 +478,7 @@ export default {
          }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
        },
      handleGetSeatQuerySucc(res) {
-       console.log(res)
+       console.log(res.data.data, 'seat')
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
@@ -489,15 +496,16 @@ export default {
            this.$message.error(res.data.msg);
         }
      },
-    handleGetSeatQueryErr(err) {
-         console.log(err)
-    },
-    selectedSeat() {
+     handleGetSeatQueryErr(err) {
+       console.log(err)
+     },
+     selectedSeat() {
       let chooseStu = this.dragging;
       let group = this.sort_group;
       let selectGroup = 0;
       let reduce = 0;
       let sum = 0;
+      let chooseStr = '';
       for(let i = 0; i < group.length; i++) {
         for(let j = 0; j < group[i].length; j++) {
           if(group[i][j].studentId == chooseStu.studentId) {
@@ -511,18 +519,31 @@ export default {
       for(let z = 0; z < selectGroup;z++) {
          reduce += group[z].length;
       }
-      console.log(Math.ceil(sum / this.type), Math.floor(reduce / this.type))
+      // console.log(sum ,reduce)
       this.topNum = Math.ceil(sum / this.type);
-      this.floorNum = Math.floor(reduce / this.type);
+      this.floorNum = Math.ceil(reduce / this.type);
+      //console.log( this.topNum, this.floorNum)
+     for(let b = this.floorNum; b <= this.topNum; b++) {
+        chooseStr += b;
+     }
+     this.chooseStr = chooseStr;
 
     },
     changeBelongs() {
-      this.reversePai = []; //先清空循环
+      this.reversePai.firstList = []; //先清空循环
       // this.divList.forEach((item, index) => {
       //   item.mr = false;
       // })
+      let visonArr= [];
      if(this.type == 6) {
        this.totalPai = Math.ceil(this.divList.length / 6);
+       let total = this.totalPai;
+       let com = this.visonArr.length;
+       if(com < total) {
+         for(let k = com; k < total; k++) {
+           this.visonArr.push(1.0)
+         }
+       }
        let t = this.totalPai * 6 - this.divList.length;
        for(let i = 0; i < t; i++) {
          this.divList.push({
@@ -559,10 +580,10 @@ export default {
             mr: false
          })
        }
-       for(let t = 0; t< this.totalPai; t++) {
-          let num = this.totalPai - t;
-          this.reversePai.push(num)
-        }
+      for(let t = 0; t< this.totalPai; t++) {
+         let num = this.totalPai - t;
+         this.reversePai.push(num)
+       }
      }else if(this.type == 9) {
        this.totalPai = Math.ceil(this.divList.length / 9);
        let t = this.totalPai * 9 - this.divList.length;
@@ -643,6 +664,7 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     font-weight: bold;
+    box-sizing: border-box;
   }
 .item {
 	display: inline-block;
