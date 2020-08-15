@@ -20,9 +20,9 @@
       </div>
     <div class="innerWrap">
      <!-- 方式一 -->
-    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 6" >
-       <div>第{{item1}} 排</div>
-       <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 6)"  draggable="true"
+    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1.num) !== -1}" v-for="(item1, index) in reversePai"  v-if="type == 6" >
+       <div>第{{item1.num}} {{item1.vison}}排</div>
+       <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord}" v-if="item1.num == totalPai" v-for="(item, index2) in divList.slice((item1.num- 1) * 6)"  draggable="true"
            @click="showRecordEditDialog(item.studentId)"
            @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
@@ -42,7 +42,9 @@
               <!--  <img src="../../assets/image/jian.png" v-if="mrShow"  @click="reduceMargin"  :data-index="index2 +1"> -->
               </div>
          </div>
-       <div class="item" :class="{'mr20':item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 6, item1 * 6)" :key="item.id" draggable="true"
+       <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord }"
+        v-if="item1.num !== totalPai"
+        v-for="(item) in divList.slice((item1.num -1) * 6, item1.num * 6)" :key="item.id" draggable="true"
          @click="showRecordEditDialog(item.studentId)"
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
@@ -55,14 +57,14 @@
             <img class="img" src="../../assets/image/wearboy.png" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
             <img class="img" src="../../assets/image/kong.png" width="120px" alt="" v-else-if="item.gender == 2">
             <div class="name">
-               {{item.studentName}}
+               {{item.studentName}} {{item.avgRecord}}
             </div>
        </div>
      </div>
       <!-- 方式二 -->
-    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 7">
-      <div>第{{item1}} 排</div>
-      <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 7)" draggable="true"
+    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1.num) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 7">
+      <div>第{{item1.num}}  {{item1.vison}}排</div>
+      <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord}" v-if="item1.num == totalPai" v-for="(item, index2) in divList.slice((item1.num- 1) * 7)" draggable="true"
           @click="showRecordEditDialog(item.studentId)"
           @dragstart="handleDragStart($event, item)"
           @dragenter="handleDragEnter($event, item)"
@@ -75,13 +77,13 @@
              <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
              <img class="img" src="../../assets/image/kong.png"  width="120px" alt="" v-else-if="item.gender == 2">
              <div class="name">
-                {{item.studentName}}
+               {{item.studentName}} {{item.avgRecord}}
              </div>
              <div class="addBtn">
                <img src="../../assets/image/jia.png"  @click="addMargin" :data-index="index2 +1">
              </div>
         </div>
-      <div class="item" :class="{'mr20':item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 7, item1 *7)" :key="item.id" draggable="true"
+      <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord}" v-if="item1.num!== totalPai" v-for="(item) in divList.slice((item1.num -1) * 7, item1.num *7)" :key="item.id" draggable="true"
         @click="showRecordEditDialog(item.studentId)"
         @dragstart="handleDragStart($event, item)"
         @dragenter="handleDragEnter($event, item)"
@@ -94,14 +96,14 @@
            <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
             <img class="img" src="../../assets/image/kong.png"  width="120px" alt="" v-else-if="item.gender == 2">
            <div class="name">
-              {{item.studentName}}
+              {{item.studentName}} {{item.avgRecord}}
            </div>
       </div>
     </div>
     <!-- 方式三-->
-    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 8">
-       <div>第{{item1}} 排</div>
-       <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 8)" draggable="true"
+    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1.num) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 8">
+       <div>第{{item1.num}} {{item1.vison}}排</div>
+       <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}" v-if="item1.num == totalPai" v-for="(item, index2) in divList.slice((item1.num- 1) * 8)" draggable="true"
            @click="showRecordEditDialog(item.studentId)"
            @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
@@ -114,13 +116,13 @@
               <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
               <img class="img" src="../../assets/image/kong.png"  width="120px" alt="" v-else-if="item.gender == 2">
               <div class="name">
-                 {{item.studentName}}
+                 {{item.studentName}} {{item.avgRecord}}
               </div>
               <div class="addBtn">
                 <img src="../../assets/image/jia.png"  @click="addMargin" :data-index="index2 +1">
               </div>
          </div>
-       <div class="item" :class="{'mr20':item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 8, item1 *8)" :key="item.id" draggable="true"
+       <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}" v-if="item1.num !== totalPai" v-for="(item) in divList.slice((item1.num -1) * 8, item1.num *8)" :key="item.id" draggable="true"
          @click="showRecordEditDialog(item.studentId)"
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
@@ -133,15 +135,15 @@
             <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
             <img class="img" src="../../assets/image/kong.png"  width="120px" alt="" v-else-if="item.gender == 2">
             <div class="name">
-               {{item.studentName}}
+              {{item.studentName}} {{item.avgRecord}}
             </div>
        </div>
      </div>
     <!-- 方式四 -->
-    <!-- 方式四 -->
-    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 9">
-      <div>第{{item1}} 排</div>
-      <div class="item" :class="{'mr20':item.mr}" v-if="item1 == totalPai" v-for="(item, index2) in divList.slice((item1- 1) * 9)" draggable="true"
+   <!-- 方式四 -->
+    <div class="outerBox" :class="{'bor': chooseStr.indexOf(item1.num) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 9">
+      <div>第{{item1.num}} {{item1.vison}} 排</div>
+      <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}" v-if="item1.num == totalPai" v-for="(item, index2) in divList.slice((item1.num- 1) * 9)" draggable="true"
            @click="showRecordEditDialog(item.studentId)"
            @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
@@ -154,13 +156,13 @@
               <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
               <img class="img" src="../../assets/image/kong.png"  width="120px" alt="" v-else-if="item.gender == 2">
               <div class="name">
-                 {{item.studentName}}
+                 {{item.studentName}} {{item.avgRecord}}
               </div>
               <div class="addBtn">
                 <img src="../../assets/image/jia.png"  @click="addMargin" :data-index="index2 +1">
               </div>
          </div>
-       <div class="item" :class="{'mr20':item.mr}" v-if="item1 !== totalPai" v-for="(item) in divList.slice((item1 -1) * 9, item1 *9)" :key="item.id" draggable="true"
+       <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"v-if="item1.num !== totalPai" v-for="(item) in divList.slice((item1.num -1) * 9, item1.num *9)" :key="item.id" draggable="true"
          @click="showRecordEditDialog(item.studentId)"
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
@@ -173,7 +175,7 @@
             <img class="img" src="../../assets/image/wearboy.png"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
             <img class="img" src="../../assets/image/kong.png"  width="120px" alt="" v-else-if="item.gender == 2">
             <div class="name">
-               {{item.studentName}}
+              {{item.studentName}} {{item.avgRecord}}
             </div>
        </div>
      </div>
@@ -478,7 +480,7 @@ export default {
          }).then(this.handleGetSeatQuerySucc.bind(this)).catch(this.handleGetSeatQueryErr.bind(this))
        },
      handleGetSeatQuerySucc(res) {
-       console.log(res.data.data, 'seat')
+         //console.log(res.data.data, 'seat')
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
@@ -527,78 +529,110 @@ export default {
         chooseStr += b;
      }
      this.chooseStr = chooseStr;
+     //console.log(this.chooseStr, 99)
 
     },
+    getReversePai() {
+       let totalNum = [];
+        let vison = 0.5;
+      for(let t = 0; t < this.totalPai; t++) {
+          if(t == 0) {
+            vison = 0.5
+          }else if(t == 1) {
+            vison = 0.6
+          }else if(t == 2) {
+            vison = 0.7
+          }else if(t == 3) {
+            vison = 0.8
+          }else if(t == 4) {
+            vison =  0.9
+          }else  {
+            vison =  1
+          }
+           totalNum.push({
+             num: t + 1,
+             vison: vison
+           })
+      }
+      let change = totalNum.reverse();
+      this.reversePai = totalNum;
+      //console.log(this.reversePai)
+    },
     changeBelongs() {
-      this.reversePai.firstList = []; //先清空循环
-      // this.divList.forEach((item, index) => {
-      //   item.mr = false;
-      // })
-      let visonArr= [];
-     if(this.type == 6) {
-       this.totalPai = Math.ceil(this.divList.length / 6);
-       let total = this.totalPai;
-       let com = this.visonArr.length;
-       if(com < total) {
-         for(let k = com; k < total; k++) {
-           this.visonArr.push(1.0)
-         }
+      this.reversePai = []; //先清空循环
+      let visonArr= [0.5,0.6,0.7,0.8,0.9,1.0];
+      let newArr = [];
+     this.totalPai = Math.ceil(this.divList.length / this.type);
+     let total = this.totalPai;
+     let com = this.visonArr.length;
+     if(com < total) {
+       for(let k = com; k < total; k++) {
+         this.visonArr.push(1.0);
+         visonArr.push(1.0)
        }
-       let t = this.totalPai * 6 - this.divList.length;
-       for(let i = 0; i < t; i++) {
-         this.divList.push({
-            studentName: '',
-            gender: 2,
-            mr: false
-         })
-       }
-       for(let t = 0; t< this.totalPai; t++) {
-          let num = this.totalPai - t;
-          this.reversePai.push(num)
-        }
-     }else if(this.type == 7) {
-       this.totalPai = Math.ceil(this.divList.length / 7);
-       let t = this.totalPai * 7 - this.divList.length;
-       for(let i = 0; i < t; i++) {
-         this.divList.push({
-            studentName: '',
-            gender: 2,
-            mr: false
-         })
-       }
-       for(let t = 0; t< this.totalPai; t++) {
-          let num = this.totalPai - t;
-          this.reversePai.push(num)
-        }
-     }else if(this.type == 8) {
-       this.totalPai = Math.ceil(this.divList.length / 8);
-       let t = this.totalPai * 8 - this.divList.length;
-       for(let i = 0; i < t; i++) {
-         this.divList.push({
-            studentName: '',
-            gender: 2,
-            mr: false
-         })
-       }
-      for(let t = 0; t< this.totalPai; t++) {
-         let num = this.totalPai - t;
-         this.reversePai.push(num)
-       }
-     }else if(this.type == 9) {
-       this.totalPai = Math.ceil(this.divList.length / 9);
-       let t = this.totalPai * 9 - this.divList.length;
-       for(let i = 0; i < t; i++) {
-         this.divList.push({
-            studentName: '',
-            gender: 2,
-            mr: false
-         })
-       }
-       for(let t = 0; t< this.totalPai; t++) {
-          let num = this.totalPai - t;
-          this.reversePai.push(num)
-        }
      }
+     let t = this.totalPai * this.type - this.divList.length;
+     for(let i = 0; i < t; i++) {
+       this.divList.push({
+          studentName: '',
+          gender: 2,
+          mr: false
+       })
+     }
+     this.getReversePai();
+     // if(this.type == 6) {
+     //   this.totalPai = Math.ceil(this.divList.length / 6);
+     //   let total = this.totalPai;
+     //   let com = this.visonArr.length;
+     //   if(com < total) {
+     //     for(let k = com; k < total; k++) {
+     //       this.visonArr.push(1.0);
+     //       visonArr.push(1.0)
+     //     }
+     //   }
+     //   let t = this.totalPai * 6 - this.divList.length;
+     //   for(let i = 0; i < t; i++) {
+     //     this.divList.push({
+     //        studentName: '',
+     //        gender: 2,
+     //        mr: false
+     //     })
+     //   }
+     //   this.getReversePai();
+     // }else if(this.type == 7) {
+     //   this.totalPai = Math.ceil(this.divList.length / 7);
+     //   let t = this.totalPai * 7 - this.divList.length;
+     //   for(let i = 0; i < t; i++) {
+     //     this.divList.push({
+     //        studentName: '',
+     //        gender: 2,
+     //        mr: false
+     //     })
+     //   }
+     //    this.getReversePai();
+     // }else if(this.type == 8) {
+     //   this.totalPai = Math.ceil(this.divList.length / 8);
+     //   let t = this.totalPai * 8 - this.divList.length;
+     //   for(let i = 0; i < t; i++) {
+     //     this.divList.push({
+     //        studentName: '',
+     //        gender: 2,
+     //        mr: false
+     //     })
+     //   }
+     //  this.getReversePai();
+     // }else if(this.type == 9) {
+     //   this.totalPai = Math.ceil(this.divList.length / 9);
+     //   let t = this.totalPai * 9 - this.divList.length;
+     //   for(let i = 0; i < t; i++) {
+     //     this.divList.push({
+     //        studentName: '',
+     //        gender: 2,
+     //        mr: false
+     //     })
+     //   }
+     //   this.getReversePai();
+     // }
    }
   }
 }
@@ -606,6 +640,9 @@ export default {
 <style lang="less">
   .bor {
     border: 1px solid red;
+  }
+  .nopass {
+    border: 2px solid green;
   }
   .addBtn {
     position: absolute;
