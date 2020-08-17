@@ -28,18 +28,19 @@
            v-if="item1.num == totalPai"
            v-for="(item, index2) in divList.slice((item1.num- 1) * 6)"
            draggable="true"
+           @click="showRecordEditDialog(item.studentId)"
            @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
            @dragover.prevent="handleDragover($event, item)"
            @drop="handleDrop($event, item)"
            @dragend="handleDragEnd($event, item)">
-              <img  class="i2" :src="girl"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-              <img class="i2" :src="weargirl"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-              <img class="i2" :src="boy"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-              <img class="i2" :src="wearboy"   @click="showRecordEditDialog(item.studentId)"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-              <img class="i2" :src="kong"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 2">
+              <img  class="i2" :src="girl"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+              <img class="i2" :src="weargirl"   width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+              <img class="i2" :src="boy" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+              <img class="i2" :src="wearboy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+              <img class="i2" :src="kong"   width="120px" alt="" v-else-if="item.gender == 2">
               <div class="name">
-                 {{item.studentName}}
+                   {{item.studentName}} {{item.avgRecord}}
               </div>
               <div class="addBtn" @click="addMargin">
                 <img  src="../../assets/image/jia.png"  v-if="!item.showMr"  :data-index="index2 +1">
@@ -49,16 +50,17 @@
        <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord }"
         v-if="item1.num !== totalPai"
         v-for="(item) in divList.slice((item1.num -1) * 6, item1.num * 6)" :key="item.id" draggable="true"
+         @click="showRecordEditDialog(item.studentId)"
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
          @dragover.prevent="handleDragover($event, item)"
          @drop="handleDrop($event, item)"
          @dragend="handleDragEnd($event, item)">
-           <img  class="i2" :src="girl"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-           <img class="i2" :src="weargirl"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-           <img class="i2" :src="boy"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-           <img class="i2" :src="wearboy"   @click="showRecordEditDialog(item.studentId)"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-           <img class="i2" :src="kong"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 2">
+           <img  class="i2" :src="girl"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="i2" :src="weargirl"    width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="i2" :src="boy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+           <img class="i2" :src="wearboy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <img class="i2" :src="kong"   width="120px" alt="" v-else-if="item.gender == 2">
            <div class="name">
                {{item.studentName}} {{item.avgRecord}}
             </div>
@@ -70,16 +72,17 @@
       <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord}"
        v-if="item1.num == totalPai"
          v-for="(item, index2) in divList.slice((item1.num- 1) * 7)" draggable="true"
+          @click="showRecordEditDialog(item.studentId)" 
           @dragstart="handleDragStart($event, item)"
           @dragenter="handleDragEnter($event, item)"
           @dragover.prevent="handleDragover($event, item)"
           @drop="handleDrop($event, item)"
           @dragend="handleDragEnd($event, item)">
-           <img  class="i2" :src="girl"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-           <img class="i2" :src="weargirl"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-           <img class="i2" :src="boy"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-           <img class="i2" :src="wearboy"   @click="showRecordEditDialog(item.studentId)"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-           <img class="i2" :src="kong"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 2">
+           <img  class="i2" :src="girl" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="i2" :src="weargirl"   width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="i2" :src="boy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+           <img class="i2" :src="wearboy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <img class="i2" :src="kong"  width="120px" alt="" v-else-if="item.gender == 2">
              <div class="name">
                {{item.studentName}} {{item.avgRecord}}
              </div>
@@ -92,16 +95,17 @@
       v-if="item1.num!== totalPai"
       v-for="(item) in divList.slice((item1.num -1) * 7, item1.num *7)" :key="item.id"
        draggable="true"
+        @click="showRecordEditDialog(item.studentId)" 
         @dragstart="handleDragStart($event, item)"
         @dragenter="handleDragEnter($event, item)"
         @dragover.prevent="handleDragover($event, item)"
         @drop="handleDrop($event, item)"
         @dragend="handleDragEnd($event, item)">
-           <img  class="i2" :src="girl"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-           <img class="i2" :src="weargirl"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-           <img class="i2" :src="boy"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-           <img class="i2" :src="wearboy"   @click="showRecordEditDialog(item.studentId)"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-           <img class="i2" :src="kong"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 2">
+           <img  class="i2" :src="girl"width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+           <img class="i2" :src="weargirl" width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+           <img class="i2" :src="boy" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+           <img class="i2" :src="wearboy" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+           <img class="i2" :src="kong"  width="120px" alt="" v-else-if="item.gender == 2">
            <div class="name">
               {{item.studentName}} {{item.avgRecord}}
            </div>
@@ -113,16 +117,17 @@
        <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"
             v-if="item1.num == totalPai"
             v-for="(item, index2) in divList.slice((item1.num- 1) * 8)" draggable="true"
+            @click="showRecordEditDialog(item.studentId)" 
            @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
            @dragover.prevent="handleDragover($event, item)"
            @drop="handleDrop($event, item)"
            @dragend="handleDragEnd($event, item)">
-             <img  class="i2" :src="girl"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-             <img class="i2" :src="weargirl"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-             <img class="i2" :src="boy"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-             <img class="i2" :src="wearboy"   @click="showRecordEditDialog(item.studentId)"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-             <img class="i2" :src="kong"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 2">
+             <img  class="i2" :src="girl" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+             <img class="i2" :src="weargirl" width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+             <img class="i2" :src="boy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+             <img class="i2" :src="wearboy"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+             <img class="i2" :src="kong"  width="120px" alt="" v-else-if="item.gender == 2">
               <div class="name">
                  {{item.studentName}} {{item.avgRecord}}
               </div>
@@ -134,16 +139,17 @@
        <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"
        v-if="item1.num !== totalPai"
        v-for="(item) in divList.slice((item1.num -1) * 8, item1.num *8)" :key="item.id" draggable="true"
+          @click="showRecordEditDialog(item.studentId)" 
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
          @dragover.prevent="handleDragover($event, item)"
          @drop="handleDrop($event, item)"
          @dragend="handleDragEnd($event, item)">
-            <img  class="i2" :src="girl"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-            <img class="i2" :src="weargirl"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-            <img class="i2" :src="boy"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-            <img class="i2" :src="wearboy"   @click="showRecordEditDialog(item.studentId)"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-            <img class="i2" :src="kong"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 2">
+            <img  class="i2" :src="girl"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+            <img class="i2" :src="weargirl"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+            <img class="i2" :src="boy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="i2" :src="wearboy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+            <img class="i2" :src="kong"   width="120px" alt="" v-else-if="item.gender == 2">
             <div class="name">
               {{item.studentName}} {{item.avgRecord}}
             </div>
@@ -156,16 +162,17 @@
       <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"
       v-if="item1.num == totalPai"
       v-for="(item, index2) in divList.slice((item1.num- 1) * 9)" draggable="true"
+           @click="showRecordEditDialog(item.studentId)" 
            @dragstart="handleDragStart($event, item)"
            @dragenter="handleDragEnter($event, item)"
            @dragover.prevent="handleDragover($event, item)"
            @drop="handleDrop($event, item)"
            @dragend="handleDragEnd($event, item)">
-             <img  class="i2" :src="girl"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-             <img class="i2" :src="weargirl"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-             <img class="i2" :src="boy"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-             <img class="i2" :src="wearboy"   @click="showRecordEditDialog(item.studentId)"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-             <img class="i2" :src="kong"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 2">
+             <img  class="i2" :src="girl"  width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+             <img class="i2" :src="weargirl"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+             <img class="i2" :src="boy"  width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+             <img class="i2" :src="wearboy"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+             <img class="i2" :src="kong"  width="120px" alt="" v-else-if="item.gender == 2">
                 <div class="name">
                  {{item.studentName}} {{item.avgRecord}}
               </div>
@@ -177,16 +184,17 @@
        <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"
         v-if="item1.num !== totalPai"
         v-for="(item) in divList.slice((item1.num -1) * 9, item1.num *9)" :key="item.id" draggable="true"
+          @click="showRecordEditDialog(item.studentId)" 
          @dragstart="handleDragStart($event, item)"
          @dragenter="handleDragEnter($event, item)"
          @dragover.prevent="handleDragover($event, item)"
          @drop="handleDrop($event, item)"
          @dragend="handleDragEnd($event, item)">
-            <img  class="i2" :src="girl"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
-            <img class="i2" :src="weargirl"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
-            <img class="i2" :src="boy"  @click="showRecordEditDialog(item.studentId)" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
-            <img class="i2" :src="wearboy"   @click="showRecordEditDialog(item.studentId)"width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
-            <img class="i2" :src="kong"  @click="showRecordEditDialog(item.studentId)"  width="120px" alt="" v-else-if="item.gender == 2">
+            <img  class="i2" :src="girl" width="120px" alt="" v-if="item.gender == 1 && item.correct == 0">
+            <img class="i2" :src="weargirl" width="120px" alt="" v-else-if="item.gender == 1 && item.correct == 1">
+            <img class="i2" :src="boy" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 0">
+            <img class="i2" :src="wearboy" width="120px" alt="" v-else-if="item.gender == 0 && item.correct == 1">
+            <img class="i2" :src="kong"  width="120px" alt="" v-else-if="item.gender == 2">
              <div class="name">
               {{item.studentName}} {{item.avgRecord}}
             </div>
@@ -323,6 +331,7 @@ export default {
           res ? res = res.data: '';
           this.editRecordForm = res.data;
           this.editRecordDialogVisible = true;
+          console.log(this.editRecordForm, 888)
       },
       handleEditRecordErr(err) {
           console.log(err)
@@ -421,7 +430,6 @@ export default {
           if(!item.studentId) { // 如果是空位存储的 studnetId 为0
             item.studentId = 'm' + index;
           }
-          console.log(sortArr, 888)
           sortArr.push(item.studentId.toString())
         })
         sortStu.forEach((item, index) => {
@@ -716,7 +724,7 @@ export default {
   line-height: 40px;
   margin: 0 50px;
 }
-.img {
+.i2 {
   pointer-events: none;
   display: inline-block;
 }
