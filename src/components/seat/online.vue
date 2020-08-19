@@ -18,8 +18,8 @@
                  <el-col :span="3">
                      <div class="schoolSet">排座列数选择：</div>
                 </el-col>
-                <el-col :span="4">
-                    <el-select v-model="value" placeholder="请选择排座列数" @focus="handleTypeChange(value)" clearable>
+                <el-col :span="2">
+                    <el-select v-model="value" placeholder="请选择" @focus="handleTypeChange(value)" clearable>
                     <el-option v-for="item in typeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
                     </el-option>
                 </el-select>
@@ -34,7 +34,10 @@
                     </el-select>
                 </el-col>
                 <el-col :span="3">
-                        <el-button type="primary" @click="seatQuery">在线排座</el-button>
+                    <el-button type="primary" @click="seatQuery(1)">近期微调</el-button>
+                </el-col>
+                <el-col :span="3">
+                    <el-button type="primary"  @click="seatQuery(2)">打乱重拍</el-button>
                 </el-col>
             </el-row>
             <el-row class="row " style=" font-size: 20px;font-weight: bold; margin: 20px 0 10px 0 " v-if="!this.studentList.length">
@@ -167,7 +170,8 @@ export default {
            this.schoolId = this.stu_cat[0];
            this.classId = this.stu_cat[1];
         },
-        seatQuery() {
+        seatQuery(num) {
+         if( num == 2) {
             let param = new URLSearchParams();
             if(!this.token) {
                 return this.$router.push('/login');
@@ -183,11 +187,54 @@ export default {
                 query: {
                   classId: this.classId,
                   type: this.value,
-                  time: this.time
+                  time: this.time,
+                  sortType: num
                 }
                });
                window.open(routeUrl.href, '_blank');
               }
+             }else if(num ==1) {
+               let param = new URLSearchParams();
+               if(!this.token) {
+                   return this.$router.push('/login');
+               }else if(!this.classId) {
+                    return this.$message.error('请选择学校和班级');
+               }else if(!this.value) {
+                   return this.$message.error('请选择排座方式');
+               }else if(!this.time) {
+                   return this.$message.error('请选择排座周期');
+               }else{
+                 let param = new FormData();
+                 param.append('token', this.token);
+                 param.append('classId', this.classId);
+                 axios({
+                     method: 'post',
+                     url: '/lightspace/chkSort',
+                     data: param
+                 }).then((res) => {
+                   if(res.data.status == 200) {
+                    let routeUrl = this.$router.resolve({
+                      path: '/detailSeatTwo',
+                      query: {
+                        classId: this.classId,
+                        type: this.value,
+                        time: this.time,
+                        sortType: num
+                      }
+                     });
+                     window.open(routeUrl.href, '_blank');
+                   }else if(res.data.status == 10238) {
+                      this.$message({
+                         message: res.data.msg,
+                         type: 'warning'
+                       });
+                   }
+                 }).catch((err) => {
+                   console.log(err)
+                 })
+
+                 }
+             }
             },
         //排座类型
         handleTypeChange(value) {
