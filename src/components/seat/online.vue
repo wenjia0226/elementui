@@ -8,17 +8,20 @@
         </el-breadcrumb>
          <!-- 卡片视图 -->
         <el-card>
-            <el-row :gutter="10">
+            <el-row :gutter="10" style="">
                 <el-col :span="3">
-                     <div class="schoolSet">学校班级选择：</div>
+                  <div class="schoolSet" v-if="this.identity == 1 || this.identity == 2">学校班级选择：</div>
                 </el-col>
-                <el-col :span="4">
-                     <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                <el-col :span="4" v-if="this.identity == 1 || this.identity == 2">
+                  <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                </el-col>
+                <el-col :span="2" v-if="this.identity == 3" style="height: 100%;">
+                  <div style="height: 100%;"> {{className}}</div>
                 </el-col>
                  <el-col :span="3">
-                     <div class="schoolSet">排座列数选择：</div>
+                    <div class="schoolSet">排座列数选择：</div>
                 </el-col>
-                <el-col :span="2">
+                <el-col :span="2" >
                     <el-select v-model="value" placeholder="请选择"  @focus="handleTypeChange(value)" clearable>
                     <el-option v-for="item in typeoptions" :key="item.value"   :label="item.label"  :value="item.value" >
                     </el-option>
@@ -75,6 +78,10 @@ export default {
      created() {
         this.token = window.sessionStorage.getItem('token');
         this.getOPtions();
+        let user = window.sessionStorage.getItem('token');
+        this.identity = user.split('-') [1];
+        this.fondId = user.split('-')[2];
+
     },
     data() {
         return {
@@ -115,6 +122,7 @@ export default {
         time: '',
         token: '',
         type: '',
+        className: '',
             cateProps: {
             label: 'name', //看到的是哪个属性
             value: 'id', // 选中的是谁的值
@@ -156,11 +164,33 @@ export default {
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
+            let that = this;
             if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
                 this.options =  res.data.data;
+                if(this.identity == 1) {  // admin
+
+                 }else if(this.identity == 2) {   //2 校长
+                    let selectedOption = this.options;
+                    let filterOption = selectedOption.filter((item, index) => {
+                       if(item.id == Number(that.fondId)) {
+                        return item
+                      }
+                    })
+                 this.options = filterOption;
+                }else if(this.identity == 3) {   // 教师
+                  this.options.forEach((item) => {
+                    item.children.forEach((secondItem) => {
+                      if(secondItem.id == this.fondId) {
+                        this.className = secondItem.name;
+                        this.classId = secondItem.id;
+                      }
+                    })
+                    })
+                    console.log(this.classId, this.className)
+                }
             }
         },
         handleGetOptionErr(err) {
@@ -214,7 +244,7 @@ export default {
                      url: '/lightspace/chkSort',
                      data: param
                  }).then((res) => {
-            
+
                    if(res.data.status == 200) {
                     let routeUrl = this.$router.resolve({
                       path: '/detailSeatTwo',
