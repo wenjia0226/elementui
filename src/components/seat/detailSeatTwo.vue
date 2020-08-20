@@ -214,9 +214,9 @@
       </div>
      </div>
      <!-- sortType 为1 可以调整位置 不能拆分列 -->
-     <div v-if="this.sortType == 1">
+     <div v-if="this.sortType == 1" >
        <!-- 方式一 -->
-        <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 6" >
+        <div class="outerBox"  :class="{'bor': chooseStr.indexOf(item1.num) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 6" >
          <div class="titlePai">第{{item1.num}} 排</div>
          <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord}"
              v-if="item1.num == totalPai"
@@ -263,7 +263,7 @@
          </div>
        </div>
        <!-- 方式二 -->
-        <div class="outerBox"  v-for="(item1, index) in reversePai"  v-if="type == 7">
+        <div class="outerBox"  :class="{'bor': chooseStr.indexOf(item1.num) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 7">
           <div class="titlePai">第{{item1.num}} 排</div>
           <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord}"
            v-if="item1.num == totalPai"
@@ -310,7 +310,7 @@
           </div>
         </div>
        <!-- 方式三-->
-        <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 8">
+        <div class="outerBox"  :class="{'bor': chooseStr.indexOf(item1.num) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 8">
            <div class="titlePai">第{{item1.num}}排</div>
            <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"
                 v-if="item1.num == totalPai"
@@ -356,7 +356,7 @@
            </div>
          </div>
         <!-- 方式四 -->
-        <div class="outerBox" v-for="(item1, index) in reversePai"  v-if="type == 9">
+        <div class="outerBox"  :class="{'bor': chooseStr.indexOf(item1.num) !== -1 }" v-for="(item1, index) in reversePai"  v-if="type == 9">
           <div class="titlePai">第{{item1.num}}排</div>
           <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"
           v-if="item1.num == totalPai"
@@ -458,7 +458,6 @@
     </span>
   </el-dialog>
  </div>
-
 </template>
 <script>
 import axios from 'axios'
@@ -629,9 +628,7 @@ export default {
       },
       handleDragStart(e, item) {
         this.dragging = item;
-        if(this.sortType == 2) {
-           this.selectedSeat();
-        }
+         this.selectedSeat();
 
       },
       // 当被鼠标拖动的对象进入其容器范围内时触发此事件
@@ -673,7 +670,7 @@ export default {
       },
       getSeatTable() {
         let param = new URLSearchParams();
-         if(this.sortType == 1) {
+         if(this.sortType == 1) {  // 微调
            param.append('token', this.token);
            param.append('classId', this.classId);
            axios({
@@ -681,7 +678,7 @@ export default {
                  data: param,
                  url: '/lightspace/adjustSort'
              }).then(this.handleAdjustSucc.bind(this)).catch((err) => {console.log(err)})
-         }else if(this.sortType == 2) {
+         }else if(this.sortType == 2) { //打乱重排
            param.append('token', this.token);
            param.append('classId', this.classId);
            param.append('time', this.time * 86400);
@@ -696,17 +693,9 @@ export default {
       },
       handleAdjustSucc(res) {
         if(res.data.status == 200) {
-          this.divList = res.data.data;
-          // this.divList.forEach((item, index) => {
-          //   item.mr = false
-          // })
-          // let showArr = this.showArr;
-          // let temDiv = this.divList;
-          // let num = (this.totalPai - 1) * this.type;
-          // let ar = temDiv.slice(num);
-          // for(let j = 0; j < ar.length; j++) {
-          //   ar[j].showMr = false;
-          // }
+          this.divList =res.data.data.data;
+          this.sort_group = res.data.data.sort_group;
+
           this.changeBelongs()
         }
       },
@@ -730,6 +719,7 @@ export default {
            for(let j = 0; j < ar.length; j++) {
              ar[j].showMr = false;
            }
+		   console.log(ar)
            this.id = res.data.data.id;
            this.changeBelongs()
         } else if(res.data.status =10216) {
