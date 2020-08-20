@@ -19,8 +19,8 @@
                      <div class="schoolSet">排座列数选择：</div>
                 </el-col>
                 <el-col :span="2">
-                    <el-select v-model="value" placeholder="请选择" @focus="handleTypeChange(value)" clearable>
-                    <el-option v-for="item in typeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
+                    <el-select v-model="value" placeholder="请选择"  @focus="handleTypeChange(value)" clearable>
+                    <el-option v-for="item in typeoptions" :key="item.value"   :label="item.label"  :value="item.value" >
                     </el-option>
                 </el-select>
                 </el-col>
@@ -84,7 +84,7 @@ export default {
           style3: {url:require('../../assets/image/3.jpg'), title: '方式三', id: 3},
           style4: {url:require('../../assets/image/4.jpg'), title: '方式四', id: 4}
           ,
-          typeoptions: [{
+         typeoptions: [{
           value: 6,
           label: '6列'
         }, {
@@ -114,6 +114,7 @@ export default {
         value: '',
         time: '',
         token: '',
+        type: '',
             cateProps: {
             label: 'name', //看到的是哪个属性
             value: 'id', // 选中的是谁的值
@@ -171,7 +172,7 @@ export default {
            this.classId = this.stu_cat[1];
         },
         seatQuery(num) {
-         if( num == 2) {
+         if( num == 2) { //打乱重拍
             let param = new URLSearchParams();
             if(!this.token) {
                 return this.$router.push('/login');
@@ -193,7 +194,7 @@ export default {
                });
                window.open(routeUrl.href, '_blank');
               }
-             }else if(num ==1) {
+             }else if(num ==1) {  //近期微调
                let param = new URLSearchParams();
                if(!this.token) {
                    return this.$router.push('/login');
@@ -207,19 +208,22 @@ export default {
                  let param = new FormData();
                  param.append('token', this.token);
                  param.append('classId', this.classId);
+                 param.append('type', this.value);
                  axios({
                      method: 'post',
                      url: '/lightspace/chkSort',
                      data: param
                  }).then((res) => {
+            
                    if(res.data.status == 200) {
                     let routeUrl = this.$router.resolve({
                       path: '/detailSeatTwo',
                       query: {
                         classId: this.classId,
                         type: this.value,
+                        sortType: num,
                         time: this.time,
-                        sortType: num
+
                       }
                      });
                      window.open(routeUrl.href, '_blank');
@@ -228,6 +232,11 @@ export default {
                          message: res.data.msg,
                          type: 'warning'
                        });
+                   }else if(res.data.status == 10239) {
+                     this.$message({
+                        message: res.data.msg,
+                        type: 'warning'
+                      });
                    }
                  }).catch((err) => {
                    console.log(err)
@@ -239,8 +248,8 @@ export default {
         //排座类型
         handleTypeChange(value) {
           this.showTu = true;
-            window.sessionStorage.setItem('type', value)
-            this.studentList = [];
+          window.sessionStorage.setItem('type', value)
+          this.studentList = [];
         },
         //排座周期
         changeTime(time) {
