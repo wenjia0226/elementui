@@ -15,7 +15,7 @@
                  <!-- <cascade></cascade> -->
                 <el-col :span="5">
                  <el-cascader :options="options" v-model="stu_cat" :props="cateProps"
-                 @change="handleChange" clearable></el-cascader>
+                 @change="handleChange" ></el-cascader>
                 </el-col>
 
                <!-- <el-col :span="3" v-if="this.identity == 3" style="height: 100%;">

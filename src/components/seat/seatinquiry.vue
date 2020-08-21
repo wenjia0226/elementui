@@ -11,7 +11,7 @@
        <el-card>
              <el-row :gutter="10">
                 <el-col :span="6">
-                  <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                  <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange"></el-cascader>
                 </el-col>
                 <el-col :span="3">
                   <el-button type="primary" @click="getSeatList">座位查询</el-button>
