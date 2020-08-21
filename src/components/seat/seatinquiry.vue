@@ -10,11 +10,11 @@
          <!-- 卡片视图 -->
        <el-card>
              <el-row :gutter="10">
-                <el-col :span="4">
-                     <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                <el-col :span="6">
+                  <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
                 </el-col>
                 <el-col :span="3">
-                        <el-button type="primary" @click="getSeatList">座位查询</el-button>
+                  <el-button type="primary" @click="getSeatList">座位查询</el-button>
                 </el-col>
             </el-row>
             <!-- 排座结果列表 -->
@@ -51,6 +51,9 @@ export default {
         this.token = window.sessionStorage.getItem('token');
         this.getOPtions();
         // this.getTableList();
+        let user = window.sessionStorage.getItem('token');
+        this.identity = user.split('-') [1];
+        this.fondId = user.split('-')[2];
 
     },
     data() {
@@ -58,6 +61,8 @@ export default {
             token: '',
             classId: '',
             type: '',
+            identity: '',
+            fondId: '',
             cateProps: {
               label: 'name', //看到的是哪个属性
               value: 'id', // 选中的是谁的值
@@ -112,11 +117,37 @@ export default {
             }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
         },
         handleGetOptionSucc (res) {
+          let that = this;
           if(res.data.status === 10204) {
               this.$message.error(res.data.msg);
               this.$router.push('/login');
           } else if(res.data.status == 200) {
               this.options =  res.data.data;
+              if(this.identity == 1) {  // admin
+
+               }else if(this.identity == 2) {   //2 校长
+                  let selectedOption = this.options;
+                  let filterOption = selectedOption.filter((item, index) => {
+                     if(item.id == Number(that.fondId)) {
+                      return item
+                    }
+                  })
+               this.options = filterOption;
+              }else if(this.identity == 3) {   // 教师
+                this.options.forEach((item) => {
+                  item.children.forEach((secondItem) => {
+                    if(secondItem.id == this.fondId) {
+                      this.stu_cat[0]= item.id;
+                      this.stu_cat[1] = secondItem.id;
+                      this.schoolId = item.id;
+                      this.classId = secondItem.id;
+                       this.options = [];
+                       item.disabled = true;
+                       this.options.push(item)
+                    }
+                  })
+                })
+              }
           }
         },
         handleGetOptionErr(err) {
@@ -126,7 +157,6 @@ export default {
         handleChange(item) {
            this.schoolId = this.stu_cat[0];
            this.classId = this.stu_cat[1];
-
         },
         seatQuery() {
             let param = new URLSearchParams();
@@ -213,6 +243,12 @@ export default {
               //             item.type = '方式四'
               //         }
               //     })
+               }else {
+                  this.$message({
+                     message: '你好，没有查到该班级座位表，请先去排座',
+                     type: 'warning'
+                   });
+                   this.classRecordList = [];
                }
             }
         },

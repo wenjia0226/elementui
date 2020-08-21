@@ -7,16 +7,16 @@
 	</el-breadcrumb>
 	<el-card>
 	  <el-row :gutter="10">
-      <el-col :span="2">
+      <el-col :span="3">
           <div class="schoolSet">学校班级选择：</div>
       </el-col>
-	      <el-col :span="4">
-	           <el-cascader  :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange"></el-cascader>
+	      <el-col :span="6">
+	        <el-cascader  :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange"></el-cascader>
 	      </el-col>
-        <el-col :span="2">
-             <div class="schoolSet">学生姓名选择：</div>
+        <el-col :span="3">
+           <div class="schoolSet">学生姓名选择：</div>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           <el-autocomplete
             class="inline-input"
             v-model="state1"
@@ -188,12 +188,17 @@
 export default {
 	created() {
 	  this.token = window.sessionStorage.getItem('token');
+    let user = window.sessionStorage.getItem('token');
+    this.identity = user.split('-') [1];
+    this.fondId = user.split('-')[2];
 	  this.getOPtions();
 	},
     data() {
 		return {
       token: '',
 			stu_cat: [],
+      identity: '',
+      fondId: "",
 			cateProps: {
 			label: 'name', //看到的是哪个属性
 			value: 'id', // 选中的是谁的值
@@ -405,7 +410,6 @@ export default {
       }).then(this.getStudentListSucc.bind(this)).catch(this.getStudnentListErr.bind(this))
     },
     getStudentListSucc(res) {
-
       if(res.data.status === 10204) {
         this.$message.error(res.data.msg);
         this.$router.push('/login');
@@ -449,11 +453,39 @@ export default {
 		    }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
 		},
 		handleGetOptionSucc (res) {
+      let that = this;
 		    if(res.data.status === 10204) {
 		        this.$message.error(res.data.msg);
 		        this.$router.push('/login');
 		    } else if(res.data.status == 200) {
 		       this.options =  res.data.data;
+           if(this.identity == 1) {  // admin
+
+            }else if(this.identity == 2) {   //2 校长
+               let selectedOption = this.options;
+               let filterOption = selectedOption.filter((item, index) => {
+                  if(item.id == Number(that.fondId)) {
+                   return item
+                 }
+               })
+            this.options = filterOption;
+           }else if(this.identity == 3) {   // 教师
+             this.options.forEach((item) => {
+               item.children.forEach((secondItem) => {
+                 if(secondItem.id == this.fondId) {
+                   this.stu_cat[0]= item.id;
+                   this.stu_cat[1] = secondItem.id;
+                   this.schoolId = item.id;
+                   this.classId = secondItem.id;
+                   this.options = [];
+                   item.disabled = true;
+                   this.options.push(item)
+                 }
+               })
+             })
+             this.getStudentName()
+
+           }
 		    }
 		},
 		handleGetOptionErr(err) {

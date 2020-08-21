@@ -11,8 +11,8 @@
              <div class="schoolSet">学校选择：</div>
         </el-col>
           <el-col :span="4">
-               <el-cascader  :options="schoolList" :props ="cateProps"   v-model="school" @change="handleChange">
-               </el-cascader>
+           <el-cascader  :options="schoolList" :props ="cateProps" v-model="school" @change="handleChange">
+           </el-cascader>
           </el-col>
           <el-col :span="2">
                <div class="schoolSet">年级选择：</div>
@@ -20,7 +20,6 @@
           <el-col :span="4">
              <el-select v-model="value" placeholder="请选择"  @change="getChange">
                 <el-option
-
                   v-for="item in options"
                   :key="item.value"
                   :label="item.label"
@@ -41,12 +40,15 @@
   export default {
     created() {
       this.token = window.sessionStorage.getItem('token');
+      let user = window.sessionStorage.getItem('token');
+      this.identity = user.split('-') [1];
+      this.fondId = user.split('-')[2];
       this.getSchoolList();
     },
     data() {
       return {
         token: '',
-        school: '',
+        school: '123',
         schoolId: '',
         schoolList: [],
         cateProps: {
@@ -82,7 +84,7 @@
         this.gradeId = val;
       },
       // 获取学校列表
-       getSchoolList() {
+      getSchoolList() {
           let param = new URLSearchParams();
            param.append('token', this.token);
            axios({
@@ -93,11 +95,24 @@
              .catch(this.handleGetSchoolErr.bind(this))
       },
       handleGetSchoolSucc(res) {
+        let that = this;
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
         } else if(res.data.status == 200) {
             this.schoolList = res.data.data;
+            let selectedOption = this.schoolList;
+            if(this.identity == 2) {
+              let filterOption = selectedOption.filter((item, index) => {
+                 if(item.id == Number(that.fondId)) {
+                  return item
+                }
+              })
+             console.log(filterOption)
+             this.schoolId = filterOption[0].id;
+             this.school =  filterOption[0].id;
+             this.schoolList = filterOption;
+            }
         }
       },
       handleGetSchoolErr(err) {

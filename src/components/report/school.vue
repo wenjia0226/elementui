@@ -21,7 +21,7 @@
            </el-select>
         </el-col>
           <el-col :span="4" v-if="this.identity == 2">
-           <el-select v-model="school" placeholder="请选择" disabled >
+           <el-select v-model="school" placeholder="请选择">
                <el-option
                  v-for="item in schoolList"
                  :key="item.value"
@@ -88,7 +88,11 @@
               let schoolInfo = this.schoolList.filter((item) => {
                 if(item.id == this.fondId) return item;
               })
+              schoolInfo[0].disabled = true;
+              this.schoolList = [];
+              this.schoolList = schoolInfo;
               this.school = schoolInfo[0].name;
+           
             }
         }
       },

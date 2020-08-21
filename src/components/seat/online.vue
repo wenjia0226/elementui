@@ -8,38 +8,41 @@
         </el-breadcrumb>
          <!-- 卡片视图 -->
         <el-card>
-            <el-row :gutter="10" style="">
+            <el-row :gutter="10">
                 <el-col :span="3">
                   <div class="schoolSet" v-if="this.identity == 1 || this.identity == 2">学校班级选择：</div>
                 </el-col>
-                <el-col :span="4" v-if="this.identity == 1 || this.identity == 2">
-                  <el-cascader :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                 <!-- <cascade></cascade> -->
+                <el-col :span="5">
+                 <el-cascader :options="options" v-model="stu_cat" :props="cateProps"
+                 @change="handleChange" clearable></el-cascader>
                 </el-col>
-                <el-col :span="2" v-if="this.identity == 3" style="height: 100%;">
-                  <div style="height: 100%;"> {{className}}</div>
-                </el-col>
-                 <el-col :span="3">
-                    <div class="schoolSet">排座列数选择：</div>
+
+               <!-- <el-col :span="3" v-if="this.identity == 3" style="height: 100%;">
+                  <div style="height: 40px;line-height: 40px">班级: {{className}}</div>
+                </el-col> -->
+                 <el-col :span="2">
+                    <div class="schoolSet">列数选择：</div>
                 </el-col>
                 <el-col :span="2" >
-                    <el-select v-model="value" placeholder="请选择"  @focus="handleTypeChange(value)" clearable>
+                  <el-select v-model="value" placeholder="请选择"  @focus="handleTypeChange(value)" clearable>
                     <el-option v-for="item in typeoptions" :key="item.value"   :label="item.label"  :value="item.value" >
                     </el-option>
-                </el-select>
+                  </el-select>
                 </el-col>
                 <el-col :span="2">
                      <div class="schoolSet">排座周期：</div>
                 </el-col>
-                <el-col :span="3">
+                 <el-col :span="2">
                     <el-select v-model="time" @change="changeTime"  clearable>
                     <el-option v-for="item in timeoptions" :key="item.value"  :label="item.label"  :value="item.value" >
                     </el-option>
                     </el-select>
                 </el-col>
-                <el-col :span="3">
+                <el-col :span="2">
                     <el-button type="primary" @click="seatQuery(1)">近期微调</el-button>
                 </el-col>
-                <el-col :span="3">
+                <el-col :span="2">
                     <el-button type="primary"  @click="seatQuery(2)">打乱重拍</el-button>
                 </el-col>
             </el-row>
@@ -55,25 +58,12 @@
               <el-col :span="6">8列排布</el-col>
               <el-col :span="6">9列排布</el-col>
             </el-row>
-            <!-- <el-row style="margin: 20px 0px" v-if="!this.studentList.length">
-              <el-col :span="6">
-                    <el-image  style="min-height: 200px":src="style1.url" :title="style1.title" fit="fit"></el-image>
-              </el-col>
-              <el-col :span="6">
-                    <el-image  style="min-height: 200px":src="style2.url" :title="style2.title" fit="fit"></el-image>
-              </el-col>
-             <el-col :span="6">
-                   <el-image  style="min-height: 200px":src="style3.url" :title="style3.title" fit="fit"></el-image>
-             </el-col>
-              <el-col :span="6">
-                    <el-image  style="min-height: 200px":src="style4.url" :title="style4.title" fit="fit"></el-image>
-              </el-col>
-            </el-row> -->
         </el-card>
     </div>
 </template>
 <script>
 import axios from 'axios'
+import Cascade from '../../pageCom/cascade.vue'
 export default {
      created() {
         this.token = window.sessionStorage.getItem('token');
@@ -81,7 +71,9 @@ export default {
         let user = window.sessionStorage.getItem('token');
         this.identity = user.split('-') [1];
         this.fondId = user.split('-')[2];
-
+    },
+    components: {
+      Cascade
     },
     data() {
         return {
@@ -169,7 +161,7 @@ export default {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
             } else if(res.data.status == 200) {
-                this.options =  res.data.data;
+                this.options = res.data.data;
                 if(this.identity == 1) {  // admin
 
                  }else if(this.identity == 2) {   //2 校长
@@ -184,12 +176,16 @@ export default {
                   this.options.forEach((item) => {
                     item.children.forEach((secondItem) => {
                       if(secondItem.id == this.fondId) {
-                        this.className = secondItem.name;
+                        this.stu_cat[0]= item.id;
+                        this.stu_cat[1] = secondItem.id;
+                        this.schoolId = item.id;
                         this.classId = secondItem.id;
+                         this.options = [];
+                         item.disabled = true;
+                         this.options.push(item)
                       }
                     })
-                    })
-                    console.log(this.classId, this.className)
+                  })
                 }
             }
         },
@@ -209,7 +205,7 @@ export default {
             }else if(!this.classId) {
                  return this.$message.error('请选择学校和班级');
             }else if(!this.value) {
-                return this.$message.error('请选择排座方式');
+                return this.$message.error('请选择排座列数');
             }else if(!this.time) {
                 return this.$message.error('请选择排座周期');
             }else{
@@ -231,7 +227,7 @@ export default {
                }else if(!this.classId) {
                     return this.$message.error('请选择学校和班级');
                }else if(!this.value) {
-                   return this.$message.error('请选择排座方式');
+                   return this.$message.error('请选择排座列数');
                }else if(!this.time) {
                    return this.$message.error('请选择排座周期');
                }else{

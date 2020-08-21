@@ -10,19 +10,8 @@
         <el-col :span="3" v-if="this.identity == 1 || this.identity == 2 ">
              <div class="schoolSet" >学校班级选择：</div>
         </el-col>
-          <el-col :span="4" v-if="this.identity == 1 || this.identity == 2">
+          <el-col :span="6">
                <el-cascader  :options="options" v-model="stu_cat" :props="cateProps" @change="handleChange" width="100%"></el-cascader>
-          </el-col>
-          <el-col :span="4" v-if="this.identity == 3">
-             <!-- <el-select v-model="schoolName" placeholder="请选择"  @change="handleChange">
-              <el-option
-                 v-for="item in schoolList"
-                 :key="item.value"
-                 :label="item.value"
-                 :value="item.id">
-              </el-option>
-              </el-select> -->
-              班级:{{className.name}}
           </el-col>
           <el-col :span="4">
              <el-button type="primary" @click="getCode">下载班级报表</el-button>
@@ -84,13 +73,18 @@
                this.options = school;
              }else if(this.identity == 3) {
               this.options.forEach((item) => {
-               item.children.forEach((secondItem) => {
-                 if(secondItem.id == this.fondId) {
-                   this.className = secondItem;
-                   this.classId = secondItem.id;
-                 }
-               })
-               })
+                item.children.forEach((secondItem) => {
+                  if(secondItem.id == this.fondId) {
+                    this.stu_cat[0]= item.id;
+                    this.stu_cat[1] = secondItem.id;
+                    this.schoolId = item.id;
+                    this.classId = secondItem.id;
+                    this.options = [];
+                    item.disabled = true;
+                    this.options.push(item)
+                  }
+                })
+              })
 
              }
           }
