@@ -44,7 +44,7 @@
 				<router-view></router-view>
 			</el-main>
 		</el-container>
-    <el-container v-show="showModal &&(this.identity == 1  || this.identity == 2) " >
+    <el-container v-show="showModal &&(this.identity == 1  || this.identity == 2)" >
       <el-main class="mainBox">
          <el-row>
           <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
@@ -73,7 +73,7 @@
         </el-row>
        </el-main>
     </el-container>
-    <el-container v-show="showModal &&(this.identity == 3) " >
+    <el-container v-show="showModal &&(this.identity == 3)" >
       <el-main class="mainBox">
          <el-row>
           <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
@@ -97,6 +97,35 @@
           <img src="../assets/image/baobiao.jpg" @click="gotoClassReport" class="imgWrap" alt="">
           </el-col>
         </el-row> -->
+       </el-main>
+    </el-container>
+    <el-container v-show="showModal &&(this.identity  == 5) " >
+      <el-main class="mainBox">
+         <el-row>
+          <el-col :span="24" class="welcome">欢迎{{loginName}}登陆</el-col>
+        </el-row>
+        <el-row style="margin: 40rpx 0">
+         <el-col :span="24" class="titleWrap">儿童青少年近视“人工干预|智能防控”管理系统</el-col>
+        </el-row>
+        <el-row :gutter="20" class="bottomWrap">
+          <el-col :span="8" style="text-align: center">
+            <img src="../assets/image/zhineng.jpg" @click="gotoZhi" class="imgWrap" alt="">
+          </el-col>
+          <el-col :span="8" style="text-align: center">
+            <img src="../assets/image/base.jpg"  @click="gotoBase" class="imgWrap" alt="">
+          </el-col>
+           <el-col :span="8" style="text-align: center">
+           <img src="../assets/image/jiance.jpg" @click="gotojiance" class="imgWrap" alt="">
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin: 20px 0" >
+          <el-col :span="8" style="text-align: center">
+             <img src="../assets/image/shili.jpg"   @click="gotoShili" class="imgWrap" alt="">
+          </el-col>
+           <el-col :span="8" style="text-align: center">
+          <img src="../assets/image/baobiao.jpg" @click="gotoSchoolreport" class="imgWrap" alt="">
+          </el-col>
+        </el-row>
        </el-main>
     </el-container>
    </el-container>
@@ -162,6 +191,10 @@ import router from '../router/index'
             this.loginName = window.sessionStorage.getItem('loginName');
             let user = window.sessionStorage.getItem('token');
             this.identity = user.split('-') [1];
+
+            if(this.identity !== 1  ||this.identity !==2 || this.identity !==3) {
+              this.identity = 5  // 地区
+            }
         },
         methods: {
           gotoBase() {
