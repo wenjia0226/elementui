@@ -8,10 +8,10 @@
     </el-breadcrumb>
     <el-card>
       <el-row :gutter="20">
-       <el-col :span="2" v-if="this.identity == 1">
+       <el-col :span="2" v-if="this.identity !== 3">
           <div class="schoolSet">学校选择：</div>
        </el-col>
-       <el-col :span="4" v-if="this.identity == 1">
+       <el-col :span="4" v-if="this.identity !== 3">
          <el-autocomplete
           class="inline-input"
           v-model="school"
@@ -22,10 +22,10 @@
           @change="handleSchoolChange"
           ></el-autocomplete>
          </el-col>
-         <el-col :span="2" v-if="this.identity ==  2 || this.identity ==  1 ">
+         <el-col :span="2" >
             <div class="schoolSet">班级选择：</div>
          </el-col>
-         <el-col :span="4"  v-if="this.identity ==  2|| this.identity ==  1">
+         <el-col :span="4" >
            <el-autocomplete
             class="inline-input"
             v-model="className"
@@ -129,8 +129,9 @@
         let user = window.sessionStorage.getItem('token');
        this.identity = user.split('-') [1];
        this.fondId = user.split('-')[2];
+        this.getSchoolList();
         if(this.identity == 1) {  // admin
-          this.getSchoolList();
+         
           this.getScreeningList('',this.number);
         }else if(this.identity == 2) {   //2 校长
           this.type = 'school';
@@ -529,6 +530,19 @@
             this.$router.push('/login');
            } else if(res.data.status == 200) {
              this.schoolList = res.data.data;
+             if(this.identity == 2) {
+               let sc = this.schoolList;
+               let choose = sc.filter((item, index) => {
+                 if(Number(this.fondId)==  item.id) {
+                   return item;
+                 }
+               })
+               console.log(choose)
+               this.schoolList  = choose;
+               // this.school = choose;
+              this.school = choose[0].name;
+              this.schoolId = choose[0].id;
+             }
           }
       },
       handleGetSchoolErr(error) {

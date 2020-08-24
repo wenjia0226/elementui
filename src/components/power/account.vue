@@ -72,7 +72,7 @@
                 <el-form-item label="分配角色" prop="role">
                     <el-select v-model="addAccountForm.role" placeholder="请选择" @change="handleRoleChange">
                         <el-option v-for="item in roleList" :key="item.roleId"  :label="item.roleName" :value="item" clearable>
-                        </el-option>
+                    </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="" width="100%" v-if="addAccountForm.role == '超级管理员' " v-show="false">
@@ -82,6 +82,9 @@
                     <el-cascader ref="myCascader" :options="schoolOptions" v-model="addAccountForm.schoolOptions" :props="cateProps" @change="handleSchoolChange" clearable></el-cascader>
                 </el-form-item>
                 <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '班级管理员' ">
+                    <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+                </el-form-item>
+                <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '地区管理员'">
                     <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
                 </el-form-item>
                <!-- <el-form-item label="所属学校/班级" prop="selectedOptions" width="100%" v-else>
@@ -100,9 +103,15 @@
 import axios from 'axios'
     export default {
     created() {
-        this.token = window.sessionStorage.getItem('token');
+        this.token = window.sessionStorage.getItem('token');  
+         let user = window.sessionStorage.getItem('token');
+         this.identity = user.split('-') [1];
+         this.fondId = user.split('-')[2];
          this.getOPtions();
          this.getUserList();
+         if(this.identity !== 1 ||this.identity !== 2 ||this.identity !== 3) {
+           this.getProvince()
+         }
     },
      data() {
          return {
@@ -155,6 +164,9 @@ import axios from 'axios'
          }
      },
      methods: {
+       getProvince() {
+         
+       },
        //监听页码值改变事件
        handleCurrentChange(val) {
          this.page = val;
