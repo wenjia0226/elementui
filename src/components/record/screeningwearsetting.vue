@@ -141,8 +141,11 @@
          this.type = "class";
          this.classId = this.fondId;
          this.getScreeningList(this.type,this.number);
-          this.getStudentList();
+         this.getStudentList();
           // this.getScreeningList(this.type, this.number);
+       }else {
+         this.getSchoolList();
+         this.getScreeningList('',this.number);
        }
     },
     methods: {

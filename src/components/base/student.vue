@@ -298,6 +298,9 @@ export default {
           this.getStudentList(this.type,this.number);
            this.getStudentListBySelect();
            // this.getScreeningList(this.type, this.number);
+        }else {
+          this.getSchoolList();
+          this.getStudentList('',this.number);
         }
     },
     data() {

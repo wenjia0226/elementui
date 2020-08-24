@@ -215,9 +215,11 @@ export default {
         let user = window.sessionStorage.getItem('token');
         this.identity = user.split('-') [1];
         this.fondId = user.split('-')[2];
+        console.log(user)
+        console.log(this.identity,'class')
          if(this.identity == 1) {  // admin
            this.getSchoolList();
-           this.type == '';
+           this.type = '';
            this.getClassList(this.type, 1);
          }else if(this.identity == 2) {   //2 校长
            this.type = 'school';
@@ -227,6 +229,10 @@ export default {
           this.type = "class";
           this.id= this.fondId;
           this.getClassList(this.type,1);
+        }else {
+          this.getSchoolList();
+          this.type = '';
+          this.getClassList(this.type, 1);
         }
     },
     data() {
@@ -480,7 +486,7 @@ export default {
            .catch(this.handleGetSchoolErr.bind(this))
       },
       handleGetSchoolSucc(res) {
-         // console.log(res)
+          console.log(res)
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
@@ -611,7 +617,7 @@ export default {
             )
         },
         handleGetClassSucc(res) {
-          // console.log(res)
+          console.log(res)
             if(res.status !== 200) return this.$message.error('获取班级列表失败');
             this.classList = res.data.data;
             if(res.data.status === 10204) {

@@ -129,6 +129,7 @@
         let user = window.sessionStorage.getItem('token');
        this.identity = user.split('-') [1];
        this.fondId = user.split('-')[2];
+      
         if(this.identity == 1) {  // admin
           this.getSchoolList();
           this.getScreeningList('',this.number);
@@ -143,6 +144,9 @@
          this.getScreeningList(this.type,this.number);
           this.getStudentList();
           // this.getScreeningList(this.type, this.number);
+       }else {  // 地区管理员
+        this.getSchoolList();
+        this.getScreeningList('',this.number);
        }
     },
     methods: {

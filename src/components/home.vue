@@ -191,7 +191,6 @@ import router from '../router/index'
             this.loginName = window.sessionStorage.getItem('loginName');
             let user = window.sessionStorage.getItem('token');
             this.identity = user.split('-') [1];
-
             if(this.identity !== 1  ||this.identity !==2 || this.identity !==3) {
               this.identity = 5  // 地区
             }
