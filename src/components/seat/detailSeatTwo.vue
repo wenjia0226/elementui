@@ -1,13 +1,18 @@
 <template>
-  <div style="position: relative">
-    <div class="bg2"  v-if="remind" @click="changeState"></div>
-    <div class="remindBox" v-if="remind">
-     <div class="imgRemBox"></div>
-         <div class="imgTitle">有绿色框的学生视力在这排有问题，老师可以自行调学生位置,希望您在拖动学生的过程中在红色框内
-         选择学生将要移动定位的位置，以便更科学的实现排座。</div>
-         <div class="imgTitle">  您可以拖拽调整学生位置,拖拽完成后请按左上角保存按钮,保存此次调整结果，否则将不会保存此次拖拽效果。</div>
-        <el-button type="primary" @click="changeState">我知道了</el-button>
-    </div>
+ <div style="position: relative">
+   <div class="bg2"  v-if="remind" @click="changeState"></div>
+   <div class="remindBox" v-if="remind">
+      <div class="imgRemBox" v-if="divList.length" ></div>
+      <div class="imgTitle" v-if="divList.length">有绿色框的学生视力在这排有问题，老师可以自行调学生位置,希望您在拖动学生的过程中在红色框内
+      选择学生将要移动定位的位置，以便更科学的实现排座。</div>
+      <div class="imgTitle" v-if="divList.length">  您可以拖拽调整学生位置,拖拽完成后请按左上角保存按钮,保存此次调整结果，否则将不会保存此次拖拽效果。</div>
+      <el-button type="primary" @click="changeState" v-if="divList.length">我知道了</el-button>
+     <el-table :data="errorMessage" border v-if="!divList.length">
+       <el-table-column type="index"></el-table-column>
+       <el-table-column prop="name" align="center" label="姓名"></el-table-column>
+       <el-table-column prop="cause" align="center" label="无法排座原因"></el-table-column>
+     </el-table>
+   </div>
     <div class="titleWrap">
       <!-- <div class="title">
         您可以拖拽调整学生位置,拖拽完成后请按右上角保存按钮,保存此次调整结果，否则将不会保存此次拖拽效果。
@@ -237,10 +242,10 @@
                    {{item.studentName}} {{item.avgRecord}}
                  </div>
               </div>
-             <!-- <div class="addBtn" @click="addMargin">
+             <div class="addBtn" @click="addMargin">
                 <img  src="../../assets/image/jia.png"  v-if="!item.showMr"  :data-index="index2 +1">
                 <img src="../../assets/image/jian.png" v-if="item.showMr"   :data-index="index2 +1">
-              </div> -->
+              </div>
            </div>
          <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord }"
           v-if="item1.num !== totalPai"
@@ -283,10 +288,10 @@
                     {{item.studentName}} {{item.avgRecord}}
                   </div>
                </div>
-              <!-- <div class="addBtn" @click="addMargin">
+              <div class="addBtn" @click="addMargin">
                  <img  src="../../assets/image/jia.png"  v-if="!item.showMr"  :data-index="index2 +1">
                  <img src="../../assets/image/jian.png" v-if="item.showMr"   :data-index="index2 +1">
-               </div> -->
+               </div>
             </div>
           <div class="item" :class="{'mr20':item.mr, 'nopass': item1.vison  > item.avgRecord}"
           v-if="item1.num!== totalPai"
@@ -330,10 +335,10 @@
                      {{item.studentName}} {{item.avgRecord}}
                    </div>
                 </div>
-               <!-- <div class="addBtn" @click="addMargin">
+               <div class="addBtn" @click="addMargin">
                   <img  src="../../assets/image/jia.png"  v-if="!item.showMr"  :data-index="index2 +1">
                   <img src="../../assets/image/jian.png" v-if="item.showMr"   :data-index="index2 +1">
-                </div> -->
+                </div>
              </div>
            <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"
            v-if="item1.num !== totalPai"
@@ -376,10 +381,10 @@
                       {{item.studentName}} {{item.avgRecord}}
                     </div>
                  </div>
-                 <!-- <div class="addBtn" @click="addMargin">
+                 <div class="addBtn" @click="addMargin">
                    <img  src="../../assets/image/jia.png"  v-if="!item.showMr"  :data-index="index2 +1">
                    <img src="../../assets/image/jian.png" v-if="item.showMr"   :data-index="index2 +1">
-                 </div> -->
+                 </div>
              </div>
            <div class="item" :class="{'mr20':item.mr,'nopass': item1.vison  > item.avgRecord}"
             v-if="item1.num !== totalPai"
@@ -510,6 +515,7 @@ export default {
           floorNum: 0,
           topNum: 0,
           chooseStr: '',
+          errorMessage: []
       }
     },
     methods:{
@@ -695,15 +701,13 @@ export default {
         if(res.data.status == 200) {
           this.divList =res.data.data.data;
           this.sort_group = res.data.data.sort_group;
-
           this.changeBelongs()
         }
       },
       handleGetSeatQuerySucc(res) {
-         console.log(res.data.data, 'seat')
         if(res.data.status !== 200) {
             this.$message.error(res.data.msg);
-            this.$router.push('/login');
+            this.errorMessage = res.data.data;
         } else if(res.data.status == 200) {
            if(res.data.data.length == 0) return this.$message.error('请先添加学生');
            this.divList =res.data.data.data;

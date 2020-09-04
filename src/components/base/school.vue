@@ -365,7 +365,6 @@ export default {
                } else if(res.data.status == 200) {
                 this.editSchoolForm = res.data.data;
               }
-
         },
         handleEditSchoolErr(err) {
             console.log(err)

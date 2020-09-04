@@ -21,7 +21,7 @@
                <!-- <el-col :span="3" v-if="this.identity == 3" style="height: 100%;">
                   <div style="height: 40px;line-height: 40px">班级: {{className}}</div>
                 </el-col> -->
-                 <el-col :span="2">
+                <el-col :span="2">
                     <div class="schoolSet">列数选择：</div>
                 </el-col>
                 <el-col :span="2" >

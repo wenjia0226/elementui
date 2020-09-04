@@ -1,3 +1,39 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+
+@wenjia0226
+wenjia0226
+/
+elementui
+1
+00
+Code
+Issues
+Pull requests
+6
+Actions
+Projects
+Wiki
+Security
+11
+Insights
+Settings
+elementui/src/components/base/student.vue
+@wenjia0226
+wenjia0226 12
+Latest commit a1f77c0 10 days ago
+ History
+ 1 contributor
+We found potential security vulnerabilities in your dependencies.
+Only the owner of this repository can see this message.
+
+1121 lines (1114 sloc)  46.7 KB
+
 <template>
      <div  v-loading="loading">
        <!-- 面包屑导航区域 -->
@@ -9,24 +45,24 @@
          <!-- 卡片视图 -->
         <el-card>
           <el-row :gutter="20">
-           <el-col :span="2" v-if="this.identity  !== 3">
+           <el-col :span="2" v-if="this.identity == 1">
               <div class="schoolSet">学校选择：</div>
            </el-col>
-           <el-col :span="4" v-if="this.identity !== 3">
+           <el-col :span="4" v-if="this.identity == 1">
              <el-autocomplete
               class="inline-input"
               v-model="school"
-               clearable
+              clearable
               :fetch-suggestions="querySearchSchool"
               placeholder="请输入学校名称"
               @select="handleSelectSchool"
               @change="handleSchoolChange"
               ></el-autocomplete>
              </el-col>
-             <el-col :span="2" v-if="this.identity !== 3">
+             <el-col :span="2" v-if="this.identity ==  2 || this.identity ==  1 ">
                 <div class="schoolSet">班级选择：</div>
              </el-col>
-             <el-col :span="3" v-if="this.identity !== 3">
+             <el-col :span="4"  v-if="this.identity ==  2|| this.identity ==  1">
                <el-autocomplete
                 class="inline-input"
                 v-model="className"
@@ -36,15 +72,15 @@
                 @select="handleSelectClass"
                 ></el-autocomplete>
               </el-col>
-             <el-col :span="2" >
+             <el-col :span="3" >
                   <div class="schoolSet">学生姓名选择：</div>
              </el-col>
              <el-col :span="4">
                <el-autocomplete
                  class="inline-input"
                  v-model="student"
-                  clearable
                  :fetch-suggestions="querySearch"
+                 clearable
                  placeholder="请输入学生姓名"
                  @select="handleSelect">
                </el-autocomplete>
@@ -52,10 +88,10 @@
              <el-col :span="2">
               <el-button type="primary" @click="getRecodRight">查询</el-button>
              </el-col>
-           <el-col :span="2">
+           <el-col :span="3">
                   <el-button type="primary" @click="addStudent">添加学生</el-button>
            </el-col>
-           <el-col :span="2" >
+           <el-col :span="3" >
                   <el-button type="primary" @click="handdlePi" >批量导入</el-button>
            </el-col>
           </el-row>
@@ -202,7 +238,7 @@
                       <el-radio v-model="editStudentForm.gender" size="medium" border :label="0">男</el-radio>
                       <el-radio v-model="editStudentForm.gender" size="medium" border :label="1">女</el-radio>
                  </el-form-item>
-                 <el-form-item label ="出生日期" prop="birthday">
+                 <el-form-item label ="出生日期">
                     <el-date-picker
                      v-model="editStudentForm.birthday"
                      type="date"
@@ -284,8 +320,8 @@ export default {
         let user = window.sessionStorage.getItem('token');
         this.identity = user.split('-') [1];
         this.fondId = user.split('-')[2];
-        this.getSchoolList();
          if(this.identity == 1) {  // admin
+           this.getSchoolList();
            this.getStudentList('',this.number);
          }else if(this.identity == 2) {   //2 校长
            this.type = 'school';
@@ -299,7 +335,7 @@ export default {
            this.getStudentListBySelect();
            // this.getScreeningList(this.type, this.number);
         }else {
-
+          this.getSchoolList();
           this.getStudentList('',this.number);
         }
     },
@@ -499,7 +535,6 @@ export default {
          }).then(this.handleGetRecordDirSucc.bind(this)).catch(this.handlgGetRecordDirErr.bind(this))
        },
        handleGetRecordDirSucc(res) {
-
          if(res.data.status == 200) {
            res ? res= res.data.data: '';
            this.content = res.content;
@@ -535,24 +570,12 @@ export default {
             .catch(this.handleGetSchoolErr.bind(this))
        },
        handleGetSchoolSucc(res) {
-        // console.log(res)
+         // console.log(res)
          if(res.data.status === 10204) {
              this.$message.error(res.data.msg);
              this.$router.push('/login');
             } else if(res.data.status == 200) {
               this.schoolList = res.data.data;
-              if(this.identity == 2) {
-                let sc = this.schoolList;
-                let choose = sc.filter((item, index) => {
-                  if(Number(this.fondId)==  item.id) {
-                    return item;
-                  }
-                })
-                this.schoolList  = choose;
-                // this.school = choose;
-               this.school = choose[0].name;
-               this.schoolId = choose[0].id;
-              }
            }
        },
        handleGetSchoolErr(error) {
@@ -647,7 +670,6 @@ export default {
        getStuListErr(err) {
          console.log(err)
        },
-
        handleSchoolChange(val) {
          this.schoolId =  val.id;
        },
@@ -726,7 +748,6 @@ export default {
           this.$refs.upload.submit();
           this.showDialog = false;
           this.loading = true;
-
         },
         handleSuccess(res, file, fileList) {
            this.loading = false;
@@ -774,7 +795,6 @@ export default {
        this.showDialog = false;
         this.$refs.upload.clearFiles();
      },
-
    //关闭按钮
     handleClose() {
       this.addStudentVisible = false;
@@ -796,7 +816,6 @@ export default {
             method: "post",
             url: '/lightspace/queryStudent',
             data: param,
-
         }).then(this.handleQuerySucc.bind(this))
         .catch(this.handleQueryErr.bind(this))
     },
@@ -934,7 +953,6 @@ export default {
             }else if(this.school && this.className == '' && this.student == '') {
               this.getStuInType('school',this.schoolId, this.page);
             }else {
-
               this.getStudentList('', this.page);
             }
           }
@@ -1016,7 +1034,6 @@ export default {
         handleAddressFun(e, form, thsAreaCode) {
             thsAreaCode = this.$refs['cascaderAddr'].currentLabels;
             alert(thsAreaCode)
-
         },
         handleEditStuErr(err) {
             console.log(err)

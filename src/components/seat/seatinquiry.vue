@@ -208,8 +208,7 @@ export default {
         //获取座位列表
         getSeatList() {
           if(this.classId) {
-            let param = new URLSearchParams();
-            param.append('token', this.token);
+            let param = new FormData();
             param.append('classId', this.classId);
             axios({
                 method: 'post',

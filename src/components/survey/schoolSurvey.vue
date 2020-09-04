@@ -188,7 +188,7 @@
         }).then(this.getSchoolAnalysisSucc.bind(this)).catch(this.handleGetSchoolAnalysisErr.bind(this))
       },
       getSchoolAnalysisSucc(res) {
-          console.log(res)
+        //  console.log(res)
         if(res.data.status === 10204) {
             this.$message.error(res.data.msg);
             this.$router.push('/login');
