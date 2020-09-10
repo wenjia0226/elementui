@@ -1,39 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
-
-@wenjia0226
-wenjia0226
-/
-elementui
-1
-00
-Code
-Issues
-Pull requests
-6
-Actions
-Projects
-Wiki
-Security
-11
-Insights
-Settings
-elementui/src/components/base/student.vue
-@wenjia0226
-wenjia0226 12
-Latest commit a1f77c0 10 days ago
- History
- 1 contributor
-We found potential security vulnerabilities in your dependencies.
-Only the owner of this repository can see this message.
-
-1121 lines (1114 sloc)  46.7 KB
-
 <template>
      <div  v-loading="loading">
        <!-- 面包屑导航区域 -->
@@ -291,7 +255,7 @@ Only the owner of this repository can see this message.
                 :data="pdfData"
                 class="upload-demo"
                 ref="upload"
-                action="/lightspace/studentExcel"
+                action="/lightspace/school/studentExcel"
                 :before-upload="beforeUpload"
                 accept=".xlsx"
                 show-file-list
@@ -391,8 +355,8 @@ export default {
             query: '',
             fileList: [],//此数组中存入所有提交的文档信息
             pdfData: {
-                file: '',
-                token: ''
+                file: ''
+           
             },
             value1: '',
             searchStudentList: [],
@@ -742,7 +706,6 @@ export default {
        //请求参数传递
        beforeUpload(file) {
          this.pdfData.file = file;
-         this.pdfData.token = this.token;
         },
         submitUpload() {
           this.$refs.upload.submit();

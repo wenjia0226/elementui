@@ -210,6 +210,7 @@ export default {
           if(this.classId) {
             let param = new FormData();
             param.append('classId', this.classId);
+            param.append('token', this.token);
             axios({
                 method: 'post',
                 url: '/lightspace/classSorts',
