@@ -158,17 +158,18 @@
                    <el-form-item label="年龄">
                         <el-input v-model.number="addStudentForm.age" clearable></el-input>
                    </el-form-item>
-                   <el-form-item label="身高(米)" >
+                   <el-form-item label="身高(厘米)" prop="height">
                         <el-input v-model="addStudentForm.height" clearable></el-input>
+                   </el-form-item>
+                  
+                   <el-form-item label="椅子高度(厘米)" prop="chairHeight" >
+                        <el-input v-model="addStudentForm.chairHeight" clearable></el-input>
+                   </el-form-item>
+                   <el-form-item label="坐姿高度(厘米)"prop="sittingHeight" >
+                        <el-input v-model="addStudentForm.sittingHeight" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="体重(KG)" >
                         <el-input v-model="addStudentForm.weight" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="椅子高度(米)" >
-                        <el-input v-model="addStudentForm.chairHeight" clearable></el-input>
-                   </el-form-item>
-                   <el-form-item label="坐姿高度(米)" >
-                        <el-input v-model="addStudentForm.sittingHeight" clearable></el-input>
                    </el-form-item>
                    <el-form-item label="是否矫正" >
                             <el-radio v-model="addStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
@@ -213,17 +214,18 @@
                  <el-form-item label="年龄" >
                       <el-input v-model.number="editStudentForm.age" clearable></el-input>
                  </el-form-item>
-                 <el-form-item label="身高(米)" >
+                 <el-form-item label="身高(厘米)" prop="height" >
                       <el-input v-model="editStudentForm.height" clearable></el-input>
+                 </el-form-item>
+
+                 <el-form-item label="椅子高度(厘米)" prop="chairHeight" >
+                      <el-input v-model="editStudentForm.chairHeight" clearable></el-input>
+                 </el-form-item>
+                 <el-form-item label="坐姿高度(厘米)" prop="sittingHeight" >
+                      <el-input v-model="editStudentForm.sittingHeight" clearable></el-input>
                  </el-form-item>
                  <el-form-item label="体重(KG)" >
                       <el-input v-model="editStudentForm.weight" clearable></el-input>
-                 </el-form-item>
-                 <el-form-item label="椅子高度(米)" >
-                      <el-input v-model="editStudentForm.chairHeight" clearable></el-input>
-                 </el-form-item>
-                 <el-form-item label="坐姿高度(米)" >
-                      <el-input v-model="editStudentForm.sittingHeight" clearable></el-input>
                  </el-form-item>
                  <el-form-item label="是否矫正" >
                           <el-radio v-model="editStudentForm.correct" size="medium" border  :label="1">已矫正</el-radio>
@@ -356,7 +358,7 @@ export default {
             fileList: [],//此数组中存入所有提交的文档信息
             pdfData: {
                 file: ''
-           
+
             },
             value1: '',
             searchStudentList: [],
