@@ -72,7 +72,6 @@
 
 
      getCode() {
-        
         if(this.schoolId) {
       this.loading = this.$loading({
          lock: true,

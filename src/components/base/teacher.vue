@@ -9,7 +9,7 @@
      <el-card>
        <el-row :gutter="20">
            <el-col :span="6">
-            <el-input placeholder="输入学校名称" v-model="query" clearable @clear="queryTeacher">
+            <el-input placeholder="输入教师名称" v-model="query" clearable @clear="queryTeacher">
                 <el-button slot="append" icon="el-icon-search" @click="queryTeacher"></el-button>
              </el-input>
            </el-col>
@@ -178,9 +178,8 @@
       }
     },
     created() {
-      // this.token = window.sessionStorage.getItem('token');
-      // this.getTeacherList(this.page);
-      // this.getOPtions();
+      this.token = window.sessionStorage.getItem('token');
+      this.getOPtions();
       this.token = window.sessionStorage.getItem('token');
       let user = window.sessionStorage.getItem('token');
       this.identity = user.split('-') [1];
@@ -192,12 +191,11 @@
        }else if(this.identity == 2) {   //2 校长
           this.type = 'school';
           this.getTeacherList(this.type, this.page);
-        }
-      // }else if(this.identity == 3) {   // 教师
-      //   this.type = "class";
-      //   this.id= this.fondId;
-      //  this.getTeacherList(this.type, this.page);
-      // }
+      }else if(this.identity == 3) {   // 教师
+        this.type = "class";
+        this.id= this.fondId;
+       this.getTeacherList(this.type, this.page);
+      }
     },
     methods: {
       handleCurrentChange(val) {
@@ -427,11 +425,13 @@
              }).then(this.handleGetOptionSucc.bind(this)).catch(this.handleGetOptionErr.bind(this))
          },
          handleGetOptionSucc (res) {
+           // console.log(res)
            if(res.data.status === 10204) {
                this.$message.error(res.data.msg);
                this.$router.push('/login');
            } else if(res.data.status == 200) {
               this.options =  res.data.data;
+              console.log(res)
            }
          },
          handleGetOptionErr(err) {
