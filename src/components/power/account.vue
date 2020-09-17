@@ -19,17 +19,58 @@
                 </el-col>
             </el-row>
               <!-- 用户列表 -->
-            <el-table :data="userList" border  stripe style="width: 100%" v-show="!this.searchAccountList.length">
-                <el-table-column type="index"></el-table-column>
-                <el-table-column label="登录账号" prop="loginName"></el-table-column>
-                <el-table-column label="姓名" prop="name"></el-table-column>
-                 <el-table-column label="角色" prop="roleName"></el-table-column>
-                <el-table-column label="创建时间" prop="genTime"></el-table-column>
-                <el-table-column label="操作">
+            <el-table
+             :data="userList" border highlight-current-row   ref="table" stripe style="width: 100%" v-show="!this.searchAccountList.length">
+             <!-- <el-table-column>
+              @row-click="clickTable" row-key="id"  ref="refTable"
+               <template slot-scope="props">
+                 <el-row>
+                   <el-col :span="16">
+                     <el-table  border :data="props.row.children" stripe>
+                        <el-table-column align="center"label="学校" prop="name"></el-table-column>
+                         <el-table-column align="center"label="所属区" prop="regionName"></el-table-column>
+                        <el-table-column  align="center" label="操作">
+                          <template slot-scope="scope">
+                             <el-button type="danger" size="mini" icon="el-icon-delete" circle @click="deleteSchool(scope.row.id)"></el-button>
+                          </template>
+                        </el-table-column>
+                     </el-table>
+                   </el-col>
+                 </el-row>
+               </template>
+             </el-table-column> -->
+            <el-table-column label="登录账号" prop="loginName"></el-table-column>
+            <el-table-column label="姓名" prop="name"></el-table-column>
+             <el-table-column label="角色" prop="roleName"></el-table-column>
+            <el-table-column label="创建时间" prop="genTime"></el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeUserById(scope.row.id)"></el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary"  size="middle"  @click="showAddSchoolDialog(scope.row.id)" >添加集团从属学校</el-button>
+                </template>
+            </el-table-column>
+             <el-table-column label="操作" width="120">
+              <template slot-scope="scope">
+                <el-button type="text" @click="toogleExpand(scope.row)">查看从属学校</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column type="expand" width="1">
+              <template slot-scope="props">
+               <el-table  border :data="props.row.children" stripe>
+                  <el-table-column align="center"label="学校" prop="name"></el-table-column>
+                   <el-table-column align="center"label="所属区" prop="regionName"></el-table-column>
+                  <el-table-column  align="center" label="操作">
                     <template slot-scope="scope">
-                        <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeUserById(scope.row.id)"></el-button>
+                       <el-button type="danger" size="mini" icon="el-icon-delete" circle @click="deleteSchool(scope.row.id)"></el-button>
                     </template>
-                </el-table-column>
+                  </el-table-column>
+               </el-table>
+               </template>
+            </el-table-column>
             </el-table>
             <!-- 搜索列表 -->
             <el-table :data="searchAccountList" border  stripe style="width: 100%" v-show="this.searchAccountList.length">
@@ -54,43 +95,57 @@
              :total="this.totalElements">
            </el-pagination>
         </el-card>
+         <el-dialog title="添加从属学校"  :visible.sync="showAddSchool" width="50%" :before-close="handleShoolClose">
+            <el-form :model="addSchoolForm" label-width="120px">
+                 <el-form-item label="学校选择" >
+                     <el-select v-model="school" placeholder="请选择" @change="handleAddSchool">
+                        <el-option
+                          v-for="item in schoolList"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                 </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="handleShoolClose">取 消</el-button>
+                <el-button type="primary" @click="submitAddSchool" >确 定</el-button>
+            </span>
+        </el-dialog>
          <!-- 添加角色对话框 -->
         <el-dialog title="添加角色"  :visible.sync="addAccountDialogVisible" width="50%"  :before-close="handleClose">
            <el-form :model="addAccountForm" :rules="addAccountRules" ref="accountFormRef" label-width="120px">
-                <el-form-item label="姓名" prop="name" >
-                    <el-input v-model="addAccountForm.name" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="登录账号" prop="loginName">
-                    <el-input v-model="addAccountForm.loginName" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="登录密码" prop="password">
-                    <el-input v-model="addAccountForm.password" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="微信昵称" prop="wechatName">
-                    <el-input v-model="addAccountForm.wechatName" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="分配角色" prop="role">
-                    <el-select v-model="addAccountForm.role" placeholder="请选择" @change="handleRoleChange">
-                        <el-option v-for="item in roleList" :key="item.roleId"  :label="item.roleName" :value="item" clearable>
-                    </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="" width="100%" v-if="addAccountForm.role == '超级管理员' " v-show="false">
-                    <!-- <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader> -->
-                </el-form-item>
-                <el-form-item label="所属学校" prop="schoolOptions" width="100%" v-else-if="addAccountForm.role == '校级管理员' ">
-                    <el-cascader ref="myCascader" :options="schoolOptions" v-model="addAccountForm.schoolOptions" :props="cateProps" @change="handleSchoolChange" clearable></el-cascader>
-                </el-form-item>
-                <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '班级管理员' ">
-                    <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
-                </el-form-item>
-                <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '地区管理员'">
-                    <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
-                </el-form-item>
-               <!-- <el-form-item label="所属学校/班级" prop="selectedOptions" width="100%" v-else>
-                    <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange"  v-show = "false" clearable></el-cascader>
-                </el-form-item> -->
-
+            <el-form-item label="姓名" prop="name" >
+                <el-input v-model="addAccountForm.name" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="登录账号" prop="loginName">
+                <el-input v-model="addAccountForm.loginName" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="登录密码" prop="password">
+                <el-input v-model="addAccountForm.password" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="微信昵称" prop="wechatName">
+                <el-input v-model="addAccountForm.wechatName" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="分配角色" prop="role">
+                <el-select v-model="addAccountForm.role" placeholder="请选择" @change="handleRoleChange">
+                    <el-option v-for="item in roleList" :key="item.roleId"  :label="item.roleName" :value="item" clearable>
+                </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="" width="100%" v-if="addAccountForm.role == '超级管理员' " v-show="false">
+                <!-- <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader> -->
+            </el-form-item>
+            <el-form-item label="所属学校" prop="schoolOptions" width="100%" v-else-if="addAccountForm.role == '校级管理员' ">
+                <el-cascader ref="myCascader" :options="schoolOptions" v-model="addAccountForm.schoolOptions" :props="cateProps" @change="handleSchoolChange" clearable></el-cascader>
+            </el-form-item>
+            <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '班级管理员' ">
+                <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+            </el-form-item>
+            <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '地区管理员'">
+                <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+            </el-form-item>
            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="handleClose">取 消</el-button>
@@ -103,15 +158,14 @@
 import axios from 'axios'
     export default {
     created() {
-        this.token = window.sessionStorage.getItem('token');  
+        this.token = window.sessionStorage.getItem('token');
          let user = window.sessionStorage.getItem('token');
          this.identity = user.split('-') [1];
          this.fondId = user.split('-')[2];
          this.getOPtions();
          this.getUserList();
-         if(this.identity !== 1 ||this.identity !== 2 ||this.identity !== 3) {
-           this.getProvince()
-         }
+         this.getAllSchool();
+
     },
      data() {
          return {
@@ -119,15 +173,22 @@ import axios from 'axios'
             page: 1,
             totalElements: 0,
             number: 1,
-           currentPage: 1,
-           pageSize: 10,
-           total: 0,
-
-           size: 10,
+            currentPage: 1,
+            pageSize: 10,
+            total: 0,
+            size: 10,
             addAccountDialogVisible: false,
             roleList: [],  //角色列表
             query: '',
             searchAccountList: [],
+            showAddSchool: false,
+            comschoolId: '',
+            comroleId: '',
+            school: '',
+            schoolList: [],
+            addSchoolForm: {
+
+            },
             addAccountForm: {
                name: '',
                loginName: '',
@@ -164,9 +225,86 @@ import axios from 'axios'
          }
      },
      methods: {
-       getProvince() {
-         
+       toogleExpand(row) {
+          let $table = this.$refs.table;
+         this.userList.map((item) => {
+            if (row.id != item.id) {
+             $table.toggleRowExpansion(item, false)
+            }
+         })
+
+          $table.toggleRowExpansion(row)
+          this.roleId = row.id
        },
+       //根据id删除学校
+       async deleteSchool(id) {
+       const confirmResult = await this.$confirm('此操作将接触该集团学校绑定, 是否继续?', '提示', {
+       confirmButtonText: '确定',
+       cancelButtonText: '取消',
+       type: 'warning'
+       }).catch(err => err)
+       if(confirmResult !== 'confirm') {
+           return this.$message.info('已经取消删除')
+       }
+       console.log(this.roleId)
+       let param = new URLSearchParams();
+       param.append('token', this.token);
+       param.append('schoolId', id);
+       param.append('userId', this.roleId);
+       axios({
+           method: 'post',
+           url: '/lightspace/deleteUserSchool',
+           data: param
+       }).then(this.handleDeleteUserShoolSucc.bind(this))
+       .catch((err) => {console.log(err)})
+       },
+       handleDeleteUserShoolSucc(res) {
+           if(res.data.status === 10204) {
+               this.$message.error(res.data.msg);
+               this.$router.push('/login');
+           } else if(res.data.status == 200) {
+             this.$message.success('删除学校成功');
+             this.getUserList()
+           }
+
+       },
+       showAddSchoolDialog(id) {
+         this.comroleId = id;
+         this.showAddSchool = true;
+       },
+       handleAddSchool(val) {
+         this.comschoolId = val;
+       },
+       handleShoolClose() {
+         this.school = '';
+         this.comschoolId = '';
+         this.showAddSchool = false;
+       },
+       submitAddSchool() {
+         let param = new FormData();
+         param.append('token',this.token);
+         param.append('schoolId', this.comschoolId);
+         param.append('userId', this.comroleId);
+         axios({
+           method: 'post',
+           data: param,
+           url: '/lightspace/addUserSchool'
+         }).then(this.handleAddComSchool.bind(this)).catch((err) => {console.log(err)})
+       },
+       handleAddComSchool(res) {
+         if(res.data.status == 200) {
+           this.$message.success('恭喜您' + res.data.msg);
+           this.showAddSchool = false;
+         }else if(res.data.status == 10206) {
+           this.$message.error(res.data.msg);
+           this.showAddSchool = false;
+         }
+       },
+       clickTable(row,index,e){
+          this.nowGrade = row.name;
+          this.currentRow = row;
+          this.$refs.refTable.toggleRowExpansion(row)
+        },
        //监听页码值改变事件
        handleCurrentChange(val) {
          this.page = val;
@@ -236,6 +374,7 @@ import axios from 'axios'
              console.log(err)
          },
          handleGetUserListSucc(res) {
+           console.log(res)
              if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
@@ -318,6 +457,20 @@ import axios from 'axios'
           this.addAccountForm.selectedOptions = item;
           this.schoolId = item[0];
           this.classId = '';
+         },
+         getAllSchool() {
+           let param = new FormData();
+           param.append('token', this.token);
+           axios({
+             method: 'post',
+             data:param,
+             url: '/lightspace/schoolList'
+           }).then((res) => {
+             console.log(res)
+             if(res.data.data) {
+                this.schoolList = res.data.data;
+             }
+           }).catch((err)=> {console.log(err)})
          },
         //获取级联选择器中的数据
         getOPtions() {
