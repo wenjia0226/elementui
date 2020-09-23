@@ -23,7 +23,7 @@
      <el-table-column label="类型" prop="type"></el-table-column>
      <el-table-column label="操作">
          <template slot-scope="scope">
-             <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSpecById(scope.row.id)"></el-button>
+            <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeSpecById(scope.row.id)"></el-button>
          </template>
      </el-table-column>
      </el-table>

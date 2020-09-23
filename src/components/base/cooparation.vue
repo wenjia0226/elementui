@@ -43,7 +43,7 @@
               <el-form-item label="地址" prop="address">
                   <el-input v-model="addForm.address"></el-input>
               </el-form-item>
-               <el-form-item label="图片">
+               <el-form-item label="图片" >
               <el-upload
                 ref="upload"
                 action="/as"
@@ -109,12 +109,17 @@
            if(!valid) return;
             this.$refs.upload.submit();
            let param = new FormData();
-           param.append('token', this.token);
-           param.append('details', this.addForm.details);
-           param.append('phone', this.addForm.phone);
-           param.append('address', this.addForm.address);
-           param.append('name', this.addForm.name);
-           param.append('file', this.addForm.file);
+           if(this.addForm.file) {
+             param.append('token', this.token);
+             param.append('details', this.addForm.details);
+             param.append('phone', this.addForm.phone);
+             param.append('address', this.addForm.address);
+             param.append('name', this.addForm.name);
+             param.append('file', this.addForm.file);
+           }else {
+             return this.$message.error('请添加图片')
+           }
+          
            axios({
                method: 'post',
                url: '/lightspace/addPartnership',
@@ -151,7 +156,7 @@
         //关闭按钮
         handleClose() {
          this.addDialogVisible = false;
-         this.$refs.FormRef.resetFields();
+         this.$refs.addFormRef.resetFields();
         },
         getCooparationList() {
           let param = new URLSearchParams();

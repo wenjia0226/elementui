@@ -53,7 +53,7 @@
                     <el-button type="primary"  size="middle"  @click="showAddSchoolDialog(scope.row.id)" >添加集团从属学校</el-button>
                 </template>
             </el-table-column>
-             <el-table-column label="操作" width="120">
+            <el-table-column label="操作" width="120">
               <template slot-scope="scope">
                 <el-button type="text" @click="toogleExpand(scope.row)">查看从属学校</el-button>
               </template>
@@ -134,7 +134,7 @@
                 </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="" width="100%" v-if="addAccountForm.role == '超级管理员' " v-show="false">
+            <el-form-item label="" width="100%" v-if="addAccountForm.role == '超级管理员'">
                 <!-- <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader> -->
             </el-form-item>
             <el-form-item label="所属学校" prop="schoolOptions" width="100%" v-else-if="addAccountForm.role == '校级管理员' ">
@@ -144,8 +144,26 @@
                 <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
             </el-form-item>
             <el-form-item label="所属班级" prop="selectedOptions" width="100%" v-else-if="addAccountForm.role == '地区管理员'">
-                <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader>
+  <!-- <el-cascader ref="myCascader" :options="options" v-model="addAccountForm.selectedOptions" :props="cateProps" @change="handleChange" clearable></el-cascader> -->
             </el-form-item>
+            <el-form-item label="选择省" :label-width="'100px'" prop="province" v-if="this.roleId == 4">
+               <el-select v-model="addAccountForm.province" placeholder="请选择省" @change="getShengId">
+                 <el-option v-for="item in sheng" :key="item.value" :label="item.label" :value="item.value">
+                 </el-option>
+               </el-select>
+            </el-form-item>
+           <el-form-item label="选择市" :label-width="'100px'" prop="city"  v-if="this.roleId == 4">
+              <el-select v-model="addAccountForm.city" placeholder="请选择省" @change="getCityId">
+                <el-option v-for="item in city" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="选择区" :label-width="'100px'" prop="area"  v-if="this.roleId == 4">
+               <el-select v-model="addAccountForm.area" placeholder="请选择区" @change="getAreaId">
+                 <el-option v-for="item in area" :key="item.value" :label="item.label" :value="item.value">
+                 </el-option>
+               </el-select>
+             </el-form-item>
            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="handleClose">取 消</el-button>
@@ -164,6 +182,7 @@ import axios from 'axios'
          this.fondId = user.split('-')[2];
          this.getOPtions();
          this.getUserList();
+         this.getSheng();
          this.getAllSchool();
 
     },
@@ -197,7 +216,10 @@ import axios from 'axios'
                role: '', //角色下拉框默认选中
                selectedOptions: [],
                schoolOptions: [],
-              id: ''
+               id: '',
+               province: '',
+               city: '',
+               area: ''
            },
            addAccountRules: {
                 name: [{required: true, message: '请输入所属人', trigger: 'blur' }],
@@ -205,7 +227,10 @@ import axios from 'axios'
                 password: [{required: true, message: '请输入密码', trigger: 'blur' }],
                 selectedOptions: [{required: true, message: '请选择所属学校班级', trigger: 'change' }],
                 schoolOptions:  [{required: true, message: '请选择所属学校', trigger: 'change' }],
-                role:  [{required: true, message: '请选择角色', trigger: 'change' }]
+                role:  [{required: true, message: '请选择角色', trigger: 'change' }],
+                province: [{required: true, message:'请选择省', trigger: 'blur'}],
+                city: [{required: true, message:'请选择市', trigger:'blur'}],
+                area: [{required: true, message:'请选择区', trigger: 'blur'}]
            },
             cateProps: {
                label: 'name', //看到的是哪个属性
@@ -220,11 +245,93 @@ import axios from 'axios'
             pageSize: 5,
             show: true,
             options: [], //级联绑定的数据
-            schoolOptions: []
+            schoolOptions: [],
+            sheng: [],
+            city: [],
+            area: [],
+            shengId: '',
+            cityId: '',
+            areaId: ''
 
          }
      },
      methods: {
+       getSheng() {
+       	let param = new URLSearchParams();
+       	 param.append('token', this.token);
+       	 param.append('type', 1);
+       	 axios({
+       	     method: 'post',
+       	     url: '/lightspace/findRegion',
+       	     data: param
+       	 }).then((res) => {
+            let sheng = res.data.data;
+            sheng.forEach((item) => {
+              this.sheng.push({
+                value: item.id,
+                label: item.name
+              })
+            })
+       	 })
+       	 .catch((err) => {console.log(err)})
+       },
+       getShengId(val) {
+          this.shengId = val;
+          this.addSchoolForm.province = val;
+          this.addSchoolForm.city = '';
+          this.addSchoolForm.area = '';
+          this.city = [];
+          this.getCity();
+       },
+       getCity() {
+         let param = new URLSearchParams();
+          param.append('pId', this.shengId);
+          param.append('type', 2);
+          axios({
+              method: 'post',
+              url: '/lightspace/findRegion',
+              data: param
+          }).then((res) => {
+            let city = res.data.data;
+            city.forEach((item) => {
+              this.city.push({
+                value: item.id,
+                label: item.name
+              })
+            })
+          })
+          .catch((err) => {console.log(err)})
+       },
+       getCityId(val) {
+          this.cityId = val;
+          this.addSchoolForm.city = val;
+          this.area = [];
+          this.addSchoolForm.area =  '';
+          this.getArea();
+       },
+       getArea() {
+         let param = new URLSearchParams();
+          param.append('pId', this.cityId);
+          param.append('type', 2);
+          axios({
+              method: 'post',
+              url: '/lightspace/findRegion',
+              data: param
+          }).then((res) => {
+            let area = res.data.data;
+            area.forEach((item) => {
+              this.area.push({
+                value: item.id,
+                label: item.name
+              })
+            })
+          })
+          .catch((err) => {console.log(err)})
+       },
+       getAreaId(val) {
+         this.areaId = val;
+         this.addAccountForm.area = val;
+       },
        toogleExpand(row) {
           let $table = this.$refs.table;
          this.userList.map((item) => {
@@ -374,7 +481,7 @@ import axios from 'axios'
              console.log(err)
          },
          handleGetUserListSucc(res) {
-           console.log(res)
+           //console.log(res)
              if(res.data.status === 10204) {
                 this.$message.error(res.data.msg);
                 this.$router.push('/login');
@@ -418,6 +525,7 @@ import axios from 'axios'
                 param.append('classId', this.classId);
                 param.append('schoolId', this.schoolId);
                 param.append('roleId', this.roleId);
+                param.append('regionId', this.areaId);
                 param.append('token' ,this.token);
                 param.append('loginName' ,this.addAccountForm.loginName);
                 param.append('name', this.addAccountForm.name);
