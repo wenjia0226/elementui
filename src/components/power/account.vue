@@ -353,7 +353,6 @@ import axios from 'axios'
        if(confirmResult !== 'confirm') {
            return this.$message.info('已经取消删除')
        }
-       console.log(this.roleId)
        let param = new URLSearchParams();
        param.append('token', this.token);
        param.append('schoolId', id);
