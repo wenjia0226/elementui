@@ -8,9 +8,8 @@
      </el-breadcrumb>
      <el-card>
        <el-row :gutter="20">
-
            <el-col :span="6">
-                  <el-button type="primary" @click="addLabel">新增标签</el-button>
+            <el-button type="primary" @click="addLabel">新增标签</el-button>
            </el-col>
         </el-row>
        <el-table :data="this.content" border  stripe style="width: 100%">
@@ -55,7 +54,6 @@
     </el-dialog>
    </div>
 </template>
-
 <script>
   import axios from 'axios'
   export default {

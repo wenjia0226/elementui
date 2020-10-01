@@ -54,6 +54,7 @@ import detailGradeSurvey from '@/components/survey/detailGradeSurvey'
 // 价格表
 import labelsetting from '@/components/price/labelsetting.vue'
 import seriessetting from '@/components/price/seriessetting.vue'
+import glassessetting from '@/components/price/glassessetting.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -120,6 +121,7 @@ const router = new Router({
         {path: '/momentsconfig', component: momentsconfig},
         {path: '/labelsetting', component: labelsetting},
         {path: '/seriessetting', component: seriessetting},
+        {path: '/glassessetting', component: glassessetting}
       ]
     },
 
