@@ -21,7 +21,7 @@
 				router
 				:unique-opened= true>
 				<!-- 一级菜单 -->
-				<el-submenu :index="'/' +item.id"  v-for="item in menuList" :key="item.id" >
+				<el-submenu :index="'/' + item.id"  v-for="item in menuList" :key="item.id" >
 					<!-- 一级菜单模板 -->
 					<template slot="title">
 					<i :class="iconObj[item.id]"></i>

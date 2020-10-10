@@ -55,6 +55,8 @@ import detailGradeSurvey from '@/components/survey/detailGradeSurvey'
 import labelsetting from '@/components/price/labelsetting.vue'
 import seriessetting from '@/components/price/seriessetting.vue'
 import glassessetting from '@/components/price/glassessetting.vue'
+import dioptersetting from  '@/components/record/dioptersetting.vue'
+import diopterRecord from '@/components/personRecord/diopterRecord.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -64,8 +66,8 @@ const router = new Router({
   routes: [
   {path: '/', redirect: '/login'},
   {path: '/login',component: Login},
-	{path: '/schoolSurvey/:id',component: schoolSurvey},
-	{path: '/classSurvey/:id',component: classSurvey},
+  {path: '/schoolSurvey/:id',component: schoolSurvey},
+  {path: '/classSurvey/:id',component: classSurvey},
   {path: '/detailSeat/',component: detailSeat},
   {path: '/detailSeatTwo/',component: detailSeatTwo},
   {path: '/personRecord/:id', component: personRecord},
@@ -73,6 +75,7 @@ const router = new Router({
   {path: '/detailClassSurvey/', component: detailClassSurvey},
   {path: '/detailSchoolSurvey/', component: detailSchoolSurvey},
   {path: '/detailGradeSurvey/', component: detailGradeSurvey},
+  {path: '/diopterRecord/:id', component: diopterRecord},
   {
       path: '/home',
       component: Home,
@@ -121,7 +124,9 @@ const router = new Router({
         {path: '/momentsconfig', component: momentsconfig},
         {path: '/labelsetting', component: labelsetting},
         {path: '/seriessetting', component: seriessetting},
-        {path: '/glassessetting', component: glassessetting}
+        {path: '/glassessetting', component: glassessetting},
+		{path: '/dioptersetting', component: dioptersetting},
+		
       ]
     },
 

@@ -129,7 +129,6 @@
         let user = window.sessionStorage.getItem('token');
        this.identity = user.split('-') [1];
        this.fondId = user.split('-')[2];
-       console.log(this.identity)
         this.getSchoolList();
         if(this.identity == 1) {  // admin
           this.getScreeningList('',this.number);

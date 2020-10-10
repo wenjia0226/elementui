@@ -14,8 +14,7 @@
         </el-row>
        <el-table :data="this.content" border  stripe style="width: 100%">
          <el-table-column label="标签名" prop="name"></el-table-column>
-
-
+         <el-table-column label="标签路径" prop="path"></el-table-column>
          <el-table-column label="操作">
              <template slot-scope="scope">
                 <el-button type="primary" size="middle" icon="el-icon-edit" @click="showEditDialog(scope.row.id)"></el-button>
@@ -34,6 +33,9 @@
              <el-form-item label="标签名称" prop="name" >
                  <el-input v-model="addLabelForm.name"></el-input>
              </el-form-item>
+             <el-form-item label="标签路径" prop="path" >
+                 <el-input v-model="addLabelForm.path"></el-input>
+             </el-form-item>
          </el-form>
          <span slot="footer" class="dialog-footer">
              <el-button @click="addDialogVisible = false">取 消</el-button>
@@ -45,6 +47,9 @@
        <el-form :model="editLabelForm" :rules="editLabelRules" ref="editLabelRef" label-width="120px">
            <el-form-item label="标签名称" prop="name" >
                <el-input v-model="editLabelForm.name"></el-input>
+           </el-form-item>
+           <el-form-item label="标签路径" prop="path" >
+               <el-input v-model="editLabelForm.path"></el-input>
            </el-form-item>
        </el-form>
 		 <span slot="footer" class="dialog-footer">
@@ -74,6 +79,7 @@
         tea_cat: [],
         addLabelForm: {
             name: '',
+            path: ''
         },
         page: 1,
         size: 5,
@@ -82,13 +88,16 @@
         number: 1,
         addLabelRules: {
           name: [{required: true, message: '请输入标签名', trigger: 'blur' }],
+          path: [{required: true, message: '请输入标签路径', trigger: 'blur' }],
         },
 
         editLabelForm: {
            name: '',
+           path: ''
         },
         editLabelRules: {
           name: [{required: true, message: '请输入标签名', trigger: 'blur' }],
+           path: [{required: true, message: '请输入标签路径', trigger: 'blur' }],
         },
       }
     },
@@ -103,6 +112,7 @@
              if(!valid) return;
              let param = new URLSearchParams();
              param.append('name', this.addLabelForm.name);
+             param.append('path', this.addLabelForm.path);
              param.append('token', this.token);
              axios({
                  method: 'post',
@@ -146,7 +156,7 @@
            url: '/lightspace/labelList'
         }).then(this.handleGetLabelListSucc.bind(this)).catch(this.handleGetLabelErr.bind(this))
       },
-      handleGetLabelListSucc(res) {      
+      handleGetLabelListSucc(res) {
         if(res.data.status == 200 && res.data.data !== '') {
          this.content = res.data.data;
          }
@@ -190,6 +200,7 @@
          let param = new URLSearchParams();
          param.append('token', this.token);
          param.append('name', this.editLabelForm.name);
+         param.append('path', this.editLabelForm.path);
          param.append('id', this.id);
          axios({
              method: 'post',
@@ -208,7 +219,7 @@
            //隐藏编辑框
            this.editDialogVisible = false;
            //提示修改成功
-           this.$message.success('更新学校信息成功');
+           this.$message.success('更新信息成功');
            this.getLabelList(this.page)
          }
      },

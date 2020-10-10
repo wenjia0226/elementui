@@ -707,7 +707,7 @@ export default {
        },
        //请求参数传递
        beforeUpload(file) {
-         this.pdfData.file = file;
+         this.pdfData.file = file
         },
         submitUpload() {
           this.$refs.upload.submit();

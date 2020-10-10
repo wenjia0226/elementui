@@ -16,8 +16,6 @@
       </el-row>
       <el-table :data="this.seriesList" border  stripe style="width: 100%">
         <el-table-column label="系列名称" prop="name"></el-table-column>
-        <el-table-column label="电话" prop="phone"></el-table-column>
-        <el-table-column label="地址" prop="address"></el-table-column>
         <el-table-column label="图片"  prop="imgurl" min-width="20%" >
          <!-- 图片的显示 -->
          <template   slot-scope="scope">
