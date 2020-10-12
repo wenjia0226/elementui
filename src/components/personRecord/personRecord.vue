@@ -19,12 +19,11 @@
          <el-table-column label="右眼裸眼视力" prop="visionRight"></el-table-column>
          <el-table-column label="左眼裸眼视力" prop="visionLeft"></el-table-column>
          <el-table-column label="检测时间" prop="lastTime"></el-table-column>
-         <el-table-column label="操作" >
-             <template slot-scope="scope">
-                 <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeRecord(scope.row.id)"></el-button>
-             </template>
+         <el-table-column label="操作">
+					 <template slot-scope="scope">
+							 <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeRecord(scope.row.id)"></el-button>
+					 </template>
          </el-table-column>
-
      </el-table>
      <el-pagination
        background

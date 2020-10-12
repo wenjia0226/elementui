@@ -59,23 +59,26 @@
 		 </el-col>
         </el-row>
         <el-table :data="this.content" border  stripe style="width: 100%">
-            <el-table-column type="index"></el-table-column>
-            <el-table-column label="学校" prop="schoolName"></el-table-column>
-            <el-table-column label="班级" prop="className"></el-table-column>
-            <el-table-column label="学生姓名" prop="studentName"></el-table-column>
-            <el-table-column label="右眼屈光度" prop="diopterRight"></el-table-column>
-            <el-table-column label="左眼屈光度" prop="diopterLeft"></el-table-column>
-           <!-- <el-table-column label="上传时间" prop="genTime"></el-table-column> -->
-           <!-- <el-table-column label="操作" v-if="this.identity == 1">
-                <template slot-scope="scope">
-                    <el-button type="danger"  size="middle" icon="el-icon-delete" @click="removeRecord(scope.row.id)"></el-button>
-                </template>
-            </el-table-column> -->
+		<el-table-column type="index"></el-table-column>
+		<el-table-column label="学校" prop="schoolName"></el-table-column>
+		<el-table-column label="班级" prop="className"></el-table-column>
+		<el-table-column label="学生姓名" prop="studentName"></el-table-column>
+		<el-table-column label="右眼屈光度" prop="diopterRight"></el-table-column>
+		<el-table-column label="左眼屈光度" prop="diopterLeft"></el-table-column>
+		 <el-table-column label="右眼屈光度" >
+			 <template slot-scope="scope">
+				<el-input v-model="scope.row.diopterRight" clearable @input="handleRightChange" @blur="handleSubmitRight(scope.row)" ></el-input>
+			 </template>
+		 </el-table-column>
+		 <el-table-column label="左眼屈光度" >
+			 <template slot-scope="scope">
+				 <el-input v-model="scope.row.diopterLeft" clearable @input="handleLeftChange" @blur="handleSubmitRight(scope.row)" ></el-input>
+			 </template>
+		 </el-table-column>
             <el-table-column label="操作">
-                <template slot-scope="scope">
-					 <el-button type="primary"  size="middle" icon="el-icon-edit" @click="editRecord(scope.row.id)"></el-button>
-                    <el-button type="primary"  size="middle"  @click="record(scope.row)">历史记录</el-button>
-                </template>
+				<template slot-scope="scope">
+				  <el-button type="primary"  size="middle"  @click="record(scope.row)">历史记录</el-button>
+				</template>
             </el-table-column>
         </el-table>
         <el-pagination
@@ -96,21 +99,6 @@
           :page-size ="this.size"
           :total="this.totalElements">
         </el-pagination>
-		<!-- 修改用户对话框 -->
-		<el-dialog title="修改屈光度" :visible.sync="showEditDiopter" width="50%" @close="editDialogClosed">
-		    <el-form :model="editDiopterForm" :rules="editDiopterRules" ref="editDiopterRef" label-width="100px">
-		        <el-form-item label="右眼屈光度" prop="diopterRight">
-		            <el-input v-model="editDiopterForm.right"></el-input>
-		        </el-form-item>
-		        <el-form-item label="左眼屈光度" prop="diopterLeft">
-		            <el-input v-model="editDiopterForm.left"></el-input>
-		        </el-form-item>
-		    </el-form>
-		    <span slot="footer" class="dialog-footer">
-		        <el-button @click="showEditDiopter = false">取 消</el-button>
-		        <el-button type="primary" @click="saveEdit">确 定</el-button>
-		    </span>
-		</el-dialog>
 		<!-- 批量导入 -->
 		<el-dialog :visible.sync="showDialog"  width="30%" center :before-close="handleFileClose">
 		  <el-row>
@@ -159,6 +147,8 @@
         number: 1,
         size: 10,
         page: 1,
+		rightInput: '', 
+		leftInput: '',
         searchPage: 1,
         schoolInfo: {},
         fondId: '',
@@ -182,8 +172,7 @@
 		}
       }
     },
-    created() {
-		
+    created() {	
         this.token = window.sessionStorage.getItem('token');
         let user = window.sessionStorage.getItem('token');
        this.identity = user.split('-') [1];
@@ -207,6 +196,32 @@
        }
     },
     methods: {
+		handleRightChange(val) {
+			this.rightInput = val;
+		},
+		handleLeftChange(val) {
+			this.leftInput = val;
+		},
+		handleSubmitRight(row) {
+		 let param = new FormData();
+		 param.append('token', this.token);
+		 param.append('type', 1);
+		 param.append('id', row.studentId);
+		 param.append('diopterLeft', this.leftInput);
+		 param.append('diopterRight', this.rightInput);
+		axios({
+			method: 'post',
+			data: param,
+			url: '/lightspace/saveDiopter'
+		  }).then(this.handleSaveDiopterSucc.bind(this)).catch((err)=> {console.log(err)})
+		
+		},
+		handleSaveDiopterSucc(res) {
+			  this.$message.success('修改成功')
+			 if(res.data.status == 200) {
+				
+			 }
+		},
 		editDialogClosed() {
 		  this.$refs.editDiopterRef.resetFields()
 		},
