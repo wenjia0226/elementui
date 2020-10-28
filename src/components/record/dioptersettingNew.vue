@@ -96,11 +96,11 @@
 		    </el-pagination>
 		<!-- 批量导入-->
 		<el-dialog :visible.sync="showDialog"  width="30%" center :before-close="handleFileClose">
-			<el-form ref="studentFormRef" :rules="addStudentRules" label-width="120px" >
-				<el-form-item label="所属学校班级" prop='classId'>
+			<el-form ref="studentFormRef"  label-width="120px" >
+				<el-form-item label="所属学校班级">
 					<el-cascader :options="options" v-model="addStudentForm.classId" :props="cateProps" @change="handleChange" clearable></el-cascader>
 				</el-form-item>
-				<el-form-item label="上传机器数据" prop='exportList' >
+				<el-form-item label="上传机器数据" >
 					<el-upload
 					:data="pdfData"
 					ref="upload"
@@ -118,7 +118,7 @@
 					<!-- <div slot="tip" class="el-upload__tip">只能上传.xlsx文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>
-				<el-form-item label="上传学生排序" prop ="nameList">
+				<el-form-item label="上传学生排序">
 					<el-upload
 					:data="pdfData"
 					ref="uploadStu"
@@ -255,20 +255,22 @@
 				 this.showDialog = false;
 			 },
 			 sumitAdd() {
-				 this.$refs.studentFormRef.validate((valid) => {
-				   if(!valid) return this.$message.error('验证失败');
 				 let param = new FormData();
-				 
-				 param.append('token', this.token);
-				 param.append('classId', this.classId);
-				 param.append('nameList', this.pdfData.nameList);
-				 param.append('exportList', this.pdfData.exportList);
+				   if(this.pdfData.nameList && this.pdfData.exportList) { 
+					 param.append('token', this.token);
+					 param.append('classId', this.classId);
+					 param.append('nameList', this.pdfData.nameList);
+					 param.append('exportList', this.pdfData.exportList);
+				   }else {
+					   this.$message.error('请先添加2个文件,选择班级')
+					   return;
+				   }
 				 axios({
 					method: 'post',
 					data: param,
 					 url: '/lightspace/readDiopterExcel' 
 				 }).then((res) => {
-					 // console.log(res)
+					 //console.log(res)
 					 if(res.data.status ==200) {
 						 this.showDialog = false;
 						 this.$refs.upload.clearFiles();
@@ -278,7 +280,6 @@
 						 this.$message.error(res.data.msg)
 					 }
 				 }).catch((err) => {console.log(err)})
-				})
 			 },
 			 //获取级联选择器中的数据
 			 getOPtions() {
