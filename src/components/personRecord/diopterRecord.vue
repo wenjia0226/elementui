@@ -7,34 +7,20 @@
        </el-col>
      </el-row>
      <el-table :data="this.content" border  stripe style="width: 100%">
-			 <el-table-column type="index"></el-table-column>
-			 <el-table-column label="学校" prop="schoolName"></el-table-column>
-			 <el-table-column label="班级" prop="className"></el-table-column>
-			 <el-table-column label="学生姓名" prop="studentName"></el-table-column>
-			 <el-table-column label="右眼球镜" prop="ds1R"></el-table-column>
-			 <el-table-column label="左眼球镜" prop="ds1L"></el-table-column>
-			 <el-table-column label="右眼柱镜" prop="dc1R"></el-table-column>
-			 <el-table-column label="左眼柱镜" prop="dc1L"></el-table-column>
-			 <el-table-column label="右眼轴位" prop="axis1R"></el-table-column>
-			 <el-table-column label="左眼轴位" prop="axis1L"></el-table-column>
-			 <el-table-column label="右眼水平眼位" prop="ghR"></el-table-column>
-			 <el-table-column label="左眼水平眼位" prop="ghR"></el-table-column>
-			 <el-table-column label="右眼垂直眼位" prop="gvR"></el-table-column>
-			 <el-table-column label="左眼垂直眼位" prop="gvL"></el-table-column>
-         <!-- <el-table-column type="index"></el-table-column>
-         <el-table-column label="学校" prop="schoolName"></el-table-column>
-         <el-table-column label="班级" prop="className"></el-table-column>
-         <el-table-column label="学生姓名" prop="studentName"></el-table-column>-->
-         <!-- <el-table-column label="右眼屈光度" > 
-			 <template slot-scope="scope">
-				<el-input v-model="scope.row.diopterRight" clearable @input="handleRightChange" @blur="handleSubmitRight(scope.row)" ></el-input>
-			 </template>
-         </el-table-column>
-         <el-table-column label="左眼屈光度" >
-			 <template slot-scope="scope">
-				 <el-input v-model="scope.row.diopterLeft" clearable @input="handleLeftChange" @blur="handleSubmitRight(scope.row)" ></el-input>
-			 </template>
-         </el-table-column> -->
+		 <el-table-column type="index"></el-table-column>
+		 <el-table-column label="学校" prop="schoolName"></el-table-column>
+		 <el-table-column label="班级" prop="className"></el-table-column>
+		 <el-table-column label="学生姓名" prop="studentName"></el-table-column>
+		 <el-table-column label="右眼球镜" prop="ds1R"></el-table-column>
+		 <el-table-column label="左眼球镜" prop="ds1L"></el-table-column>
+		 <el-table-column label="右眼柱镜" prop="dc1R"></el-table-column>
+		 <el-table-column label="左眼柱镜" prop="dc1L"></el-table-column>
+		 <el-table-column label="右眼轴位" prop="axis1R"></el-table-column>
+		 <el-table-column label="左眼轴位" prop="axis1L"></el-table-column>
+		 <el-table-column label="右眼水平眼位" prop="ghR"></el-table-column>
+		 <el-table-column label="左眼水平眼位" prop="ghL"></el-table-column>
+		 <el-table-column label="右眼垂直眼位" prop="gvR"></el-table-column>
+		 <el-table-column label="左眼垂直眼位" prop="gvL"></el-table-column>
          <el-table-column label="上传时间" prop="genTime"></el-table-column>
 			 <el-table-column label="操作" >
 				 <template slot-scope="scope">

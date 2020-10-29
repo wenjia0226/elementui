@@ -67,7 +67,7 @@
 		<el-table-column label="右眼轴位" prop="axis1R"></el-table-column>
 		<el-table-column label="左眼轴位" prop="axis1L"></el-table-column>
 		<el-table-column label="右眼水平眼位" prop="ghR"></el-table-column>
-		<el-table-column label="左眼水平眼位" prop="ghR"></el-table-column>
+		<el-table-column label="左眼水平眼位" prop="ghL"></el-table-column>
 		<el-table-column label="右眼垂直眼位" prop="gvR"></el-table-column>
 		<el-table-column label="左眼垂直眼位" prop="gvL"></el-table-column>
 		<el-table-column label="操作">
